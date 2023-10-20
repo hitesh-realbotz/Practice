@@ -2,6 +2,9 @@
 $(document).ready(function () {
 
     let form = $("#form");
+    enableFastFeedback(form);
+    var validFormState = false;
+
     var modal = document.getElementById("myModal");
 
     const list = [];
@@ -33,16 +36,16 @@ $(document).ready(function () {
     }
     dataToTable();
 
-    //Data insertion in Table from list
+    //Initial Data insertion in Table from list
     function dataToTable() {
         var tableBody = $("tbody");
-        $("tbody").empty();
-        var tableRow = '';
+
         list.forEach(listData);
-        tableBody.append(tableRow);
 
         function listData(element, index) {
-            tableRow += `<tr id="${index}">`;
+            console.log("list iterating");
+
+            tableRow = `<tr id="${index}">`;
             tableRow += '<td>' + element.name + "</td>";
             tableRow += '<td>' + element.dob + "</td>";
             tableRow += '<td>' + element.address + "</td>";
@@ -51,8 +54,11 @@ $(document).ready(function () {
             tableRow += `<td id="Gender${index}"><select data-index="${index}" name="" class="edit-gender"><option value="${element.gender}">${element.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`;
             // tableRow += '<td>' + element.gender + "</td>";
             tableRow += '<td>' + element.email + "</td>>";
-            tableRow += `<td> <button  data-index="${index}"  class='edit btn btn-secondary' >Edit</button> <button  data-index="${index}"   class='delete btn btn-danger'>Delete</button></td>`;
-            tableRow += '</tr>';
+            tableRow += `<td> <button  data-index="${index}"  class='edit' >Edit</button> <button  data-index="${index}"   class='delete'>Delete</button></td>`;
+            // tableRow += `<td> <button  data-index="${index}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
+            tableRow += `</tr>`;
+
+            tableBody.append(tableRow);
         }
     }
 
@@ -73,6 +79,7 @@ $(document).ready(function () {
         ($("#hobby2").is(":checked") ? hobbiesArray.push($("#hobby2").data("hobby2")) : "");
         ($("#hobby3").is(":checked") ? hobbiesArray.push($("#hobby3").data("hobby3")) : "");
 
+
         person.name = name;
         person.dob = dob;
         person.address = address;
@@ -82,32 +89,52 @@ $(document).ready(function () {
         person.password = password;
         person.hobbies = hobbiesArray;
 
+        var tableBody = $("tbody");
+
         if (op === "new") {
+            console.log("ADDING DATA TO TABLE");
             list.push(person);
-            var tableBody = $("tbody");
-            tableRow = `<tr id = "${list.length - 1}" >`;
+            op = list.length - 1;
+            list.forEach(element => {
+                console.log(element);
+            });
+            var tableRow = '<tr>';
+            dataManipulation(person, op);
+            tableRow += "</tr>";
+            tableBody.append(tableRow);
+
+        } else {
+            console.log("op is " + op);
+            list[op] = person;
+            // var tableRowEle = $(`#tbody tr:eq("${op}")`);
+            var tableRow = "";
+            console.log(tableRow);
+
+            dataManipulation(person, op);
+            $(`#tbody tr:eq("${op}")`).html(`${tableRow}`);
+
+        }
+
+        function dataManipulation(person, op) {
             tableRow += '<td>' + person.name + "</td>";
             tableRow += '<td>' + person.dob + "</td>";
             tableRow += '<td>' + person.address + "</td>";
             tableRow += '<td>' + person.country + "</td>";
             tableRow += '<td>' + person.hobbies + "</td>";
-            tableRow += `<td id="Gender${list.length - 1}"><select data-index="${list.length - 1}" name="" class="edit-gender"><option value="${person.gender}">${person.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td >`;
-
+            tableRow += `<td id="Gender${op}"><select data-index="${op}" name="" class="edit-gender"><option value="${person.gender}">${person.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`;
             tableRow += '<td>' + person.email + "</td>";
-            tableRow += `<td> <button  data-index="${list.length - 1}"  class='edit btn btn-secondary' >Edit</button> <button   data-index="${list.length - 1}"  class='delete btn btn-danger' >Delete</button></td>`;
-            tableRow += '</tr>';
+            // tableRow += `<td> <button  data-index="${op}"  class='edit btn btn-secondary' >Edit</button> <button   data-index="${op}"  class='delete btn btn-danger' >Delete</button></td>`;
+            // tableRow += `<td> <button  data-index="${op}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
 
-            tableBody.append(tableRow);
-
-        } else {
-            list[op] = person;
-            dataToTable();
-            $(":reset").click();
+            tableRow += `<td> <button  data-index="${op}"  class="edit" >Edit</button> <button  data-index="${op}"   class="delete">Delete</button></td>`;
+            // tableRow += `<td> <button  data-index="${op}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
 
         }
 
         return person;
     }
+
+
 
     //Password Visibility Toggle
     $("#eye").on("click", function () {
@@ -124,19 +151,61 @@ $(document).ready(function () {
 
 
     //Blank form to add new user by clicking ADD @ navbar ---- as of now default values are attached to input fields
-    $("#add").on("click", function (event) {
+    $("#add").on("click", clearForm);
+
+    //Clears form
+    function clearForm() {
         $("#submit").css("display", "inline-block");
         $("#update").css("display", "none");
+        $("#reset").data("index", "");
+        $("#reset").attr("type", "reset");
         $(":reset").click();
+        $("input").css("box-shadow", "");
+        $("select").css("box-shadow", "");
 
-    });
+    }
 
+    $("#tbody").on("click", ".row-no", function () {
+        var rowNumber = $(this).closest("tr");
+        console.log("Row no is " + rowNumber.index());
+    })
 
     //Shows User details in form on-click Edit button against respective user
     $("#tbody").on("click", ".edit", function () {
 
-        var currIndexValue = $(this).data("index");
+        var curRow = $(this).closest("tr");
+        console.log("Row no is " + curRow.index());
 
+        var currIndexValue = curRow.index();
+        console.log(currIndexValue);
+        resetUpdateForm(currIndexValue);
+        // //Getting user from list and Displaying user values in form
+        // const currPerson = list[currIndexValue];
+
+        // $("#name").val(currPerson.name);
+        // $("#dob").val(currPerson.dob);
+        // $("#address").val(currPerson.address);
+        // $("#email").val(currPerson.email);
+        // $("#country").val(currPerson.country);
+        // $("#gender").val(currPerson.gender);
+        // $("#password").val(currPerson.password);
+        // // $("#hobbies").val(currPerson.hobbies);
+
+        // var currHobbies = currPerson.hobbies;
+        // $("#hobby1").prop("checked", currHobbies.includes("Cricket"));
+        // $("#hobby2").prop("checked", currHobbies.includes("Reading"));
+        // $("#hobby3").prop("checked", currHobbies.includes("Writting"));
+
+
+
+        // $("#submit").css("display", "none");
+        // $("#update").css("display", "inline-block");
+        // $("#update").data("index", currIndexValue);
+        // $("#reset").data("index", currIndexValue);
+    });
+
+
+    function resetUpdateForm(currIndexValue) {
         //Getting user from list and Displaying user values in form
         const currPerson = list[currIndexValue];
 
@@ -154,10 +223,14 @@ $(document).ready(function () {
         $("#hobby2").prop("checked", currHobbies.includes("Reading"));
         $("#hobby3").prop("checked", currHobbies.includes("Writting"));
 
+
+
         $("#submit").css("display", "none");
         $("#update").css("display", "inline-block");
         $("#update").data("index", currIndexValue);
-    });
+        $("#reset").data("index", currIndexValue);
+        $("#reset").attr("type", "button");
+    }
 
 
     //Updating user details on-click Update button
@@ -167,6 +240,25 @@ $(document).ready(function () {
         const person = list[updateIndex];
 
         formDataProcess(person, updateIndex);
+
+        clearForm();
+
+    });
+
+    //Reseting user details on-click Reset button
+    $("#reset").on("click", function (event) {
+
+        if ($("#reset").attr("type") == "reset") {
+
+        } else {
+            let currIndexValue = $("#reset").data("index");
+
+            resetUpdateForm(currIndexValue);
+
+        }
+
+
+
     });
 
 
@@ -183,13 +275,17 @@ $(document).ready(function () {
         existingPer.gender = selectedOption;
         list[updateIndex] = existingPer;
 
-        $(`#${genderBox}`).html(`<td id = "Gender${index}" > <select data-index="${index}" name="" class="edit-gender"><option value="${element.gender}">${element.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`);
+        $(`#${genderBox}`).html(`<td id = "Gender${updateIndex}" > <select data-index="${updateIndex}" name="" class="edit-gender"><option value="${existingPer.gender}">${existingPer.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`);
     });
 
     //Model-PopUp for before deletion
     $("#tbody").on("click", ".delete", function () {
         console.log("button clicked");
-        var currIndexValue = $(this).data("index");
+        var curRow = $(this).closest("tr");
+        console.log("Row no is " + curRow.index());
+
+        var currIndexValue = curRow.index();
+        console.log(currIndexValue);
 
         var modelBox = $(".modal-content");
         modal.style.display = "flex";
@@ -234,15 +330,21 @@ $(document).ready(function () {
 
     //Deletes record
     $("#myModal").on("click", "#del-yes", function () {
-        var currIndexValue = $(this).data("index");
-        console.log(currIndexValue);
 
-        list.splice(currIndexValue, 1);
+
+        var remIndex = $(this).data("index");
+        console.log(remIndex);
+
+        list.splice(remIndex, 1);
         list.forEach(element => {
             console.log(element);
         });
 
-        dataToTable();
+        var tableRow = $(`#tbody tr:eq("${remIndex}")`).html();
+        tableRow = "<tr>" + tableRow + "</tr>";
+        console.log(tableRow);
+        $(`#tbody tr:eq("${remIndex}")`).html('');
+
         modal.style.display = "none";
     });
 
@@ -262,6 +364,7 @@ $(document).ready(function () {
     //New User entry on-click Submit button after filling input fields
     // $("#submit").on("click", function (event) {
     form.submit(function (event) {
+        console.log("IN SUBMIT");
         const person = {
             name: '', dob: '', address: '', country: '', hobbies: '', gender: '', email: '', password: '',
         }
@@ -271,64 +374,119 @@ $(document).ready(function () {
         var dob = $("#dob").val();
         var address = $("#address").val();
         var email = $("#email").val();
+        // var country = $("#country").find(":selected").text();
         var country = $("#country").val();
         var gender = $("#gender").val();
         var password = $("#password").val();
+        let checkedHobby = $("input[name='hobby']:checked");
 
-        // validateNameField(name, event);
-        var validFormState = validateNameField(name, event) && validatePasswordField(password, event) && validateAddressField(address, event);
+        validateNameField(name, event);
+        validatePasswordField(password, event);
+        validateAddressField(address, event);
+        validateEmailField(email, event);
+        validateHobbies(checkedHobby, event);
+        validateGender(gender, event);
+        validateCountry(country, event);
+        validateDOBField(dob, event);
+        var validFormState = validateNameField(name, event) && validatePasswordField(password, event) && validateAddressField(address, event) && validateEmailField(email, event) && validateHobbies(checkedHobby, event) && validateGender(gender, event) && validateCountry(country, event) && validateDOBField(dob, event);
+        console.log("form status is " + validFormState);
         if (validFormState) {
+            // if (true) {
+            console.log("IN VALID BLOCK");
 
             formDataProcess(person, "new");
-            {//Cell wise data insertion in table
-                // const $tableBody = $("#listTable tbody")
-                // $tableBody.empty();
-                // list.forEach(user => {
-                //     const $row = $("<tr>");
-                //     const $nameCell = $("<td>").text(user.name);
-                //     const $dobCell = $("<td>").text(user.dob);
-                //     const $addressCell = $("<td>").text(user.address);
-                //     const $countryCell = $("<td>").text(user.country);
-                //     const $hobbiesCell = $("<td>").text(user.hobbies);
-                //     const $genderCell = $("<td>").text(user.gender);
-                //     const $emailCell = $("<td>").text(user.email);
-
-                //     $row.append($nameCell, $dobCell, $addressCell, $countryCell, $hobbiesCell, $genderCell, $emailCell);
-                //     $tableBody.append($row);
-                // });
-            }
+            clearForm();
             event.preventDefault();
-            $(":reset").click();
+
+        } else {
+            event.preventDefault();
         }
     });
 
 
-    enableFastFeedback(form);
+
 
     function enableFastFeedback(formElement) {
 
         var nameInput = formElement.find("#name");
+        var dobInput = formElement.find("#dob");
         var addressInput = formElement.find("#address");
         var emailInput = formElement.find("#email");
-        var countryInput = formElement.find("#country");
-        var genderInput = formElement.find("#gender");
+
         var passwordInput = formElement.find("#password");
+        var genderInput = formElement.find("#gender");
+        var countryInput = formElement.find("#country");
+        var hobbyInput = $("input[name='hobby']");
 
 
+        hobbyInput.change(function (event) {
+            let checkedHobby = $("input[name='hobby']:checked");
 
+            validateHobbies(checkedHobby, event)
+            if (checkedHobby.length == 0) {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #811");
+                hobbyInput.css("box-shadow", "0 0 4px #811");
+            } else {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #181");
+                hobbyInput.css("box-shadow", "0 0 4px #181");
+            }
+        });
+        genderInput.change(function (event) {
+            let selectedGender = $(this).val();
+            console.log(selectedGender);
+
+            validateGender(selectedGender, event);
+
+            if (selectedGender == null) {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #811");
+                genderInput.css("box-shadow", "0 0 4px #811");
+            } else {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #181");
+                genderInput.css("box-shadow", "0 0 4px #181");
+            }
+        });
+        countryInput.change(function (event) {
+            let selectedCountry = $(this).val();
+
+            validateCountry(selectedCountry, event);
+            if (selectedCountry == null) {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #811");
+                countryInput.css("box-shadow", "0 0 4px #811");
+            } else {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #181");
+                countryInput.css("box-shadow", "0 0 4px #181");
+            }
+        });
 
 
         nameInput.blur(function (event) {
+
             var name = $(this).val();
 
             validateNameField(name, event);
 
             if (!isValidName(name)) {
                 $(this).css("box-shadow", "0 0 4px #811");
+
             } else {
                 $(this).css("box-shadow", "0 0 4px #181");
             }
         });
+        dobInput.blur(function (event) {
+            // var dob = $("#dob").val();
+            // console.log("DOB is " + dob);
+            var dob = $(this).val();
+
+            validateDOBField(dob, event);
+
+            if (!isValidDOB(dob)) {
+                $(this).css("box-shadow", "0 0 4px #811");
+
+            } else {
+                $(this).css("box-shadow", "0 0 4px #181");
+            }
+        });
+
         addressInput.blur(function (event) {
             var address = $(this).val();
 
@@ -336,6 +494,7 @@ $(document).ready(function () {
 
             if (!isValidAddress(address)) {
                 $(this).css("box-shadow", "0 0 4px #811");
+
             } else {
                 $(this).css("box-shadow", "0 0 4px #181");
             }
@@ -349,6 +508,7 @@ $(document).ready(function () {
 
             if (!isValidEmail(email)) {
                 $(this).css("box-shadow", "0 0 4px #811");
+
             } else {
                 $(this).css("box-shadow", "0 0 4px #181");
                 console.log("false");
@@ -361,95 +521,177 @@ $(document).ready(function () {
 
             if (!isValidPassword(password)) {
                 $(this).css("box-shadow", "0 0 4px #811");
+
             } else {
                 $(this).css("box-shadow", "0 0 4px #181");
                 console.log("false");
             }
         });
 
+    }
 
-        function validateNameField(name, event) {
-            if (!isValidName(name)) {
-                $("#name-feedback").text("Name should be unique");
-                event.preventDefault();
-                return false;
-            } else {
-                $("#name-feedback").text("");
-                return true;
+
+    function validateHobbies(checkedHobby, event) {
+        if (checkedHobby.length === 0) {
+            $("#hobby-feedback").text("Select atleast one hobby");
+            // validFormState = false;
+            //   event.preventDefault();
+            return false;
+        } else {
+            $("#hobby-feedback").text("");
+            // validFormState = true;
+            return true;
+        }
+    }
+    function validateGender(selectedGender, event) {
+        if (selectedGender == null) {
+            console.log("in validate gender");
+            $("#gender-feedback").text("Select Gender");
+            // validFormState = false;
+            //   event.preventDefault();
+            $("#gender").css("box-shadow", "0 0 4px #811");
+            return false;
+        } else {
+            $("#gender-feedback").text("");
+            // validFormState = true;
+            $("#gender").css("box-shadow", "0 0 4px #181");
+            return true;
+        }
+    }
+    function validateCountry(selectedCountry, event) {
+        if (selectedCountry == null) {
+            console.log("in validate gender");
+            $("#country-feedback").text("Select Country");
+            // validFormState = false;
+            //   event.preventDefault();
+            $("#country").css("box-shadow", "0 0 4px #811");
+            return false;
+        } else {
+            $("#country-feedback").text("");
+            // validFormState = true;
+            $("#country").css("box-shadow", "0 0 4px #181");
+            return true;
+        }
+    }
+
+
+    function validateNameField(name, event) {
+        if (!isValidName(name)) {
+            $("#name-feedback").text("Name should be unique");
+            // validFormState = false;
+            return false;
+        } else {
+            $("#name-feedback").text("");
+            // validFormState = true;
+            return true;
+        }
+    }
+
+    function isValidName(name) {
+        let isValid = true;
+        list.forEach(valid);
+        function valid(element) {
+            console.log(element.name);
+            if (element.name == name || name == "") {
+                isValid = false;
             }
         }
-
-
-        function isValidName(name) {
-            var isValid = true;
-            list.forEach(valid);
-
-            function valid(element, index) {
-                console.log(element.name);
-                if (element.name == name) {
-                    isValid = false;
-                }
-            }
-            console.log(isValid);
-            return isValid;
+        console.log(isValid);
+        return isValid;
+    }
+    function validateDOBField(dob, event) {
+        if (!isValidDOB(dob)) {
+            $("#dob-feedback").text("Select DOB");
+            // validFormState = false;
+            // $("#dob").css("box-shadow", "0 0 4px #811");
+            return false;
+        } else {
+            $("#dob-feedback").text("");
+            // validFormState = true;
+            // $("#dob").css("box-shadow", "0 0 4px #181");
+            return true;
         }
+    }
+
+    function isValidDOB(dob) {
+        return dob !== "";
+    }
 
 
-        function validateEmailField(email, event) {
-            if (!isValidEmail(email)) {
-                $("#email-feedback").text("Password should contain min. 6 char");
-                event.preventDefault();
-                return false;
-            } else {
-                $("#email-feedback").text("");
-                return true;
-            }
+    function validateEmailField(email, event) {
+        if (!isValidEmail(email)) {
+            $("#email-feedback").text("Password should contain min. 6 char");
+            // validFormState = false;
+            // event.preventDefault();
+            return false;
+        } else {
+            $("#email-feedback").text("");
+            // validFormState = true;
+            return true;
         }
+    }
 
-        function isValidEmail(email) {
-
-            var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-            if (!regex.test(email)) {
-                console.log("false");
-                return false;
-            } else {
-                console.log("okay");
-                return true;
-            }
-
+    function isValidEmail(email) {
+        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!regex.test(email)) {
+            console.log("false");
+            return false;
+        } else {
+            console.log("okay");
+            return true;
         }
+    }
 
-        function validatePasswordField(password, event) {
-            if (!isValidPassword(password)) {
-                $("#password-feedback").text("Password should contain min. 6 char");
-                event.preventDefault();
-                return false;
-            } else {
-                $("#password-feedback").text("");
-                return true;
-            }
+    function validatePasswordField(password, event) {
+        if (!isValidPassword(password)) {
+            $("#password-feedback").text("Password should contain min. 6 char");
+            // validFormState = false;
+            // event.preventDefault();
+            return false;
+        } else {
+            $("#password-feedback").text("");
+            // validFormState = true;
+            return true;
         }
+    }
 
-        function isValidPassword(password) {
-            return password.length >= 6;
+    function isValidPassword(password) {
+        return password.length >= 6;
+    }
+
+    function validateAddressField(address, event) {
+        if (!isValidAddress(address)) {
+            $("#address-feedback").text("Address required");
+            // validFormState = false;
+            // event.preventDefault(); 
+            return false;
+        } else {
+            $("#address-feedback").text("");
+            // validFormState = true;
+            return true;
         }
+    }
 
-        function validateAddressField(address, event) {
-            if (!isValidAddress(address)) {
-                $("#address-feedback").text("Address required");
-                event.preventDefault();
-                return false;
-            } else {
-                $("#address-feedback").text("");
-                return true;
-            }
+
+    function isValidAddress(address) {
+        return address.trim() !== "";
+    }
+    function validateHobbyField(address, event) {
+        if (!isValidHobby(address)) {
+            $("#address-feedback").text("Address required");
+            // validFormState = false;
+            // event.preventDefault(); 
+            return false;
+        } else {
+            $("#address-feedback").text("");
+            // validFormState = true;
+            return true;
         }
+    }
 
 
-        function isValidAddress(address) {
-            return address.trim() !== "";
-        }
-
+    function isValidHobby(address) {
+        return address.trim() !== "";
     }
 
 });
