@@ -63,96 +63,90 @@
         <form id="form" class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" value="" required>
+                <input type="text" class="form-control" id="name" value="">
                 <div id="name-feedback" class="feedback"></div>
             </div>
             <div class="col-md-6">
                 <label for="dob" class="form-label">DOB</label>
-                <input type="date" class="form-control" id="dob" value="" required>
-                <div class="valid-feedback">
-                    Looks good!
-                </div>
+                <input type="date" class="form-control" id="dob" value="">
+                <div id="dob-feedback" class="feedback"></div>
             </div>
 
             <div class="col-12">
                 <label for="address" class="form-label">Address</label>
-                <input type="text" class="form-control" id="address" value="" required>
+                <input type="text" class="form-control" id="address" value="">
+                <div id="address-feedback" class="feedback"></div>
             </div>
 
 
             <div class="col-md-6">
                 <label for="email" class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" value="" required>
-                <div class="invalid-feedback">
-                    Please provide a valid email.
-                </div>
+                <input type="email" class="form-control" id="email" value="">
+                <div id="email-feedback" class="feedback"></div>
             </div>
 
             <div class="col-md-6">
                 <label for="country" class="form-label">Country</label>
-                <select class="form-select" id="country" required>
+                <select class="form-select" id="country">
                     <option selected disabled value="">Choose...</option>
                     <option>India</option>
                     <option>USA</option>
                     <option>Russia</option>
                     <option>Japan</option>
                 </select>
-                <div class="invalid-feedback">
-                    Please select a valid country.
-                </div>
+                <div id="country-feedback" class="feedback"></div>
             </div>
             <div class="col-md-6">
                 <div>
                     <label for="hobbies" class="form-label">Hobbies</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="hobby1" data-hobby1="Cricket">
-                    <label class="form-check-label" for="hobby1">Cricket</label>
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby1" data-hobby1="Cricket" value="Cricket">
+                    <label class="form-check-label" name="hobby" for="hobby">Cricket</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="hobby2" data-hobby2="Reading">
-                    <label class="form-check-label" for="hobby2">Reading</label>
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby2" data-hobby2="Reading" value="Reading">
+                    <label class="form-check-label" name="hobby" for="hobby">Reading</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" id="hobby3" data-hobby3="Writting">
-                    <label class="form-check-label" for="hobby3">Writting</label>
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby3" data-hobby3="Writting" value="Writting">
+                    <label class="form-check-label" name="hobby" for="hobby">Writting</label>
                 </div>
+                <div id="hobby-feedback" class="feedback"></div>
             </div>
 
             <div class="col-md-6">
                 <label for="gender" class="form-label">Gender</label>
-                <select class="form-select" id="gender" required>
+                <select class="form-select" id="gender">
                     <option selected disabled value="">Choose...</option>
                     <option>Male</option>
                     <option>Female</option>
                     <option>Other</option>
                 </select>
-                <div class="invalid-feedback">
-                    Please select a valid country.
-                </div>
+                <div id="gender-feedback" class="feedback"></div>
             </div>
 
             <div class="col-md-6">
                 <label for="password" class="form-label">Password</label>
                 <div class="passwordDiv">
-                    <input type="password" class="form-control" id="password" required>
+                    <input type="password" class="form-control" id="password">
                     <i id="eye" class="fa fa-eye password-icon"></i>
                     <!-- <i id="eye" class="fa fa-eye"></i> -->
 
-                    <div class="password-feedback">
-                        
-                    </div>
+                    <div id="password-feedback" class="feedback"></div>
+
                 </div>
+            </div>
 
             </div>
 
 
             <div class="form-btn">
-                <button id="submit" class="btn btn-primary" type="submit">Add User</button>
-              
+                <button id="submit" class="main-btn" type="submit">Add User</button>
+
                 <!-- <button id="submit" class="btn btn-primary" type="button">Submit</button> -->
-                <button id="update" class="update btn btn-primary" type="button" style="display: none;">Update</button>
-                <button id="reset" class="btn btn-secondary" type="reset">Reset</button>
+                <button id="update" class="main-btn" type="button" style="display: none;">Update</button>
+                <button id="reset" class="edit" type="reset">Reset</button>
 
 
             </div>
@@ -171,25 +165,26 @@
                     <th>Gender</th>
                     <th>Email</th>
                     <th>Action</th>
+                    <!-- <th>RowNo</th> -->
                 </tr>
             </thead>
-            <tbody id="tbody" >
+            <tbody id="tbody">
 
 
             </tbody>
         </table>
     </section>
 
-    
+
     <div id="myModal" class="modal">
-        
+
         <div class="modal-content">
 
         </div>
 
     </div>
 
-    
+
 </body>
 
 </html>

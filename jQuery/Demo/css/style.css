@@ -45,7 +45,10 @@ nav li a {
 }
 
 .edit-gender{
+    display: flex;
     width: 80px;
+    align-items: center;
+    justify-content: center;
 }
 
 
@@ -59,7 +62,29 @@ button{
     width: 100px;
     height: auto;
     padding: 3px 10px;
+    margin: 5px;
+    border-radius: 10px;
 }
+.edit{
+    color: white;
+    background-color: rgb(120, 120, 120);
+    border: 1px solid black;
+    
+    
+}
+.main-btn{
+    color: white;
+    background-color: rgb(47, 120, 216);
+    border: 1px solid black;
+     
+}
+.delete{
+    color: black;
+    background-color: rgb(211, 46, 59);
+    border: 1px solid black;
+    
+}
+
 
 .form-label{
     font-size: 18px;
@@ -95,6 +120,7 @@ cursor: pointer;
 
 
   th, td{
+    
     text-align: center;
     vertical-align: middle;
   }
@@ -105,6 +131,3 @@ cursor: pointer;
     
   }
 
-  .btn{
-    margin: 5px;
-  }
