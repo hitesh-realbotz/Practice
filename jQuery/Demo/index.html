@@ -101,15 +101,18 @@
                     <label for="hobbies" class="form-label">Hobbies</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby1" data-hobby1="Cricket" value="Cricket">
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby1" data-hobby1="Cricket"
+                        value="Cricket">
                     <label class="form-check-label" name="hobby" for="hobby">Cricket</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby2" data-hobby2="Reading" value="Reading">
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby2" data-hobby2="Reading"
+                        value="Reading">
                     <label class="form-check-label" name="hobby" for="hobby">Reading</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby3" data-hobby3="Writting" value="Writting">
+                    <input class="form-check-input" name="hobby" type="checkbox" id="hobby3" data-hobby3="Writting"
+                        value="Writting">
                     <label class="form-check-label" name="hobby" for="hobby">Writting</label>
                 </div>
                 <div id="hobby-feedback" class="feedback"></div>
@@ -133,22 +136,24 @@
                     <i id="eye" class="fa fa-eye password-icon"></i>
                     <!-- <i id="eye" class="fa fa-eye"></i> -->
 
-                    <div id="password-feedback" class="feedback"></div>
-
                 </div>
+                <div id="password-feedback" class="feedback"></div>
             </div>
 
+            <div class="col-md-6">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role">
+                    <option selected disabled value="">Choose...</option>
+                    <option>Admin</option>
+                    <option>User</option>
+                </select>
+                <div id="role-feedback" class="feedback"></div>
             </div>
-
-
             <div class="form-btn">
                 <button id="submit" class="main-btn" type="submit">Add User</button>
-
                 <!-- <button id="submit" class="btn btn-primary" type="button">Submit</button> -->
                 <button id="update" class="main-btn" type="button" style="display: none;">Update</button>
-                <button id="reset" class="edit" type="reset">Reset</button>
-
-
+                <button id="reset" class="reset-btn" type="reset">Reset</button>
             </div>
         </form>
     </section>
@@ -164,17 +169,16 @@
                     <th>Hobbies</th>
                     <th>Gender</th>
                     <th>Email</th>
+                    <th>Role</th>
                     <th>Action</th>
                     <!-- <th>RowNo</th> -->
                 </tr>
             </thead>
             <tbody id="tbody">
 
-
             </tbody>
         </table>
     </section>
-
 
     <div id="myModal" class="modal">
 

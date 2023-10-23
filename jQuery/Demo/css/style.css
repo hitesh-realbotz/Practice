@@ -58,31 +58,33 @@ nav li a {
     
 }
 
-button{
+
+
+
+button {
     width: 100px;
     height: auto;
     padding: 3px 10px;
     margin: 5px;
     border-radius: 10px;
-}
-.edit{
     color: white;
+    border: 1px solid black;
+}
+
+.edit {
     background-color: rgb(120, 120, 120);
-    border: 1px solid black;
-    
-    
 }
-.main-btn{
-    color: white;
+
+.reset-btn {
+    background-color: rgb(120, 120, 120);
+}
+
+.main-btn {
     background-color: rgb(47, 120, 216);
-    border: 1px solid black;
-     
 }
-.delete{
-    color: black;
+
+.delete {
     background-color: rgb(211, 46, 59);
-    border: 1px solid black;
-    
 }
 
 
