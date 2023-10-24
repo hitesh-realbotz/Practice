@@ -3,41 +3,21 @@ $(document).ready(function () {
 
     let form = $("#form");
     enableFastFeedback(form);
-    var validFormState = false;
 
     var modal = document.getElementById("myModal");
 
-    const list = [];
+    // localStorage.clear();
 
-    {   //Initial Data insertion in list
-        const person1 = {
-            name: 'Mark',
-            dob: '2000-01-01',
-            address: 'USA',
-            country: 'USA',
-            hobbies: ["Cricket"],
-            gender: 'Male',
-            email: 'mark@gmail.com',
-            password: 'mark@123',
-        }
+    if ((JSON.parse(localStorage.getItem('listOfUsers'))) == null) {
+        var list = [];
 
-        const person2 = {
-            name: 'ABC',
-            dob: '2000-01-01',
-            address: 'Surat',
-            country: 'India',
-            hobbies: ["Reading"],
-            gender: 'Male',
-            email: 'abc@gmail.com',
-            password: 'abc123',
-        }
-        list.push(person1);
-        list.push(person2);
+    } else {
+        var list = JSON.parse(localStorage.getItem('listOfUsers'));
+        initialDataToTable(list);
     }
-    dataToTable();
 
-    //Initial Data insertion in Table from list
-    function dataToTable() {
+    //Initial Data insertion in Table from LocalStorage
+    function initialDataToTable(list) {
         var tableBody = $("tbody");
 
         list.forEach(listData);
@@ -54,6 +34,7 @@ $(document).ready(function () {
             tableRow += `<td id="Gender${index}"><select data-index="${index}" name="" class="edit-gender"><option value="${element.gender}">${element.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`;
             // tableRow += '<td>' + element.gender + "</td>";
             tableRow += '<td>' + element.email + "</td>>";
+            tableRow += '<td>' + element.role + "</td>>";
             tableRow += `<td> <button  data-index="${index}"  class='edit' >Edit</button> <button  data-index="${index}"   class='delete'>Delete</button></td>`;
             // tableRow += `<td> <button  data-index="${index}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
             tableRow += `</tr>`;
@@ -64,7 +45,7 @@ $(document).ready(function () {
 
 
     //Form Data Processing for adding or updating user 
-    function formDataProcess(person, op) {
+    function formDataProcess(person) {
 
         var name = $("#name").val();
         var dob = $("#dob").val();
@@ -73,12 +54,12 @@ $(document).ready(function () {
         var country = $("#country").val();
         var gender = $("#gender").val();
         var password = $("#password").val();
+        var role = $("#role").val();
 
         var hobbiesArray = [];
         ($("#hobby1").is(":checked") ? hobbiesArray.push($("#hobby1").data("hobby1")) : "");
         ($("#hobby2").is(":checked") ? hobbiesArray.push($("#hobby2").data("hobby2")) : "");
         ($("#hobby3").is(":checked") ? hobbiesArray.push($("#hobby3").data("hobby3")) : "");
-
 
         person.name = name;
         person.dob = dob;
@@ -87,53 +68,27 @@ $(document).ready(function () {
         person.country = country;
         person.gender = gender;
         person.password = password;
+        person.role = role;
         person.hobbies = hobbiesArray;
-
-        var tableBody = $("tbody");
-
-        if (op === "new") {
-            console.log("ADDING DATA TO TABLE");
-            list.push(person);
-            op = list.length - 1;
-            list.forEach(element => {
-                console.log(element);
-            });
-            var tableRow = '<tr>';
-            dataManipulation(person, op);
-            tableRow += "</tr>";
-            tableBody.append(tableRow);
-
-        } else {
-            console.log("op is " + op);
-            list[op] = person;
-            // var tableRowEle = $(`#tbody tr:eq("${op}")`);
-            var tableRow = "";
-            console.log(tableRow);
-
-            dataManipulation(person, op);
-            $(`#tbody tr:eq("${op}")`).html(`${tableRow}`);
-
-        }
-
-        function dataManipulation(person, op) {
-            tableRow += '<td>' + person.name + "</td>";
-            tableRow += '<td>' + person.dob + "</td>";
-            tableRow += '<td>' + person.address + "</td>";
-            tableRow += '<td>' + person.country + "</td>";
-            tableRow += '<td>' + person.hobbies + "</td>";
-            tableRow += `<td id="Gender${op}"><select data-index="${op}" name="" class="edit-gender"><option value="${person.gender}">${person.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`;
-            tableRow += '<td>' + person.email + "</td>";
-            // tableRow += `<td> <button  data-index="${op}"  class='edit btn btn-secondary' >Edit</button> <button   data-index="${op}"  class='delete btn btn-danger' >Delete</button></td>`;
-            // tableRow += `<td> <button  data-index="${op}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
-
-            tableRow += `<td> <button  data-index="${op}"  class="edit" >Edit</button> <button  data-index="${op}"   class="delete">Delete</button></td>`;
-            // tableRow += `<td> <button  data-index="${op}"  class='row-no btn btn-secondary' >RowNo</button></td>`;
-
-        }
 
         return person;
     }
 
+
+    //DataToTable
+    function DataToTable(person, tableRow, op) {
+        tableRow += '<td>' + person.name + "</td>";
+        tableRow += '<td>' + person.dob + "</td>";
+        tableRow += '<td>' + person.address + "</td>";
+        tableRow += '<td>' + person.country + "</td>";
+        tableRow += '<td>' + person.hobbies + "</td>";
+        tableRow += `<td id="Gender${op}"><select data-index="${op}" name="" class="edit-gender"><option value="${person.gender}">${person.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`;
+        tableRow += '<td>' + person.email + "</td>";
+        tableRow += '<td>' + person.role + "</td>";
+        tableRow += `<td> <button  data-index="${op}"  class="edit" >Edit</button> <button  data-index="${op}"   class="delete">Delete</button></td>`;
+        
+        return tableRow;
+    }
 
 
     //Password Visibility Toggle
@@ -155,15 +110,30 @@ $(document).ready(function () {
 
     //Clears form
     function clearForm() {
+
         $("#submit").css("display", "inline-block");
         $("#update").css("display", "none");
         $("#reset").data("index", "");
         $("#reset").attr("type", "reset");
-        $(":reset").click();
-        $("input").css("box-shadow", "");
-        $("select").css("box-shadow", "");
+
+        $("#form select").val("").css("box-shadow", "");
+        $("#form .feedback").html("");
+        $("#form input").val("").prop("checked", false).css("box-shadow", "");
 
     }
+
+    //Reset button
+    $("#form").on("click", "#reset", function (event) {
+
+        if ($("#reset").attr("type") == "reset") {
+            clearForm();
+        } else {
+            let currIndexValue = $("#reset").data("index");
+            resetUpdateForm(currIndexValue);
+        }
+    });
+
+
 
     $("#tbody").on("click", ".row-no", function () {
         var rowNumber = $(this).closest("tr");
@@ -179,35 +149,15 @@ $(document).ready(function () {
         var currIndexValue = curRow.index();
         console.log(currIndexValue);
         resetUpdateForm(currIndexValue);
-        // //Getting user from list and Displaying user values in form
-        // const currPerson = list[currIndexValue];
 
-        // $("#name").val(currPerson.name);
-        // $("#dob").val(currPerson.dob);
-        // $("#address").val(currPerson.address);
-        // $("#email").val(currPerson.email);
-        // $("#country").val(currPerson.country);
-        // $("#gender").val(currPerson.gender);
-        // $("#password").val(currPerson.password);
-        // // $("#hobbies").val(currPerson.hobbies);
-
-        // var currHobbies = currPerson.hobbies;
-        // $("#hobby1").prop("checked", currHobbies.includes("Cricket"));
-        // $("#hobby2").prop("checked", currHobbies.includes("Reading"));
-        // $("#hobby3").prop("checked", currHobbies.includes("Writting"));
-
-
-
-        // $("#submit").css("display", "none");
-        // $("#update").css("display", "inline-block");
-        // $("#update").data("index", currIndexValue);
-        // $("#reset").data("index", currIndexValue);
     });
 
 
+    //Getting user from list and Displaying user values in form
     function resetUpdateForm(currIndexValue) {
         //Getting user from list and Displaying user values in form
         const currPerson = list[currIndexValue];
+        clearForm();
 
         $("#name").val(currPerson.name);
         $("#dob").val(currPerson.dob);
@@ -216,14 +166,13 @@ $(document).ready(function () {
         $("#country").val(currPerson.country);
         $("#gender").val(currPerson.gender);
         $("#password").val(currPerson.password);
+        $("#role").val(currPerson.role);
         // $("#hobbies").val(currPerson.hobbies);
 
         var currHobbies = currPerson.hobbies;
         $("#hobby1").prop("checked", currHobbies.includes("Cricket"));
         $("#hobby2").prop("checked", currHobbies.includes("Reading"));
         $("#hobby3").prop("checked", currHobbies.includes("Writting"));
-
-
 
         $("#submit").css("display", "none");
         $("#update").css("display", "inline-block");
@@ -237,27 +186,25 @@ $(document).ready(function () {
     $("#update").on("click", function (event) {
         let updateIndex = $("#update").data("index");
 
-        const person = list[updateIndex];
+        const person = formDataProcess(list[updateIndex]);
+        var validFormState = validateFormFields(person, event, "update");
+        if (validFormState == true) {
 
-        formDataProcess(person, updateIndex);
+            list[updateIndex] = person;
+            localStorage.setItem('listOfUsers', JSON.stringify(list));
 
-        clearForm();
+            // var tableRowEle = $(`#tbody tr:eq("${op}")`);
+            var tableBody = $("tbody");
+            var tableRow = "";
+            console.log(tableRow);
 
-    });
+            tableRow = DataToTable(person, tableRow, updateIndex);
+            $(`#tbody tr:eq("${updateIndex}")`).html(`${tableRow}`);
 
-    //Reseting user details on-click Reset button
-    $("#reset").on("click", function (event) {
-
-        if ($("#reset").attr("type") == "reset") {
-
+            clearForm();
         } else {
-            let currIndexValue = $("#reset").data("index");
-
-            resetUpdateForm(currIndexValue);
-
+            event.preventDefault();
         }
-
-
 
     });
 
@@ -266,7 +213,13 @@ $(document).ready(function () {
     $("#tbody").on("change", ".edit-gender", function () {
         console.log("button clicked");
 
-        var updateIndex = $(this).data("index");
+        var curRow = $(this).closest("tr");
+        console.log("Row no is " + curRow.index());
+
+        var updateIndex = curRow.index();
+        console.log(updateIndex);
+
+        // var updateIndex = $(this).data("index");
         var selectedOption = $(this).find(":selected").val();
         var genderBox = "Gender" + updateIndex;
 
@@ -274,6 +227,7 @@ $(document).ready(function () {
         const existingPer = list[updateIndex];
         existingPer.gender = selectedOption;
         list[updateIndex] = existingPer;
+        localStorage.setItem('listOfUsers', JSON.stringify(list));
 
         $(`#${genderBox}`).html(`<td id = "Gender${updateIndex}" > <select data-index="${updateIndex}" name="" class="edit-gender"><option value="${existingPer.gender}">${existingPer.gender}</option><option value="Male">Male</option><option value="Female">Female</option><option value="Other">Other</option></select></td>`);
     });
@@ -307,24 +261,6 @@ $(document).ready(function () {
             //         console.log(element);
             //     });
 
-            //     dataToTable();
-
-            //     // console.log("next id is "+$(`tbody #${ currIndexValue } `).next().attr("id"));
-            //     // var nextId = $(`tbody #${ currIndexValue } `).next().attr("id");
-            //     // $(`tbody #${ currIndexValue } `).remove();
-
-            //     // while(nextId != "undefined"){
-            //     //     var preId = nextId;
-            //     //     $(`tbody #${ preId } `).attr("id",currIndexValue);
-            //     //     currIndexValue = nextId;
-
-            //     //     nextId = $(`tbody #${ currIndexValue } `).next().attr("id");
-
-            //     // }
-
-            // } else {
-            //     text = "You canceled!";
-            // }
         }
     });
 
@@ -336,6 +272,8 @@ $(document).ready(function () {
         console.log(remIndex);
 
         list.splice(remIndex, 1);
+        localStorage.setItem('listOfUsers', JSON.stringify(list));
+
         list.forEach(element => {
             console.log(element);
         });
@@ -343,8 +281,8 @@ $(document).ready(function () {
         var tableRow = $(`#tbody tr:eq("${remIndex}")`).html();
         tableRow = "<tr>" + tableRow + "</tr>";
         console.log(tableRow);
-        $(`#tbody tr:eq("${remIndex}")`).html('');
-
+        $(`#tbody tr:eq("${remIndex}")`).remove();
+        clearForm();
         modal.style.display = "none";
     });
 
@@ -360,41 +298,39 @@ $(document).ready(function () {
         }
     }
 
-
+    // localStorage.clear();
     //New User entry on-click Submit button after filling input fields
     // $("#submit").on("click", function (event) {
     form.submit(function (event) {
         console.log("IN SUBMIT");
-        const person = {
-            name: '', dob: '', address: '', country: '', hobbies: '', gender: '', email: '', password: '',
+        const person1 = {
+            name: '', dob: '', address: '', country: '', hobbies: '', gender: '', email: '', password: '', role: ''
         }
 
+        const person = formDataProcess(person1);
+        // let checkedHobby = $("input[name='hobby']:checked");
+        // let checkedHobby = person.hobbies;
 
-        var name = $("#name").val();
-        var dob = $("#dob").val();
-        var address = $("#address").val();
-        var email = $("#email").val();
-        // var country = $("#country").find(":selected").text();
-        var country = $("#country").val();
-        var gender = $("#gender").val();
-        var password = $("#password").val();
-        let checkedHobby = $("input[name='hobby']:checked");
-
-        validateNameField(name, event);
-        validatePasswordField(password, event);
-        validateAddressField(address, event);
-        validateEmailField(email, event);
-        validateHobbies(checkedHobby, event);
-        validateGender(gender, event);
-        validateCountry(country, event);
-        validateDOBField(dob, event);
-        var validFormState = validateNameField(name, event) && validatePasswordField(password, event) && validateAddressField(address, event) && validateEmailField(email, event) && validateHobbies(checkedHobby, event) && validateGender(gender, event) && validateCountry(country, event) && validateDOBField(dob, event);
+        var validFormState = validateFormFields(person, event, "new");
         console.log("form status is " + validFormState);
-        if (validFormState) {
-            // if (true) {
-            console.log("IN VALID BLOCK");
+        if (validFormState == true) {
 
-            formDataProcess(person, "new");
+            list.push(person);
+            localStorage.setItem('listOfUsers', JSON.stringify(list));
+
+
+
+            index = list.length - 1;
+            list.forEach(element => {
+                console.log(element);
+            });
+            var tableBody = $("tbody");
+            var tableRow = '<tr>';
+            tableRow = DataToTable(person, tableRow, index);
+            tableRow += "</tr>";
+            tableBody.append(tableRow);
+
+
             clearForm();
             event.preventDefault();
 
@@ -404,8 +340,29 @@ $(document).ready(function () {
     });
 
 
+    //Form Fields validation before submission
+    function validateFormFields(person, event, purpose) {
+        let validFormFieldsArray = [];
 
+        if (purpose == "new") {
+            validFormFieldsArray.push(validateNameField(person.name, event));
+        }
+        validFormFieldsArray.push(validatePasswordField(person.password, event));
+        validFormFieldsArray.push(validateAddressField(person.address, event));
+        validFormFieldsArray.push(validateEmailField(person.email, event));
+        validFormFieldsArray.push(validateHobbies(person.hobbies, event));
+        validFormFieldsArray.push(validateHobbies(person.hobbies, event));
+        validFormFieldsArray.push(validateGender(person.gender, event));
+        validFormFieldsArray.push(validateCountry(person.country, event));
+        validFormFieldsArray.push(validateRole(person.role, event));
+        validFormFieldsArray.push(validateDOBField(person.dob, event));
+        console.log("Array include false value is ===== " + validFormFieldsArray.includes(false));
 
+        return !validFormFieldsArray.includes(false);
+
+    }
+
+    //Validation while form filling
     function enableFastFeedback(formElement) {
 
         var nameInput = formElement.find("#name");
@@ -416,6 +373,7 @@ $(document).ready(function () {
         var passwordInput = formElement.find("#password");
         var genderInput = formElement.find("#gender");
         var countryInput = formElement.find("#country");
+        var roleInput = formElement.find("#role");
         var hobbyInput = $("input[name='hobby']");
 
 
@@ -455,6 +413,18 @@ $(document).ready(function () {
             } else {
                 //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #181");
                 countryInput.css("box-shadow", "0 0 4px #181");
+            }
+        });
+        roleInput.change(function (event) {
+            let selectedRole = $(this).val();
+
+            validateRole(selectedRole, event);
+            if (selectedRole == null) {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #811");
+                roleInput.css("box-shadow", "0 0 4px #811");
+            } else {
+                //   $(this).add("label[for='checkbox2']").css("box-shadow", "0 0 4px #181");
+                roleInput.css("box-shadow", "0 0 4px #181");
             }
         });
 
@@ -543,6 +513,7 @@ $(document).ready(function () {
             return true;
         }
     }
+
     function validateGender(selectedGender, event) {
         if (selectedGender == null) {
             console.log("in validate gender");
@@ -558,9 +529,9 @@ $(document).ready(function () {
             return true;
         }
     }
+
     function validateCountry(selectedCountry, event) {
         if (selectedCountry == null) {
-            console.log("in validate gender");
             $("#country-feedback").text("Select Country");
             // validFormState = false;
             //   event.preventDefault();
@@ -570,6 +541,20 @@ $(document).ready(function () {
             $("#country-feedback").text("");
             // validFormState = true;
             $("#country").css("box-shadow", "0 0 4px #181");
+            return true;
+        }
+    }
+    function validateRole(selectedRole, event) {
+        if (selectedRole == null) {
+            $("#role-feedback").text("Select Role");
+            // validFormState = false;
+            //   event.preventDefault();
+            $("#role").css("box-shadow", "0 0 4px #811");
+            return false;
+        } else {
+            $("#role-feedback").text("");
+            // validFormState = true;
+            $("#role").css("box-shadow", "0 0 4px #181");
             return true;
         }
     }
@@ -589,10 +574,12 @@ $(document).ready(function () {
 
     function isValidName(name) {
         let isValid = true;
+        name = name.toLowerCase();
         list.forEach(valid);
         function valid(element) {
-            console.log(element.name);
-            if (element.name == name || name == "") {
+            console.log(name);
+
+            if (name === "" || element.name.toLowerCase() === name) {
                 isValid = false;
             }
         }
