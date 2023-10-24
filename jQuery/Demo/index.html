@@ -9,11 +9,6 @@
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-
-
-
-
-
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modelstyle.css">
 
@@ -43,12 +38,9 @@
                         <li class="nav-item">
                             <a id="add" class="nav-link active" aria-current="page" href="#form-section">Add</a>
                         </li>
-
-
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="#contact-us">Contact</a>
                         </li>
-
                     </ul>
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -60,6 +52,7 @@
     </header>
 
     <section id="form-section" class="container">
+        <div id="actionMsg" class="msg"></div>
         <form id="form" class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Name</label>
@@ -182,12 +175,13 @@
 
     <div id="myModal" class="modal">
 
-        <div class="modal-content">
-
-        </div>
-
+        <div class="modal-content"></div>
     </div>
 
+    <div class="toast text-white bg-success position-absolute top-0 end-0 p-3" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header"></div>
+        <div class="toast-body"></div>
+    </div>
 
 </body>
 

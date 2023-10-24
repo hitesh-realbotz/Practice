@@ -1,9 +1,9 @@
-
 .navbar{
     position: fixed;
     width: 100%;
     height: 60px;
     font-size: 25px;
+    z-index: auto;
     
 }
  .navbar .navbar-brand{
@@ -36,8 +36,7 @@ nav li a {
         position: relative;
         height: auto;
         width: 100%;
-        margin: 50px auto;
-        
+        margin: 50px auto;        
 }
 
 #form-section{
@@ -51,14 +50,10 @@ nav li a {
     justify-content: center;
 }
 
-
 .center{
     align-items: center;
-    justify-content: center;
-    
+    justify-content: center; 
 }
-
-
 
 
 button {
@@ -87,6 +82,12 @@ button {
     background-color: rgb(211, 46, 59);
 }
 
+.form-btn{
+    display: flex;
+    justify-content: center;
+    
+  }
+
 
 .form-label{
     font-size: 18px;
@@ -94,9 +95,9 @@ button {
 }
 
 
+
 .passwordDiv{
-    display: flex;
-    
+    display: flex;   
 }
 
 .passwordDiv .password-icon{
@@ -110,16 +111,6 @@ cursor: pointer;
     color: red;
 }
 
-.modal-header, h4, .close {
-    background-color: #5cb85c;
-    color:white !important;
-    text-align: center;
-    font-size: 30px;
-  }
-  .modal-footer {
-    background-color: #f9f9f9;
-  }
-
 
   th, td{
     
@@ -127,9 +118,10 @@ cursor: pointer;
     vertical-align: middle;
   }
 
-  .form-btn{
-    display: flex;
-    justify-content: center;
-    
-  }
 
+  .valid-field{
+    box-shadow: 0 0 4px #181;
+  }
+  .invalid-field{
+    box-shadow: 0 0 4px #811;
+  }
