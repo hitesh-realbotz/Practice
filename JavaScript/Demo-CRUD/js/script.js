@@ -44,7 +44,7 @@ $(document).ready(function () {
         let table = document.getElementById("listTable").getElementsByTagName('tbody')[0];
         let row = table.insertRow(index);
         DataToTable(element, row);
-        actionConfirmationToast("Inserted");
+        // actionConfirmationToast("Inserted");
     }
 
     //DataToTable for NewEntry or data from LocalStorage
@@ -450,7 +450,9 @@ function validateFormFields(person, event, purpose) {
         if (name == "") {
             return false;
         }
-
+        if (document.getElementById("update").style.display == "inline-block") {
+            return isValid;
+        }
         list.forEach(checkInList);
         function checkInList(element) {
             if (element.name.toLowerCase() === name) {
