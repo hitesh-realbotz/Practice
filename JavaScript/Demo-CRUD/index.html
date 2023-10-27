@@ -56,7 +56,7 @@
         <form id="form" class="row g-3">
             <div class="col-md-6">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" value="Mark">
+                <input type="text" class="form-control" id="name" value="" >
                 <div id="name-feedback" class="feedback"></div>
             </div>
             <div class="col-md-6">
@@ -143,7 +143,7 @@
                 <button id="submit" class="main-btn" type="submit">Add User</button>
                 <!-- <button id="submit" class="btn btn-primary" type="button">Submit</button> -->
                 <button id="update" onclick="updateForm(this)" class="main-btn" type="button" style="display: none;">Update</button>
-                <button id="reset" class="reset-btn" type="reset">Reset</button>
+                <button id="reset" onclick="resetForm(this)" class="reset-btn" type="reset">Reset</button>
                 
             </div>
         </form>

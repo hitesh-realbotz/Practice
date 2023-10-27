@@ -479,7 +479,7 @@ $(document).ready(function () {
 
         function validateEmailField(email, event) {
             if (!isValidEmail(email)) {
-                $("#email-feedback").text("Password should contain min. 6 char");
+                $("#email-feedback").text("Enter valid email-id");
                 $("#email").addClass("invalid-field").removeClass("valid-field");
                 return false;
             } else {
