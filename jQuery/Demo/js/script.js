@@ -449,6 +449,9 @@ $(document).ready(function () {
             if (name == "") {
                 return false;
             }
+            if ($("#update").css("display") == "inline-block") {
+                return isValid;
+            }
 
             list.forEach(valid);
             function valid(element) {
