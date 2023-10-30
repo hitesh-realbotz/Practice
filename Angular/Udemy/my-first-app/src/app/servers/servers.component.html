@@ -1,4 +1,38 @@
-<h3>servers</h3>
-<p>servers works!</p>
+<!-- <h3>Servers</h3> -->
+<label for="">Server Name</label>
+<!-- event-binding -->
+<input type="text" class="form-control" (input)="onUpdateServerName($event)">
+<!-- <input type="text" class="form-control" (blur)="onUpdateServerName($event)"> -->
+<!-- <input type="text" class="form-control" (focus)="onUpdateServerName($event)"> -->
+<!-- Two-Way-Binding -->
+<input type="text" class="form-control" [(ngModel)]="serverName">
+<!-- String-Interpolation -->
+<p>{{serverName}}</p>
+
+<button class="btn btn-primary" [disabled]="!allowNewServer" (click)="onCreateServer()">AddNewServer</button>
+<!-- <p [innerHTML]="serverCreationStatus" ></p>
+<p >{{serverCreationStatus}}</p> -->
+<p *ngIf="serverCreated">{{serverCreationStatus}}</p>
+<!-- <p *ngIf="serverCreated; else noServer" >{{serverCreationStatus}}</p>
+<ng-template #noServer>
+    <p >{{serverCreationStatus}}</p>
+</ng-template> -->
+
+<!-- <p [innerHTML]="allowNewServer"></p> -->
 <app-server></app-server>
 <app-server></app-server>
+
+<!-- <label for="">UserName</label>
+<input type="text" class="form-control" [(ngModel)]="userName">
+<button type="reset" class="btn btn-primary"
+ [disabled]="userName === ''"
+ (click)="userName = ''">Reset UserName</button> -->
+
+
+<!-- <button class="btn btn-primary" (click)="showPassword = !showPassword">ShowDetails</button> -->
+<button class="btn btn-primary" (click)="showDetails()">ShowDetails</button>
+<p *ngIf="showPassword">This is password field</p>
+<!-- <p *ngFor="let log of logItem" [ngStyle]="{backgroundColor : log >=5? 'blue' : 'transparent', 'color': 'pink'}">{{log}}</p> -->
+<!-- <p *ngFor="let log of logItem" [ngStyle]="{backgroundColor : log >=5? 'blue' : 'transparent'}">{{log}}</p> -->
+<!-- <p *ngFor="let log of logItem" [ngStyle]="{'backgroundColor' : log >=5? 'blue' : 'transparent'}" [ngClass]="{'text-color': log >=5}">{{log}}</p> -->
+<p *ngFor="let log of logItem; let i = index;let val = value" [ngStyle]="{'backgroundColor' : i >=5? 'blue' : 'transparent'}" [ngClass]="{'text-color': i >=5}">{{log}}</p>
