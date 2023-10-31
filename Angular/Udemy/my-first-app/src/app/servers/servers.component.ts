@@ -49,6 +49,27 @@ export class ServersComponent implements OnInit {
       }
 
 
+
+      serverElements = [{type: 'server', name: 'TestServer', content: 'This is Test for Server'}];
+          
+
+      onServerAdded(serverData:{serverName: string,serverContent: string}) {
+        this.serverElements.push({
+          type: 'server',
+          name: serverData.serverName,
+          content: serverData.serverContent
+        });
+      }
+    
+      onBlueprintAdded(blueprintData:{blueprintName: string,blueprintContent: string}) {
+        this.serverElements.push({
+          type: 'blueprint',
+          name: blueprintData.blueprintName,
+          content: blueprintData.blueprintContent
+        });
+      }
+
+
 }
 
 // export class ServersComponent {
