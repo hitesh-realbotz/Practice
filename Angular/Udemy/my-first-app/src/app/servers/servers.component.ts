@@ -53,7 +53,8 @@ export class ServersComponent implements OnInit {
       serverElements = [{type: 'server', name: 'TestServer', content: 'This is Test for Server'}];
           
 
-      onServerAdded(serverData:{serverName: string,serverContent: string}) {
+      // onServerAdded(serverData:{serverName: string,serverContent: string}) {
+      onServerAdded(serverData) {
         this.serverElements.push({
           type: 'server',
           name: serverData.serverName,
