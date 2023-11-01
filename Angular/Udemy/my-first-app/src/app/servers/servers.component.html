@@ -35,4 +35,22 @@
 <!-- <p *ngFor="let log of logItem" [ngStyle]="{backgroundColor : log >=5? 'blue' : 'transparent', 'color': 'pink'}">{{log}}</p> -->
 <!-- <p *ngFor="let log of logItem" [ngStyle]="{backgroundColor : log >=5? 'blue' : 'transparent'}">{{log}}</p> -->
 <!-- <p *ngFor="let log of logItem" [ngStyle]="{'backgroundColor' : log >=5? 'blue' : 'transparent'}" [ngClass]="{'text-color': log >=5}">{{log}}</p> -->
-<p *ngFor="let log of logItem; let i = index;let val = value" [ngStyle]="{'backgroundColor' : i >=5? 'blue' : 'transparent'}" [ngClass]="{'text-color': i >=5}">{{log}}</p>
+<p *ngFor="let log of logItem; let i = index;let val = value"
+    [ngStyle]="{'backgroundColor' : i >=5? 'blue' : 'transparent'}" [ngClass]="{'text-color': i >=5}">{{log}}</p>
+
+
+
+<div class="container">
+    <div class="row">
+        <app-cockpit (serverCreated)="onServerAdded($event)"
+        (blueprintCreated)="onBlueprintAdded($event)"></app-cockpit>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <!-- <app-server-element  *ngFor="let serverElement of serverElements" [element]="serverElement" ></app-server-element> -->
+            <!-- with custom attribute name -->
+            <app-server-element  *ngFor="let serverElement of serverElements" [servElement]="serverElement" ></app-server-element>
+        </div>
+    </div>
+</div>
