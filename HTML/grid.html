@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .container{
+            background-color: antiquewhite;
+            border: 2px solid black;
+            display: grid;
+            /* grid-template-columns: 1fr 2fr auto;
+            grid-template-rows: 1fr 2fr ;
+            grid-auto-rows: 1fr;
+            grid-row-gap: 2rem;
+            grid-column-gap: 2rem; */
+
+            grid-template-columns: repeat(5,auto);
+        
+            grid-template-rows: repeat(4, 1fr);
+
+
+
+
+
+            
+        }
+        .item:first-child {
+            /* grid-column-start: 1;
+            grid-column-end: 3;
+            grid-row-start: 1;
+            grid-row-end: 3; */
+            /* background-color: red; */
+            
+            /* grid-column: 2 / span 3;
+            grid-row: 2 / span 3; */
+            grid-column: 1 / span 3;
+            grid-row: 1 / span 3;
+        }
+    
+        .item{
+            
+            background-color: rgb(197, 178, 153);
+            border: 2px solid black;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="item" id="item-1">Item-1</div>
+        <div class="item" id="item-2">Item-2</div>
+        <div class="item" id="item-3">Item-3</div>
+        <div class="item" id="item-4">Item-4</div>
+        <div class="item" id="item-5">Item-5</div>
+        <div class="item" id="item-6">Item-6</div>
+        <div class="item" id="item-7">Item-7</div>
+        <div class="item" id="item-8">Item-8</div>
+        <div class="item" id="item-9">Item-9</div>
+        <div class="item" id="item-10">Item-10</div>
+        <div class="item" id="item-11">Item-11</div>
+        <div class="item" id="item-12">Item-12</div>
+        <div class="item" id="item-13">Item-13</div>
+        <div class="item" id="item-14">Item-14</div>
+        <div class="item" id="item-15">Item-15</div>
+        <div class="item" id="item-16">Item-16</div>
+        <div class="item" id="item-17">Item-17</div>
+        <div class="item" id="item-18">Item-18</div>
+        
+    </div>
+</body>
+</html>

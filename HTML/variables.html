@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root {
+            --primary-color: rgb(236, 160, 160);
+            --secondary-color: rgb(91, 145, 160);
+            --border1: black;
+            --border2: blue;
+        }
+
+        .container {
+            border: 2px solid var(--border1);
+            background-color: var(--primary-color);
+            display: flex;
+            flex-flow: row wrap;
+        }
+
+        .item {
+            border: 2px solid var(--border2);
+            background-color: var(--secondary-color);
+            margin: 25px;
+            width: 250px;
+            height: 250px;
+            box-shadow: 4px 4px 4px 1px #a38f8f;
+            text-align: center;
+            font-size: 30px;
+            align-content: center;
+            text-shadow: 2px 2px red;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="item" id="box-1">This is box-1</div>
+        <div class="item" id="box-2">This is box-2</div>
+        <!-- <div class="item" id="box-3">This is box-3</div>
+        <div class="item" id="box-4">This is box-4</div>
+        <div class="item" id="box-5">This is box-5</div>
+        <div class="item" id="box-6">This is box-6</div>
+        <div class="item" id="box-7">This is box-7</div>
+        <div class="item" id="box-8">This is box-8</div>
+        <div class="item" id="box-9">This is box-9</div>
+        <div class="item" id="box-10">This is box-10</div> -->
+    </div>
+</body>
+
+</html>
