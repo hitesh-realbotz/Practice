@@ -48,9 +48,20 @@
     <hr>
     <div class="row">
         <div class="col-xs-12">
+            <button class="btn btn-primary" (click)="onChangeFirst()">Change FirstElement</button>
+            <button class="btn btn-danger" (click)="onDestroyFirst()">Delete FirstElement</button>
             <!-- <app-server-element  *ngFor="let serverElement of serverElements" [element]="serverElement" ></app-server-element> -->
             <!-- with custom attribute name -->
-            <app-server-element  *ngFor="let serverElement of serverElements" [servElement]="serverElement" ></app-server-element>
+            <!-- <app-server-element  *ngFor="let serverElement of serverElements" [servElement]="serverElement" ></app-server-element> -->
+            <p >Paragraph content for @ContentChild</p>
+            <app-server-element  *ngFor="let serverElement of serverElements" [servElement]="serverElement" [name]="serverElement.name" >
+
+                <!-- Projecting Content into Components with ng-content -->
+                <p #paraContent>
+                    <strong *ngIf="serverElement.type === 'server'" style="color: red">{{ serverElement.content }}</strong>
+                    <em *ngIf="serverElement.type === 'blueprint'">{{ serverElement.content }}</em>
+                </p>
+            </app-server-element>
         </div>
     </div>
 </div>

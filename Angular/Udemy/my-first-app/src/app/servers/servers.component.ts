@@ -22,13 +22,15 @@ export class ServersComponent implements OnInit {
 
   
     constructor() {
+        // console.log('constructor called');
         setTimeout(()=> {this.allowNewServer=true},2000);
         // setTimeout(function(){this.allowNewServer=true},2000);
       }
     
       ngOnInit(): void {
-        // throw new Error('Method not implemented.');
+        // console.log('ngOnInit called');
       }
+
 
       onCreateServer(){
         this.serverCreated = true;
@@ -69,6 +71,16 @@ export class ServersComponent implements OnInit {
           content: blueprintData.blueprintContent
         });
       }
+
+      onChangeFirst(){
+        this.serverElements[0].name = "Changed!!!";
+      }
+      onDestroyFirst(){
+        this.serverElements.splice(0,1);
+      }
+
+
+      
 
 
 }
