@@ -10,6 +10,10 @@ import { ServerElementComponent } from './server-element/server-element.componen
 import { ViewEmulComponent } from './view-emul/view-emul.component';
 import { ViewNoneComponent } from './view-none/view-none.component';
 import { ViewShadowComponent } from './view-shadow/view-shadow.component';
+import { DirectiveComponent } from './directive/directive.component';
+import { BasicHighlightDirective } from './directive-folder/basic-highlight/basic-highlight.directive';
+import { BetterHighlightDirective } from './directive-folder/better-highlight.directive';
+import { UnlessDirective } from './directive-folder/unless.directive';
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { ViewShadowComponent } from './view-shadow/view-shadow.component';
     ServerElementComponent,
     ViewEmulComponent,
     ViewNoneComponent,
-    ViewShadowComponent
+    ViewShadowComponent,
+    DirectiveComponent,
+    BasicHighlightDirective,
+    BetterHighlightDirective,
+    UnlessDirective
   ],
   imports: [
     BrowserModule,
