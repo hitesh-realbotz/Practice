@@ -1,5 +1,7 @@
-<a  class="list-group list-group-item clearfix" 
-    (click)="onSelected()">
+<!-- <a class="list-group list-group-item clearfix" (click)="onSelected()"> -->
+<a class="list-group list-group-item clearfix" 
+    [routerLink]="[index]"
+    routerLinkActive="active">
     <!-- <div class="pull-left"> -->
     <div class="float-start">
         <h4 class="list-group-item-heading">{{recipe.name}}</h4>
