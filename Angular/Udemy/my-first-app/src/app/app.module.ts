@@ -22,6 +22,7 @@ import { LoggingService } from './services-and-dependency/services/logging.servi
 import { RoutingComponent } from './routing/routing.component';
 
 
+
 // comment earlier import of ServiceComponent, ServerComponent
 import { HomeComponent } from './routing/home/home.component';
 import { UsersComponent } from './routing/users/users.component';
@@ -31,25 +32,16 @@ import { ServerComponent } from './routing/servers/server/server.component';
 import { UserComponent } from './routing/users/user/user.component';
 import { ServersService } from './routing/servers/servers.service';
 import { RouterModule, Routes } from '@angular/router';
+import { PageNotFoundComponent } from './routing/page-not-found/page-not-found.component';
 
-const appRoutes: Routes = [
-  { path: '', component: HomeComponent},
-  { path: 'users', component: UsersComponent, children:[
-    {
-      path: ':id/:name', component: UserComponent
-    }
-  ] },
-  // { path: 'users', component: UsersComponent},
-  // { path: 'users/:id/:name', component: UserComponent },
-  {
-    path: 'servers', component: ServersComponent, children: [
-      { path: ':id', component: ServerComponent },
-      { path: ':id/edit', component: EditServerComponent },
-    ]
-  },
-  // { path:'servers/:id', component: ServerComponent},
-  // { path:'servers/:id/edit', component: EditServerComponent},
-];
+import { AppRoutingModule } from './routing/app-routing.module';
+import { AuthService } from './routing/auth.service';
+import { AuthGuard } from './routing/auth-guard.service';
+import { CanDeactivateGuard } from './routing/servers/edit-server/can-deactivate-guard.service';
+import { ErrorPageComponent } from './routing/error-page/error-page.component';
+import { ServerResolver } from './routing/servers/server/server-resolver.service';
+
+
 
 @NgModule({
   declarations: [
@@ -72,14 +64,17 @@ const appRoutes: Routes = [
     HomeComponent,
     UsersComponent,
     EditServerComponent,
-    UserComponent
+    UserComponent,
+    PageNotFoundComponent,
+    ErrorPageComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    // RouterModule.forRoot(appRoutes), // include in-case appRoutes declared in app.module.ts file
+    AppRoutingModule
   ],
-  providers: [AccountsService, LoggingService, ServersService],  // for application scope/level instantiation
+  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver],  // for application scope/level instantiation
   bootstrap: [AppComponent]
 })
 export class AppModule { }
