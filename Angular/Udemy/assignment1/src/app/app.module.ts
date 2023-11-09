@@ -11,6 +11,8 @@ import { ServicesComponent } from './services/services.component';
 import { ActiveUsersComponent } from './services/active-users/active-users.component';
 import { InactiveUsersComponent } from './services/inactive-users/inactive-users.component';
 import { CounterService } from './services/counter.service';
+import { FormsTdComponent } from './forms/forms-td/forms-td.component';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -22,10 +24,12 @@ import { CounterService } from './services/counter.service';
     EvenComponent,
     ServicesComponent,
     ActiveUsersComponent,
-    InactiveUsersComponent
+    InactiveUsersComponent,
+    FormsTdComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [CounterService],
   bootstrap: [AppComponent]

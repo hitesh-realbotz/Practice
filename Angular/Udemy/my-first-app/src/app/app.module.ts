@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -46,6 +46,8 @@ import { HomeComponent } from './obervable/home/home.component';
 import { UserComponent } from './obervable/user/user.component';
 
 import { ObervableComponent } from './obervable/obervable.component';
+import { FormsTdComponent } from './forms/forms-td/forms-td.component';
+import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.component';
 
 @NgModule({
   declarations: [
@@ -72,11 +74,14 @@ import { ObervableComponent } from './obervable/obervable.component';
     PageNotFoundComponent,
     ErrorPageComponent,
     ObervableComponent,
+    FormsTdComponent,
+    FormsReactiveComponent,
     
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     // RouterModule.forRoot(appRoutes), // include in-case appRoutes declared in app.module.ts file
     AppRoutingModule
   ],
