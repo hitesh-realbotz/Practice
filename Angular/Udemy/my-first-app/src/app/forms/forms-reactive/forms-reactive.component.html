@@ -26,13 +26,23 @@
                     <div class="form-group">
                         <label for="username">Username</label>
                         <input type="text" id="username" formControlName="username" class="form-control">
-                        <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
-                            class="help-block">Please enter a valid username!</span>
+                        <!-- <span *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
+                            class="help-block">Please enter a valid username!</span> -->
+                        <span
+                            *ngIf="!signupForm.get('userData.username').valid && signupForm.get('userData.username').touched"
+                            class="help-block">
+                            <span *ngIf="signupForm.get('userData.username').errors['nameIsForbidden']">Please enter a
+                                valid username!</span>
+                        <span *ngIf="signupForm.get('userData.username').errors['required']">This field is
+                            required!</span>
+                        </span>
+
                     </div>
                     <div class="form-group">
                         <label for="email">email</label>
                         <input type="text" id="email" formControlName="email" class="form-control">
-                        <span *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
+                        <span
+                            *ngIf="!signupForm.get('userData.email').valid && signupForm.get('userData.email').touched"
                             class="help-block">Please enter a valid email!</span>
                     </div>
                 </div>
@@ -44,21 +54,14 @@
                 </div>
                 <div formArrayName="hobbies">
                     <h4>Hobbies</h4>
-                    <button 
-                        class="btn-m" 
-                        type="button"
-                        (click)="onAddHobby()">Add Hobby</button>
-                        <div 
-                            class="form-group"
-                            *ngFor="let hobbyControl of getControls(); let i = index">
-                            <input 
-                                type="text" 
-                                class="form-control" 
-                                [formControlName]="i">
-                        </div>
+                    <button class="btn-m" type="button" (click)="onAddHobby()">Add Hobby</button>
+                    <div class="form-group" *ngFor="let hobbyControl of getControls(); let i = index">
+                        <input type="text" class="form-control" [formControlName]="i">
+                    </div>
                 </div>
                 <div>
-                    <span *ngIf="!signupForm.valid && signupForm.touched" class="help-block">Please enter a valid data!</span>
+                    <span *ngIf="!signupForm.valid && signupForm.touched" class="help-block">Please enter a valid
+                        data!</span>
                 </div>
                 <button class="btn btn-primary" type="submit">Submit</button>
             </form>

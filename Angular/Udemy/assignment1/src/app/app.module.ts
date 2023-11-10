@@ -12,7 +12,8 @@ import { ActiveUsersComponent } from './services/active-users/active-users.compo
 import { InactiveUsersComponent } from './services/inactive-users/inactive-users.component';
 import { CounterService } from './services/counter.service';
 import { FormsTdComponent } from './forms/forms-td/forms-td.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.component';
 
 @NgModule({
   declarations: [
@@ -25,11 +26,13 @@ import { FormsModule } from '@angular/forms';
     ServicesComponent,
     ActiveUsersComponent,
     InactiveUsersComponent,
-    FormsTdComponent
+    FormsTdComponent,
+    FormsReactiveComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule
   ],
   providers: [CounterService],
   bootstrap: [AppComponent]
