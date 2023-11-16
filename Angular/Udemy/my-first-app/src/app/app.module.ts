@@ -48,6 +48,11 @@ import { UserComponent } from './obervable/user/user.component';
 import { ObervableComponent } from './obervable/obervable.component';
 import { FormsTdComponent } from './forms/forms-td/forms-td.component';
 import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.component';
+import { PipesComponent } from './pipes/pipes.component';
+import { ShortenPipe } from './pipes/shorten.pipe';
+import { FilterPipe } from './pipes/filter.pipe';
+
+
 
 @NgModule({
   declarations: [
@@ -76,6 +81,10 @@ import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.co
     ObervableComponent,
     FormsTdComponent,
     FormsReactiveComponent,
+    PipesComponent,
+    ShortenPipe,
+    FilterPipe,
+    
     
   ],
   imports: [
