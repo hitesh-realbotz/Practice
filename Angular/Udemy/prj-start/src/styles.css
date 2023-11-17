@@ -1,7 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+You can add global styles to this file, and also import other style files */
 .btn {
-    margin: 10px 2px;
+    margin-right: 10px;
 }
 .open{
     display: block;
+}
+
+.row{
+    margin-top: 10px;
 }
