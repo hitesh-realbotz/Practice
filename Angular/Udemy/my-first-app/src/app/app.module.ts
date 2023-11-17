@@ -52,7 +52,8 @@ import { PipesComponent } from './pipes/pipes.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
 import { HttpComponent } from './http/http.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptorService } from './http/auth-interceptor.service';
 
 
 
@@ -98,7 +99,12 @@ import { HttpClientModule } from '@angular/common/http';
     AppRoutingModule,
     HttpClientModule
   ],
-  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver],  // for application scope/level instantiation
+  // for application scope/level instantiation
+  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver,
+              { 
+                provide: HTTP_INTERCEPTORS, 
+                useClass: AuthInterceptorService, 
+                multi: true }],  
   bootstrap: [AppComponent]
 })
 export class AppModule { }
