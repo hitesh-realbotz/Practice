@@ -51,6 +51,9 @@ import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.co
 import { PipesComponent } from './pipes/pipes.component';
 import { ShortenPipe } from './pipes/shorten.pipe';
 import { FilterPipe } from './pipes/filter.pipe';
+import { HttpComponent } from './http/http.component';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { AuthInterceptorService } from './http/auth-interceptor.service';
 
 
 
@@ -84,6 +87,7 @@ import { FilterPipe } from './pipes/filter.pipe';
     PipesComponent,
     ShortenPipe,
     FilterPipe,
+    HttpComponent,
     
     
   ],
@@ -92,9 +96,15 @@ import { FilterPipe } from './pipes/filter.pipe';
     FormsModule,
     ReactiveFormsModule,
     // RouterModule.forRoot(appRoutes), // include in-case appRoutes declared in app.module.ts file
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule
   ],
-  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver],  // for application scope/level instantiation
+  // for application scope/level instantiation
+  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver,
+              { 
+                provide: HTTP_INTERCEPTORS, 
+                useClass: AuthInterceptorService, 
+                multi: true }],  
   bootstrap: [AppComponent]
 })
 export class AppModule { }

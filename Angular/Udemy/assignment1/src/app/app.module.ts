@@ -14,6 +14,11 @@ import { CounterService } from './services/counter.service';
 import { FormsTdComponent } from './forms/forms-td/forms-td.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.component';
+import { PipesComponent } from './pipes/pipes.component';
+import { FilterPipe } from './pipes/filter.pipe';
+import { ReversePipe } from './pipes/reverse.pipe';
+import { SortPipe } from './pipes/sort.pipe';
+
 
 @NgModule({
   declarations: [
@@ -27,7 +32,11 @@ import { FormsReactiveComponent } from './forms/forms-reactive/forms-reactive.co
     ActiveUsersComponent,
     InactiveUsersComponent,
     FormsTdComponent,
-    FormsReactiveComponent
+    FormsReactiveComponent,
+    PipesComponent,
+    FilterPipe,
+    ReversePipe,
+    SortPipe
   ],
   imports: [
     BrowserModule,
