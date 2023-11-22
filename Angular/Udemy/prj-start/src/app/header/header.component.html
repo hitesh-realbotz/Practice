@@ -38,6 +38,9 @@
                 <li routerLinkActive="active" class="nav-item">
                     <a routerLink="/shopping-list" class="nav-link" >Shopping List</a>
                 </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a routerLink="/auth" class="nav-link" >Authenticate</a>
+                </li>
             </ul>
 
             <div class="btn-group" appDropdown #r="appDropdown">
@@ -45,8 +48,8 @@
                     Manage<span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" [ngClass]="{'show':r.isOpen}">
-                    <li><a class="dropdown-item" >Save Data</a></li>
-                    <li><a class="dropdown-item" >Fetch data</a></li>
+                    <li><a class="dropdown-item" (click)="onSaveData()">Save Data</a></li>
+                    <li><a class="dropdown-item" (click)="onFetchData()">Fetch data</a></li>
                 </ul>
             </div>
 

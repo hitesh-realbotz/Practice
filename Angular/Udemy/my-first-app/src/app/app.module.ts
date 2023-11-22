@@ -54,6 +54,7 @@ import { FilterPipe } from './pipes/filter.pipe';
 import { HttpComponent } from './http/http.component';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { AuthInterceptorService } from './http/auth-interceptor.service';
+import { LoggingInterceptorService } from './http/logging-interceptor.service';
 
 
 
@@ -88,8 +89,8 @@ import { AuthInterceptorService } from './http/auth-interceptor.service';
     ShortenPipe,
     FilterPipe,
     HttpComponent,
-    
-    
+
+
   ],
   imports: [
     BrowserModule,
@@ -100,11 +101,19 @@ import { AuthInterceptorService } from './http/auth-interceptor.service';
     HttpClientModule
   ],
   // for application scope/level instantiation
-  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard,CanDeactivateGuard, ServerResolver,
-              { 
-                provide: HTTP_INTERCEPTORS, 
-                useClass: AuthInterceptorService, 
-                multi: true }],  
+  providers: [AccountsService, LoggingService, ServersService, AuthService, AuthGuard, CanDeactivateGuard, ServerResolver,
+    //Interceptors order
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: LoggingInterceptorService,
+      multi: true
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
