@@ -123,7 +123,6 @@ export class AuthService {
         localStorage.setItem('userData', JSON.stringify(user) );
     }
 
-
     private handleError(errorRes: HttpErrorResponse) {
         console.log(errorRes);
         let errorMessage = 'An unknown error occured!';
