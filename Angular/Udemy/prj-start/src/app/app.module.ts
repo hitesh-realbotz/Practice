@@ -22,6 +22,11 @@ import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinne
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
 import { AlertComponent } from './shared/alert/alert.component';
 import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
+import { RecipesModule } from './recipes/recipes.module';
+import { ShoppingListModule } from './shopping-list/shopping-list.module';
+import { SharedModule } from './shared/Shared.module';
+import { CoreModule } from './core.module';
+import { AuthModule } from './auth/auth.module';
 
 
 
@@ -29,35 +34,55 @@ import { PlaceholderDirective } from './shared/placeholder/placeholder.directive
   declarations: [
     AppComponent,
     HeaderComponent,
-    RecipesComponent,
-    RecipeListComponent,
-    RecipeDetailComponent,
-    RecipeItemComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
-    DropdownDirective,
-    RecipeStartComponent,
-    RecipeEditComponent,
-    AuthComponent,
-    LoadingSpinnerComponent,
-    AlertComponent,
-    PlaceholderDirective,
+
+    // ====> recipes.module
+    // RecipesComponent,
+    // RecipeListComponent,
+    // RecipeDetailComponent,
+    // RecipeItemComponent,
+
+    // ====> shopping-list.module
+    // ShoppingListComponent,
+    // ShoppingEditComponent,
+
+    // ====> recipes.module
+    // DropdownDirective,
+    // RecipeStartComponent,
+    // RecipeEditComponent,
     
+    // ====> auth.module
+    // AuthComponent,
+
+    // ====> shared.module
+    // LoadingSpinnerComponent,
+    // AlertComponent,
+    // PlaceholderDirective,
+
   ],
   imports: [
     BrowserModule,
-    FormsModule,
-    ReactiveFormsModule,
+    // FormsModule,
+    AuthModule,
+
+    // ReactiveFormsModule,
+    RecipesModule,
+
     HttpClientModule,
     AppRoutingModule,
-    
+    ShoppingListModule,
+    SharedModule,
+    CoreModule,
   ],
-  providers: [ShoppingListService, RecipeService, 
-              { 
-                provide: HTTP_INTERCEPTORS,
-                useClass : AuthInterceptorService,
-                multi : true
-              }],
-  bootstrap: [AppComponent] 
+
+  // ====> core.module
+  // providers: [
+  //   ShoppingListService, RecipeService,
+  //   {
+  //     provide: HTTP_INTERCEPTORS,
+  //     useClass: AuthInterceptorService,
+  //     multi: true
+  //   }
+  // ],
+  bootstrap: [AppComponent]
 })
 export class AppModule { }
