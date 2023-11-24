@@ -1,32 +1,38 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
-import { RecipesComponent } from './recipes/recipes.component';
-import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
-import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
-import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
-import { ShoppingListComponent } from './shopping-list/shopping-list.component';
-import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { DropdownDirective } from './shared/dropdown.directive';
-import { ShoppingListService } from './shopping-list/shopping-list.service';
+
+// import { HTTP_INTERCEPTORS } from '@angular/common/http';
+// import { RecipesComponent } from './recipes/recipes.component';
+// import { RecipeListComponent } from './recipes/recipe-list/recipe-list.component';
+// import { RecipeDetailComponent } from './recipes/recipe-detail/recipe-detail.component';
+// import { RecipeItemComponent } from './recipes/recipe-list/recipe-item/recipe-item.component';
+// import { ShoppingListComponent } from './shopping-list/shopping-list.component';
+// import { ShoppingEditComponent } from './shopping-list/shopping-edit/shopping-edit.component';
+// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { DropdownDirective } from './shared/dropdown.directive';
+// import { ShoppingListService } from './shopping-list/shopping-list.service';
+// import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
+// import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
+// import { RecipeService } from './recipes/recipe.service';
+// import { AuthComponent } from './auth/auth.component';
+// import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
+// import { AuthInterceptorService } from './auth/auth-interceptor.service';
+// import { AlertComponent } from './shared/alert/alert.component';
+// import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
+
 import { AppRoutingModule } from './app-routing.module';
-import { RecipeStartComponent } from './recipes/recipe-start/recipe-start.component';
-import { RecipeEditComponent } from './recipes/recipe-edit/recipe-edit.component';
-import { RecipeService } from './recipes/recipe.service';
-import { AuthComponent } from './auth/auth.component';
-import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
-import { AuthInterceptorService } from './auth/auth-interceptor.service';
-import { AlertComponent } from './shared/alert/alert.component';
-import { PlaceholderDirective } from './shared/placeholder/placeholder.directive';
-import { RecipesModule } from './recipes/recipes.module';
-import { ShoppingListModule } from './shopping-list/shopping-list.module';
 import { SharedModule } from './shared/Shared.module';
 import { CoreModule } from './core.module';
-import { AuthModule } from './auth/auth.module';
+import { LoggingService } from './logging.service';
+
+// // LazyLoading
+// import { RecipesModule } from './recipes/recipes.module';
+// import { ShoppingListModule } from './shopping-list/shopping-list.module';
+// import { AuthModule } from './auth/auth.module';
 
 
 
@@ -35,25 +41,25 @@ import { AuthModule } from './auth/auth.module';
     AppComponent,
     HeaderComponent,
 
-    // ====> recipes.module
+    // // ====> recipes.module
     // RecipesComponent,
     // RecipeListComponent,
     // RecipeDetailComponent,
     // RecipeItemComponent,
 
-    // ====> shopping-list.module
+    // // ====> shopping-list.module
     // ShoppingListComponent,
     // ShoppingEditComponent,
 
-    // ====> recipes.module
+    // // ====> recipes.module
     // DropdownDirective,
     // RecipeStartComponent,
     // RecipeEditComponent,
     
-    // ====> auth.module
+    // // ====> auth.module
     // AuthComponent,
 
-    // ====> shared.module
+    // // ====> shared.module
     // LoadingSpinnerComponent,
     // AlertComponent,
     // PlaceholderDirective,
@@ -61,20 +67,21 @@ import { AuthModule } from './auth/auth.module';
   ],
   imports: [
     BrowserModule,
-    // FormsModule,
-    AuthModule,
-
-    // ReactiveFormsModule,
-    RecipesModule,
-
-    HttpClientModule,
+    // FormsModule,         //====> auth.module   
+    // ReactiveFormsModule, // ====> recipes.module
+    
+    // // LazyLoading
+    // RecipesModule,       
+    // ShoppingListModule,
+    // AuthModule,
+    
     AppRoutingModule,
-    ShoppingListModule,
+    HttpClientModule,
     SharedModule,
     CoreModule,
   ],
 
-  // ====> core.module
+  // // ====> core.module
   // providers: [
   //   ShoppingListService, RecipeService,
   //   {
@@ -83,6 +90,8 @@ import { AuthModule } from './auth/auth.module';
   //     multi: true
   //   }
   // ],
+
+  providers: [ LoggingService ], //Loading Service in appmodule
   bootstrap: [AppComponent]
 })
 export class AppModule { }

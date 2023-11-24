@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit } from '@angular/core';
 import { filter, map, of } from 'rxjs';
 import { AuthService } from './auth/auth.service';
+import { LoggingService } from './logging.service';
 
 @Component({
   selector: 'app-root',
@@ -16,9 +17,10 @@ export class AppComponent implements OnInit {
     this.loadedFeature = feature;
   }
 
-  constructor(private authService: AuthService){ }
+  constructor(private authService: AuthService, private loggingService: LoggingService){ }
   
   ngOnInit() {
    this.authService.autoLogin();
+   this.loggingService.printLog('Hello from AppComponent ngOnInit');
   }
 }
