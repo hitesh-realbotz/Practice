@@ -28,13 +28,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared/Shared.module';
 import { CoreModule } from './core.module';
 import { LoggingService } from './logging.service';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 // // LazyLoading
 // import { RecipesModule } from './recipes/recipes.module';
 // import { ShoppingListModule } from './shopping-list/shopping-list.module';
 // import { AuthModule } from './auth/auth.module';
-
-
 
 @NgModule({
   declarations: [
@@ -55,7 +55,7 @@ import { LoggingService } from './logging.service';
     // DropdownDirective,
     // RecipeStartComponent,
     // RecipeEditComponent,
-    
+
     // // ====> auth.module
     // AuthComponent,
 
@@ -69,16 +69,24 @@ import { LoggingService } from './logging.service';
     BrowserModule,
     // FormsModule,         //====> auth.module   
     // ReactiveFormsModule, // ====> recipes.module
-    
+
     // // LazyLoading
     // RecipesModule,       
     // ShoppingListModule,
     // AuthModule,
-    
+
     AppRoutingModule,
     HttpClientModule,
     SharedModule,
     CoreModule,
+    BrowserAnimationsModule,
+        ToastrModule.forRoot(
+            {
+                positionClass: 'toast-bottom-right',
+                closeButton: true,
+                progressBar: true
+            }
+        )
   ],
 
   // // ====> core.module
@@ -91,7 +99,7 @@ import { LoggingService } from './logging.service';
   //   }
   // ],
 
-  providers: [ LoggingService ], //Loading Service in appmodule
+  providers: [LoggingService], //Loading Service in appmodule
   bootstrap: [AppComponent]
 })
 export class AppModule { }

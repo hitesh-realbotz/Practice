@@ -33,14 +33,18 @@
 
 
 // From Forms
-import { EventEmitter } from "@angular/core";
+import { EventEmitter, Injectable } from "@angular/core";
 import { Ingredient } from "../shared/ingredient.model";
 import { Subject } from "rxjs";
+import { ToastrService } from "ngx-toastr";
 
+@Injectable()
 export class ShoppingListService {
     // ingredientsChanged = new EventEmitter<Ingredient[]>();
     ingredientsChanged = new Subject<Ingredient[]>();
     startedEditing = new Subject<number>();
+
+    constructor(private toastr: ToastrService) { }
 
     private ingredients: Ingredient[] = [
         new Ingredient('Apples', 5),
@@ -59,6 +63,7 @@ export class ShoppingListService {
         this.ingredients.push(ingredient);
         // this.ingredientsChanged.emit(this.ingredients.slice());
         this.ingredientsChanged.next(this.ingredients.slice());
+        this.toastr.success('Ingredient Added');
     }
 
     addIngredients(ingredients: Ingredient[]){
@@ -73,11 +78,13 @@ export class ShoppingListService {
     updateIngredient(index: number, newIngredient: Ingredient){
         this.ingredients[index] = newIngredient;
         this.ingredientsChanged.next(this.ingredients.slice());
+        this.toastr.info('Ingredient updated');
     }
 
     deleteIngredient(index: number){
         this.ingredients.splice(index,1);
         this.ingredientsChanged.next(this.ingredients.slice());
+        this.toastr.warning('Ingredient removed');
     }
 
 }
