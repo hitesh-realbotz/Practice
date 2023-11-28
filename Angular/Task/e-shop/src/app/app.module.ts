@@ -6,17 +6,20 @@ import { HeaderComponent } from './header/header.component';
 import { AuthComponent } from './auth/auth.component';
 import { AppRoutingModule } from './app-routing-module';
 import { FormsModule } from '@angular/forms';
-import { DropdownDirective } from './shared/dropdown.directive';
+// import { DropdownDirective } from './shared/dropdown.directive';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+// import { UsersComponent } from './users/users.component';
+// import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
     AuthComponent,
-    DropdownDirective
+    // UsersComponent,
+    // UserProfileComponent
 
   ],
   imports: [

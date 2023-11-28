@@ -1,0 +1,37 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+                
+                <div class="form-group">
+                    <label for="email">email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control">
+                </div>
+
+                <div class="radio" *ngFor="let role of roles">
+                    <label>
+                        <input type="radio" formControlName="role" [value]="role">{{ role }}
+                    </label>
+                </div>
+                <div class="form-group" class="form-group">
+                    <label for="question">Question</label>
+                    <select name="question" id="question" class="form-control" formControlName="question" >
+                        <option value="" disabled selected>Choose Security Question for Password Reset</option>
+                        <option value="Favorite food?">Favorite food?</option>
+                        <option value="First Mobile Brand?">First Mobile Brand?</option>
+                        <option value="Birth Place?">Birth Place?</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="answer">Answer</label>
+                    <input type="text" id="answer" formControlName="answer" class="form-control">
+                </div>
+                
+                <div>
+                    <!-- <span *ngIf="!userForm.valid && userForm.touched" class="help-block">Please enter a valid data!</span> -->
+                </div>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>
