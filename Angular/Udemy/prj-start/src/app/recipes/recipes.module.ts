@@ -27,8 +27,7 @@ import { SharedModule } from "../shared/Shared.module";
         // CommonModule,
         SharedModule,
         ReactiveFormsModule,
-        RecipesRoutingModule
-        
+        RecipesRoutingModule    
     ],
 
     // // ====> No need to export as recipes-routing.module included

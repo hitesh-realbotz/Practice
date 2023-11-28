@@ -5,6 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
 import { AlertComponent } from '../shared/alert/alert.component';
 import { PlaceholderDirective } from '../shared/placeholder/placeholder.directive';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-auth',
@@ -22,11 +23,13 @@ export class AuthComponent implements OnDestroy {
 
   constructor(private authService: AuthService,
     private router: Router,
-    private componentFactoryResolver: ComponentFactoryResolver) { }
+    private componentFactoryResolver: ComponentFactoryResolver,
+    private toastr: ToastrService) { }
 
 
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
+    this.toastr.info(this.isLoginMode ? `Switched To Login Mode` : `Switched To SignUp Mode` );
   }
 
   onSubmit(form: NgForm) {
@@ -77,13 +80,16 @@ export class AuthComponent implements OnDestroy {
       resData => {
         console.log(resData);
         this.isLoading = false;
+        this.toastr.success('Welcome to RecipeBook','Login Success!');
         this.router.navigate(['/recipes']);
+        
       },
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;
         this.showErrorAlert(errorMessage);
+        this.toastr.warning('Enter Valid Credentials','Login Unsuccessful!');
       }
     );
 
@@ -114,6 +120,5 @@ export class AuthComponent implements OnDestroy {
       hostViewContainerRef.clear();
     });
   }
-
 
 }

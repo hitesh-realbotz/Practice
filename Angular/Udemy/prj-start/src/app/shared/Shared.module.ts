@@ -13,7 +13,7 @@ import { CommonModule } from "@angular/common";
         DropdownDirective,
     ],
     imports: [
-        CommonModule,
+        CommonModule,        
     ],
     exports: [
         AlertComponent,

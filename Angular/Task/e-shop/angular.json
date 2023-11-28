@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "prj-start": {
+    "e-shop": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/prj-start",
+            "outputPath": "dist/e-shop",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -29,7 +29,9 @@
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -53,13 +55,7 @@
               "vendorChunk": true,
               "extractLicenses": false,
               "sourceMap": true,
-              "namedChunks": true,
-              "fileReplacements": [
-                {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.development.ts"
-                }
-              ]
+              "namedChunks": true
             }
           },
           "defaultConfiguration": "production"
@@ -68,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "prj-start:build:production"
+              "browserTarget": "e-shop:build:production"
             },
             "development": {
-              "browserTarget": "prj-start:build:development"
+              "browserTarget": "e-shop:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -79,7 +75,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "prj-start:build"
+            "browserTarget": "e-shop:build"
           }
         },
         "test": {

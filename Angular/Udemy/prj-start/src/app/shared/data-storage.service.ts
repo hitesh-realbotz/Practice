@@ -4,17 +4,27 @@ import { Recipe } from "../recipes/recipe.model";
 import { RecipeService } from "../recipes/recipe.service";
 import { exhaustMap, map, take, tap } from "rxjs";
 import { AuthService } from "../auth/auth.service";
+import { ToastrService } from "ngx-toastr";
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
     constructor(private http: HttpClient,
         private recipeService: RecipeService,
-        private authService: AuthService) { }
+        private authService: AuthService,
+        private toastr: ToastrService) { }
     storeRecipes() {
         const recipes = this.recipeService.getRecipes();
-        this.http.put('https://ng-course-recipe-book-95529-default-rtdb.firebaseio.com/recipes.json', recipes).subscribe(response => {
-            console.log(response);
-        });
+
+        if (recipes.length === 0) {
+            this.toastr.warning('Minimum One recipe required', 'Data to server Action');
+            return false;
+        } else {
+            this.http.put('https://ng-course-recipe-book-95529-default-rtdb.firebaseio.com/recipes.json', recipes).subscribe(response => {
+                console.log(response);
+            });
+            this.toastr.info('Remote data updated!', 'Data to server Action');
+            return true;
+        }
     }
 
     fetchRecipes() {
@@ -70,6 +80,8 @@ export class DataStorageService {
                 }),
                 tap(recipes => {
                     this.recipeService.setRecipes(recipes);
+                    this.toastr.info('Remote data recieved!', 'Data From server Action');
+
                 })
             );
     }
