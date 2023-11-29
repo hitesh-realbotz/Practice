@@ -14,9 +14,8 @@ export class AuthComponent implements OnDestroy {
   isLoading: boolean = false;
   isLoginMode = true;
   error: string = null;
-  role: string = 'buyer';
   closeSub: Subscription;
-
+  role: string = 'buyer';
   constructor(private authService: AuthService,
     private router: Router,
     private toastr: ToastrService) { }
@@ -40,10 +39,10 @@ export class AuthComponent implements OnDestroy {
     this.isLoading = true;
 
     if (this.isLoginMode) {
-      // authObs = this.authService.login(email, password, this.role);
+      authObs = this.authService.login(email, password);
 
     } else {
-      authObs = this.authService.signup(email, password, this.role);
+      authObs = this.authService.signup(email, password);
 
     }
 
@@ -52,7 +51,7 @@ export class AuthComponent implements OnDestroy {
         console.log(resData);
         this.isLoading = false;
         this.toastr.success('Welcome to E-Shop', 'Login Success!');
-        this.router.navigate(['/items']);
+        this.router.navigate(['user']);
 
       },
       errorMessage => {
