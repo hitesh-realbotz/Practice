@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable, Subscription } from 'rxjs';
 import { AuthResponseData, AuthService } from './auth.service';
+import { UserService } from '../users/user.service';
 
 @Component({
   selector: 'app-auth',
@@ -18,7 +19,8 @@ export class AuthComponent implements OnDestroy {
   role: string = 'buyer';
   constructor(private authService: AuthService,
     private router: Router,
-    private toastr: ToastrService) { }
+    private toastr: ToastrService,
+    private userService: UserService) { }
 
 
 
@@ -28,7 +30,7 @@ export class AuthComponent implements OnDestroy {
   }
 
   onForgotPass(){
-    this.router.navigate(['/aboutus']);
+    this.router.navigate(['/forgotpass']);
   }
 
 
@@ -77,6 +79,11 @@ export class AuthComponent implements OnDestroy {
     if (this.closeSub) {
       this.closeSub.unsubscribe();
     }
+  }
+
+  onGetUsers(){
+   console.log(this.userService.users);
+
   }
 
 }

@@ -21,7 +21,7 @@
             </div>
             <div class="row">
                 <div class="col-xs-12">
-                    <img [src]="image.value" class="img-responsive" alt="">
+                    <img [src]="image.value" style="max-width: 300px; max-height: 300px;" class="img-responsive" alt="">
                 </div>
             </div>
             <div class="row">
@@ -33,17 +33,27 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="form-group" class="form-group">
+                <label for="category">Category</label>
+                <select name="category" id="category" class="form-control" formControlName="category" >
+                    <option value="" disabled selected>Choose a Category</option>
+                    <option value="mens">Mens</option>
+                    <option value="women">Women</option>
+                    <option value="kids">Kids</option>
+                </select>
+            </div>
+            <!-- <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label for="category">Category</label>
                         <input type="text" name="category" id="category" formControlName="category" class="form-control ">
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="col-xs-12">
-                    <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button>
+                    <!-- <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button> -->
+                    <button type="submit" class="btn btn-success" >Save</button>
                     <button type="submit" class="btn btn-danger" (click)="onCancel()">Cancel</button>
                 </div>
             </div>

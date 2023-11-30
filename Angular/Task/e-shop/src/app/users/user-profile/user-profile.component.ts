@@ -25,18 +25,18 @@ export class UserProfileComponent implements OnInit {
 
 
   ngOnInit() {
-    this.loggedUser = JSON.parse(localStorage.getItem('loggedUser'));
+    this.loggedUser = this.userService.loggedUser;
     this.userForm = new FormGroup({
       'email': new FormControl(this.loggedUser.email, [Validators.required, Validators.email]),
       'role': new FormControl(this.loggedUser.role, [Validators.required]),
-
+      
       'question': new FormControl(this.loggedUser.question),
       'answer': new FormControl(this.loggedUser.answer),
     });
+    this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
     console.log('user-profile');
     console.log(this.loggedUser.id);
 
-    this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
 
     // this.userForm.valueChanges.subscribe(
     //   (value) => console.log(value)
@@ -63,42 +63,11 @@ export class UserProfileComponent implements OnInit {
     this.router.navigate(['user']);
     this.toastr.warning('User Deatils Updated', 'Update Success!');
     // this.userForm.reset();
+    
 
   }
 
-  // onAddHobby() {
-  //   const control = new FormControl(null, Validators.required);
-  //   (<FormArray>this.userForm.get('hobbies')).push(control);
-  // }
-  // getControls() {
-  //   return (<FormArray>this.userForm.get('hobbies')).controls;
-  // }
-  // forbiddenNames(control: FormControl): { [s: string]: boolean } {
-  //   // if (this.forbiddenUsernames.indexOf(control.value) !== -1) {
-  //   //   return {'nameIsForbidden': true};
-  //   // }
-  //   // return null;
-
-  //   if (this.forbiddenUsernames.includes(control.value)) {
-
-  //     return { 'nameIsForbidden': true };
-  //   }
-  //   return null;
-  // }
-
-  // forbiddenEmails(control: FormControl): Promise<any> | Observable<any> {
-  //   const promise = new Promise<any>((resolve, reject) => {
-  //     setTimeout(() => {
-  //       if (control.value === 'test@gmail.com') {
-  //         // if (this.forbiddenEmailList.includes(control.value)) {   //incase of accessing email list
-  //         resolve({ 'emailIsForbidden': true });
-  //       } else {
-  //         resolve(null)
-  //       }
-  //     }, 1500);
-  //   })
-  //   return promise;
-  // }
+  
 
 
 

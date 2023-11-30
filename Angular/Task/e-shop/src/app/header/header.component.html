@@ -17,7 +17,7 @@
           <li routerLinkActive="active" class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/items">Items</a>
           </li>
-          <li routerLinkActive="active" class="nav-item" *ngIf="question == '' ">
+          <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated  ">
             <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a>
           </li>
         </ul>

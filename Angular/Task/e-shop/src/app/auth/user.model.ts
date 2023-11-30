@@ -1,28 +1,34 @@
 export class User {
-    public email: string;
-    public id: string;
-    public role: string | null;
-    public question: string | null;
-    public answer: string | null;
-    private _token: string;
-    private _tokenExpirationDate: Date;
-  
-    constructor(
-      email: string,
+  public id: string;
+  public email: string;
+  public question: string | null;
+  public answer: string | null;
+  public password: string;
+  private _token: string;
+  private _tokenExpirationDate: Date;
+  public role: string | null;
+
+  constructor(
       id: string,
+      email: string,
+      password: string,
       token: string,
       tokenExpirationDate: Date,
       role?: string,
       question?: string,
-      answer?: string
-    ) {
-      this.email = email;
+      answer?: string,
+  ) {
       this.id = id;
+      this.email = email;
+      this.password = password;
       this._token = token;
       this._tokenExpirationDate = tokenExpirationDate;
       this.role = role || 'buyer';
       this.question = question || '';
       this.answer = answer || '';
-    }
   }
-  
+
+  setPassword(password: string){
+    this.password = password;
+  }
+}

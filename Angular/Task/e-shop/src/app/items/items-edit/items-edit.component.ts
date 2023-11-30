@@ -34,7 +34,7 @@ export class ItemsEditComponent implements OnInit {
     const item = this.itemService.getItem(this.id);
 
     let name = '';
-    let itemId = '';
+    let itemId = 0 ;
     let sellerId = '';
     let image = '';
     let description = '';
@@ -56,8 +56,8 @@ export class ItemsEditComponent implements OnInit {
       'image': new FormControl(image, Validators.required),
       'description': new FormControl(description, Validators.required),
       'category': new FormControl(category, Validators.required),
-      'itemId': new FormControl(itemId, Validators.required),
-      'sellerId': new FormControl(sellerId, Validators.required),
+      // 'itemId': new FormControl(itemId, Validators.required),
+      // 'sellerId': new FormControl(sellerId, Validators.required),
 
     });
   }
@@ -65,8 +65,6 @@ export class ItemsEditComponent implements OnInit {
   onSubmit() {
     const newItem = new Item(
       this.itemForm.value['name'],
-      this.itemForm.value['itemId'],
-      this.itemForm.value['sellerId'],
       this.itemForm.value['image'],
       this.itemForm.value['description'],
       this.itemForm.value['category'],
