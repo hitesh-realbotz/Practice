@@ -10,6 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
+import { AboutUsComponent } from './shared/about-us/about-us.component';
+import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
+// import { ItemsComponent } from './items/items.component';
 // import { UsersComponent } from './users/users.component';
 // import { UserProfileComponent } from './users/user-profile/user-profile.component';
 
@@ -18,6 +21,9 @@ import { HttpClientModule } from '@angular/common/http';
     AppComponent,
     HeaderComponent,
     AuthComponent,
+    AboutUsComponent,
+    ForgotPassComponent,
+    // ItemsComponent,
     // UsersComponent,
     // UserProfileComponent
 

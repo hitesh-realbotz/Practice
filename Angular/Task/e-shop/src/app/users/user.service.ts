@@ -8,7 +8,8 @@ import { AuthService } from "../auth/auth.service";
 @Injectable({ providedIn: 'root' })
 export class UserService {
 
-    user = new BehaviorSubject<User>(null);
+    loggedUserChanged = new BehaviorSubject<User>(null);
+    loggedUser: User;
     users: User[] = [];
     
 
@@ -16,27 +17,50 @@ export class UserService {
                 private datastorageService: DataStorageService) { }
 
     addUser(user: User) {
-        this.users.push(user);
-        this.user.next(user);
-        this.dataStorageService.storeUsers();
+       // Adding new user to local storage
+       if ((JSON.parse(localStorage.getItem('userList'))) == null) {
+        const userList: User[] = [user];
+        this.users = userList;
+        localStorage.setItem('userList', JSON.stringify(userList));
+    } else {
+        const userList: User[] = JSON.parse(localStorage.getItem('userList'));
+        userList.push(user);
+        this.users = userList;
+        localStorage.setItem('userList', JSON.stringify(userList));
+    }
+
+    // this.users.push(user);
+    this.loggedUser = user;
+    this.loggedUserChanged.next(user);
+    this.updateLocalStorage(this.loggedUser, this.users);
+    this.dataStorageService.storeUsers();
     }
 
     getUsers() {
         return this.users.slice();
     }
 
-    updateUser(loggedUser: User, index: number) {
-        console.log(loggedUser);
-        this.users[index] = loggedUser;
+    setLoggedUser(id: string) {
+        this.users = JSON.parse(localStorage.getItem('userList'));
+        let index = this.getUserIndex(id);
+        if(index != -1){
+            const logUser = this.users[index];
+            this.loggedUser = logUser;
+            this.loggedUserChanged.next(logUser);
+            localStorage.setItem('loggedUser', JSON.stringify(logUser));
+        }
+        
+    }
 
-        localStorage.setItem('loggedUser', JSON.stringify(loggedUser) );        
-        localStorage.setItem('userList', JSON.stringify(this.users));
+    updateUser(upLoggedUser: User, index: number) {
+        this.loggedUser = upLoggedUser;
+        this.loggedUserChanged.next(upLoggedUser);
+        this.users[index] = this.loggedUser;
+        this.updateLocalStorage(this.loggedUser, this.users);
         this.dataStorageService.storeUsers();
     }
 
     getUserIndex(id: string) {
-        console.log('user-service index');
-        console.log(id);
         for (const [index, userFromList] of this.users.entries()) {
             //    console.log(userFromList);
             //    console.log(userFromList.id === id);
@@ -46,6 +70,11 @@ export class UserService {
             }
         }
         return -1;
+    }
+
+    updateLocalStorage(loggedUser: User, userList: User[]) {
+        localStorage.setItem('loggedUser', JSON.stringify(loggedUser));
+        localStorage.setItem('userList', JSON.stringify(userList));
     }
 
 

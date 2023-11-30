@@ -27,6 +27,10 @@ export class AuthComponent implements OnDestroy {
     this.toastr.info(this.isLoginMode ? `Switched To Login Mode` : `Switched To SignUp Mode`);
   }
 
+  onForgotPass(){
+    this.router.navigate(['/aboutus']);
+  }
+
 
   onSubmit(form: NgForm) {
     console.log(form.value);
@@ -51,8 +55,8 @@ export class AuthComponent implements OnDestroy {
         console.log(resData);
         this.isLoading = false;
         this.toastr.success('Welcome to E-Shop', 'Login Success!');
-        this.router.navigate(['user']);
-
+        // this.router.navigate(['user']);
+        this.router.navigate(['/items']);
       },
       errorMessage => {
         console.log(errorMessage);

@@ -3,6 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, tap } from "rxjs";
 import { User } from "./user.model";
 import { UserService } from "../users/user.service";
+import { Router } from "@angular/router";
 
 
 export interface AuthResponseData {
@@ -20,8 +21,17 @@ export class AuthService{
 
     private userList: User[];
     
-    constructor(private http: HttpClient, private userService: UserService){ }
+    constructor(private http: HttpClient, private userService: UserService,  private router: Router){ }
 
+    logout(){
+        this.userService.loggedUserChanged.next(null);
+        this.router.navigate(['/auth']);
+        localStorage.removeItem('loggedUser');
+        // if (this.tokenExpirationTimer) {
+        //     clearTimeout(this.tokenExpirationTimer);
+        // }
+        // this.tokenExpirationTimer = null;
+    }
     
     signup(email: string, password: string) {
         
@@ -35,30 +45,22 @@ export class AuthService{
             .pipe(
                 // catchError(this.handleError),
                 tap(resData => {
-                    
+
 
                     const user = this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
                     this.userService.addUser(user);
 
-                    // Adding new user to local storage
-                    if ((JSON.parse(localStorage.getItem('userList'))) == null) {
-                        const userList: User[] = [user];
-                        this.userService.users = userList;
-                        localStorage.setItem('userList', JSON.stringify(userList) );
-
-                        // this.userService.users = this.userList;
-                        // localStorage.setItem('userList', JSON.stringify(this.userList) );
-                        
-                    }else{
-                        const userList: User[] = JSON.parse(localStorage.getItem('userList'));
-                        userList.push(user);
-                        this.userService.users = userList;
-                        localStorage.setItem('userList', JSON.stringify(userList) );
-                        // this.userList = JSON.parse(localStorage.getItem('userList'));
-                        // this.userList.push(user);
-                        // this.userService.users = this.userList;
-                        // localStorage.setItem('userList', JSON.stringify(this.userList) );
-                    }
+                    // // Adding new user to local storage
+                    // if ((JSON.parse(localStorage.getItem('userList'))) == null) {
+                    //     const userList: User[] = [user];
+                    //     this.userService.users = userList;
+                    //     localStorage.setItem('userList', JSON.stringify(userList));
+                    // } else {
+                    //     const userList: User[] = JSON.parse(localStorage.getItem('userList'));
+                    //     userList.push(user);
+                    //     this.userService.users = userList;
+                    //     localStorage.setItem('userList', JSON.stringify(userList));
+                    // }
                     console.log(resData);
                 }));
 
@@ -75,10 +77,12 @@ export class AuthService{
             }
         )
         .pipe(
+            
             // catchError(this.handleError),
             tap(resData => {
                 const user = this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
-                // this.userService.users.push(user);
+                this.userService.setLoggedUser(user.id);                
+                
             }));
 
     }
@@ -87,12 +91,10 @@ export class AuthService{
         const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
         const user = new User(email, userId, token, expirationDate);
         console.log(user);
-        
+
         // this.autoLogout(expiresIn * 1000);
         // this.autoLogout(2000);
-        localStorage.setItem('loggedUser', JSON.stringify(user) );
-        // const userList = JSON.parse(localStorage.getItem('userList'));
-        // localStorage.setItem('userList', JSON.stringify(user) );
+        
         return user;
     }
 
