@@ -31,14 +31,15 @@ export class ItemsService {
     }
 
     addItem(item: Item) {
-        this.userService.loggedUserChanged.subscribe(
-            (user: User) => {
-                item.sellerId = user.id;
-                item.itemId = (this.items.length + 1);
-            }
-        );
+        // this.userService.loggedUserChanged.subscribe(
+        //     (user: User) => {
+        //         item.sellerId = user.id;
+        //         item.itemId = (this.items.length + 1);
+        //     }
+        // );
+        item.sellerId = this.userService.loggedUser.id;
+        item.itemId = (this.items.length + 1);
 
-        
         this.items.push(item);
         this.itemChanged.next(this.items.slice());
         this.dataStorageService.storeItems();
