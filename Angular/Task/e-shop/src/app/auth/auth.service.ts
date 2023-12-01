@@ -4,6 +4,7 @@ import { BehaviorSubject, tap } from "rxjs";
 import { User } from "./user.model";
 import { UserService } from "../users/user.service";
 import { Router } from "@angular/router";
+import { DataStorageService } from "../shared/data-storage.service";
 
 
 export interface AuthResponseData {
@@ -16,14 +17,14 @@ export interface AuthResponseData {
     registered?: boolean;
 }
 
-@Injectable({ providedIn : 'root'})
-export class AuthService{
+@Injectable({ providedIn: 'root' })
+export class AuthService {
 
     private userList: User[];
-    
-    constructor(private http: HttpClient, private userService: UserService,  private router: Router){ }
 
-    logout(){
+    constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService) { }
+
+    logout() {
         this.userService.loggedUserChanged.next(null);
         this.router.navigate(['/auth']);
         localStorage.removeItem('loggedUser');
@@ -32,10 +33,19 @@ export class AuthService{
         // }
         // this.tokenExpirationTimer = null;
     }
-    
+
+    forgotPass(email: string){
+        const user = this.userService.getUserSecurityQuestion(email);
+        return user;
+    }
+    resetPass(user: User){
+        let index = this.userService.getUserIndex(user.id);
+        this.userService.updateUser(user, index);
+    }
+
     signup(email: string, password: string) {
-        
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',        
+
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
             {
                 email: email,
                 password: password,
@@ -47,21 +57,12 @@ export class AuthService{
                 tap(resData => {
 
 
-                    const user = this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
+                    const user = this.handleAuthentication(resData.localId, resData.email, password, resData.idToken, +resData.expiresIn);
                     this.userService.addUser(user);
+                    // this.dataStorageService.userCred(resData.localId ,email, password);
 
-                    // // Adding new user to local storage
-                    // if ((JSON.parse(localStorage.getItem('userList'))) == null) {
-                    //     const userList: User[] = [user];
-                    //     this.userService.users = userList;
-                    //     localStorage.setItem('userList', JSON.stringify(userList));
-                    // } else {
-                    //     const userList: User[] = JSON.parse(localStorage.getItem('userList'));
-                    //     userList.push(user);
-                    //     this.userService.users = userList;
-                    //     localStorage.setItem('userList', JSON.stringify(userList));
-                    // }
                     console.log(resData);
+                    
                 }));
 
 
@@ -76,25 +77,25 @@ export class AuthService{
                 returnSecureToken: true
             }
         )
-        .pipe(
-            
-            // catchError(this.handleError),
-            tap(resData => {
-                const user = this.handleAuthentication(resData.email, resData.localId, resData.idToken, +resData.expiresIn);
-                this.userService.setLoggedUser(user.id);                
-                
-            }));
+            .pipe(
+
+                // catchError(this.handleError),
+                tap(resData => {
+                    const user = this.handleAuthentication(resData.localId, resData.email, password, resData.idToken, +resData.expiresIn);
+                    this.userService.setLoggedUser(user);
+
+                }));
 
     }
 
-    private handleAuthentication(email: string, userId: string, token: string, expiresIn: number) {
+    private handleAuthentication(userId: string, email: string, password: string, token: string, expiresIn: number) {
         const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
-        const user = new User(email, userId, token, expirationDate);
+        const user = new User(userId, email, password, token, expirationDate);
         console.log(user);
 
         // this.autoLogout(expiresIn * 1000);
         // this.autoLogout(2000);
-        
+
         return user;
     }
 

@@ -1,7 +1,7 @@
 export class Item{
     public name: string;
-    public itemId: string;
-    public sellerId: string;
+    public itemId: number | null;
+    public sellerId: string | null;
     public image: string;
     public description: string;
     public category: string;
@@ -9,17 +9,17 @@ export class Item{
   
     constructor(
       name: string,
-      itemId: string,
-      sellerId: string,
       image: string,
       description: string,
-      category: string
+      category: string,
+      itemId?: number,
+      sellerId?: string,
     ) {
         this.name = name;
-        this.itemId = itemId;
-        this.sellerId = sellerId;
         this.image = image;
         this.description = description;
         this.category = category;
+        this.itemId = itemId || 0 ;
+        this.sellerId = sellerId || '';
     }
 }
