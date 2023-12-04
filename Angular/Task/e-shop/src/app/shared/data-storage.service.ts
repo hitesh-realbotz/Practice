@@ -12,11 +12,13 @@ import { ItemsService } from "../items/items.service";
 export class DataStorageService {
     private userService: UserService;
     private itemService: ItemsService;
+    private authService: AuthService
     // users: User[];
 
     constructor(private http: HttpClient,
         private toastr: ToastrService,
-        private injector: Injector) { }
+        private injector: Injector
+        ) { }
 
     storeItems() {
         this.getItemServiceInstance();
@@ -27,6 +29,15 @@ export class DataStorageService {
         });
         this.toastr.info('Remote data updated!', 'Data to server Action');
         return true;
+    }
+
+    fetchItems(){
+        this.getItemServiceInstance();
+        return this.http.get<Item[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json')
+            .subscribe(items => {
+                console.log(items);
+                this.itemService.setItems(items);
+            });
     }
 
     storeUsers() {
@@ -50,10 +61,12 @@ export class DataStorageService {
 
     fetchUsers() {
         this.getUserServiceInstance();
+        this.getAuthServiceInstance();
         return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
             .subscribe(users => {
                 console.log(users);
                 this.userService.setUsers(users);
+                this.authService.autoLogin();
             });
     }
 
@@ -68,6 +81,12 @@ export class DataStorageService {
             this.itemService = this.injector.get(ItemsService);
         }
         return this.itemService;
+    }
+    getAuthServiceInstance(): AuthService {
+        if (!this.authService) {
+            this.authService = this.injector.get(AuthService);
+        }
+        return this.authService;
     }
 
 }

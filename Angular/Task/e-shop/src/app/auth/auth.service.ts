@@ -36,11 +36,44 @@ export class AuthService {
         this.userService.loggedUser = null;
         this.userService.loggedUserChanged.next(null);
         this.router.navigate(['/auth']);
-        localStorage.removeItem('loggedUser');
+        localStorage.removeItem('loggedUserDetail');
         // if (this.tokenExpirationTimer) {
         //     clearTimeout(this.tokenExpirationTimer);
         // }
         // this.tokenExpirationTimer = null;
+    }
+
+    autoLogin() {
+
+        if ((JSON.parse(localStorage.getItem('loggedUserDetail'))) === null) {
+            this.router.navigate(['/auth']);
+            return;
+
+        } else {
+            const loggedUserDet: {
+                email: string;
+                id: string;
+            } = JSON.parse(localStorage.getItem('loggedUserDetail'));
+
+            if (!loggedUserDet) {
+                return;
+            }
+            const loadedUser = this.userService.getUserSecurityQuestion(loggedUserDet.email);
+            console.log("loaded user " + loadedUser.email);
+            this.login(loadedUser.email, loadedUser.password).subscribe(
+                resData => {
+                    this.router.navigate(['/items']);
+                },
+                errorMessage => {
+                    console.log(errorMessage);
+                    this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
+                }
+            );
+            this.router.navigate(['/items']);
+        }
+
+
+
     }
 
     forgotPass(email: string) {

@@ -6,10 +6,9 @@ import { AboutUsComponent } from "./shared/about-us/about-us.component";
 import { ForgotPassComponent } from "./auth/forgot-pass/forgot-pass.component";
 
 const routes: Routes = [
-    { path: '', redirectTo: '/auth', pathMatch: 'full'},
-    { path: 'auth', component: AuthComponent },
+    // { path: 'auth', component: AuthComponent },
+    // { path: 'forgotpass', component: ForgotPassComponent },
     { path: 'aboutus', component: AboutUsComponent },
-    { path: 'forgotpass', component: ForgotPassComponent },
 
     { path: 'user', loadChildren: ()=> {
         // return import('./users/users.module').then(m => m.UsersModule);
@@ -19,6 +18,12 @@ const routes: Routes = [
         // return import('./users/users.module').then(m => m.UsersModule);
         return import('./items/items.module').then(m=> m.ItemsModule);
     } },
+    
+    { path: 'auth', loadChildren: ()=> {
+        return import('./auth/auth-module').then(m => m.AuthModule);
+    } },
+    
+    // { path: '', redirectTo: '/auth', pathMatch: 'full'},
 ]
 
 @NgModule({

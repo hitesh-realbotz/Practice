@@ -36,7 +36,7 @@
             <div class="form-group" class="form-group">
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control" formControlName="category" >
-                    <option value="" disabled selected>Choose a Category</option>
+                    <option [value]="category" disabled selected>{{category === '' ? 'Choose a category' : category }}</option>
                     <option value="mens">Mens</option>
                     <option value="women">Women</option>
                     <option value="kids">Kids</option>

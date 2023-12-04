@@ -6,12 +6,16 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { ItemsRoutingModule } from "./items-routing.module";
 import { ItemsListComponent } from './items-list/items-list.component';
 import { ItemsEditComponent } from './items-edit/items-edit.component';
+import { ItemsDetailComponent } from './items-detail/items-detail.component';
+import { ItemsItemComponent } from './items-list/items-item/items-item.component';
 
 @NgModule({
     declarations: [
         ItemsComponent,
         ItemsListComponent,
-        ItemsEditComponent
+        ItemsEditComponent,
+        ItemsDetailComponent,
+        ItemsItemComponent
     ],
     imports: [
         RouterModule,

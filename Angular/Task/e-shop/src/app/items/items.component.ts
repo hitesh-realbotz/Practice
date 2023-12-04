@@ -17,7 +17,8 @@ export class ItemsComponent implements OnInit {
   constructor(private itemService: ItemsService, private router: Router, private route: ActivatedRoute) { }
   
   ngOnInit(){
-    console.log('Recipes Init called');
+    console.log('Items Init called');
+    
     this.itemService.itemSelected.subscribe(
       (item: Item) => {this.selectedItem = item}
     )

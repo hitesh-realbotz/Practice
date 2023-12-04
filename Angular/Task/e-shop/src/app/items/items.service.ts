@@ -15,13 +15,16 @@ export class ItemsService {
 
     constructor(private toastr: ToastrService, private userService: UserService, private dataStorageService: DataStorageService) { }
 
-    setItems(Items: Item[]) {
-        this.items = Items;
+    setItems(items: Item[]) {
+        this.items = items;
         this.itemChanged.next(this.items.slice());
     }
     getItems() {
         console.log('get Items method called ');
         console.log(this.items);
+        if (this.items.length == 0) {
+            this.dataStorageService.fetchItems();
+        }
         return this.items.slice();
 
     }
@@ -45,16 +48,18 @@ export class ItemsService {
         this.dataStorageService.storeItems();
         this.toastr.info('New Item Added', 'Add Action');
     }
-    updateItem(index: number, newItem: Item) {
+
+    updateItem(index: number, newItem: Item) {  
         this.items[index] = newItem;
         this.itemChanged.next(this.items.slice());
+        this.dataStorageService.storeItems();
         this.toastr.info('Item Updated', 'Update Action');
     }
-
+    
     deleteItem(index: number) {
-
         this.items.splice(index, 1);
         this.itemChanged.next(this.items.slice());
+        this.dataStorageService.storeItems();
         this.toastr.warning('Item Deleted', 'Delete Action');
     }
 }

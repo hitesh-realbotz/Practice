@@ -20,9 +20,9 @@ import { ForgotPassComponent } from './auth/forgot-pass/forgot-pass.component';
   declarations: [
     AppComponent,
     HeaderComponent,
-    AuthComponent,
     AboutUsComponent,
-    ForgotPassComponent,
+    // AuthComponent,
+    // ForgotPassComponent,
     // ItemsComponent,
     // UsersComponent,
     // UserProfileComponent
