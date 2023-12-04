@@ -53,7 +53,8 @@ export class UserService  {
     }
 
     setUsers(users: User[]){
-        this.users = users;
+        (users != null) ? (this.users = users) : '';
+        // this.users = users;
         this.usersChanged.next(this.users.slice());
     }
 
@@ -71,6 +72,7 @@ export class UserService  {
         this.loggedUser = upLoggedUser;
         this.loggedUserChanged.next(upLoggedUser);
         this.users[index] = this.loggedUser;
+        console.log(this.users);
         this.dataStorageService.storeUsers();
     }
 
@@ -97,6 +99,19 @@ export class UserService  {
     updateLocalStorage(userDetailList: UserDetails[]) {
 
         localStorage.setItem('usersDetailList', JSON.stringify(userDetailList));
+    }
+
+    ChangePass(updatedUser: User, user: User) {
+        console.log('from changePass :' + updatedUser);
+        
+        updatedUser.role = user.role;
+        updatedUser.question = user.question;
+        updatedUser.answer = user.answer;
+        this.setLoggedUser(updatedUser);
+
+        let index = this.getUserIndex(updatedUser.id);
+        console.log(index);
+        this.updateUser(updatedUser, index);
     }
 
 

@@ -45,7 +45,7 @@ export class ForgotPassComponent implements OnInit {
     //   'answer': new FormControl(''),
     //   'password': new FormControl(''),
     // });
-    
+
     this.userForm = new FormGroup({
       'email': new FormControl(this.email, [Validators.required, Validators.email]),
       'question': new FormControl(this.question),
@@ -56,11 +56,11 @@ export class ForgotPassComponent implements OnInit {
 
 
   onSubmit() {
-    
+
     if (this.formMode == 'emailCheck') {
       let email = this.userForm.value['email'];
       this.validUser = this.authService.forgotPass(email);
-      console.log('Quest : '+this.validUser.question);
+      console.log('Quest : ' + this.validUser.question);
       if (!!this.validUser && this.validUser.question != '') {
         this.isUser = true;
         this.formMode = 'answerCheck';
@@ -68,11 +68,11 @@ export class ForgotPassComponent implements OnInit {
         this.question = this.validUser.question;
         this.forgotPassForm();
         this.toastr.info('Verify Security Question', 'Security Question!!');
-      }else{
+      } else {
         this.toastr.warning('Security Question not set', 'Security Question!!');
         console.log('Question not set');
       }
-    }else if (this.formMode == 'answerCheck') {
+    } else if (this.formMode == 'answerCheck') {
       this.answer = this.userForm.value['answer'];
       if (this.answer === this.validUser.answer) {
         this.formMode = 'enterPassword';
@@ -83,17 +83,26 @@ export class ForgotPassComponent implements OnInit {
 
         this.toastr.warning('Answer Not Matched', 'Answer Status!');
       }
-      
+
     } else {
       let newPassword = this.userForm.value['password'];
-      console.log(this.validUser);
-      console.log(newPassword);
-      this.validUser.password = newPassword;
-      // this.validUser.setPassword(newPassword);
-      this.authService.resetPass(this.validUser);
-      this.router.navigate(['user']);
+      let passObs: Observable<AuthResponseData>;
+      passObs = this.authService.resetPass(this.validUser, newPassword);
+      // passObs = this.authService.upPassValuesDirect(this.validUser._token, this.validUser, newPassword) // not working as user not logged-in
+      passObs.subscribe(
+        resData => {
+
+          this.toastr.info('Password Changed!!');
+          // this.router.navigate(['/items']); 
+          this.authService.logout();
+        },
+        errorMessage => {
+          console.log(errorMessage);
+          this.toastr.warning('Password not Changed!!');
+          // this.router.navigate(['/auth']); 
+          this.authService.logout();
+        }
+      );
     }
   }
-
-
-  }
+}

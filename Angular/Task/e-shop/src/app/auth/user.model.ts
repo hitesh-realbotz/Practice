@@ -4,8 +4,8 @@ export class User {
   public question: string | null;
   public answer: string | null;
   public password: string;
-  private _token: string;
-  private _tokenExpirationDate: Date;
+  public _token: string;
+  public _tokenExpirationDate: Date;
   public role: string | null;
 
   constructor(
@@ -28,7 +28,5 @@ export class User {
       this.answer = answer || '';
   }
 
-  setPassword(password: string){
-    this.password = password;
-  }
+  
 }
