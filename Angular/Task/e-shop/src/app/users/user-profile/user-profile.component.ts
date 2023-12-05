@@ -13,10 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class UserProfileComponent implements OnInit {
 
-  roles = ['buyer', 'seller'];
-  forbiddenUsernames = ['Max', 'Anna'];
-  forbiddenEmailList = ['test@gmail.com', 'test3@gmail.com'];
-  
+  // roles = ['buyer', 'seller'];
   
   userForm: FormGroup;
   loggedUser: User;
@@ -28,15 +25,11 @@ export class UserProfileComponent implements OnInit {
     this.loggedUser = this.userService.loggedUser;
     this.userForm = new FormGroup({
       'email': new FormControl(this.loggedUser.email, [Validators.required, Validators.email]),
-      'role': new FormControl(this.loggedUser.role, [Validators.required]),
-      
+      // 'role': new FormControl(this.loggedUser.role, [Validators.required]),
       'question': new FormControl(this.loggedUser.question),
       'answer': new FormControl(this.loggedUser.answer),
     });
     this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
-    console.log('user-profile');
-    console.log(this.loggedUser.id);
-
 
     // this.userForm.valueChanges.subscribe(
     //   (value) => console.log(value)
@@ -45,25 +38,19 @@ export class UserProfileComponent implements OnInit {
     //   (status) => console.log(status)
     // );
 
-
   }
 
   onSubmit() {
-   
-    // console.log(this.userForm.value['email']);
-    // console.log(this.userForm.value['role']);
-    // console.log(this.userForm.value['question']);
-    // console.log(this.userForm.value['answer']);
-    this.loggedUser.role = this.userForm.value['role'];
+
+    // this.loggedUser.role = this.userForm.value['role'];
     this.loggedUser.question = this.userForm.value['question'];
     this.loggedUser.answer = this.userForm.value['answer'];
     
     this.userService.updateUser(this.loggedUser, this.loggedUserIndex);
 
     this.router.navigate(['user']);
-    this.toastr.warning('User Deatils Updated', 'Update Success!');
-    // this.userForm.reset();
-    
+    this.toastr.info('User Deatils Updated', 'Update Success!');
+    this.userForm.reset();
 
   }
 

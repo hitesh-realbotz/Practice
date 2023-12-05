@@ -3,6 +3,7 @@ import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ItemsService } from '../items.service';
 import { Item } from '../item.model';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-items-edit',
@@ -18,17 +19,23 @@ export class ItemsEditComponent implements OnInit {
   category: string;
   constructor(private route: ActivatedRoute,
     private itemService: ItemsService,
-    private router: Router) { }
+    private router: Router,
+    private location: Location) { }
 
   ngOnInit() {
+    
     console.log(this.editMode);
     this.route.params.subscribe(
       (params: Params) => {
         this.id = +params['id'];
+        if(this.router.url.includes('shop')){
+          this.id = this.itemService.sellerItemsIndex[this.id];
+        }
         this.editMode = params['id'] != null;
         console.log(this.editMode);
       }
     );
+
     this.initForm();
   }
 
@@ -83,7 +90,8 @@ export class ItemsEditComponent implements OnInit {
 
 
   onCancel() {
-    this.router.navigate(['../'], { relativeTo: this.route });
+    // this.router.navigate(['../'], { relativeTo: this.route });
+    this.location.back();
   }
 
 }

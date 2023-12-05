@@ -1,0 +1,56 @@
+<div class="row">
+    <div class="col-xs-12">
+        <form [formGroup]="shopForm" (ngSubmit)="onSubmit()">
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="shopName">Shop Name</label>
+                        <input type="text" name="shopName" id="shopName" formControlName="shopName" class="form-control ">
+                    </div>
+                </div>
+            </div> 
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="shopAddress">Shop Address</label>
+                        <textarea type="text" name="shopAddress" id="shopAddress" formControlName="shopAddress"
+                            class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="shopIntro">Shop Introduction</label>
+                        <textarea type="text" name="shopIntro" id="shopIntro" formControlName="shopIntro"
+                            class="form-control" rows="4"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="shopImage">Shop Image URL</label>
+                        <input type="text" name="shopImage" id="shopImage" formControlName="shopImage"
+                        class="form-control" #shopImage>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <img [src]="shopImage.value" style="max-width: 300px; max-height: 300px;" class="img-responsive" alt="">
+                </div>
+            </div>  
+            
+            <div class="row">
+                <div class="col-xs-12">
+                    <!-- <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button> -->
+                    <button type="submit" class="btn btn-success" >Save</button>
+                    <button type="submit" class="btn btn-danger" (click)="onCancel()">Cancel</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

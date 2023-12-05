@@ -14,7 +14,7 @@ export class ItemsDetailComponent  implements OnInit {
   item: Item;
   id: number;
   role: string;
-  constructor(private itemsService: ItemsService,
+  constructor(private itemService: ItemsService,
               private userService: UserService,
               private route: ActivatedRoute,
               private router: Router) { }
@@ -25,8 +25,11 @@ export class ItemsDetailComponent  implements OnInit {
     this.route.params.subscribe(
       (params: Params) => {
         this.id = +params['id'];
+        if(this.router.url.includes('shop')){
+          this.id = this.itemService.sellerItemsIndex[this.id];
+        }
         console.log('Id is : ' + this.id);
-        this.item = this.itemsService.getItem(this.id);
+        this.item = this.itemService.getItem(this.id);
       }
     );
   }
