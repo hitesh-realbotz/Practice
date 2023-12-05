@@ -13,7 +13,9 @@ export class ItemsEditComponent implements OnInit {
 
   id: number;
   editMode = false;
+  item: Item;
   itemForm: FormGroup;
+  category: string;
   constructor(private route: ActivatedRoute,
     private itemService: ItemsService,
     private router: Router) { }
@@ -31,7 +33,7 @@ export class ItemsEditComponent implements OnInit {
   }
 
   private initForm() {
-    const item = this.itemService.getItem(this.id);
+    this.item = this.itemService.getItem(this.id);
 
     let name = '';
     let itemId = 0 ;
@@ -41,14 +43,13 @@ export class ItemsEditComponent implements OnInit {
     let category = '';
 
     if (this.editMode) {
-
-      
-      name = item.name;
-      itemId = item.itemId
-      sellerId = item.sellerId;
-      image = item.image;
-      description = item.description;
-      category = item.category;
+      name = this.item.name;
+      itemId = this.item.itemId
+      sellerId = this.item.sellerId;
+      image = this.item.image;
+      description = this.item.description;
+      category = this.item.category;
+      this.category = this.item.category;
     }
 
     this.itemForm = new FormGroup({
@@ -70,6 +71,8 @@ export class ItemsEditComponent implements OnInit {
       this.itemForm.value['category'],
     );
     if (this.editMode) {
+      newItem.itemId = this.item.itemId;
+      newItem.sellerId = this.item.sellerId;
       this.itemService.updateItem(this.id, newItem);
     }
     else {

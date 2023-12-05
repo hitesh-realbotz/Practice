@@ -14,6 +14,7 @@ export class UserService  {
     usersChanged = new Subject<User[]>();
     users: User[] = [];
     usersDetList: UserDetails[] = [];
+    loggedUserDet: UserDetails;
 
 
     constructor(private dataStorageService: DataStorageService, private toastr: ToastrService,
@@ -29,7 +30,7 @@ export class UserService  {
         // Adding new user to local storage
         if ((JSON.parse(localStorage.getItem('usersDetailList'))) === null) {
             this.usersDetList = [userDetails];
-            this.updateLocalStorage(this.usersDetList);
+            // this.updateLocalStorage(this.usersDetList);
 
         } else {
             // const list: UserDetails[] = JSON.parse(localStorage.getItem('usersDetailList'));
@@ -38,13 +39,16 @@ export class UserService  {
             // this.updateLocalStorage(this.usersDetList);
             this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
             this.usersDetList.push(userDetails);
-            this.updateLocalStorage(this.usersDetList);
+            
+            // this.updateLocalStorage(this.usersDetList);
         }
 
         this.users.push(user);
         this.loggedUser = user;
         this.loggedUserChanged.next(user);
-        // this.updateLocalStorage(this.usersDetList);
+
+        this.loggedUserDet = userDetails;
+        this.updateLocalStorage(this.usersDetList, this.loggedUserDet);
         this.dataStorageService.storeUsers();
     }
 
@@ -63,7 +67,9 @@ export class UserService  {
         let index = this.getUserIndex(user.id);
         if (index != -1) {
             this.loggedUser = this.users[index];
-            this.loggedUserChanged.next(this.loggedUser);
+            this.loggedUserChanged.next(this.loggedUser);   
+            this.loggedUserDet = new UserDetails(user.id, user.email);
+            localStorage.setItem('loggedUserDetail', JSON.stringify(this.loggedUserDet));
         }
 
     }
@@ -96,9 +102,10 @@ export class UserService  {
 
     }
 
-    updateLocalStorage(userDetailList: UserDetails[]) {
+    updateLocalStorage(userDetailList: UserDetails[], loggedUserDet: UserDetails) {
 
         localStorage.setItem('usersDetailList', JSON.stringify(userDetailList));
+        localStorage.setItem('loggedUserDetail', JSON.stringify(loggedUserDet));
     }
 
     ChangePass(updatedUser: User, user: User) {

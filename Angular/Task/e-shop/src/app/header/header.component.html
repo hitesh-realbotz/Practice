@@ -20,6 +20,9 @@
           <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated  ">
             <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a>
           </li>
+          <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated  ">
+            <a class="nav-link" aria-current="page" routerLink="/items" (click)="onGetItems()">Get Items</a>
+          </li>
         </ul>
         <ul class="navbar-nav me-right mb-2 mb-sm-0">
           <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">

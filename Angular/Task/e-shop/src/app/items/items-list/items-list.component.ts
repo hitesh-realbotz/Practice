@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { Item } from '../item.model';
 import { ItemsService } from '../items.service';
+import { UserService } from 'src/app/users/user.service';
 
 @Component({
   selector: 'app-items-list',
@@ -13,13 +14,16 @@ export class ItemsListComponent implements OnInit, OnDestroy {
 
   items: Item[];
   subscription: Subscription;
+  role: string;
 
   constructor(private itemService: ItemsService,
+    private userService: UserService,
     private router: Router,
     private route: ActivatedRoute) {
 
   }
   ngOnInit() {
+    this.role = this.userService.loggedUser.role;
     this.subscription = this.itemService.itemChanged.subscribe(
       (Items: Item[]) => {
         this.items = Items;
