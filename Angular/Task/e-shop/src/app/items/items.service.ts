@@ -12,6 +12,7 @@ export class ItemsService {
     itemChanged = new Subject<Item[]>();
 
     private items: Item[] = [];
+    sellerItemsIndex: number[];
 
     constructor(private toastr: ToastrService, private userService: UserService, private dataStorageService: DataStorageService) { }
 
@@ -22,8 +23,12 @@ export class ItemsService {
     getItems() {
         console.log('get Items method called ');
         console.log(this.items);
-        if (this.items.length == 0) {
-            this.dataStorageService.fetchItems();
+        // if (!this.items.length) {
+        //     this.dataStorageService.fetchItems();
+        // }
+        // return this.items.slice();
+        if (!this.items) {
+            return null;
         }
         return this.items.slice();
 
@@ -49,17 +54,31 @@ export class ItemsService {
         this.toastr.info('New Item Added', 'Add Action');
     }
 
-    updateItem(index: number, newItem: Item) {  
+    updateItem(index: number, newItem: Item) {
         this.items[index] = newItem;
         this.itemChanged.next(this.items.slice());
         this.dataStorageService.storeItems();
         this.toastr.info('Item Updated', 'Update Action');
     }
-    
+
     deleteItem(index: number) {
         this.items.splice(index, 1);
         this.itemChanged.next(this.items.slice());
         this.dataStorageService.storeItems();
         this.toastr.warning('Item Deleted', 'Delete Action');
     }
+
+    getItemsBySellerId(id: string) {
+        const sellerItems: Item[] = [];
+            this.sellerItemsIndex = [];
+            for (const [index, itemFromList] of this.items.entries()) {
+                if (itemFromList.sellerId === id) {
+                    this.sellerItemsIndex.push(index);
+                    sellerItems.push(itemFromList);
+                }
+            }
+            return sellerItems;
+
+    }
+    
 }

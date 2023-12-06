@@ -22,6 +22,9 @@ const routes: Routes = [
     { path: 'auth', loadChildren: ()=> {
         return import('./auth/auth-module').then(m => m.AuthModule);
     } },
+    { path: 'shop', loadChildren: ()=> {
+        return import('./shop/shop-module').then(m => m.ShopModule);
+    } },
     
     // { path: '', redirectTo: '/auth', pathMatch: 'full'},
 ]

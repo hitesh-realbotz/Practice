@@ -24,12 +24,24 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   }
   ngOnInit() {
     this.role = this.userService.loggedUser.role;
-    this.subscription = this.itemService.itemChanged.subscribe(
-      (Items: Item[]) => {
-        this.items = Items;
-      }
-    )
-    this.items = this.itemService.getItems();
+
+    if(this.router.url === '/shop'){
+      const id = this.userService.loggedUser.id;
+      this.items = this.itemService.getItemsBySellerId(id);
+    }else{
+      this.subscription = this.itemService.itemChanged.subscribe(
+          (Items: Item[]) => {
+            this.items = Items;
+          }
+        )
+      this.items = this.itemService.getItems();
+    }
+    // this.subscription = this.itemService.itemChanged.subscribe(
+    //   (Items: Item[]) => {
+    //     this.items = Items;
+    //   }
+    // )
+    // this.items = this.itemService.getItems();
 
   }
 
@@ -37,7 +49,9 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    if (!!this.subscription) {  
+      this.subscription.unsubscribe();
+    }
   }
 
 }

@@ -5,6 +5,7 @@ import { DataStorageService } from "../shared/data-storage.service";
 import { ToastrService } from "ngx-toastr";
 import { AuthService } from "../auth/auth.service";
 import { UserDetails } from "../auth/user-details.model";
+import { Item } from "../items/item.model";
 
 @Injectable({ providedIn: 'root' })
 export class UserService  {
@@ -30,17 +31,11 @@ export class UserService  {
         // Adding new user to local storage
         if ((JSON.parse(localStorage.getItem('usersDetailList'))) === null) {
             this.usersDetList = [userDetails];
-            // this.updateLocalStorage(this.usersDetList);
+            
 
         } else {
-            // const list: UserDetails[] = JSON.parse(localStorage.getItem('usersDetailList'));
-            // this.usersDetList = list;
-            // this.usersDetList.push(userDetails);
-            // this.updateLocalStorage(this.usersDetList);
             this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
             this.usersDetList.push(userDetails);
-            
-            // this.updateLocalStorage(this.usersDetList);
         }
 
         this.users.push(user);
@@ -80,6 +75,11 @@ export class UserService  {
         this.users[index] = this.loggedUser;
         console.log(this.users);
         this.dataStorageService.storeUsers();
+    }
+
+    updateLoggedUserDet(item: Item){
+        
+
     }
 
     getUserIndex(id: string) {

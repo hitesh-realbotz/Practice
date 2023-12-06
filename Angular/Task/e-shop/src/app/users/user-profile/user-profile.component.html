@@ -4,15 +4,14 @@
             <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
                 
                 <div class="form-group">
-                    <label for="email">email</label>
-                    <input type="text" id="email" formControlName="email" class="form-control">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control" readonly>
                 </div>
-
-                <div class="radio" *ngFor="let role of roles">
+                <!-- <div class="radio" *ngFor="let role of roles">
                     <label>
                         <input type="radio" formControlName="role" [value]="role">{{ role }}
                     </label>
-                </div>
+                </div> -->
                 <div class="form-group" class="form-group">
                     <label for="question">Question</label>
                     <select name="question" id="question" class="form-control" formControlName="question" >

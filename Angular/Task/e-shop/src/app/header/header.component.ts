@@ -17,7 +17,7 @@ import { ToastrService } from 'ngx-toastr';
 export class HeaderComponent implements OnInit, OnDestroy {
 
   isAuthenticated = false;
-  question = '';
+  role = '';
   private userSub: Subscription;
   constructor(private userService: UserService, 
               private authService: AuthService, 
@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       (loggedUser: User) => {
         this.isAuthenticated = !!loggedUser;
         if (!!loggedUser) {
-          this.question = loggedUser.question;
+          this.role = loggedUser.role;
         }
       }
     )
@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Formal white shirt',
         'Mens',
         1,
-        'PFBeTCGpiLgJiaIhlF8PhcwakwC2'
+        'ytZ9r6le5dXllgTLf3mMePpBBz72'
       ),
       new Item(
         'Item-2',
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Black t-shirt',
         'Womens',
         2,
-        'PFBeTCGpiLgJiaIhlF8PhcwakwC2'
+        'ytZ9r6le5dXllgTLf3mMePpBBz72'
       ),
       new Item(
         'Item-3',
@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Casual checks shirt',
         'Mens',
         3,
-        'zMEFdBjOXEOQ9lasf3LFVD0y6l03'
+        'IBXZ35r0tlN5J89E4tWoiTrIzHz2'
       ),
       new Item(
         'Item-4',
@@ -82,7 +82,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'White t-shirt',
         'Womens',
         4,
-        'PFBeTCGpiLgJiaIhlF8PhcwakwC2'
+        'IBXZ35r0tlN5J89E4tWoiTrIzHz2'
       )
     ];
 

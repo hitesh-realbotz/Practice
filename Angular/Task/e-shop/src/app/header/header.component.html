@@ -20,6 +20,9 @@
           <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated  ">
             <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a>
           </li>
+          <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">
+            <a class="nav-link" aria-current="page" [routerLink]="role === 'buyer' ? 'shop/details' : 'shop'"> {{role === 'buyer' ? 'Become a Seller' : 'Shop'}}</a>
+          </li>
           <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated  ">
             <a class="nav-link" aria-current="page" routerLink="/items" (click)="onGetItems()">Get Items</a>
           </li>

@@ -13,6 +13,7 @@ export class ItemsItemComponent implements OnInit {
 
   @Input('item') item: Item;
   @Input() index: number;
+
   role: string;
 
   constructor(private userService: UserService,
@@ -21,6 +22,9 @@ export class ItemsItemComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
+    // if(this.router.url.includes('shop')){
+    //   this.role = this.userService.loggedUser.role;
+    // }
     this.role = this.userService.loggedUser.role;
   }
   onEditItem(index: number) {
@@ -32,5 +36,9 @@ export class ItemsItemComponent implements OnInit {
   }
   onDeleteItem(index){
     this.itemService.deleteItem(index);
+  }
+  onAddToCart(index: number){
+    const item = this.itemService.getItem(index);
+    this.userService.updateLoggedUserDet(item);
   }
 }

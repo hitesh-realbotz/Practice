@@ -15,8 +15,9 @@ export class ItemsResolverService implements Resolve<Item[]> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Item[] | Observable<Item[]> | Promise<Item[]>  {
         const items = this.itemsService.getItems();
+        console.log('fromGetItem :'+ items);
 
-        if (items.length === 0) { 
+        if (!items) { 
             console.log('data will be fetched');
             this.dataStorageService.fetchItems();
         } else {

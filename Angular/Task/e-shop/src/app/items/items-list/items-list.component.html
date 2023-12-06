@@ -1,13 +1,14 @@
-<div class="row">
+<!-- <div class="row">
     <div class="col-xs-12">
         <button class="btn btn-success" (click)="onNewItem()" *ngIf="role == 'seller'" >New Item</button>
     </div>
-</div>
+</div> -->
 <div class="row">
     <div class="col-xs-12 col-md-12 col-12">  
         <app-items-item 
         *ngFor="let itemEl of items; let i = index" 
         [item]="itemEl"
-        [index]="i"></app-items-item>
+        [index]="i"
+        ></app-items-item>
     </div>
 </div>
