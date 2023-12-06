@@ -1,0 +1,13 @@
+<div class="row">
+    <div class="col-xs-12">
+        <button class="btn btn-success" (click)="onClearCart()"  >Clear Cart</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12 col-md-12 col-12">  
+        <!-- <app-items-item  *ngFor="let itemEl of items; let i = index"  [item]="itemEl" [index]="i" > </app-items-item> -->
+        <div *ngFor="let itemEl of items; let i = index"  [item]="itemEl" [index]="i">
+            <div>{{itemEl.name}}</div>
+        </div>
+    </div> 
+</div>

@@ -45,7 +45,7 @@
             </div>
             <div class="item-actions">
                 <div class="item-action" *ngIf="role === 'buyer'">
-                    <button class="btn btn-success" >Add to Cart</button>
+                    <button class="btn btn-success" (click)="onAddToCart($event, index)">Add to Cart</button>
                 </div>
 
                 <div class="item-action" *ngIf="role === 'seller'">

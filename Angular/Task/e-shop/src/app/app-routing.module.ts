@@ -8,6 +8,8 @@ import { ForgotPassComponent } from "./auth/forgot-pass/forgot-pass.component";
 const routes: Routes = [
     // { path: 'auth', component: AuthComponent },
     // { path: 'forgotpass', component: ForgotPassComponent },
+
+    
     { path: 'aboutus', component: AboutUsComponent },
 
     { path: 'user', loadChildren: ()=> {
@@ -19,13 +21,13 @@ const routes: Routes = [
         return import('./items/items.module').then(m=> m.ItemsModule);
     } },
     
-    { path: 'auth', loadChildren: ()=> {
-        return import('./auth/auth-module').then(m => m.AuthModule);
-    } },
     { path: 'shop', loadChildren: ()=> {
-        return import('./shop/shop-module').then(m => m.ShopModule);
+        return import('./shop/shop.module').then(m => m.ShopModule);
     } },
     
+    { path: 'auth', loadChildren: ()=> {
+        return import('./auth/auth.module').then(m => m.AuthModule);
+    } },
     // { path: '', redirectTo: '/auth', pathMatch: 'full'},
 ]
 

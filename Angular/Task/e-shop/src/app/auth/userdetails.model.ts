@@ -1,7 +1,7 @@
 export class UserDetails {
     public id: string;
     public email: string;
-    public cart: number[];
+    public cart?: number[] | null;
 
     constructor(
         id: string,

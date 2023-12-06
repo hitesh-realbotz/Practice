@@ -5,14 +5,17 @@ import { ToastrService } from "ngx-toastr";
 import { UserService } from "../users/user.service";
 import { User } from "../auth/user.model";
 import { DataStorageService } from "../shared/data-storage.service";
+import { UserDetails } from "../auth/userdetails.model";
 
 @Injectable({ providedIn: 'root' })
 export class ItemsService {
     itemSelected = new EventEmitter<Item>();
     itemChanged = new Subject<Item[]>();
 
-    private items: Item[] = [];
+    items: Item[] = [];
     sellerItemsIndex: number[];
+    cartItemsChanged = new Subject<Item[]>();
+    cartItems: Item[] = [];
 
     constructor(private toastr: ToastrService, private userService: UserService, private dataStorageService: DataStorageService) { }
 
@@ -31,10 +34,9 @@ export class ItemsService {
             return null;
         }
         return this.items.slice();
-
     }
 
-    getItem(index: number) {
+    public getItem(index: number) {
         return this.items[index];
     }
 
@@ -68,17 +70,51 @@ export class ItemsService {
         this.toastr.warning('Item Deleted', 'Delete Action');
     }
 
+    updateCart(index: number) {
+        console.log(index);
+        console.log(this.items[index]);
+        const item: Item = this.items[index];
+        console.log("item from update method" + item);
+        const userIndex = this.userService.loggedUserIndex;
+        const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        const userCart: number[] = usersDetList[userIndex].cart;
+        userCart.includes(item.itemId) ? '' : usersDetList[userIndex].cart.push(item.itemId);
+
+        this.cartItems.push(item);
+        this.cartItemsChanged.next(this.cartItems);
+
+        // if (userCart.includes(item.itemId)) {
+        //     usersDetList[userIndex].cart.push(item.itemId);
+        //     this.cartItems.push(item);
+        //     this.cartItemsChanged.next(this.cartItems);
+        // }
+        
+        localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
+
+        // const localUserDet = this.userService.loggedUserDet;
+        // localUserDet.cart.push(item.itemId);
+        // localStorage.setItem('loggedUserDetail', JSON.stringify(localUserDet));
+    }
+
     getItemsBySellerId(id: string) {
         const sellerItems: Item[] = [];
-            this.sellerItemsIndex = [];
-            for (const [index, itemFromList] of this.items.entries()) {
-                if (itemFromList.sellerId === id) {
-                    this.sellerItemsIndex.push(index);
-                    sellerItems.push(itemFromList);
-                }
+        this.sellerItemsIndex = [];
+        for (const [index, itemFromList] of this.items.entries()) {
+            if (itemFromList.sellerId === id) {
+                this.sellerItemsIndex.push(index);
+                sellerItems.push(itemFromList);
             }
-            return sellerItems;
-
+        }
+        return sellerItems;
     }
-    
+    getItemsById(ids: number[]) {
+        this.cartItems = [];
+        for (const itemFromList of this.items) {
+            if (ids.includes(itemFromList.itemId)) {
+                this.cartItems.push(itemFromList);
+            }
+        }
+        return this.cartItems;
+    }
+
 }

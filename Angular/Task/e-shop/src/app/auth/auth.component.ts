@@ -54,6 +54,7 @@ export class AuthComponent implements OnDestroy {
 
     authObs.subscribe(
       resData => {
+        console.log('resData');
         console.log(resData);
         this.isLoading = false;
         this.toastr.success('Welcome to E-Shop', 'Login Success!');

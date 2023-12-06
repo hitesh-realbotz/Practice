@@ -12,39 +12,42 @@ import { UserService } from 'src/app/users/user.service';
 export class ItemsDetailComponent  implements OnInit {
 
   item: Item;
-  id: number;
-  role: string;
+  index: number;
+  role: string = 'buyer';
   constructor(private itemService: ItemsService,
               private userService: UserService,
               private route: ActivatedRoute,
               private router: Router) { }
 
   ngOnInit(): void {
-    this.role = this.userService.loggedUser.role;
-
     this.route.params.subscribe(
       (params: Params) => {
-        this.id = +params['id'];
+        this.index = +params['id'];
         if(this.router.url.includes('shop')){
-          this.id = this.itemService.sellerItemsIndex[this.id];
+          this.index = this.itemService.sellerItemsIndex[this.index];
+          this.role = this.userService.loggedUser.role;
         }
-        console.log('Id is : ' + this.id);
-        this.item = this.itemService.getItem(this.id);
+        this.item = this.itemService.getItem(this.index);
       }
     );
   }
 
-  onAddToShoppingList() {
-    // this.recipeService.addIngredientsToShoppingList(this.recipe.ingredients);
+  onEditItem(index: number) {
+    console.log('Edit clicked'+index);
+    this.router.navigate([index, 'edit'], { relativeTo: this.route.parent });
+    // this.router.navigate([index]);
   }
 
-  onEditItem() {
-    this.router.navigate(['edit'], { relativeTo: this.route });
+  onDeleteItem(index){
+    console.log('Delete clicked'+index);
+    this.itemService.deleteItem(index);
   }
-
-  onDeleteRecipe() {
-    // this.recipeService.deleteRecipe(this.id);
-    this.router.navigate(['/recipes']);
+  
+  onAddToCart(event: Event,index: number){
+    event.stopPropagation();
+    console.log('AddToCart clicked'+index);
+    this.itemService.updateCart(index);
+    this.router.navigate(['items']);
   }
 
 }
