@@ -7,6 +7,7 @@ import { Router } from "@angular/router";
 import { DataStorageService } from "../shared/data-storage.service";
 import { ToastrService } from "ngx-toastr";
 import { UserDetails } from "./userdetails.model";
+import { Item } from "../items/item.model";
 
 export interface AuthResponseData {
     idToken: string;
@@ -30,7 +31,8 @@ export interface AuthResponseData {
 export class AuthService {
 
     private userList: User[];
-    user = new BehaviorSubject<User>(null);
+    // user = new BehaviorSubject<User>(null);
+    user = new BehaviorSubject<number>(null);
 
     constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService, private toastr: ToastrService) { }
 
@@ -46,6 +48,7 @@ export class AuthService {
     }
 
     autoLogin() {
+        console.log(" AutoLogin Called ");
         if ((JSON.parse(localStorage.getItem('loggedUserIndex'))) === null) {
             console.log(" Routing to Auth ");
             this.router.navigate(['/auth']);
@@ -53,46 +56,19 @@ export class AuthService {
 
         } else {
 
+            // const logUser = JSON.parse(localStorage.getItem('loggedUserAuth'));
+            // this.userService.loggedUser = logUser;
+            // console.log("AuthService logUser : " + logUser);
+            // console.log(logUser);
+            // this.userService.loggedUserChanged.next(logUser);
+            // this.user.next(logUser);
+
             const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
-            const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-            
-            // const loadedUser = this.userService.getUserSecurityQuestion(loggedUserEmail);
-            const loadedUser = this.userService.users[userIndex];
-            this.user.next(loadedUser);
-            // this.router.navigate(['items']);
-            
-            this.login(loadedUser.email, loadedUser.password).subscribe(
-                resData => {
-                    this.router.navigate(['items']);
-                },
-                errorMessage => {
-                    console.log(errorMessage);
-                    this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
-                }
-            );
+            console.log("userIndex from authServ");
+            console.log(userIndex);
+            this.user.next(userIndex);
 
-
-
-            // const loggedUserDet: {
-            //     email: string;
-            //     id: string;
-            // } = JSON.parse(localStorage.getItem('loggedUserDetail'));
-
-            // if (!loggedUserDet) {
-            //     return;
-            // }
-            // const loadedUser = this.userService.getUserSecurityQuestion(loggedUserDet.email);
-            // console.log("loaded user " + loadedUser.email);
-            // this.login(loadedUser.email, loadedUser.password).subscribe(
-            //     resData => {
-            //         this.router.navigate(['/items']);
-            //     },
-            //     errorMessage => {
-            //         console.log(errorMessage);
-            //         this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
-            //     }
-            // );
-            // this.router.navigate(['/items']);
+            this.toastr.info('Page Refreshed');
         }
     }
 

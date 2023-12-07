@@ -58,7 +58,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Formal white shirt',
         'Mens',
         1,
-        'Gf6FvwzgvHNqBH5H5DN7AQKAo5h2'
+        'RJUlLEr5qzLeRGKUWaw9YQDcWaQ2'
       ),
       new Item(
         'Item-2',
@@ -66,7 +66,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Black t-shirt',
         'Womens',
         2,
-        'Gf6FvwzgvHNqBH5H5DN7AQKAo5h2'
+        'RJUlLEr5qzLeRGKUWaw9YQDcWaQ2'
       ),
       new Item(
         'Item-3',
@@ -89,6 +89,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.itemService.setItems(items);
 
     this.dataStorageService.storeItems();
+    
     this.toastr.info('New Items Added', 'Add Action');
 
   }

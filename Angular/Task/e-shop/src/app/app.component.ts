@@ -12,9 +12,12 @@ export class AppComponent implements OnInit {
   constructor(private dataStorageService: DataStorageService, private authService: AuthService) { }
 
   ngOnInit() {
-    // this.authService.autoLogin();
     this.dataStorageService.fetchUsers();
-    
+    this.dataStorageService.fetchItems();
+    this.authService.autoLogin();
+    // this.dataStorageService.fetchUsers();
+
+
   }
   title = 'e-shop';
 }
