@@ -3,6 +3,7 @@ import { UsersComponent } from "./users.component";
 import { UserProfileComponent } from "./user-profile/user-profile.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AboutUsComponent } from "../shared/about-us/about-us.component";
+import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes = [
     { path: '', component: UsersComponent,            // With LazyLoading

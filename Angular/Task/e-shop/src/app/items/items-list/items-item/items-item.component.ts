@@ -14,7 +14,7 @@ export class ItemsItemComponent implements OnInit {
   @Input('item') item: Item;
   @Input() index: number;
 
-  role: string;
+  role: string = 'buyer';
 
   constructor(private userService: UserService,
               private itemService: ItemsService,
@@ -22,23 +22,25 @@ export class ItemsItemComponent implements OnInit {
               private router: Router) { }
 
   ngOnInit() {
-    // if(this.router.url.includes('shop')){
-    //   this.role = this.userService.loggedUser.role;
-    // }
-    this.role = this.userService.loggedUser.role;
+    if(this.router.url.includes('shop')){
+      this.role = this.userService.loggedUser.role;
+    }
   }
   onEditItem(index: number) {
+    console.log('Edit clicked'+index);
     this.router.navigate([index, 'edit'], { relativeTo: this.route.parent });
-    // this.router.navigate([index]);
+  }
+  onDeleteItem(index){
+    console.log('Delete clicked'+index);
+    this.itemService.deleteItem(index);
+  }
+  onAddToCart(event: Event,index: number){
+    event.stopPropagation();
+    console.log('AddToCart clicked'+index);
+    this.itemService.updateCart(index);
+    this.router.navigate(['items']);
   }
   onItem(index){
     this.router.navigate([index], { relativeTo: this.route.parent })
-  }
-  onDeleteItem(index){
-    this.itemService.deleteItem(index);
-  }
-  onAddToCart(index: number){
-    const item = this.itemService.getItem(index);
-    this.userService.updateLoggedUserDet(item);
   }
 }

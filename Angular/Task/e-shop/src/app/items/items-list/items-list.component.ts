@@ -19,21 +19,19 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   constructor(private itemService: ItemsService,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute) {
-
-  }
+    private route: ActivatedRoute) { }
   ngOnInit() {
     this.role = this.userService.loggedUser.role;
 
-    if(this.router.url === '/shop'){
+    if (this.router.url === '/shop') {
       const id = this.userService.loggedUser.id;
       this.items = this.itemService.getItemsBySellerId(id);
-    }else{
+    } else {
       this.subscription = this.itemService.itemChanged.subscribe(
-          (Items: Item[]) => {
-            this.items = Items;
-          }
-        )
+        (Items: Item[]) => {
+          this.items = Items;
+        }
+      )
       this.items = this.itemService.getItems();
     }
     // this.subscription = this.itemService.itemChanged.subscribe(
@@ -49,7 +47,8 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.router.navigate(['new'], { relativeTo: this.route });
   }
   ngOnDestroy() {
-    if (!!this.subscription) {  
+
+    if (!!this.subscription) {
       this.subscription.unsubscribe();
     }
   }

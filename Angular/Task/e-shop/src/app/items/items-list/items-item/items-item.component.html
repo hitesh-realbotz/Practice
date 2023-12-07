@@ -11,17 +11,18 @@
             <div class="item-description float-end">
                 <p class="list-group-item-text">{{item.description}}</p>
             </div>
+            
             <div class="item-actions">
                 <div class="item-action" *ngIf="role === 'buyer'">
-                    <button class="btn btn-success" (click)="onAddToCart(index)">Add to Cart</button>
+                    <button class="btn btn-success" (click)="onAddToCart($event, index)">Add to Cart</button>
                 </div>
 
-                <!-- <div class="item-action" *ngIf="role === 'seller'">
+                <div class="item-action" *ngIf="role === 'seller'">
                     <button class="btn btn-outline-secondary" (click)="onEditItem(index)">Edit</button>
                 </div>
                 <div class="item-action" *ngIf="role === 'seller'">
                     <button class="btn btn-outline-secondary" (click)="onDeleteItem(index)">Delete</button>
-                </div> -->
+                </div>
             </div>
 
         </div>

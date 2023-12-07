@@ -18,20 +18,20 @@ export class DataStorageService {
     constructor(private http: HttpClient,
         private toastr: ToastrService,
         private injector: Injector
-        ) { }
+    ) { }
 
     storeItems() {
         this.getItemServiceInstance();
         const items = this.itemService.getItems();
         this.http.put('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json', items).subscribe(response => {
             console.log(response);
-            
+
         });
         this.toastr.info('Remote data updated!', 'Data to server Action');
         return true;
     }
 
-    fetchItems(){
+    fetchItems() {
         this.getItemServiceInstance();
         return this.http.get<Item[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json')
             .subscribe(items => {
@@ -60,14 +60,28 @@ export class DataStorageService {
     }
 
     fetchUsers() {
+        console.log('fetchUser called');
         this.getUserServiceInstance();
         this.getAuthServiceInstance();
         return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
             .subscribe(users => {
+                console.log('fetchUser respo'+ users);
                 console.log(users);
                 this.userService.setUsers(users);
                 this.authService.autoLogin();
             });
+
+        // console.log('fetchUser called');
+        // this.getUserServiceInstance();
+        // // this.getAuthServiceInstance();
+        // return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
+        //     .pipe(
+        //         // catchError(this.handleError),
+        //         tap(users => {
+        //             console.log('fetchUser respo' + users);
+        //             console.log(users);
+        //             this.userService.setUsers(users);
+        //         }));
     }
 
     getUserServiceInstance(): UserService {
