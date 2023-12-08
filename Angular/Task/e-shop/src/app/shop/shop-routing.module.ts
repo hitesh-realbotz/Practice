@@ -7,6 +7,7 @@ import { ItemsComponent } from "../items/items.component";
 import { ItemsListComponent } from "../items/items-list/items-list.component";
 import { ItemsDetailComponent } from "../items/items-detail/items-detail.component";
 import { ItemsEditComponent } from "../items/items-edit/items-edit.component";
+import { ItemsResolverService } from "../items/items-resolver.service";
 
 const routes: Routes = [
     {
@@ -14,11 +15,11 @@ const routes: Routes = [
         canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         children: [
-            { path: '', component: ItemsListComponent },
-            { path: 'details', component: ShopEditComponent },  //Registration & Updation of shop details
-            { path: 'new', component: ItemsEditComponent },     //New Item Registration
-            { path: ':id', component: ItemsDetailComponent},    //Item Details
-            { path: ':id/edit', component: ItemsEditComponent}, //Item Edit      
+            { path: '', component: ItemsListComponent, resolve: [ItemsResolverService] },
+            { path: 'details', component: ShopEditComponent, resolve: [ItemsResolverService] },  //Registration & Updation of shop details
+            { path: 'new', component: ItemsEditComponent, resolve: [ItemsResolverService] },     //New Item Registration
+            { path: ':id', component: ItemsDetailComponent, resolve: [ItemsResolverService]},    //Item Details
+            { path: ':id/edit', component: ItemsEditComponent, resolve: [ItemsResolverService]}, //Item Edit      
         ]
     },
 

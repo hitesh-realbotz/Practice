@@ -24,12 +24,15 @@ export class ItemsItemComponent implements OnInit {
 
   ngOnInit() {
     if(this.router.url.includes('shop')){
-      this.userService.usersChanged.subscribe(
-        (users: User[]) => {
-          this.role = this.userService.loggedUser.role;
-        }
-      );
-      // this.role = this.userService.loggedUser.role;
+      this.userService.loggedUserChanged.subscribe(
+        (user: User) => {
+          if (!!this.userService.loggedUser) {
+            this.role = this.userService.loggedUser.role;
+          }
+        });
+      if (!!this.userService.loggedUser) {
+        this.role = this.userService.loggedUser.role;
+      }
     }
   }
   onEditItem(index: number) {

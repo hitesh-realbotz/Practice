@@ -65,28 +65,15 @@ export class DataStorageService {
         this.getAuthServiceInstance();
         return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
             .subscribe(users => {
-                console.log('fetchUser respo');
-                console.log(users);
+                console.log('fetchUser response ==> ',users);
 
                 const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
-                const logUser = users[userIndex];
-                console.log("logUser : "+logUser);
-                
-                this.userService.loggedUser = logUser;
-                this.userService.loggedUserChanged.next(logUser);
-                this.userService.setUsers(users);
-
-
-                // const logUser = this.userService.users[userIndex];
-                // this.userService.loggedUser = logUser;
-                // console.log("logUser : "+logUser);
-                // console.log(logUser);
-                // this.userService.loggedUserChanged.next(logUser);
-                // this.userService.loggedUserIndex = userIndex;
-                // localStorage.setItem('loggedUserIndex', JSON.stringify(userIndex));
-                
+                // const logUser = users[userIndex];                
+                this.userService.loggedUser = users[userIndex];
+                this.userService.loggedUserChanged.next(this.userService.loggedUser);
+                this.userService.loggedUserIndex = userIndex;
+                this.userService.setUsers(users); 
             });
-
     }
 
     getUserServiceInstance(): UserService {

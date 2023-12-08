@@ -16,7 +16,7 @@ export class ItemsDetailComponent implements OnInit {
   index: number;
   role: string = 'buyer';
   userId: string;
-  user: User;
+  
   constructor(private itemService: ItemsService,
     private userService: UserService,
     private route: ActivatedRoute,
@@ -24,35 +24,21 @@ export class ItemsDetailComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.userService.usersChanged.subscribe(
-      (users: User[]) => {
-        console.log("loggedUserSubscribe called");
-        this.role = this.userService.loggedUser.role;
-
-      }
-    );
-
-    const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
-    const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-    this.userId = usersDetList[userIndex].id;
-    this.user = this.userService.users[userIndex];
-    console.log("usersDetList[userIndex].id");
-    console.log(usersDetList[userIndex].id);
-    console.log(this.user);
+        
+    this.userService.loggedUserChanged.subscribe(
+      (user: User) => {
+        if (!!this.userService.loggedUser) {  
+        this.role = user.role;
+        console.log('this.role', this.role);
+        }
+      });
 
 
     this.route.params.subscribe(
       (params: Params) => {
         this.index = +params['id'];
-        if (this.router.url.includes('shop')) {
-          this.itemService.getItemsBySellerId(this.userId);
-          console.log('sellerItemIndex');
-          console.log(this.itemService.sellerItemsIndex);
-          // this.role = this.user.role;
-        }
         this.item = this.itemService.getItem(this.index);
-      }
-    );
+      });
 
     this.itemService.itemChanged.subscribe(
       (items: Item[]) => {
@@ -60,10 +46,7 @@ export class ItemsDetailComponent implements OnInit {
         // const params: Params = this.route.snapshot.params;
         this.index = +(this.route.snapshot.params['id']);
         this.item = this.itemService.getItem(this.index);
-        this.role = this.user.role;
-
-      }
-    );
+      });
 
   }
 

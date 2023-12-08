@@ -1,14 +1,13 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
 import { Observable, map, take } from "rxjs";
-import { UserService } from "../users/user.service";
 import { AuthService } from "./auth.service";
-import { DataStorageService } from "../shared/data-storage.service";
+
 
 @Injectable({ providedIn: 'root' })
 export class AuthGuard implements CanActivate, CanLoad {
 
-    constructor(private userService: UserService, private router: Router, private authService: AuthService, private dataStorageService: DataStorageService) { }
+    constructor(private router: Router, private authService: AuthService) { }
     canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         console.log("CanLoad called");
 
@@ -51,7 +50,5 @@ export class AuthGuard implements CanActivate, CanLoad {
             }
             )
         )
-
     }
-
 }

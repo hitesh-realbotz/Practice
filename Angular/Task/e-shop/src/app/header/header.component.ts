@@ -35,6 +35,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       (loggedUser: User) => {
         this.isAuthenticated = !!loggedUser;
         if (!!loggedUser) {
+          console.log('Header loggedUser : ',loggedUser);
           this.role = loggedUser.role;
         }
       }
@@ -43,6 +44,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onLogout() {
     this.authService.logout();
+  }
+  onLocalLogout() {
+    localStorage.removeItem('loggedUserIndex');
   }
 
   onProfile() {
@@ -57,32 +61,40 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'https://images.unsplash.com/photo-1603252109303-2751441dd157?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
         'Formal white shirt',
         'Mens',
+        1500,
+        5,
         1,
-        'RJUlLEr5qzLeRGKUWaw9YQDcWaQ2'
+        'lO1bC3mH24Us1pPeka9dTOqbHv52'
       ),
       new Item(
         'Item-2',
         'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hpcnR8ZW58MHx8MHx8fDA%3D',
         'Black t-shirt',
         'Womens',
+        1500,
+        5,
         2,
-        'RJUlLEr5qzLeRGKUWaw9YQDcWaQ2'
+        'lO1bC3mH24Us1pPeka9dTOqbHv52'
       ),
       new Item(
         'Item-3',
         'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNoaXJ0fGVufDB8fDB8fHww',
         'Casual checks shirt',
         'Mens',
+        1500,
+        5,
         3,
-        'IBXZ35r0tlN5J89E4tWoiTrIzHz2'
+        'l0iIhz2ImEhTBQAcwl2sagiia2R2'
       ),
       new Item(
         'Item-4',
         'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNsb3RoZXN8ZW58MHx8MHx8fDA%3D',
         'White t-shirt',
         'Womens',
+        1500,
+        5,
         4,
-        'IBXZ35r0tlN5J89E4tWoiTrIzHz2'
+        'l0iIhz2ImEhTBQAcwl2sagiia2R2'
       )
     ];
 

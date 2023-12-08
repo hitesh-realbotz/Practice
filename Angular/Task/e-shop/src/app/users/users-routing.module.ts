@@ -6,20 +6,21 @@ import { AboutUsComponent } from "../shared/about-us/about-us.component";
 import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes = [
-    { path: '', component: UsersComponent,            // With LazyLoading
-        // canActivate: [AuthGuard],
-        children:[
-        { path: '', component: UsersComponent },
-        { path: 'aboutus', component: AboutUsComponent },
-        
-    ]},
+    {
+        path: '', component: UsersComponent,            // With LazyLoading
+        children: [
+            { path: '', component: UsersComponent },
+            { path: 'aboutus', component: AboutUsComponent },
+
+        ]
+    },
     { path: 'profile', component: UserProfileComponent },
 ]
 @NgModule({
-    imports : [ RouterModule.forChild(routes) ],
-    exports : [ RouterModule ]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 
-export class UsersRoutingModule{
-        
+export class UsersRoutingModule {
+
 }

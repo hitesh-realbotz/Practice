@@ -3,7 +3,7 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, Subscription, map, switchMap, tap } from "rxjs";
 import { User } from "./user.model";
 import { UserService } from "../users/user.service";
-import { Router } from "@angular/router";
+import { NavigationEnd, NavigationStart, Router } from "@angular/router";
 import { DataStorageService } from "../shared/data-storage.service";
 import { ToastrService } from "ngx-toastr";
 import { UserDetails } from "./userdetails.model";
@@ -31,7 +31,6 @@ export interface AuthResponseData {
 export class AuthService {
 
     private userList: User[];
-    // user = new BehaviorSubject<User>(null);
     user = new BehaviorSubject<number>(null);
 
     constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService, private toastr: ToastrService) { }
@@ -46,6 +45,7 @@ export class AuthService {
         // }
         // this.tokenExpirationTimer = null;
     }
+    
 
     autoLogin() {
         console.log(" AutoLogin Called ");
@@ -53,21 +53,11 @@ export class AuthService {
             console.log(" Routing to Auth ");
             this.router.navigate(['/auth']);
             return;
-
         } else {
-
-            // const logUser = JSON.parse(localStorage.getItem('loggedUserAuth'));
-            // this.userService.loggedUser = logUser;
-            // console.log("AuthService logUser : " + logUser);
-            // console.log(logUser);
-            // this.userService.loggedUserChanged.next(logUser);
-            // this.user.next(logUser);
-
             const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
             console.log("userIndex from authServ");
             console.log(userIndex);
             this.user.next(userIndex);
-
             this.toastr.info('Page Refreshed');
         }
     }
@@ -78,7 +68,6 @@ export class AuthService {
     }
 
     resetPass(curUser: User, newPassword: string) {
-
         return this.login(curUser.email, curUser.password).pipe(
             switchMap((loginResData: any) => {
 
@@ -125,7 +114,6 @@ export class AuthService {
                 })
             );
     }
-
 
 
     signup(email: string, password: string) {

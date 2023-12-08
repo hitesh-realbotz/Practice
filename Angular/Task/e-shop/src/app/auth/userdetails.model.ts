@@ -1,12 +1,15 @@
+import { CartItem } from "../items/cartItem.model";
+
+
 export class UserDetails {
     public id: string;
     public email: string;
-    public cart?: number[] | null;
+    public cart?: CartItem[] | null;
 
     constructor(
         id: string,
         email: string,
-        cart?: number[],
+        cart?: CartItem[],
         
     ) {
         this.id = id;
