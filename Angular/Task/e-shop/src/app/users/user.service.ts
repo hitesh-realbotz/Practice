@@ -12,6 +12,7 @@ import { ItemsService } from "../items/items.service";
 export class UserService {
 
     loggedUserChanged = new BehaviorSubject<User>(null);
+    // loggedUserChanged = new Subject<User>();
     loggedUser: User;
     usersChanged = new Subject<User[]>();
     users: User[] = [];
@@ -43,6 +44,7 @@ export class UserService {
         }
         localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
         localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
+        // localStorage.setItem('loggedUserAuth', JSON.stringify(this.loggedUser));
         // this.loggedUserDet = userDetails;
         // this.updateLocalStorage(this.usersDetList, this.loggedUserDet);
         this.dataStorageService.storeUsers();
@@ -72,6 +74,12 @@ export class UserService {
 
     setLoggedUser(user: User) {
         console.log('set logged user called');
+        console.log(user);
+        this.loggedUser = user;
+        this.loggedUserChanged.next(this.loggedUser);
+        console.log("Logged User ===> ");
+        console.log(this.loggedUser);
+
         let index = this.getUserIndex(user.id);
         if (index != -1) {
             this.loggedUser = this.users[index];
@@ -80,6 +88,7 @@ export class UserService {
             this.loggedUserChanged.next(this.loggedUser);
             this.loggedUserIndex = index;
             localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
+            // localStorage.setItem('loggedUserAuth', JSON.stringify(this.loggedUser));
             // this.loggedUserDet = new UserDetails(user.id, user.email);
             // localStorage.setItem('loggedUserDetail', JSON.stringify(this.loggedUserDet));
         }

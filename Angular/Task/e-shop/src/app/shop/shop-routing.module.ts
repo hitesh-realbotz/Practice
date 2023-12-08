@@ -11,6 +11,7 @@ import { ItemsEditComponent } from "../items/items-edit/items-edit.component";
 const routes: Routes = [
     {
         path: '', component: ShopComponent,
+        canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         children: [
             { path: '', component: ItemsListComponent },

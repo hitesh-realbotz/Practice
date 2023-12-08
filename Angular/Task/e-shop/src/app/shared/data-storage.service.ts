@@ -65,23 +65,28 @@ export class DataStorageService {
         this.getAuthServiceInstance();
         return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
             .subscribe(users => {
-                console.log('fetchUser respo'+ users);
+                console.log('fetchUser respo');
                 console.log(users);
+
+                const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
+                const logUser = users[userIndex];
+                console.log("logUser : "+logUser);
+                
+                this.userService.loggedUser = logUser;
+                this.userService.loggedUserChanged.next(logUser);
                 this.userService.setUsers(users);
-                this.authService.autoLogin();
+
+
+                // const logUser = this.userService.users[userIndex];
+                // this.userService.loggedUser = logUser;
+                // console.log("logUser : "+logUser);
+                // console.log(logUser);
+                // this.userService.loggedUserChanged.next(logUser);
+                // this.userService.loggedUserIndex = userIndex;
+                // localStorage.setItem('loggedUserIndex', JSON.stringify(userIndex));
+                
             });
 
-        // console.log('fetchUser called');
-        // this.getUserServiceInstance();
-        // // this.getAuthServiceInstance();
-        // return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
-        //     .pipe(
-        //         // catchError(this.handleError),
-        //         tap(users => {
-        //             console.log('fetchUser respo' + users);
-        //             console.log(users);
-        //             this.userService.setUsers(users);
-        //         }));
     }
 
     getUserServiceInstance(): UserService {

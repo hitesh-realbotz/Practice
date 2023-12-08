@@ -9,6 +9,7 @@ import { ItemsDetailComponent } from "./items-detail/items-detail.component";
 const routes: Routes = [
     {
         path: '', component: ItemsComponent,
+        canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         children: [
             { path: '', component: ItemsListComponent, resolve: [ItemsResolverService]  },

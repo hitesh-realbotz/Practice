@@ -1,40 +1,57 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
+import { ActivatedRouteSnapshot, CanActivate, CanLoad, Route, Router, RouterStateSnapshot, UrlSegment, UrlTree } from "@angular/router";
 import { Observable, map, take } from "rxjs";
 import { UserService } from "../users/user.service";
 import { AuthService } from "./auth.service";
+import { DataStorageService } from "../shared/data-storage.service";
 
 @Injectable({ providedIn: 'root' })
-export class AuthGuard implements CanActivate {
+export class AuthGuard implements CanActivate, CanLoad {
 
-    constructor(private userService: UserService, private router: Router, private authService: AuthService) { }
-    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-        return this.userService.loggedUserChanged.pipe(
+    constructor(private userService: UserService, private router: Router, private authService: AuthService, private dataStorageService: DataStorageService) { }
+    canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+        console.log("CanLoad called");
+
+        return this.authService.user.pipe(
             take(1),
             map(loggedUser => {
                 console.log(loggedUser);
                 console.log(!loggedUser);
                 console.log(!!loggedUser);
-                const isAuth = !!loggedUser;
-                if (isAuth) {
+                if (loggedUser != null) {
                     return true;
                 }
-                return this.router.createUrlTree(['/auth']);
+                // const isAuth = !!loggedUser;
+                // if (isAuth) {
+                //     return true;
+                // }
+                // return this.router.createUrlTree(['/auth']);
             }
             )
         )
-        // return this.authService.user.pipe(
-        //     take(1),
-        //     map(user => {
-        //     console.log(user);
-        //     console.log(!user);
-        //     console.log(!!user);
-        //     const isAuth = !!user;
-        //     if (isAuth) {
-        //         return true;
-        //     }
-        //     return this.router.createUrlTree(['/auth']);
-        // }));
+    }
+
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
+        console.log("CanActivate called");
+
+        return this.authService.user.pipe(
+            take(1),
+            map(loggedUser => {
+                console.log("canActivate loggedUser : " + loggedUser);
+                console.log("canActivate !loggedUse : " + !loggedUser);
+                console.log("canActivate !!loggedUs : " + !!loggedUser);
+                if (loggedUser != null) {
+                    return true;
+                }
+                // const isAuth = !!loggedUser;
+                // if (isAuth) {
+                //     return true;
+                // }
+                // return this.router.createUrlTree(['/auth']);
+            }
+            )
+        )
+
     }
 
 }

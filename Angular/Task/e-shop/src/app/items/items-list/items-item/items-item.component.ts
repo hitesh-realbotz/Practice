@@ -3,6 +3,7 @@ import { Item } from '../../item.model';
 import { UserService } from 'src/app/users/user.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ItemsService } from '../../items.service';
+import { User } from 'src/app/auth/user.model';
 
 @Component({
   selector: 'app-items-item',
@@ -23,7 +24,12 @@ export class ItemsItemComponent implements OnInit {
 
   ngOnInit() {
     if(this.router.url.includes('shop')){
-      this.role = this.userService.loggedUser.role;
+      this.userService.usersChanged.subscribe(
+        (users: User[]) => {
+          this.role = this.userService.loggedUser.role;
+        }
+      );
+      // this.role = this.userService.loggedUser.role;
     }
   }
   onEditItem(index: number) {

@@ -18,11 +18,11 @@ export class ShopComponent implements OnInit {
         if (!!user) {
           
           this.isShop = !!user.shop;
+          console.log('isShop : '+!!this.userService.loggedUser.shop);
         }
       }
     )
     // this.isShop = !!this.userService.loggedUser.shop;
-    console.log('isShop : '+!!this.userService.loggedUser.shop);
   }
   
   onNewItem(){
