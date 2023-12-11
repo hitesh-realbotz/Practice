@@ -46,7 +46,7 @@ export class ItemsItemComponent implements OnInit {
   onAddToCart(event: Event,index: number){
     event.stopPropagation();
     console.log('AddToCart clicked'+index);
-    this.itemService.updateCart(index);
+    this.itemService.AddToCart(index,null,null);
     this.router.navigate(['items']);
   }
   onItem(index){
