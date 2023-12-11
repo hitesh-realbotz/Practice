@@ -29,11 +29,46 @@
                     <div class="form-group">
                         <label for="description">Description</label>
                         <textarea type="text" name="description" id="description" formControlName="description"
-                            class="form-control" rows="6"></textarea>
+                            class="form-control" rows="4"></textarea>
                     </div>
                 </div>
             </div>
-            <div class="form-group" class="form-group">
+            <div class="row">
+                <!-- <div class="col-xs-12"> -->
+                    <div class="col-sm-4 form-group">
+                        <label for="category">Category</label>
+                        <select name="category" id="category" class="form-control" formControlName="category" >
+                            <option [value]="category" disabled selected>{{category === '' ? 'Choose a category' : category }}</option>
+                            <option value="mens">Mens</option>
+                            <option value="women">Women</option>
+                            <option value="kids">Kids</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="amount">Amount</label>
+                        <input 
+                        type="number" 
+                        id="amount" 
+                        name="amount" 
+                        formControlName="amount"
+                        class="form-control" 
+                        required 
+                        pattern="^[1-9]+[0-9]*$">
+                    </div>
+                    <div class="col-sm-4 form-group">
+                        <label for="qty">Quantity</label>
+                        <input 
+                        type="number" 
+                        id="qty" 
+                        name="qty" 
+                        formControlName="qty"
+                        class="form-control" 
+                        required 
+                        pattern="^[1-9]+[0-9]*$">
+                    </div>
+                <!-- </div> -->
+            </div>
+            <!-- <div class="form-group">
                 <label for="category">Category</label>
                 <select name="category" id="category" class="form-control" formControlName="category" >
                     <option [value]="category" disabled selected>{{category === '' ? 'Choose a category' : category }}</option>
@@ -41,7 +76,7 @@
                     <option value="women">Women</option>
                     <option value="kids">Kids</option>
                 </select>
-            </div>
+            </div> -->
             <!-- <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">

@@ -25,7 +25,6 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         ReactiveFormsModule,
-        // RouterModule.forChild([{ path: 'auth', component: AuthComponent }]),
         RouterModule.forChild(routes),
         SharedModule,
     ]

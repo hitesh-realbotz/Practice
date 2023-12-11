@@ -14,22 +14,25 @@ import { ToastrService } from 'ngx-toastr';
 export class UserProfileComponent implements OnInit {
 
   // roles = ['buyer', 'seller'];
-  
+
   userForm: FormGroup;
-  loggedUser: User;
+  loggedUser: User = new User('','','','',new Date());
   loggedUserIndex: number;
-  constructor(private userService: UserService, private router: Router, private toastr: ToastrService){ }
+  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
 
 
   ngOnInit() {
-    this.loggedUser = this.userService.loggedUser;
-    this.userForm = new FormGroup({
-      'email': new FormControl(this.loggedUser.email, [Validators.required, Validators.email]),
-      // 'role': new FormControl(this.loggedUser.role, [Validators.required]),
-      'question': new FormControl(this.loggedUser.question),
-      'answer': new FormControl(this.loggedUser.answer),
-    });
-    this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
+    
+    this.userService.loggedUserChanged.subscribe(
+      (user: User) => {
+        if (!!user) {
+          this.loggedUser = user;
+          this.initForm();
+          this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
+        }
+      });
+    
+    this.initForm();
 
     // this.userForm.valueChanges.subscribe(
     //   (value) => console.log(value)
@@ -40,12 +43,21 @@ export class UserProfileComponent implements OnInit {
 
   }
 
+  private initForm() {
+    this.userForm = new FormGroup({
+      'email': new FormControl(this.loggedUser.email, [Validators.required, Validators.email]),
+      // 'role': new FormControl(this.loggedUser.role, [Validators.required]),
+      'question': new FormControl(this.loggedUser.question),
+      'answer': new FormControl(this.loggedUser.answer),
+    });
+  }
+
   onSubmit() {
 
     // this.loggedUser.role = this.userForm.value['role'];
     this.loggedUser.question = this.userForm.value['question'];
     this.loggedUser.answer = this.userForm.value['answer'];
-    
+
     this.userService.updateUser(this.loggedUser, this.loggedUserIndex);
 
     this.router.navigate(['user']);
@@ -54,7 +66,7 @@ export class UserProfileComponent implements OnInit {
 
   }
 
-  
+
 
 
 

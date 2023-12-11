@@ -9,9 +9,18 @@
                 <h4 class="list-group-item-heading">{{item.name}}</h4>
             </div>
             <div class="item-description float-end">
-                <p class="list-group-item-text">{{item.description}}</p>
+                <div>
+                    <p class="list-group-item-text">{{item.description}}</p>
+                </div>
+                <div >
+                    <p class="list-group-item-text">Price : {{item.price}}</p>
+                </div>
+                <div >
+                    <p class="list-group-item-text">Avialble Qty : {{item.availableQty}}</p>
+                </div>
             </div>
-            
+
+
             <div class="item-actions">
                 <div class="item-action" *ngIf="role === 'buyer'">
                     <button class="btn btn-success" (click)="onAddToCart($event, index)">Add to Cart</button>

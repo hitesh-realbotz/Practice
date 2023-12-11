@@ -19,7 +19,7 @@ export class UserService {
     usersDetList: UserDetails[] = [];
     // loggedUserDet: UserDetails;
     loggedUserIndex: number;
-    private itemService: ItemsService;
+    private authService: AuthService;
 
     constructor(private dataStorageService: DataStorageService, private toastr: ToastrService,
         private datastorageService: DataStorageService, private injector: Injector) { }
@@ -74,12 +74,6 @@ export class UserService {
 
     setLoggedUser(user: User) {
         console.log('set logged user called');
-        console.log(user);
-        this.loggedUser = user;
-        this.loggedUserChanged.next(this.loggedUser);
-        console.log("Logged User ===> ");
-        console.log(this.loggedUser);
-
         let index = this.getUserIndex(user.id);
         if (index != -1) {
             this.loggedUser = this.users[index];
@@ -87,12 +81,10 @@ export class UserService {
             console.log(this.loggedUser);
             this.loggedUserChanged.next(this.loggedUser);
             this.loggedUserIndex = index;
+            this.getAuthServiceInstance();
+            this.authService.user.next(this.loggedUserIndex);
             localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
-            // localStorage.setItem('loggedUserAuth', JSON.stringify(this.loggedUser));
-            // this.loggedUserDet = new UserDetails(user.id, user.email);
-            // localStorage.setItem('loggedUserDetail', JSON.stringify(this.loggedUserDet));
         }
-
     }
 
     updateUser(upLoggedUser: User, index: number) {
@@ -105,9 +97,6 @@ export class UserService {
 
 
     getUserIndex(id: string) {
-
-        console.log(id);
-        console.log(this.users);
         for (const [index, userFromList] of this.users.entries()) {
             if (userFromList.id === id) {
                 console.log('User found at index:', index);
@@ -147,11 +136,12 @@ export class UserService {
         this.updateUser(updatedUser, index);
     }
 
-    getAuthServiceInstance(): ItemsService {
-        if (!this.itemService) {
-            this.itemService = this.injector.get(ItemsService);
+    getAuthServiceInstance(): AuthService {
+        if (!this.authService) {
+            this.authService = this.injector.get(AuthService);
         }
-        return this.itemService;
+        return this.authService;
     }
+
 
 }

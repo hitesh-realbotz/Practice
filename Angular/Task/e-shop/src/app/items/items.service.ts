@@ -6,6 +6,7 @@ import { UserService } from "../users/user.service";
 import { User } from "../auth/user.model";
 import { DataStorageService } from "../shared/data-storage.service";
 import { UserDetails } from "../auth/userdetails.model";
+import { CartItem } from "./cartItem.model";
 
 @Injectable({ providedIn: 'root' })
 export class ItemsService {
@@ -74,21 +75,37 @@ export class ItemsService {
         console.log(index);
         console.log(this.items[index]);
         const item: Item = this.items[index];
-        console.log("item from update method" + item);
+
+        console.log("item from update method", item);
         const userIndex = this.userService.loggedUserIndex;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-        const userCart: number[] = usersDetList[userIndex].cart;
-        userCart.includes(item.itemId) ? '' : usersDetList[userIndex].cart.push(item.itemId);
+        console.log("userIndex from update method", userIndex);
+        console.log("usersDetList from update method", usersDetList);
+        const userCart: CartItem[] = usersDetList[userIndex].cart;
+        // userCart.includes(item.itemId) ? '' : usersDetList[userIndex].cart.push(item.itemId);
 
-        this.cartItems.push(item);
-        this.cartItemsChanged.next(this.cartItems);
 
         // if (userCart.includes(item.itemId)) {
         //     usersDetList[userIndex].cart.push(item.itemId);
         //     this.cartItems.push(item);
         //     this.cartItemsChanged.next(this.cartItems);
         // }
-        
+        let itemFound = false;
+        for (const curCartItem of userCart) {
+            if (curCartItem.ItemId === item.itemId) {
+                curCartItem.qty += 1;
+                
+                itemFound = true;
+
+                break;
+            }
+        }
+        if (!itemFound) {
+            userCart.push(new CartItem(item.itemId, 1));
+            this.cartItems.push(item);
+            this.cartItemsChanged.next(this.cartItems);
+        }
+
         localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
 
         // const localUserDet = this.userService.loggedUserDet;

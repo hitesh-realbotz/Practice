@@ -1,3 +1,4 @@
+
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -16,62 +17,62 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   items: Item[];
   subscription: Subscription;
   role: string;
-  userId: string;
 
   constructor(private itemService: ItemsService,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+
+  ) { }
+
   ngOnInit() {
-
-    // this.userService.usersChanged.subscribe(
-    //   (users: User[]) => {
-    //     console.log("loggedUserSubscribe called");
-    //     this.role = this.userService.loggedUser.role;
-
-    //   }
-    // );
-
+    console.log("ItemList Called================>");
     if (this.router.url.includes('shop')) {
 
-      const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
-      const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-      this.userId = usersDetList[userIndex].id;
-      console.log("usersDetList[userIndex].id");
-      console.log(usersDetList[userIndex].id);
-     
+      this.userService.loggedUserChanged.subscribe(
+        (user: User) => {
+          if (!!this.userService.loggedUser) {
+            console.log("ItemsListComponent shop loggedUserChanged.subscribe called");
 
-      // this.items = this.itemService.getItemsBySellerId(this.userId);
-      this.items = this.itemService.getItemsBySellerId(this.userId);
-      this.userService.usersChanged.subscribe(
-        (users: User[]) => {
-          console.log("loggedUserSubscribe called from sub");
-          console.log(this.userService.loggedUser);
-          this.userId = this.userService.loggedUser.id;
-          console.log('id from subscribe');
-          console.log(this.userId);
-          this.role = this.userService.loggedUser.role;
+            console.log('this.userService.loggedUser', this.userService.loggedUser);
+            console.log('this.userService.loggedUser.role', this.userService.loggedUser.role);
+            console.log('users.role', user.role);
+            this.role = user.role;
+            console.log('this.role', this.role);
 
-        }
-      );
+            if (!!this.items) {
+              this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
+            } 
+          }
+        });
+
       this.subscription = this.itemService.itemChanged.subscribe(
-        (Items: Item[]) => {
-          this.items = this.itemService.getItemsBySellerId(this.userId);
-        }
-      )
-      
-      console.log(this.items);
+        (items: Item[]) => {
+          if(!!this.role){
+            this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
+          }else{
+            this.items = items;
+          }
+        });
 
+      if (!!this.userService.loggedUser) {
+        // this.itemSub('from outer Sub');
+        this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
+        console.log(this.items);
+      }
     } else {
-      this.userService.usersChanged.subscribe(
-        (users: User[]) => {
-          console.log("loggedUserSubscribe called");
-          this.userId = this.userService.loggedUser.id;
-          console.log('id from subscribe');
-          console.log(this.userId);
-          this.role = this.userService.loggedUser.role;
-        }
-      );
+      this.userService.loggedUserChanged.subscribe(
+        (user: User) => {
+          if (!!this.userService.loggedUser) {
+            console.log("ItemsListComponent loggedUserChanged.subscribe called");
+            console.log('this.userService.loggedUser', this.userService.loggedUser);
+            console.log('this.userService.loggedUser.role', this.userService.loggedUser.role);
+            console.log('users.role', user.role);
+            this.role = user.role;
+            console.log('this.role', this.role);
+          }
+        });
+
       this.subscription = this.itemService.itemChanged.subscribe(
         (Items: Item[]) => {
           this.items = Items;

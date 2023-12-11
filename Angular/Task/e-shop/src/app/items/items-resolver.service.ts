@@ -15,13 +15,23 @@ export class ItemsResolverService implements Resolve<Item[]> {
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Item[] | Observable<Item[]> | Promise<Item[]>  {
         const items = this.itemsService.getItems();
-        
-        if (!items) { 
+        console.log("item-Resolver ====>", items);
+        console.log("!!item-Resolver ====>", !!items);
+        // if (items) { 
+        //     console.log('data will be fetched');
+        //     this.dataStorageService.fetchItems();
+        // } else {
+        //     console.log('data not fetched');
+        //     return items;
+        // }
+        if (items.length === 0 || !items ) { 
             console.log('data will be fetched');
             this.dataStorageService.fetchItems();
+            
         } else {
             console.log('data not fetched');
             return items;
+            
         }
 
        
