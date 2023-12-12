@@ -1,0 +1,30 @@
+.cart-item{
+    display: flex;
+    flex-direction: row;
+}
+.cart-item:hover {
+    background-color: rgb(213, 228, 235);
+}
+.cart-item-name{
+    width: 60%;
+}
+.cart-item-price{
+    width: 20%;
+}
+.cart-item-qty-action{
+    text-decoration: none;
+    width: 5%;
+    cursor: pointer;
+}
+.cart-item-qty{
+    width: 10%;
+    text-align: center;
+}
+
+
+.checkbox{
+    width: 10%;
+}
+.cart-btn{
+    width: 48%;
+}

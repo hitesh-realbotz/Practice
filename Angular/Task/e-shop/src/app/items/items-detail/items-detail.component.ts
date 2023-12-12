@@ -27,7 +27,8 @@ export class ItemsDetailComponent implements OnInit {
         
     this.userService.loggedUserChanged.subscribe(
       (user: User) => {
-        if (!!this.userService.loggedUser) {  
+        if (!!this.userService.loggedUser && this.router.url.includes('shop')) { 
+       
         this.role = user.role;
         console.log('this.role', this.role);
         }
@@ -64,7 +65,7 @@ export class ItemsDetailComponent implements OnInit {
   onAddToCart(event: Event, index: number) {
     event.stopPropagation();
     console.log('AddToCart clicked' + index);
-    this.itemService.updateCart(index);
+    this.itemService.AddToCart(index);
     this.router.navigate(['items']);
   }
 

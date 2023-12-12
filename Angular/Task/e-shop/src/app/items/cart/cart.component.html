@@ -1,13 +1,70 @@
+<!-- <div class="row ">
+    <div class="col-md-12 col-lg-12 col-12 ">  
+        <div class="cart-item list-group list-group-item">
+            <span class="cart-item-name">Item Name</span>
+            <span class="cart-item-price">Price</span>
+            <span class="cart-item-qty">Quantity</span>    
+        </div>
+    </div> 
+</div>
+<div class="row ">
+    <div class="col-md-12 col-lg-12 col-12 ">  
+        <div *ngFor="let itemEl of items; let i = index"  [item]="itemEl" [index]="i" class="cart-item list-group list-group-item">
+            <label class="checkbox">
+                <input type="checkbox" [checked]="itemEl.checked" > 
+            </label>
+            <span class="cart-item-name">{{ itemEl.item.name }}</span>
+            <span class="cart-item-price">{{ itemEl.item.price }}</span>
+            <a class="cart-item-qty-action"> - </a>
+            <span class="cart-item-qty">{{ itemEl.qty }}</span>
+            <a class="cart-item-qty-action"> + </a>
+        </div>
+    </div> 
+</div> -->
+
 <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success" (click)="onClearCart()"  >Clear Cart</button>
+    <div class="col-md-12 col-lg-12 col-12">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th></th>
+                    <th>Qty</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let itemEl of items; let i = index" [item]="itemEl" [index]="i">
+                    <td class="cart-item-name">
+                        <label class="checkbox">
+                            <input type="checkbox" [checked]="itemEl.checked" (change)="toggleItemCheck(i)">
+                        </label>
+                        <span>{{ itemEl.item.name }}</span>
+                    </td>
+                    <td class="cart-item-price"> {{ itemEl.item.price }} </td>
+                    <td class="cart-item-qty-action">
+                        <a (click)="decreaseQuantity(i, itemEl)">-</a>
+                    </td>
+                    <td class="cart-item-qty">
+                        <span>{{ itemEl.qty }}</span>
+                    </td>
+                    <td class="cart-item-qty-action">
+                        <a (click)="increaseQuantity(itemEl)">+</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div>
+            Total Price for Cart Items: {{ totalCartAmount }}
+        </div>        
+        <div>
+            Total Price for Checked Items: {{ totalSelectedCartAmount }}
+        </div>        
     </div>
 </div>
 <div class="row">
-    <div class="col-xs-12 col-md-12 col-12">  
-        <!-- <app-items-item  *ngFor="let itemEl of items; let i = index"  [item]="itemEl" [index]="i" > </app-items-item> -->
-        <div *ngFor="let itemEl of items; let i = index"  [item]="itemEl" [index]="i">
-            <div>{{itemEl.name}}</div>
-        </div>
-    </div> 
+    <div class="col-xs-12">
+        <button class="btn btn-success cart-btn" (click)="onClearCart()">Clear Cart</button> | <button class="btn btn-success cart-btn" (click)="onCheckout()">Checkout</button>
+    </div>
 </div>
