@@ -6,7 +6,9 @@ import { ItemsEditComponent } from "./items-edit/items-edit.component";
 import { AuthGuard } from "../auth/auth.guard";
 import { ItemsResolverService } from "./items-resolver.service";
 import { ItemsDetailComponent } from "./items-detail/items-detail.component";
+import { PaymentComponent } from "../shared/payment/payment.component";
 const routes: Routes = [
+    { path: 'payment', component: PaymentComponent, resolve: [ItemsResolverService]},
     {
         path: '', component: ItemsComponent,
         canLoad: [AuthGuard],
@@ -18,6 +20,7 @@ const routes: Routes = [
             { path: ':id/edit', component: ItemsEditComponent, resolve: [ItemsResolverService]},
         ]
     },
+    
 ]
 @NgModule({
     imports: [RouterModule.forChild(routes)],

@@ -21,6 +21,7 @@ export class ItemsEditComponent implements OnInit {
   itemForm: FormGroup;
   category: string;
   subscription: Subscription;
+  
   constructor(private route: ActivatedRoute,
     private itemService: ItemsService,
     private router: Router,

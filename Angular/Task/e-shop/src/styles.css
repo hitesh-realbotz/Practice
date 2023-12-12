@@ -2,3 +2,8 @@
 .btn-primary{
     margin : 10px;
 }
+
+.form{
+    margin: auto;
+    max-width: 800px;
+}

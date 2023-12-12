@@ -64,7 +64,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         1,
-        'HJgCWAgXumXtVYljdtY9xpT6aAB3'
+        'EuDcXtCbXebiEOR6xQZlBgsHSIJ3'
       ),
       new Item(
         'Item-2',
@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         2,
-        'HJgCWAgXumXtVYljdtY9xpT6aAB3'
+        'EuDcXtCbXebiEOR6xQZlBgsHSIJ3'
       ),
       new Item(
         'Item-3',
@@ -84,7 +84,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         3,
-        'l0iIhz2ImEhTBQAcwl2sagiia2R2'
+        'QoNTCMYCxCPBe5sH68nF96EFgqU2'
       ),
       new Item(
         'Item-4',
@@ -94,7 +94,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         4,
-        'l0iIhz2ImEhTBQAcwl2sagiia2R2'
+        'QoNTCMYCxCPBe5sH68nF96EFgqU2'
       )
     ];
 

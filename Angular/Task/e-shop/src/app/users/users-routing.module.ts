@@ -4,6 +4,7 @@ import { UserProfileComponent } from "./user-profile/user-profile.component";
 import { RouterModule, Routes } from "@angular/router";
 import { AboutUsComponent } from "../shared/about-us/about-us.component";
 import { AuthGuard } from "../auth/auth.guard";
+import { PaymentComponent } from "../shared/payment/payment.component";
 
 const routes: Routes = [
     {
@@ -11,7 +12,7 @@ const routes: Routes = [
         children: [
             { path: '', component: UsersComponent },
             { path: 'aboutus', component: AboutUsComponent },
-
+            
         ]
     },
     { path: 'profile', component: UserProfileComponent },
