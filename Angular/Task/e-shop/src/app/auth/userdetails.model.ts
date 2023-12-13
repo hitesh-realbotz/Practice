@@ -1,4 +1,4 @@
-import { CartItem } from "../items/cartItem.model";
+import { CartItem } from "../items/cart/cartItem.model";
 
 
 export class UserDetails {

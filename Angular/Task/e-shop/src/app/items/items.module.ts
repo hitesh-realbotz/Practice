@@ -17,7 +17,7 @@ import { CartComponent } from './cart/cart.component';
         ItemsEditComponent,
         ItemsDetailComponent,
         ItemsItemComponent,
-        CartComponent
+        CartComponent,
     ],
     imports: [
         RouterModule,

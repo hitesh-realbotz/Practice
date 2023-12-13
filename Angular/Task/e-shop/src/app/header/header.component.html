@@ -27,6 +27,9 @@
           <li routerLinkActive="active" class="nav-item">
             <a class="nav-link" aria-current="page" routerLink="/items" (click)="onGetItems()">Get Items</a>
           </li>
+          <li routerLinkActive="active" class="nav-item">
+            <a class="nav-link" aria-current="page" (click)="onRemoveOrders()">Clear Orders</a>
+          </li>
         </ul>
         <ul class="navbar-nav me-right mb-2 mb-sm-0">
           <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">

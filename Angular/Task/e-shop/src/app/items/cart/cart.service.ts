@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { BehaviorSubject, Subject } from "rxjs";
-import { CartItem } from "../cartItem.model";
+import { CartItem } from "./cartItem.model";
 import { ToastrService } from "ngx-toastr";
 import { ItemsService } from "../items.service";
 import { DataStorageService } from "src/app/shared/data-storage.service";
@@ -12,7 +12,6 @@ export class CartService {
 
     cartItemsChanged = new BehaviorSubject<CartItem[]>(null);
     cartItems: CartItem[] = [];
-    selectedCartItems: CartItem[] = [];
     totalCartAmount: number = 0;
     totalSelectedCartAmount: number = 0;
 
@@ -61,7 +60,7 @@ export class CartService {
                             localCart.qty += 1;
                         } else if (decreaseQuantity == null) {
                             localCart.qty += 1;
-                        } else if (decreaseQuantity && curCartItem.qty > 1) {
+                        } else if (decreaseQuantity && curCartItem.qty >= 1) {
                             localCart.qty -= 1;
                         } else {
                             localUserCart.splice(indexPosition, 1);

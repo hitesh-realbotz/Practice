@@ -6,7 +6,7 @@ import { UserService } from "../users/user.service";
 import { User } from "../auth/user.model";
 import { DataStorageService } from "../shared/data-storage.service";
 import { UserDetails } from "../auth/userdetails.model";
-import { CartItem } from "./cartItem.model";
+import { CartItem } from "./cart/cartItem.model";
 
 @Injectable({ providedIn: 'root' })
 export class ItemsService {

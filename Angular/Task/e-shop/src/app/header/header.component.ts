@@ -8,6 +8,7 @@ import { Item } from '../items/item.model';
 import { ItemsService } from '../items/items.service';
 import { DataStorageService } from '../shared/data-storage.service';
 import { ToastrService } from 'ngx-toastr';
+import { OrderService } from '../orders/orders.service';
 
 @Component({
   selector: 'app-header',
@@ -24,7 +25,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
               private router: Router, 
               private itemService: ItemsService, 
               private dataStorageService: DataStorageService,
-              private toastr: ToastrService,) { }
+              private toastr: ToastrService,
+              private orderService: OrderService) { }
 
   ngOnDestroy() {
     this.userSub.unsubscribe();
@@ -52,6 +54,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onProfile() {
     // this.router.navigate(['profile'], { relativeTo: this.route });
     this.router.navigate(['/user/profile']);
+  }
+
+  onRemoveOrders(){
+    localStorage.removeItem('orderDetList');
+    this.orderService.orderDetList = [];
   }
 
   onGetItems() {
@@ -84,7 +91,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         3,
-        'QoNTCMYCxCPBe5sH68nF96EFgqU2'
+        'X4rfjjV6q3ff1eHdTRMZB0wcsQ22'
       ),
       new Item(
         'Item-4',
@@ -94,7 +101,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         4,
-        'QoNTCMYCxCPBe5sH68nF96EFgqU2'
+        'X4rfjjV6q3ff1eHdTRMZB0wcsQ22'
       )
     ];
 

@@ -8,6 +8,8 @@ import { ItemsListComponent } from "../items/items-list/items-list.component";
 import { ItemsDetailComponent } from "../items/items-detail/items-detail.component";
 import { ItemsEditComponent } from "../items/items-edit/items-edit.component";
 import { ItemsResolverService } from "../items/items-resolver.service";
+import { OrdersListComponent } from "../orders/orders-list/orders-list.component";
+import { OrdersResolverService } from "../orders/orders-resolver.service";
 
 const routes: Routes = [
     {
@@ -18,6 +20,7 @@ const routes: Routes = [
             { path: '', component: ItemsListComponent, resolve: [ItemsResolverService] },
             { path: 'details', component: ShopEditComponent, resolve: [ItemsResolverService] },  //Registration & Updation of shop details
             { path: 'new', component: ItemsEditComponent, resolve: [ItemsResolverService] },     //New Item Registration
+            { path: 'orders', component: OrdersListComponent, resolve: [OrdersResolverService]}, //Item Edit      
             { path: ':id', component: ItemsDetailComponent, resolve: [ItemsResolverService]},    //Item Details
             { path: ':id/edit', component: ItemsEditComponent, resolve: [ItemsResolverService]}, //Item Edit      
         ]

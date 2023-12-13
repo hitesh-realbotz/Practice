@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs';
 import { ItemsService } from '../items.service';
 import { UserService } from 'src/app/users/user.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CartItem } from '../cartItem.model';
+import { CartItem } from './cartItem.model';
 import { User } from 'src/app/auth/user.model';
 import { ToastrService } from 'ngx-toastr';
 import { CartService } from './cart.service';
@@ -15,7 +15,7 @@ import { CartService } from './cart.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-  items: CartItem[];
+  items: CartItem[] = [];
   totalCartAmount: number;
   totalSelectedCartAmount: number;
   subscription: Subscription;
@@ -33,21 +33,24 @@ export class CartComponent implements OnInit {
     this.userService.loggedUserChanged.subscribe(
       (user: User) => {
         console.log('loggedUserChanged.subscribe');
-        this.items = this.cartService.getItems();
+        this.cartService.getItems();
       }
     );
     this.itemService.itemChanged.subscribe(
-      (items: Item[]) => {
-        console.log('itemChanged.subscribe');
-        this.items = this.cartService.getItems();
+      (items: Item[]) => {          
+          console.log('itemChanged.subscribe');
+          this.cartService.getItems();
+        
       }
     );
 
     this.subscription = this.cartService.cartItemsChanged.subscribe(
       (items: CartItem[]) => {
+        if (!!items) {
         this.items = items;
         this.totalCartAmount = this.cartService.totalCartAmount;
         this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
+        }
       }
     );
   }
