@@ -4,6 +4,7 @@ import { Item } from '../item.model';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from 'src/app/users/user.service';
 import { User } from 'src/app/auth/user.model';
+import { CartService } from '../cart/cart.service';
 
 @Component({
   selector: 'app-items-detail',
@@ -19,6 +20,7 @@ export class ItemsDetailComponent implements OnInit {
   
   constructor(private itemService: ItemsService,
     private userService: UserService,
+    private cartService: CartService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -43,8 +45,6 @@ export class ItemsDetailComponent implements OnInit {
 
     this.itemService.itemChanged.subscribe(
       (items: Item[]) => {
-        // console.log("In logUserSubscribe this.router.url.charAt(this.router.url.length-1)");        
-        // const params: Params = this.route.snapshot.params;
         this.index = +(this.route.snapshot.params['id']);
         this.item = this.itemService.getItem(this.index);
       });
@@ -65,7 +65,8 @@ export class ItemsDetailComponent implements OnInit {
   onAddToCart(event: Event, index: number) {
     event.stopPropagation();
     console.log('AddToCart clicked' + index);
-    this.itemService.AddToCart(index);
+    // this.itemService.AddToCart(index);
+    this.cartService.AddToCart(index);
     this.router.navigate(['items']);
   }
 

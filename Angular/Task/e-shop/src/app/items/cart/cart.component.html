@@ -22,9 +22,9 @@
     </div> 
 </div> -->
 
-<div class="row">
-    <div class="col-md-12 col-lg-12 col-12">
-        <table class="table table-primary">
+<div class="row" >
+    <div class="col-md-12 col-lg-12 col-12" *ngIf="items.length">
+        <table class="table table-primary" >
             <thead>
                 <tr>
                     <th>Item Name</th>
@@ -58,13 +58,13 @@
         <div>
             Total Price for Cart Items: {{ totalCartAmount }}
         </div>        
-        <div>
+        <div >
             Total Price for Checked Items: {{ totalSelectedCartAmount }}
         </div>        
     </div>
 </div>
 <div class="row">
     <div class="col-xs-12">
-        <button class="btn btn-success cart-btn" (click)="onClearCart()">Clear Cart</button> | <button class="btn btn-success cart-btn" (click)="onCheckout()">Checkout</button>
+        <button class="btn btn-success cart-btn" (click)="onClearCart()" [disabled]="!items.length">Clear Cart</button> | <button class="btn btn-success cart-btn" (click)="onCheckout()" [disabled]="!items.length">Checkout</button>
     </div>
 </div>

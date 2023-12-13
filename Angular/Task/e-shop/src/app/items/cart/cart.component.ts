@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CartItem } from '../cartItem.model';
 import { User } from 'src/app/auth/user.model';
 import { ToastrService } from 'ngx-toastr';
+import { CartService } from './cart.service';
 
 @Component({
   selector: 'app-cart',
@@ -22,47 +23,31 @@ export class CartComponent implements OnInit {
 
   constructor(private itemService: ItemsService,
     private userService: UserService,
+    private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,) { }
-
-  initForm() {
-    if (!!this.userService.loggedUser && !!this.itemService.items) {
-      const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-      const userIndex = this.userService.loggedUserIndex;
-      let localUserCart: { id: number, qty: number }[] = [];
-      console.log('userIndex : ', userIndex);
-      console.log('usersDetList : ', usersDetList);
-      if (usersDetList && usersDetList[userIndex] && usersDetList[userIndex].cart) {
-        localUserCart = usersDetList[userIndex].cart;
-        console.log('localStorageCart : ', localUserCart);
-      }
-      this.items = this.itemService.getItemsById(localUserCart);
-      this.calculateTotalAmount();
-    }
-
-  }
 
   ngOnInit() {
 
     this.userService.loggedUserChanged.subscribe(
       (user: User) => {
         console.log('loggedUserChanged.subscribe');
-        this.initForm();
+        this.items = this.cartService.getItems();
       }
     );
     this.itemService.itemChanged.subscribe(
       (items: Item[]) => {
         console.log('itemChanged.subscribe');
-        this.initForm();
+        this.items = this.cartService.getItems();
       }
     );
 
-    this.subscription = this.itemService.cartItemsChanged.subscribe(
+    this.subscription = this.cartService.cartItemsChanged.subscribe(
       (items: CartItem[]) => {
-        console.log('cartItemsChanged.subscribe');
         this.items = items;
-        this.calculateTotalAmount();
+        this.totalCartAmount = this.cartService.totalCartAmount;
+        this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
       }
     );
   }
@@ -73,35 +58,42 @@ export class CartComponent implements OnInit {
     const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
     usersDetList[userIndex].cart = [];
     localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
-    this.itemService.cartItems = [];
+    // this.itemService.cartItems = [];
+    this.cartService.cartItems = [];
     this.totalCartAmount = 0;
     this.totalSelectedCartAmount = 0;
     this.toastr.warning('Items removed from cart!!');
   }
 
-  decreaseQuantity(index : number,itemEl: CartItem) {
+  decreaseQuantity(index: number, itemEl: CartItem) {
     console.log('index : ', index);
     console.log('itemEl : ', itemEl);
-    this.itemService.AddToCart(null, itemEl, true);
+    // this.itemService.AddToCart(null, itemEl, true);
+    this.cartService.AddToCart(null, itemEl, true);
   }
   increaseQuantity(itemEl: CartItem) {
     console.log('itemEl : ', itemEl);
-    this.itemService.AddToCart(null, itemEl, null);
+    // this.itemService.AddToCart(null, itemEl, null);
+    this.cartService.AddToCart(null, itemEl, null);
   }
 
   toggleItemCheck(index: number) {
-    console.log('this.itemService.cartItems[index].checked : ', this.itemService.cartItems[index].checked);
-    this.itemService.cartItems[index].checked = !this.itemService.cartItems[index].checked;
-    this.itemService.cartItemsChanged.next(this.itemService.cartItems);  
+    this.cartService.cartItems[index].checked = !this.cartService.cartItems[index].checked;  
+    this.cartService.calculateTotalAmount();
+    this.cartService.cartItemsChanged.next(this.cartService.cartItems);  
+    const userIndex = this.userService.loggedUserIndex;
+    const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+    const localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
+    for (const localCartItem of localUserCart) {
+      if (localCartItem.id === this.cartService.cartItems[index].item.itemId) {
+        localCartItem.checked = !localCartItem.checked;
+      }
+    }
+    localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));    
   }
-  calculateTotalAmount(){
-    this.totalCartAmount = this.itemService.cartItems.reduce((total, item) => total + item.item.price, 0);
-    this.totalSelectedCartAmount = this.itemService.cartItems.reduce((total, item) => total + (item.checked ? (item.item.price) : 0), 0);
 
-  }
-
-  onCheckout(){
-
+  onCheckout() {
+    this.router.navigate(['payment'], { relativeTo: this.route });
   }
 
 }

@@ -4,6 +4,7 @@ import { UserService } from 'src/app/users/user.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ItemsService } from '../../items.service';
 import { User } from 'src/app/auth/user.model';
+import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'app-items-item',
@@ -19,6 +20,7 @@ export class ItemsItemComponent implements OnInit {
 
   constructor(private userService: UserService,
               private itemService: ItemsService,
+              private cartService: CartService,
               private route: ActivatedRoute,
               private router: Router) { }
 
@@ -46,7 +48,8 @@ export class ItemsItemComponent implements OnInit {
   onAddToCart(event: Event,index: number){
     event.stopPropagation();
     console.log('AddToCart clicked'+index);
-    this.itemService.AddToCart(index,null,null);
+    // this.itemService.AddToCart(index,null,null);
+    this.cartService.AddToCart(index,null,null);
     this.router.navigate(['items']);
   }
   onItem(index){
