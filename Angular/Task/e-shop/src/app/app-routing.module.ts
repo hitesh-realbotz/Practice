@@ -18,20 +18,22 @@ const routes: Routes = [
         canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         loadChildren: () => {
-            // return import('./users/users.module').then(m => m.UsersModule);
             return import('./users/users.module').then(m => m.UsersModule);
         }
     },
     {
         path: 'items', loadChildren: () => {
-            // return import('./users/users.module').then(m => m.UsersModule);
             return import('./items/items.module').then(m => m.ItemsModule);
         }
     },
-
     {
         path: 'shop', loadChildren: () => {
             return import('./shop/shop.module').then(m => m.ShopModule);
+        }
+    },
+    {
+        path: 'orders', loadChildren: () => {
+            return import('./orders/orders.module').then(m => m.OrdersModule);
         }
     },
 

@@ -1,0 +1,47 @@
+
+.order{
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+}
+.order-detail{
+    display: flex;
+    flex-direction: column;
+}
+
+.order:hover {
+    background-color: rgb(213, 228, 235);
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.item-image img {
+    width: 35px;
+    height: 35px;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+.item-details {
+    display: flex;
+}
+
+.item-title {
+    width: 30%;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.item-description {
+    width: 40%;
+}
+
+strong{  
+    display: inline-block;
+    width: 120px;
+}
+

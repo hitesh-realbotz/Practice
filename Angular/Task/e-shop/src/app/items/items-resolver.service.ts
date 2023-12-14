@@ -9,9 +9,7 @@ import { DataStorageService } from "../shared/data-storage.service";
 export class ItemsResolverService implements Resolve<Item[]> {
 
     constructor(private dataStorageService: DataStorageService, private itemsService: ItemsService){ }
-    // resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Item[] | Observable<Item[]> | Promise<Item[]> {
-    //     throw new Error("Method not implemented.");
-    // }
+    
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Item[] | Observable<Item[]> | Promise<Item[]>  {
         const items = this.itemsService.getItems();

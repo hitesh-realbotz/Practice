@@ -18,69 +18,36 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   role: string;
 
-  constructor(private itemService: ItemsService,
-    private userService: UserService,
-    private router: Router,
-    private route: ActivatedRoute,
+  constructor(
+                private itemService: ItemsService,
+                private userService: UserService,
+                private router: Router,
+                private route: ActivatedRoute ) { }
 
-  ) { }
+
 
   ngOnInit() {
     console.log("ItemList Called================>");
-    if (this.router.url.includes('shop')) {
+    this.userService.loggedUserChanged.subscribe(
+      (user: User) => {
+        this.initProcess();
+      });
 
-      this.userService.loggedUserChanged.subscribe(
-        (user: User) => {
-          if (!!this.userService.loggedUser) {
-            console.log("ItemsListComponent shop loggedUserChanged.subscribe called");
+    this.subscription = this.itemService.itemChanged.subscribe(
+      (Items: Item[]) => {
+        this.initProcess();
+      });
+  }
 
-            console.log('this.userService.loggedUser', this.userService.loggedUser);
-            console.log('this.userService.loggedUser.role', this.userService.loggedUser.role);
-            console.log('users.role', user.role);
-            this.role = user.role;
-            console.log('this.role', this.role);
-
-            if (!!this.items) {
-              this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
-            } 
-          }
-        });
-
-      this.subscription = this.itemService.itemChanged.subscribe(
-        (items: Item[]) => {
-          if(!!this.role){
-            this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
-          }else{
-            this.items = items;
-          }
-        });
-
-      if (!!this.userService.loggedUser) {
-        // this.itemSub('from outer Sub');
+  initProcess() {
+    if (!!this.userService.loggedUser && !!this.itemService.items) {
+      this.role = this.userService.loggedUser.role;
+      if (this.router.url.includes('shop')) {
         this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
-        console.log(this.items);
+      } else {
+        this.items = this.itemService.getItems();
       }
-    } else {
-      this.userService.loggedUserChanged.subscribe(
-        (user: User) => {
-          if (!!this.userService.loggedUser) {
-            console.log("ItemsListComponent loggedUserChanged.subscribe called");
-            console.log('this.userService.loggedUser', this.userService.loggedUser);
-            console.log('this.userService.loggedUser.role', this.userService.loggedUser.role);
-            console.log('users.role', user.role);
-            this.role = user.role;
-            console.log('this.role', this.role);
-          }
-        });
-
-      this.subscription = this.itemService.itemChanged.subscribe(
-        (Items: Item[]) => {
-          this.items = Items;
-        }
-      )
-      this.items = this.itemService.getItems();
     }
-
   }
 
   onNewItem() {

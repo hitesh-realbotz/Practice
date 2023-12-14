@@ -16,7 +16,6 @@ export class ItemsDetailComponent implements OnInit {
   item: Item;
   index: number;
   role: string = 'buyer';
-  userId: string;
   
   constructor(private itemService: ItemsService,
     private userService: UserService,
