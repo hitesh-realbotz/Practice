@@ -35,13 +35,16 @@ export class ItemsItemComponent implements OnInit {
       if (!!this.userService.loggedUser) {
         this.role = this.userService.loggedUser.role;
       }
+
     }
   }
-  onEditItem(index: number) {
+  onEditItem(event: Event, index: number) {
+    event.stopPropagation();
     console.log('Edit clicked'+index);
     this.router.navigate([index, 'edit'], { relativeTo: this.route.parent });
   }
-  onDeleteItem(index){
+  onDeleteItem(event: Event, index){
+    event.stopPropagation();
     console.log('Delete clicked'+index);
     this.itemService.deleteItem(index);
   }
@@ -52,7 +55,11 @@ export class ItemsItemComponent implements OnInit {
     this.cartService.AddToCart(index,null,null);
     this.router.navigate(['items']);
   }
+  
   onItem(index){
+    if (this.router.url.includes('shop')) {
+      index = this.itemService.sellerItemsIndex[index];
+    }
     this.router.navigate([index], { relativeTo: this.route.parent })
   }
 }

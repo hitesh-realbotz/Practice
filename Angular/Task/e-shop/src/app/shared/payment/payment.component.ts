@@ -1,8 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/auth/user.model';
 import { CartService } from 'src/app/items/cart/cart.service';
@@ -26,10 +24,7 @@ export class PaymentComponent implements OnInit {
   shippingMethods: string[] = ['standard', 'by-air'];
 
   constructor(private cartService: CartService, private userService: UserService, private itemService: ItemsService,
-    private router: Router,
-    private route: ActivatedRoute,
     private location: Location,
-    private toastr: ToastrService,
     private orderService: OrderService) { }
 
   ngOnInit() {
@@ -80,10 +75,6 @@ export class PaymentComponent implements OnInit {
 
   onSubmit() {
 
-    // console.log('this.paymentForm.value');
-    // console.log(this.paymentForm.value);
-    // console.log('this.userService.loggedUser.password');
-    // console.log(this.userService.loggedUser.password);
     if (this.paymentForm.value['pin'] === this.userService.loggedUser.password) {
       
       const newOrder = new Order(
@@ -95,7 +86,7 @@ export class PaymentComponent implements OnInit {
                                   this.paymentForm.value['amount']
                                 );
       this.orderService.newOrder(newOrder, this.items);
-      this.onCancel();
+      
     } else {
       this.onCancel();
     }

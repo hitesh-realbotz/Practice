@@ -18,7 +18,7 @@
                 <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
                     <!-- Loop through each order item -->
                     <div *ngFor="let orderItem of order.orderedItems; let j = index" class="row ">
-                        <div class="item-details">
+                        <div class="item-details" (click)="onItem($event, orderItem.itemId)">
 
 
                             <div class="item-image">

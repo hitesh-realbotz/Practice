@@ -3,7 +3,7 @@
 <div class="row">
     <div class="list-group col-12">
         <div class="list-group-item clearfix" *ngFor="let orderEl of orders; let i = index">
-            <div class="order col-12" (click)="onOrder(i)">
+            <div class="order col-12" (click)="onOrder(orderEl.orderId)">
                 <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <!-- Order details -->
                     <div><strong>OrderId</strong> : {{orderEl.orderId}}</div>
@@ -16,10 +16,12 @@
                 <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
                     <!-- Loop through each order item -->
                     <div *ngFor="let orderItem of orderEl.orderedItems; let j = index" class="row ">
-                        <div class="item-details">
-
-
+                        <!-- <div class="item-details" (click)="onItem($event, orderItem.itemId)" (mouseenter)="onShowActions()" (mouseleave)="onHideActions()"> -->
+                        <div class="item-details" (click)="onItem($event, orderEl, orderItem)" (mouseenter)="showActions = !showActions" (mouseleave)="showActions = !showActions">
                             <div class="item-image">
+                                <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
+                            </div>
+                            <div class="item-image" *ngIf="showActions">
                                 <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
                             </div>
 

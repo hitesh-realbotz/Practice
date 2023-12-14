@@ -44,6 +44,10 @@ export class ItemsListComponent implements OnInit, OnDestroy {
       this.role = this.userService.loggedUser.role;
       if (this.router.url.includes('shop')) {
         this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
+        console.log('this.itemService.sellerItemsIndex');
+        console.log(this.itemService.sellerItemsIndex);
+        console.log(this.itemService.items[this.itemService.sellerItemsIndex[0]]);
+        console.log(this.itemService.items[this.itemService.sellerItemsIndex[1]]);
       } else {
         this.items = this.itemService.getItems();
       }

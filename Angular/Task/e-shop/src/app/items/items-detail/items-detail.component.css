@@ -37,3 +37,7 @@
     min-width: 80px;
     max-width: 150px;
 }
+
+.not-available{
+    color: red;
+}

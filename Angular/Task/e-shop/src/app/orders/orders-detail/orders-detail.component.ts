@@ -49,9 +49,9 @@ export class OrdersDetailComponent implements OnInit {
   initProcess() {
     if (!!this.userService.loggedUser && !!this.orderService.orderDetList && this.index != null) {
       this.order = this.orderService.getOrderById(this.index);
-      console.log('this.order');
-      console.log(this.order);
     }
   }
+
+
 
 }
