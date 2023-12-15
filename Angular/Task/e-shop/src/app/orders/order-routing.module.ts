@@ -5,6 +5,8 @@ import { AuthGuard } from "../auth/auth.guard";
 import { OrdersListComponent } from "./orders-list/orders-list.component";
 import { OrdersResolverService } from "./orders-resolver.service";
 import { OrdersDetailComponent } from "./orders-detail/orders-detail.component";
+import { ItemsDetailComponent } from "../items/items-detail/items-detail.component";
+import { ItemsResolverService } from "../items/items-resolver.service";
 
 const routes: Routes = [
     {
@@ -13,7 +15,9 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         children: [
             { path: '', component: OrdersListComponent, resolve: [OrdersResolverService] },
+            { path: 'items/:id/:id2', component: ItemsDetailComponent, resolve: [ItemsResolverService]},
             { path: ':id', component: OrdersDetailComponent, resolve: [OrdersResolverService]},
+            { path: ':id/success', component: OrdersDetailComponent, resolve: [OrdersResolverService]},
         ]
     },
 ]

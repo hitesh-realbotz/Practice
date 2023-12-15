@@ -26,12 +26,6 @@ export class ItemsService {
         this.itemChanged.next(this.items.slice());
     }
     getItems() {
-        console.log('get Items method called ');
-        console.log(this.items);
-        // if (!this.items.length) {
-        //     this.dataStorageService.fetchItems();
-        // }
-        // return this.items.slice();
         if (!this.items) {
             return null;
         }
@@ -40,6 +34,12 @@ export class ItemsService {
 
     public getItem(index: number) {
         return this.items[index];
+    }
+    public getItemById(id: number) {
+        return this.items.find(item => item.itemId === id);
+    }
+    public getItemIndexById(id: number) {
+        return this.items.findIndex(item => item.itemId === id);
     }
 
     addItem(item: Item) {
@@ -65,8 +65,8 @@ export class ItemsService {
         this.toastr.info('Item Updated', 'Update Action');
     }
 
-    deleteItem(index: number) {
-        this.items.splice(index, 1);
+    deleteItem(index: number) {        
+        this.items.splice(this.sellerItemsIndex[index], 1);
         this.itemChanged.next(this.items.slice());
         this.dataStorageService.storeItems();
         this.toastr.warning('Item Deleted', 'Delete Action');

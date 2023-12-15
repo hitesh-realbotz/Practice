@@ -27,10 +27,10 @@
                 </div>
 
                 <div class="item-action" *ngIf="role === 'seller'">
-                    <button class="btn btn-outline-secondary" (click)="onEditItem(index)">Edit</button>
+                    <button class="btn btn-outline-secondary" (click)="onEditItem($event, index)">Edit</button>
                 </div>
                 <div class="item-action" *ngIf="role === 'seller'">
-                    <button class="btn btn-outline-secondary" (click)="onDeleteItem(index)">Delete</button>
+                    <button class="btn btn-outline-secondary" (click)="onDeleteItem($event, index)">Delete</button>
                 </div>
             </div>
 

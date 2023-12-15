@@ -14,7 +14,7 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     this.dataStorageService.fetchUsers();
-    // this.dataStorageService.fetchItems();
+    this.dataStorageService.fetchItems();
     this.authService.autoLogin();
   }
   title = 'e-shop';

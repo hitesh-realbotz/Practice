@@ -4,32 +4,38 @@
     </div>
     <div class="item-details col-8 col-md-8 col-lg-8">
         <div class="item-title">
-            <h1 class="list-group-item-heading">{{item.name}}</h1>
+            <h1 class="list-group-item-heading" [ngClass]="{'not-available': isAvailable  === 'no' }">{{item.name}}</h1>
         </div>
         <!-- <div class="item-description float-end">
                 <p class="list-group-item-text">{{item.description}}</p>
             </div> -->
         <div class="item-description float-end">
+            <div *ngIf="isAvailable  === 'no'">
+                <p class="list-group-item-text not-available"> {{optionId != -1? '(Product Details changed)' : '(Not Available)'}} </p>
+            </div>
             <div>
                 <p class="list-group-item-text">{{item.description}}</p>
             </div>
             <div>
-                <p class="list-group-item-text">Price : {{item.price}}</p>
+                <p class="list-group-item-text">Unit Price : {{isAvailable == 'no'? item.price/item.qty : item.price}} </p>
             </div>
             <div>
-                <p class="list-group-item-text">Avialble Qty : {{item.availableQty}}</p>
+                <p class="list-group-item-text">{{isAvailable == 'no'? 'Orderd' : 'Available'}} Qty : {{isAvailable == 'no'? item.qty : item.availableQty}}</p>
             </div>
         </div>
         <div class="item-actions">
-            <div class="item-action" *ngIf="role === 'buyer'">
+            <div class="item-action" *ngIf="isAvailable == 'buyer'">
                 <button class="btn btn-success" (click)="onAddToCart($event, index)">Add to Cart</button>
             </div>
 
-            <div class="item-action" *ngIf="role === 'seller'">
+            <div class="item-action" *ngIf="isAvailable == 'shop'">
                 <button class="btn btn-outline-secondary" (click)="onEditItem(index)">Edit</button>
             </div>
-            <div class="item-action" *ngIf="role === 'seller'">
+            <div class="item-action" *ngIf="isAvailable == 'shop'">
                 <button class="btn btn-outline-secondary" (click)="onDeleteItem(index)">Delete</button>
+            </div>
+            <div class="item-action" *ngIf="optionId != -1">
+                <button class="btn btn-outline-secondary" (click)="onAvailableItem(index)">Available Item</button>
             </div>
         </div>
 

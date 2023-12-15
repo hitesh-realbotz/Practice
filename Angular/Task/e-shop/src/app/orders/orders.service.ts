@@ -4,6 +4,8 @@ import { UserService } from "src/app/users/user.service";
 import { Order } from "./order.model";
 import { OrderItem } from "./order-item.model";
 import { Subject } from "rxjs";
+import { Router } from "@angular/router";
+import { ItemsService } from "../items/items.service";
 
 
 @Injectable({ providedIn: 'root' })
@@ -11,15 +13,13 @@ export class OrderService {
 
     ordersChanged = new Subject<Order[]>();
     orderDetList: Order[] = [];
-    constructor(private userService: UserService){
+    constructor(private userService: UserService, private router: Router, private itemService: ItemsService) {
         console.log('Oredr constructor called');
 
-        if ((JSON.parse(localStorage.getItem('orderDetList'))) === null) {
-            this.orderDetList = [];
-        } else {
-            this.orderDetList = JSON.parse(localStorage.getItem('orderDetList'));
-        }
-     }
+        this.orderDetList = this.orderDetList.filter(order => order.buyerId === this.userService.loggedUser.id ||
+            order.orderedItems.some(item => item.sellerId === this.userService.loggedUser.id)
+    );
+    }
 
 
     // newOrder(buyerName: string, contactNo: number, items: CartItem[]) {
@@ -40,33 +40,45 @@ export class OrderService {
         for (const selectedItem of items) {
             orderItems.push(new OrderItem(selectedItem));
         }
-        newOrder.orderId = this.orderDetList.length+1;
-        newOrder.orderedItems  = orderItems;
+        newOrder.orderedItems = orderItems;
+        const allOrders = JSON.parse(localStorage.getItem('orderDetList'));
+        newOrder.orderId = allOrders.length + 1;
         const index = this.orderDetList.push(newOrder) - 1;
-        console.log('this.orderDetList.push(newOrder)');
-        console.log('index');
-        console.log(index);
-        this.ordersChanged.next(this.orderDetList);
-        console.log(this.orderDetList);
-        localStorage.setItem('orderDetList', JSON.stringify(this.orderDetList));
+        if (index != null) {
+            this.ordersChanged.next(this.orderDetList);
+            console.log(this.orderDetList);
+            allOrders.push(newOrder);
+            localStorage.setItem('orderDetList', JSON.stringify(allOrders));
+            this.router.navigate(['/orders', newOrder.orderId, 'success']);
+
+        } else {
+
+        }
 
     }
 
-    getOrders(){
+    getOrders() {
         return this.orderDetList.slice();
     }
-    getOrderById(index: number){
+    getOrderByIndex(index: number) {
         return this.orderDetList[index];
     }
-    getOrdersByBuyerId(index: string){
+    getOrderById(index: number) {
+        return this.orderDetList.find(order => order.orderId === index)
+    }
+    getOrdersByBuyerId(index: string) {
         return this.orderDetList.filter(order => order.buyerId === index)
     }
-    // getOrdersBySellerId(index: string){
-    //     return this.orderDetList.filter(order => order.orderedItems.includes())
-    // }
+
     getOrdersBySellerId(sellerId: string) {
-        return this.orderDetList.filter(order => 
-          order.orderedItems.some(item => item.sellerId === sellerId)
-        );
-      }
+        return this.orderDetList.filter(order =>
+            order.orderedItems.some(item => item.sellerId === sellerId));
+    }
+
+    getItemById(id: number){
+        return this.itemService.getItemById(id);
+    }
+    getItemIndexById(id: number){
+        return this.itemService.getItemIndexById(id);
+    }
 }
