@@ -6,6 +6,7 @@ import { Item } from '../item.model';
 import { ItemsService } from '../items.service';
 import { UserService } from 'src/app/users/user.service';
 import { User } from 'src/app/auth/user.model';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
 
 @Component({
   selector: 'app-items-list',
@@ -19,10 +20,11 @@ export class ItemsListComponent implements OnInit, OnDestroy {
   role: string;
 
   constructor(
-                private itemService: ItemsService,
-                private userService: UserService,
-                private router: Router,
-                private route: ActivatedRoute ) { }
+    private itemService: ItemsService,
+    private userService: UserService,
+    private dataStorageService: DataStorageService,
+    private router: Router,
+    private route: ActivatedRoute) { }
 
 
 
@@ -36,11 +38,18 @@ export class ItemsListComponent implements OnInit, OnDestroy {
     this.subscription = this.itemService.itemChanged.subscribe(
       (Items: Item[]) => {
         this.initProcess();
+
+
+
+
+
+        this.dataStorageService.storeItems();
       });
   }
 
   initProcess() {
     if (!!this.userService.loggedUser && !!this.itemService.items) {
+
       this.role = this.userService.loggedUser.role;
       if (this.router.url.includes('shop')) {
         this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);

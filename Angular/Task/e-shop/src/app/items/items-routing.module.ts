@@ -17,7 +17,7 @@ const routes: Routes = [
             { path: '', component: ItemsListComponent, resolve: [ItemsResolverService]  },
             { path: 'new', component: ItemsEditComponent, resolve: [ItemsResolverService] },
             { path: ':id', component: ItemsDetailComponent, resolve: [ItemsResolverService]},
-            { path: ':id/:id', component: ItemsDetailComponent, resolve: [ItemsResolverService]},
+            { path: 'orders/:id/:id2', component: ItemsDetailComponent, resolve: [ItemsResolverService]},
             { path: ':id/edit', component: ItemsEditComponent, resolve: [ItemsResolverService]},
         ]
     },

@@ -35,7 +35,6 @@ export class ItemsItemComponent implements OnInit {
       if (!!this.userService.loggedUser) {
         this.role = this.userService.loggedUser.role;
       }
-
     }
   }
   onEditItem(event: Event, index: number) {

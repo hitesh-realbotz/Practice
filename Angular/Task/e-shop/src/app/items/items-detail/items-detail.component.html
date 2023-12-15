@@ -34,7 +34,7 @@
             <div class="item-action" *ngIf="isAvailable == 'shop'">
                 <button class="btn btn-outline-secondary" (click)="onDeleteItem(index)">Delete</button>
             </div>
-            <div class="item-action" *ngIf="optionId != -1">
+            <div class="item-action" *ngIf="optionId != -1 && isAvailable  === 'no'">
                 <button class="btn btn-outline-secondary" (click)="onAvailableItem(index)">Available Item</button>
             </div>
         </div>

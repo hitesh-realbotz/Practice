@@ -6,6 +6,8 @@ import { OrderItem } from "./order-item.model";
 import { Subject } from "rxjs";
 import { Router } from "@angular/router";
 import { ItemsService } from "../items/items.service";
+import { CartService } from "../items/cart/cart.service";
+import { DataStorageService } from "../shared/data-storage.service";
 
 
 @Injectable({ providedIn: 'root' })
@@ -13,7 +15,7 @@ export class OrderService {
 
     ordersChanged = new Subject<Order[]>();
     orderDetList: Order[] = [];
-    constructor(private userService: UserService, private router: Router, private itemService: ItemsService) {
+    constructor(private userService: UserService, private router: Router, private itemService: ItemsService, private cartService: CartService, private dataStorageService: DataStorageService) {
         console.log('Oredr constructor called');
 
         this.orderDetList = this.orderDetList.filter(order => order.buyerId === this.userService.loggedUser.id ||
@@ -39,15 +41,23 @@ export class OrderService {
         const orderItems: OrderItem[] = [];
         for (const selectedItem of items) {
             orderItems.push(new OrderItem(selectedItem));
+            console.log(this.itemService.getItemById(selectedItem.item.itemId));
+            this.itemService.getItemById(selectedItem.item.itemId).availableQty -= selectedItem.qty;
+            console.log(this.itemService.getItemById(selectedItem.item.itemId));
+            
         }
         newOrder.orderedItems = orderItems;
-        const allOrders = JSON.parse(localStorage.getItem('orderDetList'));
-        newOrder.orderId = allOrders.length + 1;
+        let allOrders: Order[] = JSON.parse(localStorage.getItem('orderDetList'));
+        !!allOrders ? '' : allOrders = []; 
+        newOrder.orderId = (!!allOrders ? allOrders.length +1 : 1);
+        console.log(newOrder);
         const index = this.orderDetList.push(newOrder) - 1;
         if (index != null) {
             this.ordersChanged.next(this.orderDetList);
+            this.cartService.clearCart(true);
             console.log(this.orderDetList);
             allOrders.push(newOrder);
+            this.dataStorageService.storeItems();
             localStorage.setItem('orderDetList', JSON.stringify(allOrders));
             this.router.navigate(['/orders', newOrder.orderId, 'success']);
 

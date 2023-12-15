@@ -4,11 +4,12 @@ import { Observable } from "rxjs";
 import { Injectable } from "@angular/core";
 import { ItemsService } from "./items.service";
 import { DataStorageService } from "../shared/data-storage.service";
+import { UserService } from "../users/user.service";
 
 @Injectable({ providedIn: 'root' })
 export class ItemsResolverService implements Resolve<Item[]> {
 
-    constructor(private dataStorageService: DataStorageService, private itemsService: ItemsService){ }
+    constructor(private dataStorageService: DataStorageService, private itemsService: ItemsService, private userService: UserService){ }
     
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Item[] | Observable<Item[]> | Promise<Item[]>  {
@@ -27,7 +28,7 @@ export class ItemsResolverService implements Resolve<Item[]> {
             this.dataStorageService.fetchItems();
             
         } else {
-            console.log('data not fetched');
+            console.log('data not fetched'); 
             return items;
             
         }

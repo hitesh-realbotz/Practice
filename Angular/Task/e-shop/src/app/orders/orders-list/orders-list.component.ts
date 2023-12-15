@@ -49,42 +49,23 @@ export class OrdersListComponent implements OnInit {
   onOrder(index) {
     this.router.navigate([index], { relativeTo: this.route });
   }
+  // onItem(event: Event, orderEl, orderItem) {
+  //   event.stopPropagation();
+  //   const item= this.orderService.getItemById(orderItem.itemId);
+  //   console.log(item);
+    
+  //   if (!!item && this.isEqualToItem(orderItem, item)) {
+  //     const index = this.orderService.getItemIndexById(item.itemId);
+  //     this.router.navigate([ 'items', index]);
+  //   } else {
+  //     // this.router.navigate([ 'items', orderEl.orderId, orderItem.itemId], { relativeTo: this.route });
+  //     this.router.navigate([ 'items','orders', orderEl.orderId, orderItem.itemId]);
+  //   }
+    
+  // }
   onItem(event: Event, orderEl, orderItem) {
-    event.stopPropagation();
-    const item= this.orderService.getItemById(orderItem.itemId);
-    console.log(item);
-    
-    if (!!item && this.isEqualToItem(orderItem, item)) {
-      const index = this.orderService.getItemIndexById(item.itemId);
-      this.router.navigate([ 'items', index]);
-    } else {
-      this.router.navigate([ 'items', orderEl.orderId, orderItem.itemId], { relativeTo: this.route });
-    }
-    
-
-
-    
-    // if (index != null) {
-      
-    // }else{
-    //   this.router.navigate(['/items', orderId, itemId], { relativeTo: this.route });
-    // }
-    // // this.router.navigate(['/items', 'itemRemoved']);
-    // // this.router.navigate(['items', orderId,'not',itemId], { relativeTo: this.route });
-    
-  }
-
-  isEqualToItem(orderItem, item){
-    console.log('TRUE===== ', orderItem.name == item.name && 
-    orderItem.description == item.description && 
-    orderItem.image == item.image && 
-    orderItem.category == item.category );
-
-    return  orderItem.name == item.name && 
-            orderItem.description == item.description && 
-            orderItem.image == item.image && 
-            orderItem.category == item.category
-            
+    event.stopPropagation();  
+      this.router.navigate([ 'items','orders', orderEl.orderId, orderItem.itemId]);
   }
 
   onShowActions() {

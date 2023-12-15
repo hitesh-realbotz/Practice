@@ -19,18 +19,18 @@ export class Item {
     qty: number,
     itemId?: number,
     sellerId?: string,
+    availableQty?: number,
 
   ) {
     this.name = name;
     this.image = image;
     this.description = description;
     this.category = category;
-
     this.price = price;
     this.qty = qty;
     this.itemId = itemId || 0;
     this.sellerId = sellerId || '';
-    this.availableQty = qty;
+    this.availableQty = availableQty || qty;
   }
 }
 
