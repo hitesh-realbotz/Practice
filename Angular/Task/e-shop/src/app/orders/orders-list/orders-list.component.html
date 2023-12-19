@@ -1,43 +1,65 @@
-
-
 <div class="row">
     <div class="list-group col-12">
-        <div class="list-group-item clearfix" *ngFor="let orderEl of orders; let i = index">
-            <div class="order col-12" (click)="onOrder(orderEl.orderId)">
-                <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                    <!-- Order details -->
-                    <div><strong>OrderId</strong> : {{orderEl.orderId}}</div>
-                    <div><strong>BuyerId</strong> : {{orderEl.buyerId}}</div>
-                    <div><strong>Billing Name</strong> : {{orderEl.billingName}}</div>
-                    <div><strong>Address</strong> : {{orderEl.address}}</div>
-                    <div><strong>Contact No.</strong> : {{orderEl.contactNo}}</div>
-                    <div><strong>Total Price</strong> : {{orderEl.totalPrice}}</div>
-                </div>
-                <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                    <!-- Loop through each order item -->
-                    <div *ngFor="let orderItem of orderEl.orderedItems; let j = index" class="row ">
-                        <!-- <div class="item-details" (click)="onItem($event, orderItem.itemId)" (mouseenter)="onShowActions()" (mouseleave)="onHideActions()"> -->
-                        <div class="item-details" (click)="onItem($event, orderEl, orderItem)" (mouseenter)="showActions = !showActions" (mouseleave)="showActions = !showActions">
-                            <div class="item-image">
-                                <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
-                            </div>
-                            <div class="item-image" *ngIf="showActions">
-                                <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
+        <mat-paginator [length]="length" [pageSize]="oredersPerPage" [pageSizeOptions]="[1, 2, 3, 4]"
+            aria-label="Select page" (page)="onPageChange($event)" >
+        </mat-paginator>
+        <form [formGroup]="sortForm" class="sorting-controls">
+            <label for="sortProperty">Sort By:</label>
+            <select id="sortProperty" formControlName="selectedSortProperty" (change)="onSortChange()">
+                <option value="orderId">Order Id</option>
+                <option value="totalPrice">Price</option>
+            </select>
+
+            <label for="sortOrder">Sort Order:</label>
+            <select id="sortOrder" formControlName="selectedSortOrder" (change)="onSortChange()">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </form>
+        <mat-list class="mat-list">
+            <!-- <div ngClass="mat-list-item" class="list-group-item clearfix" *ngFor="let orderEl of orders; let i = index"> -->
+            <div ngClass="mat-list-item" class="list-group-item clearfix"
+                *ngFor="let orderEl of pagedData; let i = index">
+                <div class="order col-12" (click)="onOrder(orderEl.orderId)">
+                    <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                        <!-- Order details -->
+                        <div><strong>OrderId</strong> : {{orderEl.orderId}}</div>
+                        <div><strong>BuyerId</strong> : {{orderEl.buyerId}}</div>
+                        <div><strong>Billing Name</strong> : {{orderEl.billingName}}</div>
+                        <div><strong>Address</strong> : {{orderEl.address}}</div>
+                        <div><strong>Contact No.</strong> : {{orderEl.contactNo}}</div>
+                        <div><strong>Total Price</strong> : {{orderEl.totalPrice}}</div>
+                    </div>
+                    <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                        <!-- Loop through each order item -->
+                        <div *ngFor="let orderItem of orderEl.orderedItems; let j = index" class="row ">
+                            <!-- <div class="item-details" (click)="onItem($event, orderItem.itemId)" (mouseenter)="onShowActions()" (mouseleave)="onHideActions()"> -->
+                            <div class="item-details" (click)="onItem($event, orderEl, orderItem)"
+                                (mouseenter)="showActions = !showActions" (mouseleave)="showActions = !showActions">
+                                <div class="item-image">
+                                    <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
+                                </div>
+                                <div class="item-image" *ngIf="showActions">
+                                    <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
+                                </div>
+
+                                <div class="item-title">
+                                    <h5 class="list-group-item-heading">{{orderItem.name}}</h5>
+                                </div>
+                                <div class="item-description">
+                                    <p class="list-group-item-text">{{orderItem.qty}} * {{orderItem.price}} =
+                                        {{orderItem.qty *
+                                        orderItem.price}}/-</p>
+                                </div>
                             </div>
 
-                            <div class="item-title">
-                                <h5 class="list-group-item-heading">{{orderItem.name}}</h5>
-                            </div>
-                            <div class="item-description">
-                                <p class="list-group-item-text">{{orderItem.qty}} * {{orderItem.price}} =
-                                    {{orderItem.qty *
-                                    orderItem.price}}/-</p>
-                            </div>
                         </div>
-
                     </div>
                 </div>
             </div>
-        </div>
+
+        </mat-list>
+
+
     </div>
 </div>

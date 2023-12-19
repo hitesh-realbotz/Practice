@@ -1,14 +1,38 @@
-<!-- <div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success" (click)="onNewItem()" *ngIf="role == 'seller'" >New Item</button>
-    </div>
-</div> -->
-<div class="row" >
+<!-- <div class="row" >
     <div class="col-xs-12 col-md-12 col-12">  
         <app-items-item 
         *ngFor="let itemEl of items; let i = index" 
         [item]="itemEl"
         [index]="i"
         ></app-items-item>
+    </div>
+</div> -->
+<div class="row mat-list">
+    <div class="col-xs-12 col-md-12 col-12"> 
+        <mat-paginator [length]="length" [pageSize]="itemsPerPage" [pageSizeOptions]="[1, 2, 3, 4]"
+            aria-label="Select page" (page)="onPageChange($event)"> </mat-paginator>
+
+        <form [formGroup]="sortForm" class="sorting-controls">
+            <label for="sortProperty">Sort By:</label>
+            <select id="sortProperty" formControlName="selectedSortProperty" (change)="onSortChange()">
+                <option value="name">Name</option>
+                <option value="price">Price</option>
+                <option value="quantity">Quantity</option>
+            </select>
+
+            <label for="sortOrder">Sort Order:</label>
+            <select id="sortOrder" formControlName="selectedSortOrder" (change)="onSortChange()">
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+            </select>
+        </form>
+
+        <mat-list>
+            <div ngClass="mat-list-item">
+                <app-items-item *ngFor="let itemEl of pagedData; let i = index" [item]="itemEl"
+                    [index]="i"></app-items-item>
+            </div>
+        </mat-list>
+
     </div>
 </div>

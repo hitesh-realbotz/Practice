@@ -37,25 +37,36 @@ export class ItemsItemComponent implements OnInit {
       }
     }
   }
-  onEditItem(event: Event, index: number) {
+
+  
+  // onEditItem(event: Event, index: number) {
+  onEditItem(event: Event, item: Item) {
     event.stopPropagation();
+    const index = this.itemService.getItemIndexById(item.itemId);
     console.log('Edit clicked'+index);
     this.router.navigate([index, 'edit'], { relativeTo: this.route.parent });
   }
-  onDeleteItem(event: Event, index){
+
+  // onDeleteItem(event: Event, index){
+  onDeleteItem(event: Event, item: Item){
     event.stopPropagation();
+    const index = this.itemService.getItemIndexById(item.itemId);
     console.log('Delete clicked'+index);
     this.itemService.deleteItem(index);
   }
-  onAddToCart(event: Event,index: number){
+
+  // onAddToCart(event: Event,index: number){
+  onAddToCart(event: Event,item: Item){
     event.stopPropagation();
-    console.log('AddToCart clicked'+index);
+    const index = this.itemService.getItemIndexById(item.itemId);
+    console.log('AddToCart clicked'+ index);
     // this.itemService.AddToCart(index,null,null);
     this.cartService.AddToCart(index,null,null);
     this.router.navigate(['items']);
   }
   
-  onItem(index){
+  onItem(item: Item){
+    let index = this.itemService.getItemIndexById(item.itemId);
     if (this.router.url.includes('shop')) {
       index = this.itemService.sellerItemsIndex[index];
     }

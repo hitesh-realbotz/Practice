@@ -3,6 +3,7 @@
     display: flex;
     width: 100%;
     cursor: pointer;
+    height: 175px;
 }
 .order-detail{
     display: flex;
@@ -44,4 +45,16 @@ strong{
     display: inline-block;
     width: 120px;
 }
+
+.mat-list {
+    display: flex;
+    flex-direction: column; /* Ensure items are in a column layout */
+    align-items: flex-start; /* Align items at the start (top) */
+  }
+  
+  .mat-list-item {
+    width: 100%; /* Ensure full width of the container */
+    box-sizing: border-box; /* Include padding and border in the width */
+    height: 175px;
+  }
 

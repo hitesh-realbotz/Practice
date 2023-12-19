@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { count, from } from 'rxjs';
+import { UserService } from './user.service';
 
 @Component({
   selector: 'app-users',
@@ -25682,13 +25683,23 @@ data = [{
   ]
 }]
 
+role: string;
+
   constructor(
     private router: Router,
-    private route: ActivatedRoute) {
+    private route: ActivatedRoute,
+    private userService: UserService) {
 
   }
   ngOnInit(): void {
+    this.role = this.userService.loggedUser.role;
     localStorage.setItem('data', JSON.stringify(this.data));
+  }
+  onMyOrders(){
+    this.router.navigate(['/orders']);
+  }
+  onShopOrders(){
+    this.router.navigate(['/shop/orders']);
   }
 
   onProfile() {

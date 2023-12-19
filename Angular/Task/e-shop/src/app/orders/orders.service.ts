@@ -57,7 +57,7 @@ export class OrderService {
             this.cartService.clearCart(true);
             console.log(this.orderDetList);
             allOrders.push(newOrder);
-            this.dataStorageService.storeItems();
+            // this.dataStorageService.storeItems();
             localStorage.setItem('orderDetList', JSON.stringify(allOrders));
             this.router.navigate(['/orders', newOrder.orderId, 'success']);
 

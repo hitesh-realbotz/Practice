@@ -78,7 +78,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8c2hpcnR8ZW58MHx8MHx8fDA%3D',
         'Black t-shirt',
         'Womens',
-        1500,
+        1400,
         5,
         2,
         'QLA4ySQzZQNS2tk8ubkqVhUOrfT2'
@@ -88,7 +88,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTB8fHNoaXJ0fGVufDB8fDB8fHww',
         'Casual checks shirt',
         'Mens',
-        1500,
+        2500,
         25,
         3,
         'Yp9yDte1PTNitzOL6hCIInXxUvU2'
@@ -98,7 +98,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'https://images.unsplash.com/photo-1620799140408-edc6dcb6d633?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGNsb3RoZXN8ZW58MHx8MHx8fDA%3D',
         'White t-shirt',
         'Womens',
-        1500,
+        500,
         25,
         4,
         'Yp9yDte1PTNitzOL6hCIInXxUvU2'
