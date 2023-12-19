@@ -8,6 +8,8 @@ import { DataStorageService } from "../shared/data-storage.service";
 import { ToastrService } from "ngx-toastr";
 import { UserDetails } from "./userdetails.model";
 import { Item } from "../items/item.model";
+import { CartService } from "../items/cart/cart.service";
+import { ItemsService } from "../items/items.service";
 
 export interface AuthResponseData {
     idToken: string;
@@ -33,19 +35,37 @@ export class AuthService {
     private userList: User[];
     user = new BehaviorSubject<number>(null);
 
-    constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService, private toastr: ToastrService) { }
+    constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService, private toastr: ToastrService,
+        private cartService: CartService, private itemService: ItemsService) { }
 
     logout() {
+
+
+        // const userIndex = this.userService.loggedUserIndex;
+        // const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        // let usercart = usersDetList[userIndex].cart;
+        // for (const cartItem of usercart) {
+        //     console.log(cartItem.id);
+        //     console.log(this.itemService.items[this.itemService.getItemIndexById(cartItem.id)].availableQty);
+        //     const item = this.itemService.getItemById(cartItem.id);
+        //     item.availableQty += cartItem.qty;
+        //     console.log(item);
+        //     console.log(this.itemService.getItems());
+        // }
+        // this.dataStorageService.storeItems();
+
         this.userService.loggedUser = null;
         this.userService.loggedUserChanged.next(null);
         this.router.navigate(['/auth']);
+
         localStorage.removeItem('loggedUserIndex');
+
         // if (this.tokenExpirationTimer) {
         //     clearTimeout(this.tokenExpirationTimer);
         // }
         // this.tokenExpirationTimer = null;
     }
-    
+
 
     autoLogin() {
         console.log(" AutoLogin Called ");

@@ -37,35 +37,26 @@ export class CartComponent implements OnInit {
       }
     );
     this.itemService.itemChanged.subscribe(
-      (items: Item[]) => {          
-          console.log('itemChanged.subscribe');
-          this.cartService.getItems();
-        
+      (items: Item[]) => {
+        console.log('itemChanged.subscribe');
+        this.cartService.getItems();
+
       }
     );
 
     this.subscription = this.cartService.cartItemsChanged.subscribe(
       (items: CartItem[]) => {
         if (!!items) {
-        this.items = items;
-        this.totalCartAmount = this.cartService.totalCartAmount;
-        this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
+          this.items = items;
+          this.totalCartAmount = this.cartService.totalCartAmount;
+          this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
         }
       }
     );
   }
 
   onClearCart() {
-    const userIndex = this.userService.loggedUserIndex;
-    this.items = [];
-    const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-    usersDetList[userIndex].cart = [];
-    localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
-    // this.itemService.cartItems = [];
-    this.cartService.cartItems = [];
-    this.totalCartAmount = 0;
-    this.totalSelectedCartAmount = 0;
-    this.toastr.warning('Items removed from cart!!');
+    this.items = this.cartService.clearCart();
   }
 
   decreaseQuantity(index: number, itemEl: CartItem) {
@@ -81,9 +72,9 @@ export class CartComponent implements OnInit {
   }
 
   toggleItemCheck(index: number) {
-    this.cartService.cartItems[index].checked = !this.cartService.cartItems[index].checked;  
+    this.cartService.cartItems[index].checked = !this.cartService.cartItems[index].checked;
     this.cartService.calculateTotalAmount();
-    this.cartService.cartItemsChanged.next(this.cartService.cartItems);  
+    this.cartService.cartItemsChanged.next(this.cartService.cartItems);
     const userIndex = this.userService.loggedUserIndex;
     const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
     const localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
@@ -92,7 +83,7 @@ export class CartComponent implements OnInit {
         localCartItem.checked = !localCartItem.checked;
       }
     }
-    localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));    
+    localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
   }
 
   onCheckout() {

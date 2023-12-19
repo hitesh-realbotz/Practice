@@ -52,6 +52,10 @@ export class OrdersDetailComponent implements OnInit {
     }
   }
 
+  onItem(event: Event, orderItem) {
+      this.router.navigate([ 'items','orders', this.index, orderItem.itemId]);
+  }
+
 
 
 }

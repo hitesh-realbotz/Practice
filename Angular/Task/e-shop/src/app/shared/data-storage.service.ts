@@ -23,6 +23,7 @@ export class DataStorageService {
     storeItems() {
         this.getItemServiceInstance();
         const items = this.itemService.getItems();
+        console.log(this.itemService.getItems());
         this.http.put('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json', items).subscribe(response => {
             console.log(response);
 
@@ -36,6 +37,7 @@ export class DataStorageService {
         return this.http.get<Item[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json')
             .subscribe(items => {
                 console.log(items);
+                
                 this.itemService.setItems(items);
             });
     }
@@ -65,14 +67,14 @@ export class DataStorageService {
         this.getAuthServiceInstance();
         return this.http.get<User[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/users.json')
             .subscribe(users => {
-                console.log('fetchUser response ==> ',users);
+                console.log('fetchUser response ==> ', users);
 
                 const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
                 // const logUser = users[userIndex];                
                 this.userService.loggedUser = users[userIndex];
                 this.userService.loggedUserChanged.next(this.userService.loggedUser);
                 this.userService.loggedUserIndex = userIndex;
-                this.userService.setUsers(users); 
+                this.userService.setUsers(users);
             });
     }
 

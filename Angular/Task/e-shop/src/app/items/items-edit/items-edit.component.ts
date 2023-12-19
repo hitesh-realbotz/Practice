@@ -76,6 +76,9 @@ export class ItemsEditComponent implements OnInit {
     let category = '';
     let amount = 0;
     let qty = 0;
+    let availableQty = 0;
+    console.log('this.item.availableQty');
+    console.log(this.item.availableQty);
 
     if (this.editMode && !!this.item) {
 
@@ -88,6 +91,7 @@ export class ItemsEditComponent implements OnInit {
       this.category = this.item.category;
       amount = this.item.price;
       qty = this.item.qty;
+      availableQty = this.item.availableQty;
     }
 
     this.itemForm = new FormGroup({
@@ -97,6 +101,7 @@ export class ItemsEditComponent implements OnInit {
       'category': new FormControl(category, Validators.required),
       'amount': new FormControl(amount, Validators.required),
       'qty': new FormControl(qty, Validators.required),
+      'availableQty': new FormControl(availableQty, Validators.required),
       // 'itemId': new FormControl(itemId, Validators.required),
       // 'sellerId': new FormControl(sellerId, Validators.required),
 
@@ -111,6 +116,9 @@ export class ItemsEditComponent implements OnInit {
       this.itemForm.value['category'],
       this.itemForm.value['amount'],
       this.itemForm.value['qty'],
+      null,
+      null,
+      this.itemForm.value['availableQty']
     );
     if (this.editMode) {
       newItem.itemId = this.item.itemId;

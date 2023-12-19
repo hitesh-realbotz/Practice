@@ -50,20 +50,54 @@ export class ItemsDetailComponent implements OnInit {
       });
   }
 
+  // initProcess() {
+  //   if (!!this.userService.loggedUser && !!this.itemService.items && this.index != null) {
+  //     if (this.router.url.includes('orders')) {
+  //       this.isAvailable = 'no';
+  //       const itemId = +(this.route.snapshot.params['id2']);
+  //       console.log('itemId : ', itemId);
+  //       this.optionId = this.itemService.getItemIndexById(itemId);
+  //       console.log('optionID : ', this.optionId);
+  //       // this.item = this.itemService.getItemById(itemId); 
+  //       console.log(this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId));
+  //       this.item = this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId);
+  //     } else {
+  //         this.item = this.itemService.getItem(this.index); 
+  //       }  
+  //   }
+  // }
   initProcess() {
     if (!!this.userService.loggedUser && !!this.itemService.items && this.index != null) {
       if (this.router.url.includes('orders')) {
-        this.isAvailable = 'no';
         const itemId = +(this.route.snapshot.params['id2']);
+        
         this.optionId = this.itemService.getItemIndexById(itemId);
-        console.log('optionID : ', this.optionId);
-        // this.item = this.itemService.getItemById(itemId); 
-        console.log(this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId));
-        this.item = this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId);
+        const orderedItem = this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId);
+        
+        if (this.optionId != -1 && this.isEqualToItem(orderedItem, itemId)) {
+         
+
+        } else {
+          this.isAvailable = 'no';
+          this.item = orderedItem;
+          // console.log(this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId));
+          // this.item = this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId);
+          
+        }
+        
       } else {
           this.item = this.itemService.getItem(this.index); 
         }  
     }
+  }
+
+  isEqualToItem(orderedItem, itemId){
+    this.item = this.itemService.getItemById(itemId);
+    console.log(this.item);
+    return orderedItem.name == this.item.name && 
+    orderedItem.description == this.item.description && 
+    orderedItem.image == this.item.image && 
+    orderedItem.category == this.item.category;
   }
 
 

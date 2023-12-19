@@ -69,9 +69,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Formal white shirt',
         'Mens',
         1500,
-        5,
+        25,
         1,
-        'EuDcXtCbXebiEOR6xQZlBgsHSIJ3'
+        'QLA4ySQzZQNS2tk8ubkqVhUOrfT2'
       ),
       new Item(
         'Item-2',
@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         1500,
         5,
         2,
-        'EuDcXtCbXebiEOR6xQZlBgsHSIJ3'
+        'QLA4ySQzZQNS2tk8ubkqVhUOrfT2'
       ),
       new Item(
         'Item-3',
@@ -89,9 +89,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'Casual checks shirt',
         'Mens',
         1500,
-        5,
+        25,
         3,
-        'X4rfjjV6q3ff1eHdTRMZB0wcsQ22'
+        'Yp9yDte1PTNitzOL6hCIInXxUvU2'
       ),
       new Item(
         'Item-4',
@@ -99,9 +99,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
         'White t-shirt',
         'Womens',
         1500,
-        5,
+        25,
         4,
-        'X4rfjjV6q3ff1eHdTRMZB0wcsQ22'
+        'Yp9yDte1PTNitzOL6hCIInXxUvU2'
       )
     ];
 
