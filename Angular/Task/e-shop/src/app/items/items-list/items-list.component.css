@@ -1,0 +1,29 @@
+/* .mat-list-item{
+    display: flex;
+   
+ 
+}
+
+.mat-list{
+    display: flex;
+} */
+
+/* .mat-mdc-list-base {
+    display: flex;
+    flex-direction: column;
+    --mdc-list-list-item-one-line-container-height: 600px;
+    --mdc-list-list-item-two-line-container-height: 800px;
+    --mdc-list-list-item-three-line-container-height: 900px;
+} */
+
+.mat-list {
+    display: flex;
+    flex-direction: column; /* Ensure items are in a column layout */
+    align-items: flex-start; /* Align items at the start (top) */
+  }
+  
+  .mat-list-item {
+    width: 100%; /* Ensure full width of the container */
+    box-sizing: border-box; /* Include padding and border in the width */
+    height: 450px;
+  }

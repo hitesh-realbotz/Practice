@@ -6,6 +6,7 @@ import { RouterModule } from "@angular/router";
 import { SharedModule } from "../shared/Shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
 import { ItemsComponent } from "../items/items.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @NgModule({
     declarations : [
@@ -17,6 +18,7 @@ import { ItemsComponent } from "../items/items.component";
         ShopRoutingModule,
         SharedModule,
         ReactiveFormsModule,
+        MatTooltipModule
     ]
 })
 export class ShopModule{

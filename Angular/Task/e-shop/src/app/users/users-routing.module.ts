@@ -10,7 +10,7 @@ const routes: Routes = [
     {
         path: '', component: UsersComponent,            // With LazyLoading
         children: [
-            { path: '', component: UsersComponent },
+            // { path: '', component: UsersComponent },
             { path: 'aboutus', component: AboutUsComponent },
             
         ]
