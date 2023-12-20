@@ -7,13 +7,20 @@
                     <div class="form-group">
                         <label for="buyerName">Buyer Name</label>
                         <input type="text" name="buyerName" id="buyerName" formControlName="buyerName" class="form-control ">
+                        <span *ngIf="!paymentForm.get('buyerName').valid && paymentForm.get('buyerName').touched" class="help-block">
+                            <span *ngIf="paymentForm.get('buyerName').errors['checkWhiteSpace']">Please enter a valid Buyer Name!</span>
+                            <span *ngIf="paymentForm.get('buyerName').errors['required']"> This field is required!</span>
+                        </span>
                     </div>
                 </div>
                 <div class="col-sm-4">
                     <div class="form-group">
                         <label for="contactNo">Contact No.</label>
-                        <input type="text" name="contactNo" id="contactNo" formControlName="contactNo"
-                            class="form-control ">
+                        <input type="text" name="contactNo" id="contactNo" formControlName="contactNo" class="form-control ">
+                        <span *ngIf="!paymentForm.get('contactNo').valid && paymentForm.get('contactNo').touched" class="help-block">
+                            <span *ngIf="paymentForm.get('contactNo').errors['checkContactNo']">Min. 10 digit ContactNo required!</span>
+                            <span *ngIf="paymentForm.get('contactNo').errors['required']"> This field is required!</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -21,8 +28,11 @@
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label for="address">Delivery Address</label>
-                        <textarea type="text" name="address" id="address" formControlName="address" class="form-control"
-                            rows="2"></textarea>
+                        <textarea type="text" name="address" id="address" formControlName="address" class="form-control" rows="2"></textarea>
+                        <span *ngIf="!paymentForm.get('address').valid && paymentForm.get('address').touched" class="help-block">
+                            <span *ngIf="paymentForm.get('address').errors['checkWhiteSpace']">Please enter a valid Address!</span>
+                            <span *ngIf="paymentForm.get('address').errors['required']"> This field is required!</span>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -48,16 +58,28 @@
 
                 <div class="col-sm-6 form-group">
                     <label for="cardNo">Card No.</label>
-                    <input type="text" id="cardNo" name="cardNo" formControlName="cardNo" class="form-control" required
-                        pattern="^[1-9]+[0-9]*$">
+                    <input type="text" id="cardNo" name="cardNo" formControlName="cardNo" class="form-control">
+                    <span *ngIf="!paymentForm.get('cardNo').valid && paymentForm.get('cardNo').touched" class="help-block">
+                        <span *ngIf="paymentForm.get('cardNo').errors['checkCardNo']">Please enter a valid Card No.!</span>
+                        <span *ngIf="paymentForm.get('cardNo').errors['checkCardNoLength']">Min. 16 digit Card No. required!!</span>
+                        <span *ngIf="paymentForm.get('cardNo').errors['required']"> This field is required!</span>
+                    </span>
                 </div>
                 <div class="col-sm-2 form-group">
                     <label for="cvv">CVV</label>
                     <input type="text" id="cvv" name="cvv" formControlName="cvv" class="form-control" required>
+                    <span *ngIf="!paymentForm.get('cvv').valid && paymentForm.get('cvv').touched" class="help-block">
+                        <span *ngIf="paymentForm.get('cvv').errors['checkCVV']">Please enter a valid CVV!</span>
+                        <span *ngIf="paymentForm.get('cvv').errors['required']"> This field is required!</span>
+                    </span>
                 </div>
                 <div class="col-sm-4 form-group">
                     <label for="pin">Pin</label>
                     <input type="text" id="pin" name="pin" formControlName="pin" class="form-control" required>
+                    <span *ngIf="!paymentForm.get('pin').valid && paymentForm.get('pin').touched" class="help-block">
+                        <span *ngIf="paymentForm.get('pin').errors['checkPin']">Please enter a valid Pin!</span>
+                        <span *ngIf="paymentForm.get('pin').errors['required']"> This field is required!</span>
+                    </span>
                 </div>
             </div>
             <!-- <div class="form-group">
@@ -80,7 +102,7 @@
             <div class="row">
                 <div class="col-xs-12">
                     <!-- <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button> -->
-                    <button type="submit" class="btn btn-success">Confirm</button>
+                    <button type="submit" class="btn btn-success" [disabled]="!paymentForm.valid">Confirm</button>
                     <button type="button" class="btn btn-danger" (click)="onCancel()">Cancel</button>
                 </div>
             </div>

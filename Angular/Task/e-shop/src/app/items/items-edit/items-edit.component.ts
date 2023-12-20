@@ -21,7 +21,7 @@ export class ItemsEditComponent implements OnInit {
   itemForm: FormGroup;
   category: string;
   subscription: Subscription;
-  
+
   constructor(private route: ActivatedRoute,
     private itemService: ItemsService,
     private router: Router,
@@ -29,56 +29,43 @@ export class ItemsEditComponent implements OnInit {
     private userService: UserService) { }
 
   ngOnInit() {
-
+    // this.initForm();
     this.route.params.subscribe(
       (params: Params) => {
         this.id = +params['id'];
-        this.editMode = params['id'] != null;
-        // this.item = new Item('', '', '', '');
       });
 
     this.itemService.itemChanged.subscribe(
       (items: Item[]) => {
-        this.id = +(this.route.snapshot.params['id']);
-        this.editMode = this.id != null;
-        if (!!this.userService.loggedUser) {
-          this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
-          this.id = this.itemService.sellerItemsIndex[this.id];
-          this.item = this.itemService.getItem(this.id);
-        }
-        console.log('init form from itemChanged');
         this.initForm();
       });
 
     this.userService.loggedUserChanged.subscribe(
       (user: User) => {
-        if (!!this.userService.loggedUser) {
-          console.log('loggedUserChanged subscribed');
-          this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
-          this.id = this.itemService.sellerItemsIndex[this.id];
-          this.item = this.itemService.getItem(this.id);
-          console.log('init form from loggedUserChanged');
-          this.initForm();
-        }
-
+        this.initForm();
       });
-    console.log('init form from outer main');
-    this.initForm();
+
   }
 
   private initForm() {
     console.log("Init Form called");
+    
+    if (!!this.itemService.items) {
+      this.id = +(this.route.snapshot.params['id']);
+      // this.editMode = this.id != null;
+      this.editMode = !this.router.url.includes('new');
+      this.item = this.itemService.getItem(this.id);
+    }
+
     let name = '';
     let itemId = 0;
     let sellerId = '';
     let image = '';
     let description = '';
     let category = '';
-    let amount = 0;
-    let qty = 0;
-    let availableQty = 0;
-    console.log('this.item.availableQty');
-    console.log(this.item.availableQty);
+    let amount = 1;
+    let qty = 1;
+    let availableQty = 1;
 
     if (this.editMode && !!this.item) {
 
@@ -95,17 +82,42 @@ export class ItemsEditComponent implements OnInit {
     }
 
     this.itemForm = new FormGroup({
-      'name': new FormControl(name, Validators.required),
-      'image': new FormControl(image, Validators.required),
-      'description': new FormControl(description, Validators.required),
+      'name': new FormControl(name, [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'image': new FormControl(image, [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'description': new FormControl(description, [Validators.required, this.checkWhiteSpace.bind(this)]),
       'category': new FormControl(category, Validators.required),
-      'amount': new FormControl(amount, Validators.required),
-      'qty': new FormControl(qty, Validators.required),
+      'amount': new FormControl(amount, [Validators.required, Validators.pattern('^[1-9][0-9]*$'), this.checkPositiveAmount.bind(this)]),
+      'qty': new FormControl(qty, [Validators.required, Validators.pattern('^[1-9][0-9]*$'), this.checkPositiveQty.bind(this)]),
       'availableQty': new FormControl(availableQty, Validators.required),
-      // 'itemId': new FormControl(itemId, Validators.required),
-      // 'sellerId': new FormControl(sellerId, Validators.required),
-
     });
+
+    this.itemForm.get('qty').valueChanges.subscribe((value) => {
+      if (!this.editMode) {
+        this.itemForm.patchValue({ availableQty : this.itemForm.get('qty').value });
+      }
+    });
+  }
+
+  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim() === '') {
+      return { 'checkWhiteSpace': true };
+    }
+    return null;
+  }
+
+  checkPositiveAmount(control: FormControl): { [s: string]: boolean } | null {
+    if (control.value <= 0) {
+      return { 'invalidAmount': true };
+    }
+    // this.itemForm.get('availableQty').patchValue(this.itemForm.get('qty'));
+    return null;
+  }
+
+  checkPositiveQty(control: FormControl): { [s: string]: boolean } | null {
+    if (control.value <= 0) {
+      return { 'invalidQty': true };
+    }
+    return null;
   }
 
   onSubmit() {

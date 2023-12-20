@@ -47,9 +47,23 @@ export class UserProfileComponent implements OnInit {
     this.userForm = new FormGroup({
       'email': new FormControl(this.loggedUser.email, [Validators.required, Validators.email]),
       // 'role': new FormControl(this.loggedUser.role, [Validators.required]),
-      'question': new FormControl(this.loggedUser.question),
-      'answer': new FormControl(this.loggedUser.answer),
+      'question': new FormControl(this.loggedUser.question, [Validators.required, this.checkQuestion.bind(this)]),
+      // 'question': new FormControl(this.loggedUser.question),
+      'answer': new FormControl(this.loggedUser.answer, [Validators.required, this.checkWhiteSpace.bind(this)]),
     });
+  }
+
+  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim() === '') {
+      return { 'checkWhiteSpace': true };
+    }
+    return null;
+  }
+  checkQuestion(control: FormControl): { [s: string]: boolean } {
+    if (control.value != 'Choose Security Question for Password Reset') {
+      return { 'checkQuestion': true };
+    }
+    return null;
   }
 
   onSubmit() {

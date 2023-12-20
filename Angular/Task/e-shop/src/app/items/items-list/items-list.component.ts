@@ -177,15 +177,16 @@ export class ItemsListComponent implements OnInit, AfterViewInit, OnDestroy {
 
     this.subscription = this.itemService.itemChanged.subscribe(
       (Items: Item[]) => {
+        this.items = this.itemService.getItems();
         this.initProcess();
         // this.dataStorageService.storeItems();
       });
   }
 
   initProcess() {
-    if (!!this.userService.loggedUser && !!this.itemService.items) {
-      this.role = this.userService.loggedUser.role;
-      if (this.router.url.includes('shop')) {
+    if ( !!this.itemService.items) {
+      if (!!this.userService.loggedUser && this.router.url.includes('shop')) {
+        this.role = this.userService.loggedUser.role;
         this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
       } else {
         this.items = this.itemService.getItems();
@@ -193,6 +194,7 @@ export class ItemsListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.length = this.items.length;
       this.getPagedData();
     }
+
   }
 
   onNewItem() {

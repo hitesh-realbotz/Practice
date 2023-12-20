@@ -28,6 +28,9 @@ export class ShopComponent implements OnInit {
   onNewItem(){
     this.router.navigate(['new'], { relativeTo: this.route });
   }
+  onShopOrders() {
+    this.router.navigate(['/shop/orders']);
+  }
   onShopDetails(){
     this.router.navigate(['details'], { relativeTo: this.route });
   }

@@ -20,16 +20,24 @@
                         <option value="First Mobile Brand?">First Mobile Brand?</option>
                         <option value="Birth Place?">Birth Place?</option>
                     </select>
+                    <span *ngIf="!userForm.get('question').valid && userForm.get('question').touched" class="help-block">
+                        <span *ngIf="userForm.get('question').errors['checkQuestion']">Please select a valid Question!</span>
+                        <span *ngIf="userForm.get('question').errors['required']"> This field is required!</span>
+                    </span>
                 </div>
                 <div class="form-group">
                     <label for="answer">Answer</label>
                     <input type="text" id="answer" formControlName="answer" class="form-control">
+                    <span *ngIf="!userForm.get('answer').valid && userForm.get('answer').touched" class="help-block">
+                        <span *ngIf="userForm.get('answer').errors['checkWhiteSpace']">Please enter a valid Answer!</span>
+                        <span *ngIf="userForm.get('answer').errors['required']"> This field is required!</span>
+                    </span>
                 </div>
                 
                 <div>
                     <!-- <span *ngIf="!userForm.valid && userForm.touched" class="help-block">Please enter a valid data!</span> -->
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <button class="btn btn-primary" type="submit" [disabled]="!userForm.valid">Submit</button>
             </form>
         </div>
     </div>

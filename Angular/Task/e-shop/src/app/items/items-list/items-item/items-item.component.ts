@@ -16,7 +16,7 @@ export class ItemsItemComponent implements OnInit {
   @Input('item') item: Item;
   @Input() index: number;
 
-  role: string = 'buyer';
+  role: string = '';
 
   constructor(private userService: UserService,
               private itemService: ItemsService,
@@ -32,10 +32,11 @@ export class ItemsItemComponent implements OnInit {
             this.role = this.userService.loggedUser.role;
           }
         });
-      if (!!this.userService.loggedUser) {
-        this.role = this.userService.loggedUser.role;
+      }else{
+        if (!!this.userService.loggedUser) {
+          this.role = 'buyer';
+        }
       }
-    }
   }
 
   
@@ -67,9 +68,9 @@ export class ItemsItemComponent implements OnInit {
   
   onItem(item: Item){
     let index = this.itemService.getItemIndexById(item.itemId);
-    if (this.router.url.includes('shop')) {
-      index = this.itemService.sellerItemsIndex[index];
-    }
+    // if (this.router.url.includes('shop')) {
+    //   index = this.itemService.sellerItemsIndex[index];
+    // }
     this.router.navigate([index], { relativeTo: this.route.parent })
   }
 }

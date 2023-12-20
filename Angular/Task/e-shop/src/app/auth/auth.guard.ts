@@ -10,6 +10,7 @@ export class AuthGuard implements CanActivate, CanLoad {
     constructor(private router: Router, private authService: AuthService) { }
     canLoad(route: Route, segments: UrlSegment[]): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         console.log("CanLoad called");
+        
         return this.authService.user.pipe(
             take(1),
             map(loggedUser => {
@@ -23,6 +24,7 @@ export class AuthGuard implements CanActivate, CanLoad {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
         console.log("CanActivate called");
+        
         return this.authService.user.pipe(
             take(1),
             map(loggedUser => {

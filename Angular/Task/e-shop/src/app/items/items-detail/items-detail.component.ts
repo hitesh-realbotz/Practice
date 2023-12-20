@@ -7,6 +7,7 @@ import { User } from 'src/app/auth/user.model';
 import { CartService } from '../cart/cart.service';
 import { OrderService } from 'src/app/orders/orders.service';
 import { OrderItem } from 'src/app/orders/order-item.model';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-items-detail',
@@ -25,7 +26,8 @@ export class ItemsDetailComponent implements OnInit {
     private cartService: CartService,
     private orderService: OrderService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private toastr: ToastrService) { }
 
   ngOnInit(): void {
 
@@ -50,25 +52,9 @@ export class ItemsDetailComponent implements OnInit {
       });
   }
 
-  // initProcess() {
-  //   if (!!this.userService.loggedUser && !!this.itemService.items && this.index != null) {
-  //     if (this.router.url.includes('orders')) {
-  //       this.isAvailable = 'no';
-  //       const itemId = +(this.route.snapshot.params['id2']);
-  //       console.log('itemId : ', itemId);
-  //       this.optionId = this.itemService.getItemIndexById(itemId);
-  //       console.log('optionID : ', this.optionId);
-  //       // this.item = this.itemService.getItemById(itemId); 
-  //       console.log(this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId));
-  //       this.item = this.orderService.getOrderById(this.index).orderedItems.find(item => item.itemId === itemId);
-  //     } else {
-  //         this.item = this.itemService.getItem(this.index); 
-  //       }  
-  //   }
-  // }
   initProcess() {
-    if (!!this.userService.loggedUser && !!this.itemService.items && this.index != null) {
-      if (this.router.url.includes('orders')) {
+    if ( !!this.itemService.items && this.index != null) {
+      if (!!this.userService.loggedUser && this.router.url.includes('orders')) {
         const itemId = +(this.route.snapshot.params['id2']);
         
         this.optionId = this.itemService.getItemIndexById(itemId);
@@ -121,10 +107,15 @@ export class ItemsDetailComponent implements OnInit {
 
   onAddToCart(event: Event, index: number) {
     event.stopPropagation();
-    console.log('AddToCart clicked' + index);
-    // this.itemService.AddToCart(index);
-    this.cartService.AddToCart(index);
-    this.router.navigate(['items']);
+    if (!!this.userService.loggedUser) {
+      // this.itemService.AddToCart(index);
+      this.cartService.AddToCart(index);
+      this.router.navigate(['items']);
+    }else{
+      this.router.navigate(['/auth']);
+      this.toastr.warning('Login to Place Order');
+    }
+    
   }
 
 }

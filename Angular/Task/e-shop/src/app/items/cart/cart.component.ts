@@ -87,7 +87,8 @@ export class CartComponent implements OnInit {
   }
 
   onCheckout() {
-    this.router.navigate(['payment'], { relativeTo: this.route });
+    // this.router.navigate(['items/payment'], { relativeTo: this.route });
+    this.router.navigate(['items/payment']);
   }
 
 }

@@ -71,7 +71,7 @@ export class AuthService {
         console.log(" AutoLogin Called ");
         if ((JSON.parse(localStorage.getItem('loggedUserIndex'))) === null) {
             console.log(" Routing to Auth ");
-            this.router.navigate(['/auth']);
+            this.router.navigate(['/items']);
             return;
         } else {
             const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
