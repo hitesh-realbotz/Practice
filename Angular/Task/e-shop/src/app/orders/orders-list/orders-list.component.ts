@@ -112,6 +112,7 @@ export class OrdersListComponent implements OnInit, AfterViewInit {
 
   initProcess() {
     if (!!this.userService.loggedUser && !!this.orderService.orderDetList) {
+      console.log('from list Init main before', this.orderService.orderDetList);
       if (this.router.url.includes('shop')) {
         this.orders = this.orderService.getOrdersBySellerId(this.userService.loggedUser.id);
       } else {

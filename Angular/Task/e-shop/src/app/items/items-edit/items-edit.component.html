@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-xs-12">
-        <form [formGroup]="itemForm" (ngSubmit)="onSubmit()" class="form">
+        <form [formGroup]="itemForm" (ngSubmit)="onSubmit($event)" class="form">
 
             <div class="row">
                 <div class="col-xs-12">
@@ -21,6 +21,7 @@
                         <input type="text" name="image" id="image" formControlName="image" class="form-control" #image>
                         <span *ngIf="!itemForm.get('image').valid && itemForm.get('image').touched" class="help-block">
                             <span *ngIf="itemForm.get('image').errors['required']"> This field is required!</span>
+                            <span *ngIf="itemForm.get('image').errors['checkWhiteSpace']"> Please enter a valid Product Image-URL!!</span>
                         </span>
                     </div>
                 </div>
@@ -88,9 +89,10 @@
                 </div>
             </div> -->
             <div class="row">
-                <div class="col-xs-12 form-btn">
-                    <button type="submit" class="btn btn-success edit-btn" [disabled]="!itemForm.valid"> {{editMode ? 'Update' : 'Add'}} </button> | 
-                    <button type="button" class="btn btn-danger edit-btn" (click)="onCancel()">Cancel</button>
+                <div class="col-xs-12 form-btn-group">
+                    <!-- <button type="submit" class="btn btn-success form-btn" [disabled]="!itemForm.valid"> {{editMode ? 'Update' : 'Add'}} </button> |  -->
+                    <button type="submit" class="btn btn-success form-btn" > {{editMode ? 'Update' : 'Add'}} </button> | 
+                    <button type="button" class="btn btn-danger form-btn" (click)="onCancel()">Cancel</button>
                 </div>
             </div>
             

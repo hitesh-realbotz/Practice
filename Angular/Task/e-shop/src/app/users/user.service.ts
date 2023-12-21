@@ -35,28 +35,40 @@ export class UserService {
         this.loggedUserIndex = this.users.length - 1;
 
         const userDetails = new UserDetails(user.id, user.email);
-        // Adding new user to local storage
-        if ((JSON.parse(localStorage.getItem('usersDetailList'))) === null) {
-            this.usersDetList = [userDetails];
-        } else {
-            this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-            this.usersDetList.push(userDetails);
-        }
+        this.updateLocalStorage(userDetails, this.loggedUserIndex);
+
         localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
         localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
-        // localStorage.setItem('loggedUserAuth', JSON.stringify(this.loggedUser));
-        // this.loggedUserDet = userDetails;
-        // this.updateLocalStorage(this.usersDetList, this.loggedUserDet);
+
         this.dataStorageService.storeUsers();
     }
+
+    updateLocalStorage(userDetails: UserDetails, loggedUserIndex: number) {
+        // Adding new user to local storage
+        // if ((JSON.parse(localStorage.getItem('usersDetailList'))) === null) {
+        //     this.usersDetList.push(userDetails);
+        // } else {
+        //     this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        //     console.log('!!this.usersDetList.find(user=> user.id === userDetails.id)', !!this.usersDetList.find(user=> user.id === userDetails.id));
+        //     !!this.usersDetList.find(user=> user.id === userDetails.id) ? '' : this.usersDetList.push(userDetails);
+        // }
+
+        this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        !!this.usersDetList 
+                        ? ( !!this.usersDetList.find(user => user.id === userDetails.id) ? '' : this.usersDetList.push(userDetails) ) 
+                        : ( this.usersDetList = [userDetails] );
+
+        localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
+        localStorage.setItem('loggedUserIndex', JSON.stringify(loggedUserIndex));
+    }
+
 
     getUsers() {
         return this.users.slice();
     }
 
     setUsers(users: User[]) {
-        (users != null) ? (this.users = users) : '';
-        // this.users = users;
+        this.users = !!users ? users : [];
         this.usersChanged.next(this.users.slice());
     }
 
@@ -74,8 +86,8 @@ export class UserService {
 
     setLoggedUser(user: User) {
         console.log('set logged user called');
-        let index = this.getUserIndex(user.id);
-        if (index != -1) {
+        const index = this.getUserIndex(user.id);
+        
             this.loggedUser = this.users[index];
             console.log("Logged User ===> ");
             console.log(this.loggedUser);
@@ -83,8 +95,10 @@ export class UserService {
             this.loggedUserIndex = index;
             this.getAuthServiceInstance();
             this.authService.user.next(this.loggedUserIndex);
-            localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
-        }
+            const userDetails = new UserDetails(user.id, user.email);
+            this.updateLocalStorage(userDetails, this.loggedUserIndex);
+            // localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
+        
     }
 
     updateUser(upLoggedUser: User, index: number) {
@@ -117,11 +131,6 @@ export class UserService {
 
     }
 
-    updateLocalStorage(userDetailList: UserDetails[], loggedUserDet: UserDetails) {
-
-        localStorage.setItem('usersDetailList', JSON.stringify(userDetailList));
-        localStorage.setItem('loggedUserDetail', JSON.stringify(loggedUserDet));
-    }
 
     ChangePass(updatedUser: User, user: User) {
         console.log('from changePass :' + updatedUser);

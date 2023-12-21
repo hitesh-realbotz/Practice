@@ -1,17 +1,42 @@
-/* You can add global styles to this file, and also import other style files */
-.btn-primary{
-    margin : 10px;
-}
-
-.form{
-    margin: auto;
-    max-width: 800px;
-}
 html, body { height: 100%; }
+
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-.form-btn{
+
+.form{
+    padding: 10px;
+    background-color: #d7e2dc;
+    margin: auto;
+    margin-top: 10px;
+    max-width: 800px;
+    border: 1px solid #ac9f9f;
+}
+
+.form-btn-group{
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: auto;
 }
+
+.form-btn{
+    /* margin-top: 5px 10px; */
+    width: 48%;
+}
+
+.btn{
+    margin: 5px 10px;
+}
+
+.row{
+    margin: 5px;
+}
+
+.form label{
+    font-weight: bolder;
+}
+
+.help-block{
+    color: red;
+}
+

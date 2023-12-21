@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/auth/user.model';
@@ -25,7 +25,8 @@ export class PaymentComponent implements OnInit {
 
   constructor(private cartService: CartService, private userService: UserService, private itemService: ItemsService,
     private location: Location,
-    private orderService: OrderService) { }
+    private orderService: OrderService,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
     this.initForm();
@@ -119,23 +120,37 @@ checkCardNo(control: FormControl): { [s: string]: boolean } {
     return null;
   }
 
-  onSubmit() {
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.paymentForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+    });
+  }
 
-    if (this.paymentForm.value['pin'] === this.userService.loggedUser.password) {
+  onSubmit() {
+    if (this.paymentForm.valid) {
+      if (this.paymentForm.value['pin'] === this.userService.loggedUser.password) {
       
-      const newOrder = new Order(
-                                  this.userService.loggedUser.id,
-                                  this.paymentForm.value['buyerName'],
-                                  this.paymentForm.value['contactNo'], 
-                                  this.paymentForm.value['address'], 
-                                  this.paymentForm.value['shippingMethod'], 
-                                  this.paymentForm.value['amount']
-                                );
-      this.orderService.newOrder(newOrder, this.items);
-      
+        const newOrder = new Order(
+                                    this.userService.loggedUser.id,
+                                    this.paymentForm.value['buyerName'],
+                                    this.paymentForm.value['contactNo'], 
+                                    this.paymentForm.value['address'], 
+                                    this.paymentForm.value['shippingMethod'], 
+                                    this.paymentForm.value['amount']
+                                  );
+        this.orderService.newOrder(newOrder, this.items);
+        
+      } else {
+        this.onCancel();
+      }
     } else {
-      this.onCancel();
+      event.stopPropagation();
+      this.markAllAsTouched();
     }
+
+    
 
   }
 

@@ -47,9 +47,8 @@
                                     <h5 class="list-group-item-heading">{{orderItem.name}}</h5>
                                 </div>
                                 <div class="item-description">
-                                    <p class="list-group-item-text">{{orderItem.qty}} * {{orderItem.price}} =
-                                        {{orderItem.qty *
-                                        orderItem.price}}/-</p>
+                                    <p class="list-group-item-text">{{orderItem.qty}} * {{orderItem.price/orderItem.qty}} =
+                                        {{orderItem.price}}/-</p>
                                 </div>
                             </div>
 
