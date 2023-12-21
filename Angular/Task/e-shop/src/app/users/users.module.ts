@@ -5,12 +5,14 @@ import { RouterModule } from "@angular/router";
 import { UsersRoutingModule } from "./users-routing.module";
 import { SharedModule } from "../shared/Shared.module";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
     declarations: [
 
         UsersComponent,
         UserProfileComponent,
+        DashboardComponent,
     ],
     imports: [
         RouterModule,

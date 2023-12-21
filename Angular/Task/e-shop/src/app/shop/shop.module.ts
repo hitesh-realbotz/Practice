@@ -5,8 +5,8 @@ import { ShopRoutingModule } from "./shop-routing.module";
 import { RouterModule } from "@angular/router";
 import { SharedModule } from "../shared/Shared.module";
 import { ReactiveFormsModule } from "@angular/forms";
-import { ItemsComponent } from "../items/items.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSelectModule } from "@angular/material/select";
 
 @NgModule({
     declarations : [
@@ -18,7 +18,8 @@ import { MatTooltipModule } from "@angular/material/tooltip";
         ShopRoutingModule,
         SharedModule,
         ReactiveFormsModule,
-        MatTooltipModule
+        MatTooltipModule,
+        MatSelectModule
     ]
 })
 export class ShopModule{

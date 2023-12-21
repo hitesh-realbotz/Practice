@@ -68,7 +68,6 @@ export class AuthComponent implements OnDestroy {
         this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
       }
     );
-
     form.reset();
   }
 

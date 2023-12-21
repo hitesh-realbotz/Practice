@@ -25692,8 +25692,8 @@ role: string;
 
   }
   ngOnInit(): void {
-    this.role = this.userService.loggedUser.role;
-    localStorage.setItem('data', JSON.stringify(this.data));
+    // this.role = this.userService.loggedUser.role;
+    
   }
   onMyOrders(){
     this.router.navigate(['/orders']);

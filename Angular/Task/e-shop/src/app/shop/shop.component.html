@@ -1,11 +1,9 @@
-<div class="row">
-    <div class="col-xs-12">
-        <button class="btn btn-success" (click)="onNewItem()" *ngIf="isShop" >Add New Item</button>
+<!-- <div class="row">
+    <div class="shop-dashboard">
+        <button class="btn btn-info" (click)="onNewItem()" *ngIf="isShop" >Add New Item</button>
+        <button class="btn btn-success" (click)="onShopOrders()" *ngIf="isShop" >Orders Recieved</button>
     </div>
-    <div class="col-xs-12">
-        <button class="btn btn-success" (click)="onShopDetails()" >{{isShop ? 'Shop Details' : 'Register'}}</button>
-    </div>
-</div>
+</div> -->
 <div class="row">
     <div class="col-md-12">
         <router-outlet></router-outlet>

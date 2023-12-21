@@ -63,14 +63,60 @@ export class PaymentComponent implements OnInit {
     console.log('amount', amount);
     this.paymentForm = new FormGroup({
       'amount': new FormControl(amount, Validators.required),
-      'buyerName': new FormControl('', Validators.required),
-      'contactNo': new FormControl('', Validators.required),
-      'address': new FormControl('', Validators.required),
+      'buyerName': new FormControl('', [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'contactNo': new FormControl('', [Validators.required, this.checkContactNo.bind(this)]),
+      'address': new FormControl('', [Validators.required, this.checkWhiteSpace.bind(this)]),
       'shippingMethod': new FormControl('standard', Validators.required),
-      'cardNo': new FormControl('', Validators.required),
-      'cvv': new FormControl('', Validators.required),
-      'pin': new FormControl('', Validators.required),
+      'cardNo': new FormControl('', [Validators.required,Validators.pattern('^[1-9][0-9]*$'), this.checkCardNo.bind(this), this.checkCardNoLength.bind(this) ]),
+      'cvv': new FormControl('', [Validators.required, Validators.pattern('^[1-9][0-9]*$'), this.checkCVV.bind(this)]),
+      'pin': new FormControl('', [Validators.required, this.checkPin.bind(this)]),
     });
+  }
+
+  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim() === '') {
+      return { 'checkWhiteSpace': true };
+    }
+    return null;
+  }
+  checkContactNo(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim().length < 10 ) {
+      return { 'checkContactNo': true };
+    }
+    return null;
+  }
+  checkCardNoLength(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim().length != 16) {   
+        return { 'checkCardNoLength': true };
+    }
+    return null;
+}
+
+checkCardNo(control: FormControl): { [s: string]: boolean } {
+    if (control.value <= 0 ) {
+        return { 'checkCardNo': true };
+    }
+    return null;
+}
+  checkCVV(control: FormControl): { [s: string]: boolean } {
+    if ( control.value <= 0) {
+      return { 'checkCVV': true };
+    }
+    return null;
+  }
+  checkPin(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim().length != 6) {
+      return { 'checkPin': true };
+    }
+    return null;
+  }
+
+  checkPositiveAmount(control: FormControl): { [s: string]: boolean } | null {
+    if (control.value <= 0) {
+      return { 'invalidAmount': true };
+    }
+    // this.itemForm.get('availableQty').patchValue(this.itemForm.get('qty'));
+    return null;
   }
 
   onSubmit() {

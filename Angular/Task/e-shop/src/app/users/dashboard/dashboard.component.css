@@ -1,0 +1,31 @@
+.dashboard{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+.dash-box{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: center; */
+    align-items: center;
+    border: 1px solid red;
+    margin: 10px;
+    height: 100px;
+    width: 250px;
+    cursor: pointer;
+    background-color: #e3efeb;
+    border-radius: 5px;
+
+}
+
+.dash-box-heading{
+    font-size: 25px;
+    text-decoration: underline;
+    margin: 20px 5px;
+}
+.dash-box-detail{
+    
+    font-size: 15px;
+}

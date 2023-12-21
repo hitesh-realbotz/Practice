@@ -1,0 +1,16 @@
+input.ng-invalid.ng-touched,
+textarea.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+    border: 1px solid red;
+}
+label{
+    font-weight: bolder;
+}
+.row{
+    margin: 5px;
+}
+
+
+.edit-btn{
+    width: 48%;
+}

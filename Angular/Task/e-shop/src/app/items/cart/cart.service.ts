@@ -36,7 +36,20 @@ export class CartService {
         const userIndex = this.userService.loggedUserIndex;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
         // const localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
-        const localUserCart = usersDetList[userIndex].cart;
+        // console.log('usersDetList[userIndex]',usersDetList);
+        // console.log('usersDetList[userIndex]',userIndex);
+        // console.log('usersDetList[userIndex]',usersDetList[userIndex]);
+        // console.log(usersDetList[userIndex].cart);
+        // let localUserCart;
+        // if (usersDetList[userIndex].cart) {
+        //     localUserCart = usersDetList[userIndex].cart ;
+        // }else{
+            
+
+        //     localUserCart = [];
+        // }
+        const localUserCart = usersDetList[userIndex].cart ;
+        console.log('usersDetList[userIndex].cart',usersDetList[userIndex].cart);
 
         let itemFound = false;
         for (const [indexPosition, curCartItem] of this.cartItems.entries()) {
@@ -91,9 +104,11 @@ export class CartService {
             console.log('localCart : ', localCart)
             if (curCartItem.item.itemId === localCart.id) {
                 if ((decreaseQuantity == false)) {
-                    localCart[indexPosition] = { id: curCartItem.item.itemId, qty: curCartItem.qty + 1, checked: true };
+                    // localCart[indexPosition] = { id: curCartItem.item.itemId, qty: curCartItem.qty + 1, checked: true };
+                    localCart.qty += 1;
                 } else if (decreaseQuantity && curCartItem.qty > 1) {
-                    localCart[indexPosition] = { id: curCartItem.item.itemId, qty: curCartItem.qty - 1, checked: true };
+                    // localCart[indexPosition] = { id: curCartItem.item.itemId, qty: curCartItem.qty - 1, checked: true };
+                    localCart.qty -= 1;
                 } else {
                     localUserCart.splice(indexPosition, 1);
                 }
@@ -102,37 +117,67 @@ export class CartService {
         }
     }
 
+    // getItems() {
+    //     console.log('getItems called : ');
+    //     console.log(this.cartItems);
+    //     if (!!this.userService.loggedUser && !!this.itemService.items) {
+    //         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+    //         const userIndex = this.userService.loggedUserIndex;
+    //         // let localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
+    //         let localUserCart = [];
+    //         if (usersDetList && usersDetList[userIndex] && usersDetList[userIndex].cart) {
+    //             localUserCart = usersDetList[userIndex].cart;
+    //         }
+    //         this.cartItems = [];
+    //         // for (const localCart of localUserCart) {
+    //         for (let [indexPosition, localCart] of localUserCart.entries()) {
+    //             const foundItem = { ...this.itemService.items.find(item => item.itemId === localCart.id)};
+
+    //             console.log('found Item from getItems : ', foundItem);
+    //             console.log('found localCart from getItems : ', localCart[indexPosition]);
+    //             foundItem.price = foundItem.price * localCart[indexPosition].qty;
+
+    //             if (foundItem && !this.cartItems.find(item => item.item.itemId == localCart[indexPosition].id)) {
+    //                 console.log('from getItems if')
+    //                 // this.itemService.items.find(item => item.itemId === localCart.id).availableQty -= localCart.qty;
+    //                 this.cartItems.push(new CartItem(foundItem, localCart[indexPosition].qty, localCart.checked));
+    //             }
+    //         }
+    //         this.calculateTotalAmount();
+    //         this.cartItemsChanged.next(this.cartItems);
+    //         return this.cartItems;
+    //     }
+    // }
+
     getItems() {
-        console.log('getItems called : ');
-        console.log(this.cartItems);
         if (!!this.userService.loggedUser && !!this.itemService.items) {
             const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
             const userIndex = this.userService.loggedUserIndex;
-            // let localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
-            let localUserCart = [];
-            if (usersDetList && usersDetList[userIndex] && usersDetList[userIndex].cart) {
-                localUserCart = usersDetList[userIndex].cart;
-            }
+            const localUserCart = usersDetList?.[userIndex]?.cart || [];
+    
             this.cartItems = [];
-            // for (const localCart of localUserCart) {
-            for (let [indexPosition, localCart] of localUserCart.entries()) {
-                const foundItem = { ...this.itemService.items.find(item => item.itemId === localCart.id)};
-
-                console.log('found Item from getItems : ', foundItem);
-                console.log('found localCart from getItems : ', localCart[indexPosition]);
-                foundItem.price = foundItem.price * localCart[indexPosition].qty;
-
-                if (foundItem && !this.cartItems.find(item => item.item.itemId == localCart[indexPosition].id)) {
-                    console.log('from getItems if')
-                    // this.itemService.items.find(item => item.itemId === localCart.id).availableQty -= localCart.qty;
-                    this.cartItems.push(new CartItem(foundItem, localCart[indexPosition].qty, localCart.checked));
+    
+            for (const cartItem of localUserCart) {
+                const foundItem = { ...this.itemService.items.find(item => item.itemId === cartItem.id) };
+    
+                if (foundItem) {
+                    const totalPrice = foundItem.price * cartItem.qty;
+                    foundItem.price = totalPrice;
+    
+                    const existingCartItem = this.cartItems.find(item => item.item.itemId === cartItem.id);
+    
+                    if (!existingCartItem) {
+                        this.cartItems.push(new CartItem(foundItem, cartItem.qty, cartItem.checked));
+                    }
                 }
             }
+    
             this.calculateTotalAmount();
             this.cartItemsChanged.next(this.cartItems);
             return this.cartItems;
         }
     }
+    
 
     calculateTotalAmount() {
         this.totalCartAmount = this.cartItems.reduce((total, item) => total + item.item.price, 0);

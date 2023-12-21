@@ -5,11 +5,11 @@ import { UsersComponent } from "./users/users.component";
 import { AboutUsComponent } from "./shared/about-us/about-us.component";
 import { ForgotPassComponent } from "./auth/forgot-pass/forgot-pass.component";
 import { AuthGuard } from "./auth/auth.guard";
+import { ItemsComponent } from "./items/items.component";
 
 const routes: Routes = [
     // { path: 'auth', component: AuthComponent },
     // { path: 'forgotpass', component: ForgotPassComponent },
-
 
     { path: 'aboutus', component: AboutUsComponent },
 
@@ -42,8 +42,8 @@ const routes: Routes = [
             return import('./auth/auth.module').then(m => m.AuthModule);
         }
     },
-    { path: '', redirectTo: '/auth', pathMatch: 'full' },
     { path: '**', redirectTo: '/user', pathMatch: 'full' },
+    { path: '', redirectTo: '/items', pathMatch: 'full' },
     
 ]
 

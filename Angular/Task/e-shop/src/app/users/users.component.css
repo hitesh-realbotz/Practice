@@ -1,10 +1,1 @@
-.dashboard{
-    display: flex;
-    flex-direction: row;
-}
-.dash-box{
-    border: 1px solid red;
-    margin: 10px;
-    height: 250px;
-    width: 250px;
-}
+
