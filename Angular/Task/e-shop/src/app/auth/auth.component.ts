@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { AuthResponseData, AuthService } from './auth.service';
 import { UserService } from '../users/user.service';
 
@@ -11,29 +11,30 @@ import { UserService } from '../users/user.service';
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.css']
 })
-export class AuthComponent implements OnDestroy {
+export class AuthComponent {
+  
   isLoading: boolean = false;
   isLoginMode = true;
   error: string = null;
-  closeSub: Subscription;
   role: string = 'buyer';
   constructor(private authService: AuthService,
     private router: Router,
     private toastr: ToastrService,
     private userService: UserService) { }
 
-
-
+  //Login & SignUp mode selection
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
     this.toastr.info(this.isLoginMode ? `Switched To Login Mode` : `Switched To SignUp Mode`);
   }
 
-  onForgotPass(){
+  //Displays ForgotPAssword From
+  onForgotPass() {
     this.router.navigate(['/forgotpass']);
   }
 
 
+  //Process User email => Displays User Security Question => Vlidates Answer in steps
   onSubmit(form: NgForm) {
     console.log(form.value);
     if (!form.valid) {
@@ -46,10 +47,8 @@ export class AuthComponent implements OnDestroy {
 
     if (this.isLoginMode) {
       authObs = this.authService.login(email, password);
-
     } else {
       authObs = this.authService.signup(email, password);
-
     }
 
     authObs.subscribe(
@@ -73,17 +72,6 @@ export class AuthComponent implements OnDestroy {
 
   onHandleError() {
     this.error = null;
-  }
-
-  ngOnDestroy() {
-    if (this.closeSub) {
-      this.closeSub.unsubscribe();
-    }
-  }
-
-  onGetUsers(){
-   console.log(this.userService.users);
-
   }
 
 }

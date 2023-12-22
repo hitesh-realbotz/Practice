@@ -1,53 +1,64 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ItemsService } from '../items.service';
 import { Item } from '../item.model';
 import { Location } from '@angular/common';
 import { Subscription } from 'rxjs';
-import { UserService } from 'src/app/users/user.service';
 import { User } from 'src/app/auth/user.model';
+import { SubscriptionService } from 'src/app/shared/subscriptions.service';
 
 @Component({
   selector: 'app-items-edit',
   templateUrl: './items-edit.component.html',
   styleUrls: ['./items-edit.component.css']
 })
-export class ItemsEditComponent implements OnInit {
+export class ItemsEditComponent implements OnInit, OnDestroy {
 
   id: number;
   editMode = false;
   item: Item;
   itemForm: FormGroup;
   category: string;
-  subscription: Subscription;
+  componentSubscriptions = new Subscription();
 
   constructor(private route: ActivatedRoute,
     private itemService: ItemsService,
     private router: Router,
     private location: Location,
-    private userService: UserService,
-    private ngZone: NgZone) { }
+    private ngZone: NgZone,
+    private subService: SubscriptionService) { }
 
   ngOnInit() {
-    // this.initForm();
-    this.route.params.subscribe(
-      (params: Params) => {
-        this.id = +params['id'];
-      });
 
-    this.itemService.itemChanged.subscribe(
-      (items: Item[]) => {
-        this.initForm();
-      });
+    //Subscribe to RouteParameter
+    this.componentSubscriptions.add(
+      this.route.params.subscribe(
+        (params: Params) => {
+          this.id = +params['id'];
+        })
+    );
 
-    this.userService.loggedUserChanged.subscribe(
-      (user: User) => {
-        this.initForm();
-      });
+    //Subscribe to ItemsChanges
+    this.componentSubscriptions.add(
+      this.subService.getItemChanges().subscribe(
+        (Items: Item[]) => {
+          this.initForm();
+        })
+    );
+
+    //Subscribe to LoggedUserChanges
+    this.componentSubscriptions.add(
+      this.subService.getLoggedUserChanges().subscribe(
+        (user: User) => {
+          this.initForm();
+        })
+    );
+
 
   }
 
+  //BlanlForm inCase of AddNewItem or Populates Form with ItemDetails in-case of EditItem
   private initForm() {
     console.log("Init Form called");
 
@@ -69,7 +80,6 @@ export class ItemsEditComponent implements OnInit {
     let availableQty = 1;
 
     if (this.editMode && !!this.item) {
-
       name = this.item.name;
       itemId = this.item.itemId
       sellerId = this.item.sellerId;
@@ -121,12 +131,8 @@ export class ItemsEditComponent implements OnInit {
     return null;
   }
 
+  //Manual Form Validation
   formValidate() {
-    // const isValid = [];
-    // console.log("itemForm.get('name').hasError('required')", this.itemForm.get('name').hasError('required'));
-    // ( this.itemForm.get('name').hasError('required') || this.itemForm.get('name').hasError('checkWhiteSpace') ) ? isValid.push(false) : '';
-    // ( this.itemForm.get('image').hasError('required') || this.itemForm.get('image').hasError('checkWhiteSpace') ) ? isValid.push(false) : '';
-    // return isValid.includes(false);
     let isValid = false;
     (this.itemForm.get('name').hasError('required')
       || this.itemForm.get('name').hasError('checkWhiteSpace')
@@ -146,6 +152,7 @@ export class ItemsEditComponent implements OnInit {
   }
 
 
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
   markAllAsTouched() {
     this.ngZone.runOutsideAngular(() => {
       Object.values(this.itemForm.controls).forEach(control => {
@@ -154,6 +161,7 @@ export class ItemsEditComponent implements OnInit {
     });
   }
 
+  //Add NewItem or Updates Existing Item on-submit
   onSubmit(event: Event) {
     if (this.formValidate()) {
       console.log("ValidForm");
@@ -184,9 +192,16 @@ export class ItemsEditComponent implements OnInit {
     }
   }
 
+ //Exit from Form
   onCancel() {
     // this.router.navigate(['../'], { relativeTo: this.route });
     this.location.back();
+  }
+
+
+  //Unsubscribe to all subscriptions
+  ngOnDestroy() {
+    this.componentSubscriptions.unsubscribe();
   }
 
 }

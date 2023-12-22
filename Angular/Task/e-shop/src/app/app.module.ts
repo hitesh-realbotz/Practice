@@ -11,6 +11,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AboutUsComponent } from './shared/about-us/about-us.component';
+import { SharedModule } from './shared/Shared.module';
 
 // import { ItemsComponent } from './items/items.component';
 // import { UsersComponent } from './users/users.component';
@@ -21,14 +22,6 @@ import { AboutUsComponent } from './shared/about-us/about-us.component';
     AppComponent,
     HeaderComponent,
     AboutUsComponent,
-    // ShopComponent,
-    // ShopEditComponent,
-    // AuthComponent,
-    // ForgotPassComponent,
-    // ItemsComponent,
-    // UsersComponent,
-    // UserProfileComponent
-
   ],
   imports: [
     BrowserModule,
@@ -37,6 +30,7 @@ import { AboutUsComponent } from './shared/about-us/about-us.component';
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule,
+    SharedModule,
 
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right',

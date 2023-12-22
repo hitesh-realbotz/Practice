@@ -15,7 +15,6 @@ import { UserService } from 'src/app/users/user.service';
 export class ForgotPassComponent implements OnInit {
 
   error: string = null;
-
   isUser: boolean = false;
   userForm: FormGroup;
   validUser: User;
@@ -28,24 +27,11 @@ export class ForgotPassComponent implements OnInit {
     private router: Router,
     private toastr: ToastrService) { }
 
-
   ngOnInit() {
     this.forgotPassForm();
   }
 
   forgotPassForm() {
-    // if (!!this.validUser) {
-    //   this.isUser = true;
-    //   this.email = this.validUser.email;
-    //   this.question = this.validUser.question;
-    // }
-    // this.userForm = new FormGroup({
-    //   'email': new FormControl(this.email, [Validators.required, Validators.email]),
-    //   'question': new FormControl(this.question),
-    //   'answer': new FormControl(''),
-    //   'password': new FormControl(''),
-    // });
-
     this.userForm = new FormGroup({
       'email': new FormControl(this.email, [Validators.required, Validators.email]),
       'question': new FormControl(this.question),
@@ -53,7 +39,6 @@ export class ForgotPassComponent implements OnInit {
       'password': new FormControl(''),
     });
   }
-
 
   onSubmit() {
 
@@ -80,10 +65,8 @@ export class ForgotPassComponent implements OnInit {
         console.log(this.validUser);
         this.forgotPassForm();
       } else {
-
         this.toastr.warning('Answer Not Matched', 'Answer Status!');
       }
-
     } else {
       let newPassword = this.userForm.value['password'];
       let passObs: Observable<AuthResponseData>;

@@ -3,12 +3,8 @@ import { HttpClient } from "@angular/common/http";
 import { BehaviorSubject, Observable, Subscription, map, switchMap, tap } from "rxjs";
 import { User } from "./user.model";
 import { UserService } from "../users/user.service";
-import { NavigationEnd, NavigationStart, Router } from "@angular/router";
-import { DataStorageService } from "../shared/data-storage.service";
+import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
-import { UserDetails } from "./userdetails.model";
-import { Item } from "../items/item.model";
-import { CartService } from "../items/cart/cart.service";
 import { ItemsService } from "../items/items.service";
 
 export interface AuthResponseData {
@@ -32,46 +28,34 @@ export interface AuthResponseData {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
-    private userList: User[];
     user = new BehaviorSubject<number>(null);
 
-    constructor(private http: HttpClient, private userService: UserService, private router: Router, private dataStorageService: DataStorageService, private toastr: ToastrService,
-        private cartService: CartService, private itemService: ItemsService) { }
+    constructor(private http: HttpClient,
+        private userService: UserService,
+        private router: Router,
+        private toastr: ToastrService,
+        private itemService: ItemsService) { }
 
+    //LogOut User
     logout() {
-
-
-        // const userIndex = this.userService.loggedUserIndex;
-        // const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-        // let usercart = usersDetList[userIndex].cart;
-        // for (const cartItem of usercart) {
-        //     console.log(cartItem.id);
-        //     console.log(this.itemService.items[this.itemService.getItemIndexById(cartItem.id)].availableQty);
-        //     const item = this.itemService.getItemById(cartItem.id);
-        //     item.availableQty += cartItem.qty;
-        //     console.log(item);
-        //     console.log(this.itemService.getItems());
-        // }
-        // this.dataStorageService.storeItems();
-
         this.userService.loggedUser = null;
+        this.userService.loggedUserIndex = null;
         this.userService.loggedUserChanged.next(null);
-        this.router.navigate(['/auth']);
-
         localStorage.removeItem('loggedUserIndex');
-
-        // if (this.tokenExpirationTimer) {
-        //     clearTimeout(this.tokenExpirationTimer);
-        // }
-        // this.tokenExpirationTimer = null;
+        if (!!this.itemService.items) {
+            this.router.navigate(['/items']);
+        } else {
+            this.router.navigate(['/auth']);
+        }
     }
 
 
+    //AutoLogin on Page-Refresh
     autoLogin() {
         console.log(" AutoLogin Called ");
         if ((JSON.parse(localStorage.getItem('loggedUserIndex'))) === null) {
             console.log(" Routing to Auth ");
-            this.router.navigate(['/items']);
+            // this.router.navigate(['/items']);
             return;
         } else {
             const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
@@ -82,15 +66,17 @@ export class AuthService {
         }
     }
 
+    //Gets UserDetails onClick Forgot Password
     forgotPass(email: string) {
         const user = this.userService.getUserSecurityQuestion(email);
         return user;
     }
 
+    //Recieves CurrentUser & NewPassword from user & updates Password
     resetPass(curUser: User, newPassword: string) {
         return this.login(curUser.email, curUser.password).pipe(
+            //Nesting Observables => Passing data from one Obs to Another
             switchMap((loginResData: any) => {
-
                 return this.upPassValues(loginResData, curUser, newPassword);
             }),
             tap((changePassResData: any) => {
@@ -99,6 +85,7 @@ export class AuthService {
         );
     }
 
+    //Password updation
     upPassValues(resData: any, user: User, newPassword: any) {
         this.logout();
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
@@ -116,28 +103,9 @@ export class AuthService {
             );
     }
 
-    //Not Working as user not logged-in
-    upPassValuesDirect(tokenVal: any, user: User, newPassword: any) {
-        // this.logout();
-        console.log(tokenVal);
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
-            {
-                "idToken": tokenVal,
-                "password": newPassword,
-                "returnSecureToken": true
-            }
-        )
-            .pipe(
-                tap(resData => {
-                    const updatedUser = this.handleAuthentication(resData.localId, resData.email, newPassword, resData.idToken, +resData.expiresIn);
-                    this.userService.ChangePass(updatedUser, user);
-                })
-            );
-    }
 
-
+    //SignUp Processing
     signup(email: string, password: string) {
-
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
             {
                 email: email,
@@ -146,15 +114,13 @@ export class AuthService {
             }
         )
             .pipe(
-                // catchError(this.handleError),
                 tap(resData => {
                     const user = this.handleAuthentication(resData.localId, resData.email, password, resData.idToken, +resData.expiresIn);
                     this.userService.addUser(user);
-                    // this.dataStorageService.userCred(resData.localId ,email, password);
                 }));
     }
 
-
+    //Login Processing
     login(email: string, password: string) {
         return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
             {
@@ -171,12 +137,11 @@ export class AuthService {
                 }));
     }
 
+    //Maintain User Record
     private handleAuthentication(userId: string, email: string, password: string, token: string, expiresIn: number) {
         const expirationDate = new Date(new Date().getTime() + (expiresIn * 1000));
         const user = new User(userId, email, password, token, expirationDate);
         console.log(user);
-        // this.autoLogout(expiresIn * 1000);
-        // this.autoLogout(2000);
         return user;
     }
 

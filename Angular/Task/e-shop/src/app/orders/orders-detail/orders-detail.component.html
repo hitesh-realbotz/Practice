@@ -20,7 +20,6 @@
                     <div *ngFor="let orderItem of order.orderedItems; let j = index" class="row ">
                         <div class="item-details" (click)="onItem($event, orderItem)">
 
-
                             <div class="item-image">
                                 <img [src]="orderItem.image" alt="ImageNotAvailable" class="img-responsive">
                             </div>

@@ -1,49 +1,55 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { OrderService } from '../orders.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UserService } from 'src/app/users/user.service';
 import { Order } from '../order.model';
 import { User } from 'src/app/auth/user.model';
 import { Subscription } from 'rxjs';
+import { SubscriptionService } from 'src/app/shared/subscriptions.service';
 
 @Component({
   selector: 'app-orders-detail',
   templateUrl: './orders-detail.component.html',
   styleUrls: ['./orders-detail.component.css']
 })
-export class OrdersDetailComponent implements OnInit {
+export class OrdersDetailComponent implements OnInit, OnDestroy {
   order: Order;
-  subscription: Subscription;
+  componentSubscriptions = new Subscription();
   index: number;
-
 
   constructor(
     private orderService: OrderService,
     private userService: UserService,
     private router: Router,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private subService: SubscriptionService) { }
 
   ngOnInit() {
 
-    // Use OrderEl.oredrID instead of index while fromlist to detail
-    this.route.params.subscribe(
-      (params: Params) => {
+    //Subscribe to RouteParameter
+    this.componentSubscriptions.add(
+      this.route.params.subscribe(
+        (params: Params) => {
           this.index = +params['id'];
-          console.log('this.index from param');
-          console.log(this.index);
           this.initProcess();
-        
-      });
+        })
+    );
 
-    this.userService.loggedUserChanged.subscribe(
-      (user: User) => {
-        this.initProcess();
-      });
+    //Subscribe to LoggedUserChanges
+    this.componentSubscriptions.add(
+      this.subService.getLoggedUserChanges().subscribe(
+        (user: User) => {
+          this.initProcess();
+        })
+    );
 
-    this.subscription = this.orderService.ordersChanged.subscribe(
-      (orders: Order[]) => {
-        this.initProcess();
-      });
+    //Subscribe to OrdersChanges
+    this.componentSubscriptions.add(
+      this.orderService.ordersChanged.subscribe(
+        (orders: Order[]) => {
+          this.initProcess();
+        })
+    );
   }
 
   initProcess() {
@@ -52,10 +58,14 @@ export class OrdersDetailComponent implements OnInit {
     }
   }
 
+  //Navigates to ItemDetail onClick of particular Item in Order
   onItem(event: Event, orderItem) {
-      this.router.navigate([ 'items','orders', this.index, orderItem.itemId]);
+    this.router.navigate(['items', 'orders', this.index, orderItem.itemId]);
   }
 
-
+  //Unsubscribe to all subscriptions
+  ngOnDestroy() {
+    this.componentSubscriptions.unsubscribe();
+  }
 
 }

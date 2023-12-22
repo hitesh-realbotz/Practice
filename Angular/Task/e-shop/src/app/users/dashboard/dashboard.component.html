@@ -4,7 +4,7 @@
         <div class="dash-box-detail"></div>
     </div>
     <div class="dash-box" (click)="onGetOrCreateShop()">
-        <div class="dash-box-heading">{{role === 'buyer' ? 'Become a Seller' : 'Shop'}}</div>
+        <div class="dash-box-heading">{{role === 'seller' ? 'Shop' :'Become a Seller'}}</div>
         <div class="dash-box-detail"></div>
     </div>
     <div class="dash-box" (click)="onCart()">
@@ -15,7 +15,7 @@
         <div class="dash-box-heading">My Orders</div>
         <div class="dash-box-detail">{{orderCount}}</div>
     </div>
-    <div class="dash-box" (click)="onShopOrders()" *ngIf="role !== 'buyer'">
+    <div class="dash-box" (click)="onShopOrders()" *ngIf="role === 'seller'">
         <div class="dash-box-heading">Shop Orders</div>
         <div class="dash-box-detail">{{sellerOrderCount}}</div>
     </div>

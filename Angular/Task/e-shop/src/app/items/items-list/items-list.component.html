@@ -7,7 +7,7 @@
         ></app-items-item>
     </div>
 </div> -->
-<div class="row mat-list">
+<div class="row mat-list" *ngIf="pagedData.length > 0">
     <div class="col-xs-12 col-md-12 col-12"> 
         <mat-paginator [length]="length" [pageSize]="itemsPerPage" [pageSizeOptions]="[1, 2, 3, 4]"
             aria-label="Select page" (page)="onPageChange($event)"> </mat-paginator>
@@ -30,7 +30,7 @@
         <mat-list>
             <div ngClass="mat-list-item">
                 <app-items-item *ngFor="let itemEl of pagedData; let i = index" [item]="itemEl"
-                    [index]="i"></app-items-item>
+                    [index]="i" [role]="role"></app-items-item>
             </div>
         </mat-list>
 
