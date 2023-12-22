@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormArray, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ItemsService } from '../items.service';
@@ -26,7 +26,8 @@ export class ItemsEditComponent implements OnInit {
     private itemService: ItemsService,
     private router: Router,
     private location: Location,
-    private userService: UserService) { }
+    private userService: UserService,
+    private ngZone: NgZone) { }
 
   ngOnInit() {
     // this.initForm();
@@ -49,7 +50,7 @@ export class ItemsEditComponent implements OnInit {
 
   private initForm() {
     console.log("Init Form called");
-    
+
     if (!!this.itemService.items) {
       this.id = +(this.route.snapshot.params['id']);
       // this.editMode = this.id != null;
@@ -93,7 +94,7 @@ export class ItemsEditComponent implements OnInit {
 
     this.itemForm.get('qty').valueChanges.subscribe((value) => {
       if (!this.editMode) {
-        this.itemForm.patchValue({ availableQty : this.itemForm.get('qty').value });
+        this.itemForm.patchValue({ availableQty: this.itemForm.get('qty').value });
       }
     });
   }
@@ -120,29 +121,68 @@ export class ItemsEditComponent implements OnInit {
     return null;
   }
 
-  onSubmit() {
-    const newItem = new Item(
-      this.itemForm.value['name'],
-      this.itemForm.value['image'],
-      this.itemForm.value['description'],
-      this.itemForm.value['category'],
-      this.itemForm.value['amount'],
-      this.itemForm.value['qty'],
-      null,
-      null,
-      this.itemForm.value['availableQty']
-    );
-    if (this.editMode) {
-      newItem.itemId = this.item.itemId;
-      newItem.sellerId = this.item.sellerId;
-      this.itemService.updateItem(this.id, newItem);
-    }
-    else {
-      this.itemService.addItem(newItem);
-    }
-    this.onCancel();
+  formValidate() {
+    // const isValid = [];
+    // console.log("itemForm.get('name').hasError('required')", this.itemForm.get('name').hasError('required'));
+    // ( this.itemForm.get('name').hasError('required') || this.itemForm.get('name').hasError('checkWhiteSpace') ) ? isValid.push(false) : '';
+    // ( this.itemForm.get('image').hasError('required') || this.itemForm.get('image').hasError('checkWhiteSpace') ) ? isValid.push(false) : '';
+    // return isValid.includes(false);
+    let isValid = false;
+    (this.itemForm.get('name').hasError('required')
+      || this.itemForm.get('name').hasError('checkWhiteSpace')
+      || this.itemForm.get('image').hasError('required')
+      || this.itemForm.get('image').hasError('checkWhiteSpace')
+      || this.itemForm.get('description').hasError('required')
+      || this.itemForm.get('description').hasError('checkWhiteSpace')
+      || this.itemForm.get('category').hasError('required')
+      || this.itemForm.get('amount').hasError('required')
+      || this.itemForm.get('amount').hasError('invalidAmount')
+      || this.itemForm.get('qty').hasError('required')
+      || this.itemForm.get('qty').hasError('invalidQty')
+    ) ? isValid = false
+      : isValid = true;
+
+    return isValid;
   }
 
+
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.itemForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+    });
+  }
+
+  onSubmit(event: Event) {
+    if (this.formValidate()) {
+      console.log("ValidForm");
+      const newItem = new Item(
+        this.itemForm.value['name'],
+        this.itemForm.value['image'],
+        this.itemForm.value['description'],
+        this.itemForm.value['category'],
+        this.itemForm.value['amount'],
+        this.itemForm.value['qty'],
+        null,
+        null,
+        this.itemForm.value['availableQty']
+      );
+      if (this.editMode) {
+        newItem.itemId = this.item.itemId;
+        newItem.sellerId = this.item.sellerId;
+        this.itemService.updateItem(this.id, newItem);
+      }
+      else {
+        this.itemService.addItem(newItem);
+      }
+      this.onCancel();
+
+    } else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
+  }
 
   onCancel() {
     // this.router.navigate(['../'], { relativeTo: this.route });

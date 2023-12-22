@@ -57,8 +57,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   onRemoveOrders(){
-    localStorage.removeItem('orderDetList');
+    
     this.orderService.orderDetList = [];
+    this.dataStorageService.storeOrders();
   }
 
   onGetItems() {

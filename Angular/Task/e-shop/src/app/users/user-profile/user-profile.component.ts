@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { UserService } from '../user.service';
 import { User } from 'src/app/auth/user.model';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -16,13 +17,12 @@ export class UserProfileComponent implements OnInit {
   // roles = ['buyer', 'seller'];
 
   userForm: FormGroup;
-  loggedUser: User = new User('','','','',new Date());
+  loggedUser: User = new User('', '', '', '', new Date());
   loggedUserIndex: number;
-  constructor(private userService: UserService, private router: Router, private toastr: ToastrService) { }
+  constructor(private userService: UserService, private router: Router, private toastr: ToastrService, private location: Location, private ngZone: NgZone) { }
 
 
   ngOnInit() {
-    
     this.userService.loggedUserChanged.subscribe(
       (user: User) => {
         if (!!user) {
@@ -31,16 +31,7 @@ export class UserProfileComponent implements OnInit {
           this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
         }
       });
-    
     this.initForm();
-
-    // this.userForm.valueChanges.subscribe(
-    //   (value) => console.log(value)
-    // );
-    // this.userForm.statusChanges.subscribe(
-    //   (status) => console.log(status)
-    // );
-
   }
 
   private initForm() {
@@ -60,24 +51,50 @@ export class UserProfileComponent implements OnInit {
     return null;
   }
   checkQuestion(control: FormControl): { [s: string]: boolean } {
-    if (control.value != 'Choose Security Question for Password Reset') {
+    if (control.value == 'Choose Security Question for Password Reset') {
       return { 'checkQuestion': true };
     }
     return null;
   }
 
-  onSubmit() {
+  // formValidate() {
+  //   let isValid = false;
+  //   (this.userForm.get('question').hasError('required')
+  //     || this.userForm.get('question').hasError('checkQuestion')
+  //     || this.userForm.get('answer').hasError('required')
+  //     || this.userForm.get('answer').hasError('checkWhiteSpace')
+  //   ) ? isValid = false
+  //     : isValid = true;
+  //   return isValid;
+  // }
 
-    // this.loggedUser.role = this.userForm.value['role'];
-    this.loggedUser.question = this.userForm.value['question'];
-    this.loggedUser.answer = this.userForm.value['answer'];
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.userForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+    });
+  }
 
-    this.userService.updateUser(this.loggedUser, this.loggedUserIndex);
+  onSubmit(event: Event) {
+    // if (this.formValidate()) {
+    if (this.userForm.valid) {
+      this.loggedUser.question = this.userForm.value['question'];
+      this.loggedUser.answer = this.userForm.value['answer'];
 
-    this.router.navigate(['user']);
-    this.toastr.info('User Deatils Updated', 'Update Success!');
-    this.userForm.reset();
+      this.userService.updateUser(this.loggedUser, this.loggedUserIndex);
 
+      this.router.navigate(['user']);
+      this.toastr.info('User Deatils Updated', 'Update Success!');
+      this.userForm.reset();
+    } else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
+  }
+
+  onCancel() {
+    this.location.back();
   }
 
 

@@ -7,18 +7,22 @@ import { User } from "../auth/user.model";
 import { tap } from "rxjs";
 import { Item } from "../items/item.model";
 import { ItemsService } from "../items/items.service";
+import { OrderService } from "../orders/orders.service";
+import { Order } from "../orders/order.model";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
     private userService: UserService;
     private itemService: ItemsService;
+    private orderService: OrderService;
     private authService: AuthService
     // users: User[];
 
     constructor(private http: HttpClient,
         private toastr: ToastrService,
-        private injector: Injector
-    ) { }
+        private injector: Injector,
+        private router: Router) { }
 
     storeItems() {
         this.getItemServiceInstance();
@@ -36,9 +40,39 @@ export class DataStorageService {
         this.getItemServiceInstance();
         return this.http.get<Item[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json')
             .subscribe(items => {
-                console.log(items);
-                
+                console.log('fetchItem', items);
+                // if (items == null) {
+                //     console.log('fetchItem loggedUser', this.userService.loggedUser);
+                //     if (this.userService.loggedUser == null) {
+                //         this.router.navigate(['/auth']);
+                //     }
+                //     this.itemService.setItems(items);
+                // } else {
+                //     this.itemService.setItems(items);
+                // }
                 this.itemService.setItems(items);
+
+            });
+    }
+    storeOrders() {
+
+        this.getOrderServiceInstance();
+        const orders = this.orderService.getOrders();
+
+        this.http.put('https://e-shop-4223f-default-rtdb.firebaseio.com/orders.json', orders).subscribe(response => {
+            console.log(response);
+
+        });
+        this.toastr.info('Remote data updated!', 'Data to server Action');
+        return true;
+    }
+    fetchOrders() {
+        console.log('FetchOrders called');
+        this.getOrderServiceInstance();
+        return this.http.get<Order[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/orders.json')
+            .subscribe(orders => {
+                console.log('fetched Orders', orders);
+                this.orderService.setOrders(orders);
             });
     }
 
@@ -70,11 +104,13 @@ export class DataStorageService {
                 console.log('fetchUser response ==> ', users);
 
                 const userIndex = JSON.parse(localStorage.getItem('loggedUserIndex'));
-                // const logUser = users[userIndex];                
-                this.userService.loggedUser = users[userIndex];
-                this.userService.loggedUserChanged.next(this.userService.loggedUser);
-                this.userService.loggedUserIndex = userIndex;
-                this.userService.setUsers(users);
+                if (userIndex != null) {
+                    this.userService.loggedUser = users[userIndex];
+                    this.userService.loggedUserChanged.next(this.userService.loggedUser);
+                    this.userService.loggedUserIndex = userIndex;
+                    this.userService.setUsers(users);
+                }
+
             });
     }
 
@@ -89,6 +125,12 @@ export class DataStorageService {
             this.itemService = this.injector.get(ItemsService);
         }
         return this.itemService;
+    }
+    getOrderServiceInstance(): OrderService {
+        if (!this.orderService) {
+            this.orderService = this.injector.get(OrderService);
+        }
+        return this.orderService;
     }
     getAuthServiceInstance(): AuthService {
         if (!this.authService) {

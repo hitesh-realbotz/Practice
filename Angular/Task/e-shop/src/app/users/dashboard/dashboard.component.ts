@@ -6,6 +6,8 @@ import { User } from 'src/app/auth/user.model';
 import { Item } from 'src/app/items/item.model';
 import { OrderService } from 'src/app/orders/orders.service';
 import { CartService } from 'src/app/items/cart/cart.service';
+import { DataStorageService } from 'src/app/shared/data-storage.service';
+import { Order } from 'src/app/orders/order.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,7 +28,8 @@ export class DashboardComponent {
     private userService: UserService,
     private itemService: ItemsService,
     private orderService: OrderService,
-    private cartService: CartService) {
+    private cartService: CartService,
+    private dataStorageService: DataStorageService) {
 
   }
 
@@ -39,14 +42,19 @@ export class DashboardComponent {
       });
 
     this.subscription = this.itemService.itemChanged.subscribe(
-      (Items: Item[]) => {
+      (items: Item[]) => {
         this.initProcess();
         // this.dataStorageService.storeItems();
       });
+      this.orderService.ordersChanged.subscribe(
+        (orders: Order[]) => {
+          this.initProcess();
+        }
+      )
   }
 
   initProcess() {
-    if (!!this.userService.loggedUser && !!this.itemService.items) {
+    if (!!this.userService.loggedUser && !!this.itemService.items && !!this.orderService.orderDetList.length) {
       this.role = this.userService.loggedUser.role;
 
       this.cartItemCount = this.cartService.getItems().length;
@@ -72,13 +80,12 @@ export class DashboardComponent {
     // this.router.navigate(['profile'], { relativeTo: this.route });
     this.router.navigate(['/user/profile']);
   }
+  
   onGetOrCreateShop() {
     if (this.role === 'buyer') {
       this.router.navigate(['shop/details']);
     } else {
       this.router.navigate(['shop']);
     }
-
   }
-
 }

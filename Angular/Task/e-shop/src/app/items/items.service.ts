@@ -7,6 +7,7 @@ import { User } from "../auth/user.model";
 import { DataStorageService } from "../shared/data-storage.service";
 import { UserDetails } from "../auth/userdetails.model";
 import { CartItem } from "./cart/cartItem.model";
+import { Router } from "@angular/router";
 
 @Injectable({ providedIn: 'root' })
 export class ItemsService {
@@ -22,7 +23,8 @@ export class ItemsService {
     constructor(private toastr: ToastrService, private userService: UserService, private dataStorageService: DataStorageService) { }
 
     setItems(items: Item[]) {
-        this.items = items;
+        this.items = !!items ? items : [];
+        // !!items ? '' : this.router.navigate(['/items']);
         this.itemChanged.next(this.items.slice());
     }
     getItems() {

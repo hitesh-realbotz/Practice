@@ -48,8 +48,8 @@ export class CartService {
 
         //     localUserCart = [];
         // }
-        const localUserCart = usersDetList[userIndex].cart ;
         console.log('usersDetList[userIndex].cart',usersDetList[userIndex].cart);
+        const localUserCart = usersDetList[userIndex].cart ;
 
         let itemFound = false;
         for (const [indexPosition, curCartItem] of this.cartItems.entries()) {

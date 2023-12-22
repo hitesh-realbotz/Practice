@@ -16,12 +16,16 @@ export class OrderService {
     ordersChanged = new Subject<Order[]>();
     orderDetList: Order[] = [];
     constructor(private userService: UserService, private router: Router, private itemService: ItemsService, private cartService: CartService, private dataStorageService: DataStorageService) {
-        console.log('Oredr constructor called');
+        // console.log('Oredr constructor called');
 
-        this.orderDetList = this.orderDetList.filter(order => order.buyerId === this.userService.loggedUser.id ||
-            order.orderedItems.some(item => item.sellerId === this.userService.loggedUser.id)
-    );
+        // this.orderDetList = this.orderDetList.filter(order => order.buyerId === this.userService.loggedUser.id ||
+        //     order.orderedItems.some(item => item.sellerId === this.userService.loggedUser.id)
+        // );
     }
+
+
+
+
 
 
     // newOrder(buyerName: string, contactNo: number, items: CartItem[]) {
@@ -44,28 +48,30 @@ export class OrderService {
             console.log(this.itemService.getItemById(selectedItem.item.itemId));
             this.itemService.getItemById(selectedItem.item.itemId).availableQty -= selectedItem.qty;
             console.log(this.itemService.getItemById(selectedItem.item.itemId));
-            
+
         }
         newOrder.orderedItems = orderItems;
-        let allOrders: Order[] = JSON.parse(localStorage.getItem('orderDetList'));
-        !!allOrders ? '' : allOrders = []; 
-        newOrder.orderId = (!!allOrders ? allOrders.length +1 : 1);
+
+        newOrder.orderId = this.orderDetList.length + 1;
         console.log(newOrder);
-        const index = this.orderDetList.push(newOrder) - 1;
-        if (index != null) {
-            this.ordersChanged.next(this.orderDetList);
-            this.cartService.clearCart(true);
-            console.log(this.orderDetList);
-            allOrders.push(newOrder);
-            // this.dataStorageService.storeItems();
-            localStorage.setItem('orderDetList', JSON.stringify(allOrders));
-            this.router.navigate(['/orders', newOrder.orderId, 'success']);
 
-        } else {
+        this.orderDetList.push(newOrder);
+        this.ordersChanged.next(this.orderDetList);
 
-        }
+        this.cartService.clearCart(true);
+        console.log(this.orderDetList);
+
+        this.dataStorageService.storeOrders();
+
+        this.router.navigate(['/orders', newOrder.orderId, 'success']);
 
     }
+
+    setOrders(orders: Order[]) {
+        this.orderDetList = !!orders ? orders : [];
+        this.ordersChanged.next(this.orderDetList.slice());
+    }
+
 
     getOrders() {
         return this.orderDetList.slice();
@@ -77,18 +83,31 @@ export class OrderService {
         return this.orderDetList.find(order => order.orderId === index)
     }
     getOrdersByBuyerId(index: string) {
-        return this.orderDetList.filter(order => order.buyerId === index)
+        return this.orderDetList.filter(order => order.buyerId === index);
     }
 
     getOrdersBySellerId(sellerId: string) {
-        return this.orderDetList.filter(order =>
-            order.orderedItems.some(item => item.sellerId === sellerId));
+        console.log('getOrdersBySellerId called');
+        const orders = JSON.parse(JSON.stringify(this.orderDetList.filter(order => order.orderedItems.some(item => item.sellerId === sellerId))));
+        for (const order of orders) {
+            const orderedItems = [];
+            let totalPrice = 0;
+            for (const item of order.orderedItems) {
+                if (item.sellerId === sellerId) {
+                    orderedItems.push(item);
+                    totalPrice += item.price;              
+                }
+            }
+            order.orderedItems = orderedItems;
+            order.totalPrice = totalPrice;
+        }
+        return orders;
     }
 
-    getItemById(id: number){
+    getItemById(id: number) {
         return this.itemService.getItemById(id);
     }
-    getItemIndexById(id: number){
+    getItemIndexById(id: number) {
         return this.itemService.getItemIndexById(id);
     }
 }

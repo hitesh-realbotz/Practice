@@ -4,25 +4,15 @@ import { Order } from "./order.model";
 import { OrderService } from "./orders.service";
 import { Injectable } from "@angular/core";
 import { UserService } from "../users/user.service";
+import { DataStorageService } from "../shared/data-storage.service";
 
 @Injectable({ providedIn: 'root' })
 export class OrdersResolverService implements Resolve<Order[]> {
-    constructor(private orderService: OrderService, private userService: UserService) { }
+    constructor(private orderService: OrderService, private dataStorageService: DataStorageService) { }
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Order[] | Observable<Order[]> | Promise<Order[]> {
         const orderDetList = this.orderService.orderDetList;
         if (orderDetList.length === 0 || !orderDetList) {
-            if ((JSON.parse(localStorage.getItem('orderDetList'))) === null) {
-                this.orderService.orderDetList = [];
-            } else {
-                this.orderService.orderDetList = JSON.parse(localStorage.getItem('orderDetList'));
-                setTimeout(() => {
-                    this.orderService.orderDetList = this.orderService.orderDetList.filter(order =>
-                        order.buyerId === this.userService.loggedUser.id ||
-                        order.orderedItems.some(item => item.sellerId === this.userService.loggedUser.id) );
-                }, 1000);
-                console.log('this.orderService.orderDetList from Resolver');
-                console.log(this.orderService.orderDetList);
-            }
+           this.dataStorageService.fetchOrders();
         } else {
             return orderDetList;
         }
