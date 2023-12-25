@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { User } from 'src/app/auth/user.model';
@@ -10,50 +10,82 @@ import { ItemsService } from 'src/app/items/items.service';
 import { Order } from 'src/app/orders/order.model';
 import { OrderService } from 'src/app/orders/orders.service';
 import { UserService } from 'src/app/users/user.service';
+import { SubscriptionService } from '../subscriptions.service';
 
 @Component({
   selector: 'app-payment',
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
-export class PaymentComponent implements OnInit {
+export class PaymentComponent implements OnInit, OnDestroy {
 
   paymentForm: FormGroup;
-  subscription: Subscription;
+  componentSubscriptions = new Subscription();
   items: CartItem[] = [];
   shippingMethods: string[] = ['standard', 'by-air'];
 
   constructor(private cartService: CartService, private userService: UserService, private itemService: ItemsService,
     private location: Location,
     private orderService: OrderService,
-    private ngZone: NgZone) { }
+    private ngZone: NgZone,
+    private subService: SubscriptionService) { }
 
   ngOnInit() {
     this.initForm();
-    this.userService.loggedUserChanged.subscribe(
-      (user: User) => {
-        this.cartService.getItems();
-      }
-    );
-    this.itemService.itemChanged.subscribe(
-      (items: Item[]) => {
-        this.cartService.getItems();
-      }
+    // this.userService.loggedUserChanged.subscribe(
+    //   (user: User) => {
+    //     this.cartService.getItems();
+    //   }
+    // );
+
+    // this.itemService.itemChanged.subscribe(
+    //   (items: Item[]) => {
+    //     this.cartService.getItems();
+    //   }
+    // );
+
+    // this.cartService.cartItemsChanged.subscribe(
+    //   (items: CartItem[]) => {
+    //     if (items != null) {
+    //       for (const item of items) {
+    //         if (item.checked) {
+    //           this.items.push(item);
+    //         }
+    //       }
+    //       this.initForm();
+    //     }
+    //   }
+    // );
+
+
+    this.componentSubscriptions.add(
+      this.subService.getLoggedUserChanges().subscribe(
+        (user: User) => {
+          this.cartService.getItems();
+        })
     );
 
-    this.subscription = this.cartService.cartItemsChanged.subscribe(
-      (items: CartItem[]) => {
-        if (items != null) {
-          for (const item of items) {
-            if (item.checked) {
-              this.items.push(item);
+    this.componentSubscriptions.add(
+      this.subService.getItemChanges().subscribe(
+        (Items: Item[]) => {
+          this.cartService.getItems();
+        })
+    );
+
+    this.componentSubscriptions.add(
+      this.cartService.cartItemsChanged.subscribe(
+        (items: CartItem[]) => {
+          if (items != null) {
+            for (const item of items) {
+              if (item.checked) {
+                this.items.push(item);
+              }
             }
+            this.initForm();
           }
-          this.initForm();
         }
-      }
+      )
     );
-
 
   }
 
@@ -156,6 +188,10 @@ checkCardNo(control: FormControl): { [s: string]: boolean } {
 
   onCancel() {
     this.location.back();
+  }
+
+  ngOnDestroy() {
+    this.componentSubscriptions.unsubscribe();
   }
 
 }

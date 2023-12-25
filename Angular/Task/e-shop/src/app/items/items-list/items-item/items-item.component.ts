@@ -1,76 +1,90 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Item } from '../../item.model';
 import { UserService } from 'src/app/users/user.service';
 import { ActivatedRoute, Data, Router } from '@angular/router';
 import { ItemsService } from '../../items.service';
 import { User } from 'src/app/auth/user.model';
 import { CartService } from '../../cart/cart.service';
+import { Subscription } from 'rxjs';
+import { SubscriptionService } from 'src/app/shared/subscriptions.service';
 
 @Component({
   selector: 'app-items-item',
   templateUrl: './items-item.component.html',
   styleUrls: ['./items-item.component.css']
 })
-export class ItemsItemComponent implements OnInit {
+export class ItemsItemComponent implements OnInit, OnDestroy {
 
   @Input('item') item: Item;
   @Input() index: number;
+  // @Input() role: string;
 
   role: string = '';
+  componentSubscriptions = new Subscription();
 
   constructor(private userService: UserService,
-              private itemService: ItemsService,
-              private cartService: CartService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+    private itemService: ItemsService,
+    private cartService: CartService,
+    private route: ActivatedRoute,
+    private router: Router,
+    private subService: SubscriptionService) { }
 
   ngOnInit() {
-    if(this.router.url.includes('shop')){
-      this.userService.loggedUserChanged.subscribe(
-        (user: User) => {
-          if (!!this.userService.loggedUser) {
-            this.role = this.userService.loggedUser.role;
-          }
-        });
-      }else{
-        if (!!this.userService.loggedUser) {
-          this.role = 'buyer';
-        }
+
+    if (this.router.url.includes('shop')) {
+      //Subscribe to LoggedUserChanges
+      this.componentSubscriptions.add(
+        this.subService.getLoggedUserChanges().subscribe(
+          (user: User) => {
+            console.log('loggedChanged in Item');
+            if (!!this.userService.loggedUser) {
+              this.role = this.userService.loggedUser.role;
+            }
+          })
+      );
+    } else {
+      if (!!this.userService.loggedUser) {
+        this.role = 'buyer';
       }
+    }
   }
 
-  
-  // onEditItem(event: Event, index: number) {
+
+  //OnClick Edit Item
   onEditItem(event: Event, item: Item) {
     event.stopPropagation();
     const index = this.itemService.getItemIndexById(item.itemId);
-    console.log('Edit clicked'+index);
+    console.log('Edit clicked' + index);
     this.router.navigate([index, 'edit'], { relativeTo: this.route.parent });
   }
 
-  // onDeleteItem(event: Event, index){
-  onDeleteItem(event: Event, item: Item){
+  //OnClick Delete Item
+  onDeleteItem(event: Event, item: Item) {
     event.stopPropagation();
     const index = this.itemService.getItemIndexById(item.itemId);
-    console.log('Delete clicked'+index);
+    console.log('Delete clicked' + index);
     this.itemService.deleteItem(index);
   }
 
-  // onAddToCart(event: Event,index: number){
-  onAddToCart(event: Event,item: Item){
+  //OnClick AddToCart Item
+  onAddToCart(event: Event, item: Item) {
     event.stopPropagation();
     const index = this.itemService.getItemIndexById(item.itemId);
-    console.log('AddToCart clicked'+ index);
+    console.log('AddToCart clicked' + index);
     // this.itemService.AddToCart(index,null,null);
-    this.cartService.AddToCart(index,null,null);
+    this.cartService.AddToCart(index, null, null);
     this.router.navigate(['items']);
   }
-  
-  onItem(item: Item){
+
+
+  //Navigate to ItemDetails OnClick of Item
+  onItem(item: Item) {
     let index = this.itemService.getItemIndexById(item.itemId);
-    // if (this.router.url.includes('shop')) {
-    //   index = this.itemService.sellerItemsIndex[index];
-    // }
     this.router.navigate([index], { relativeTo: this.route.parent })
+  }
+
+  //Unsubscribe to all subscriptions
+  ngOnDestroy() {
+    this.componentSubscriptions.unsubscribe();
   }
 }

@@ -15,77 +15,55 @@ export class OrderService {
 
     ordersChanged = new Subject<Order[]>();
     orderDetList: Order[] = [];
-    constructor(private userService: UserService, private router: Router, private itemService: ItemsService, private cartService: CartService, private dataStorageService: DataStorageService) {
-        // console.log('Oredr constructor called');
-
-        // this.orderDetList = this.orderDetList.filter(order => order.buyerId === this.userService.loggedUser.id ||
-        //     order.orderedItems.some(item => item.sellerId === this.userService.loggedUser.id)
-        // );
-    }
+    constructor(private userService: UserService, 
+        private router: Router, 
+        private itemService: ItemsService, 
+        private cartService: CartService, 
+        private dataStorageService: DataStorageService) { }
 
 
-
-
-
-
-    // newOrder(buyerName: string, contactNo: number, items: CartItem[]) {
-    //     const orderItems: OrderItem[] = [];
-    //     let totalPrice: number = 0;
-    //     for (const selectedItem of items) {
-    //         orderItems.push(new OrderItem(selectedItem));
-    //         totalPrice += selectedItem.item.price;
-    //     }
-    //     const newOrder = new Order((this.orderDetList.length+1), this.userService.loggedUser.id, buyerName, contactNo, orderItems, totalPrice);
-    //     this.orderDetList.push(newOrder);
-    //     console.log(this.orderDetList);
-    //     localStorage.setItem('orderDetList', JSON.stringify(this.orderDetList));
-    // }
-
+    //Add new Order to array & on Remote-Server and Clears Cart
     newOrder(newOrder: Order, items: CartItem[]) {
         const orderItems: OrderItem[] = [];
         for (const selectedItem of items) {
-            orderItems.push(new OrderItem(selectedItem));
-            console.log(this.itemService.getItemById(selectedItem.item.itemId));
+            orderItems.push(new OrderItem(selectedItem));    
             this.itemService.getItemById(selectedItem.item.itemId).availableQty -= selectedItem.qty;
-            console.log(this.itemService.getItemById(selectedItem.item.itemId));
-
         }
         newOrder.orderedItems = orderItems;
-
         newOrder.orderId = this.orderDetList.length + 1;
-        console.log(newOrder);
-
         this.orderDetList.push(newOrder);
         this.ordersChanged.next(this.orderDetList);
-
         this.cartService.clearCart(true);
-        console.log(this.orderDetList);
-
         this.dataStorageService.storeOrders();
-
+        this.dataStorageService.storeItems();
         this.router.navigate(['/orders', newOrder.orderId, 'success']);
-
     }
 
+    //Sets Orders
     setOrders(orders: Order[]) {
         this.orderDetList = !!orders ? orders : [];
         this.ordersChanged.next(this.orderDetList.slice());
     }
 
 
+    //Gets Orders
     getOrders() {
         return this.orderDetList.slice();
     }
+
     getOrderByIndex(index: number) {
         return this.orderDetList[index];
     }
+
     getOrderById(index: number) {
         return this.orderDetList.find(order => order.orderId === index)
     }
+
     getOrdersByBuyerId(index: string) {
         return this.orderDetList.filter(order => order.buyerId === index);
     }
 
+    //Get Orders by SelllerId
     getOrdersBySellerId(sellerId: string) {
         console.log('getOrdersBySellerId called');
         const orders = JSON.parse(JSON.stringify(this.orderDetList.filter(order => order.orderedItems.some(item => item.sellerId === sellerId))));
@@ -104,9 +82,12 @@ export class OrderService {
         return orders;
     }
 
+    //Get ItemById for item in Order
     getItemById(id: number) {
         return this.itemService.getItemById(id);
     }
+
+    //Get ItemIndexById for item in Order
     getItemIndexById(id: number) {
         return this.itemService.getItemIndexById(id);
     }

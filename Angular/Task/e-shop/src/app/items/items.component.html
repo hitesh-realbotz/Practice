@@ -1,12 +1,24 @@
-<!-- 
-<div class="row">
-    <div class="col-md-9">
+<!-- <div *ngIf="isAuthenticated; else notLoggedIn">
+    <div class="row" *ngIf="selectedItem.length > 0; else itemsNotAvailable">
+        <div class="col-md-9">
+            <router-outlet></router-outlet>
+        </div>
+        <div class="col-md-3">
+            <app-cart></app-cart>
+        </div>
+    </div>
+    <ng-template #itemsNotAvailable>
+        <div class="col-md-12">
+            Items Not Available!!!
+        </div>
+    </ng-template>
+</div>
+<ng-template #notLoggedIn>
+    <div class="col-md-12">
         <router-outlet></router-outlet>
     </div>
-    <div class="col-md-3">
-        <app-cart></app-cart>
-    </div>
-</div> -->
+</ng-template> -->
+
 
 <div *ngIf="isAuthenticated; else notLoggedIn">
     <div class="row">

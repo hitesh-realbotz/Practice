@@ -6,13 +6,12 @@ import { AboutUsComponent } from "./shared/about-us/about-us.component";
 import { ForgotPassComponent } from "./auth/forgot-pass/forgot-pass.component";
 import { AuthGuard } from "./auth/auth.guard";
 import { ItemsComponent } from "./items/items.component";
+import { PageNotFoundComponent } from "./shared/page-not-found/page-not-found.component";
 
 const routes: Routes = [
-    // { path: 'auth', component: AuthComponent },
-    // { path: 'forgotpass', component: ForgotPassComponent },
 
     { path: 'aboutus', component: AboutUsComponent },
-
+    
     {
         path: 'user',
         canLoad: [AuthGuard],
@@ -42,8 +41,9 @@ const routes: Routes = [
             return import('./auth/auth.module').then(m => m.AuthModule);
         }
     },
-    { path: '**', redirectTo: '/user', pathMatch: 'full' },
     { path: '', redirectTo: '/items', pathMatch: 'full' },
+    { path: '**', component: PageNotFoundComponent },
+    
     
 ]
 

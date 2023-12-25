@@ -20,13 +20,19 @@ export class ItemsService {
     cartItemsChanged = new Subject<CartItem[]>();
     cartItems: CartItem[] = [];
 
-    constructor(private toastr: ToastrService, private userService: UserService, private dataStorageService: DataStorageService) { }
+    constructor(private toastr: ToastrService, 
+                private userService: UserService, 
+                private dataStorageService: DataStorageService,
+                private router: Router) { }
 
+    //Sets Items
     setItems(items: Item[]) {
         this.items = !!items ? items : [];
-        // !!items ? '' : this.router.navigate(['/items']);
+        console.log('!!items set', !!items)
         this.itemChanged.next(this.items.slice());
     }
+
+    //Get All Items
     getItems() {
         if (!this.items) {
             return null;
@@ -34,23 +40,21 @@ export class ItemsService {
         return this.items.slice();
     }
 
+    //Get Item by Item's index
     public getItem(index: number) {
         return this.items[index];
     }
+    
     public getItemById(id: number) {
         return this.items.find(item => item.itemId === id);
     }
+
     public getItemIndexById(id: number) {
         return this.items.findIndex(item => item.itemId === id);
     }
 
+    //Add new item to array & on Remote-Server
     addItem(item: Item) {
-        // this.userService.loggedUserChanged.subscribe(
-        //     (user: User) => {
-        //         item.sellerId = user.id;
-        //         item.itemId = (this.items.length + 1);
-        //     }
-        // );
         item.sellerId = this.userService.loggedUser.id;
         item.itemId = (this.items.length + 1);
 
@@ -60,6 +64,7 @@ export class ItemsService {
         this.toastr.info('New Item Added', 'Add Action');
     }
 
+    //Updates item in array & on Remote-Server
     updateItem(index: number, newItem: Item) {
         this.items[index] = newItem;
         this.itemChanged.next(this.items.slice());
@@ -67,6 +72,7 @@ export class ItemsService {
         this.toastr.info('Item Updated', 'Update Action');
     }
 
+    //Deletes item from array & on Remote-Server
     deleteItem(index: number) {        
         this.items.splice(this.sellerItemsIndex[index], 1);
         this.itemChanged.next(this.items.slice());
@@ -74,79 +80,8 @@ export class ItemsService {
         this.toastr.warning('Item Deleted', 'Delete Action');
     }
 
-    // AddToCart(index?: number, cartItem?: CartItem, decreaseQuantity?: boolean) {
-    //     console.log(index);
-    //     console.log('index != null : ', index != null);
-    //     console.log('decreaseQuantity : ', decreaseQuantity);
-    //     console.log(this.items[index]);
-    //     let item: Item;
-    //     if (index != null) {
-    //         item = { ...this.items[index] };
-    //         console.log(item);
-    //     } else {
-    //         console.log("else");
-    //         item = { ...cartItem.item };
-    //     }
 
-    //     console.log("item from update method", item);
-    //     const userIndex = this.userService.loggedUserIndex;
-    //     const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-    //     console.log("userIndex from update method", userIndex);
-    //     console.log("usersDetList from update method", usersDetList);
-    //     console.log("usersDetList from update method", usersDetList);
-    //     const localUserCart: { id: number, qty: number }[] = usersDetList[userIndex].cart;
-
-    //     let itemFound = false;
-    //     for (const [indexPosition, curCartItem] of this.cartItems.entries()) {
-    //         if (curCartItem.item.itemId === item.itemId) {
-
-    //             if (index != null && curCartItem.item.availableQty > curCartItem.qty) {
-    //                 curCartItem.item.price += item.price;
-    //                 curCartItem.qty += 1;
-    //             } else if (decreaseQuantity == null && curCartItem.item.availableQty > curCartItem.qty) {
-    //                 console.log("curCartItem.item.availableQty", curCartItem.item.availableQty);
-    //                 console.log("curCartItem.qty", curCartItem.qty);
-    //                 curCartItem.item.price += item.price / curCartItem.qty;
-    //                 curCartItem.qty += + 1;
-    //             } else if (decreaseQuantity && curCartItem.qty > 1) {
-    //                 curCartItem.item.price -= item.price / curCartItem.qty;
-    //                 curCartItem.qty = curCartItem.qty - 1;
-    //             } else if(decreaseQuantity) {
-    //                 this.cartItems.splice(indexPosition, 1);
-    //                 this.toastr.warning('Item removed from cart!!');
-    //             } else{
-    //                 this.toastr.warning('Not Available in Stock!!');
-    //             }
-
-    //             for (const [indexPosition, localCart] of localUserCart.entries()) {
-    //                 if (curCartItem.item.itemId === localCart.id) {
-    //                     if (index != null) {
-    //                         localCart.qty += 1;
-    //                     } else if (decreaseQuantity == null) {
-    //                         localCart.qty += 1;
-    //                     } else if (decreaseQuantity && curCartItem.qty > 1) {
-    //                         localCart.qty -= 1;
-    //                     } else {
-    //                         localUserCart.splice(indexPosition, 1);
-    //                     }
-    //                     break;
-
-    //                 }
-    //             }
-    //             itemFound = true;
-    //             break;
-    //         }
-    //     }
-    //     if (!itemFound) {
-    //         localUserCart.push({ id: item.itemId, qty: 1 });
-    //         this.cartItems.push(new CartItem(item, 1));
-    //         // this.cartItemsChanged.next(this.cartItems);
-    //     }
-    //     this.cartItemsChanged.next(this.cartItems);
-    //     console.log(this.cartItems);
-    //     localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
-    // }
-
+    //Get Item by SellerId
     getItemsBySellerId(id: string) {
         const sellerItems: Item[] = [];
         this.sellerItemsIndex = [];
@@ -158,20 +93,4 @@ export class ItemsService {
         }
         return sellerItems;
     }
-
-    
-
-
-    // getItemsById(localUserCart: { id: number, qty: number }[]) {
-    //     this.cartItems = [];
-
-    //     for (const localCart of localUserCart) {
-    //         const foundItem = { ...this.items.find(item => item.itemId === localCart.id) };
-    //         foundItem.price = foundItem.price * localCart.qty;
-    //         if (foundItem) {
-    //             this.cartItems.push(new CartItem(foundItem, localCart.qty));
-    //         }
-    //     }
-    //     return this.cartItems;
-    // }
 }

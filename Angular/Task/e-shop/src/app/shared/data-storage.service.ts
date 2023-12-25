@@ -41,19 +41,14 @@ export class DataStorageService {
         return this.http.get<Item[]>('https://e-shop-4223f-default-rtdb.firebaseio.com/items.json')
             .subscribe(items => {
                 console.log('fetchItem', items);
-                // if (items == null) {
-                //     console.log('fetchItem loggedUser', this.userService.loggedUser);
-                //     if (this.userService.loggedUser == null) {
-                //         this.router.navigate(['/auth']);
-                //     }
-                //     this.itemService.setItems(items);
+                // if (!items && !this.userService.loggedUser) {
+                //     this.router.navigate(['/auth']);
                 // } else {
-                //     this.itemService.setItems(items);
                 // }
                 this.itemService.setItems(items);
-
             });
     }
+
     storeOrders() {
 
         this.getOrderServiceInstance();
@@ -108,8 +103,8 @@ export class DataStorageService {
                     this.userService.loggedUser = users[userIndex];
                     this.userService.loggedUserChanged.next(this.userService.loggedUser);
                     this.userService.loggedUserIndex = userIndex;
-                    this.userService.setUsers(users);
                 }
+                this.userService.setUsers(users);
 
             });
     }

@@ -17,5 +17,6 @@ export class AppComponent implements OnInit {
     this.dataStorageService.fetchItems();
     this.authService.autoLogin();
   }
+  
   title = 'e-shop';
 }

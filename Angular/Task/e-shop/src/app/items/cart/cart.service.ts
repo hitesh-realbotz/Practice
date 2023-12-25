@@ -18,16 +18,20 @@ export class CartService {
     constructor(private toastr: ToastrService, private itemService: ItemsService, private userService: UserService, private dataStorageService: DataStorageService) { }
 
 
+    //Add to Cart, Update CartItem quantity (+/-)
     AddToCart(index?: number, cartItem?: CartItem, decreaseQuantity?: boolean) {
         let item: Item;
         let actualItem: Item;
+
+        //On-Click Add to Cart From ItemList
         if (index != null) {
             item = { ...this.itemService.items[index] };
             actualItem = this.itemService.items[index];
             console.log("Index Available  ", item);
             console.log("Index AvailableQty  ", item.availableQty);
-
-        } else {
+        }
+        //On-Click + / - From CartDetails
+        else {
             console.log("else");
             item = { ...cartItem.item };
             actualItem = this.itemService.getItemById(cartItem.item.itemId);
@@ -35,69 +39,56 @@ export class CartService {
 
         const userIndex = this.userService.loggedUserIndex;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-        // const localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
-        // console.log('usersDetList[userIndex]',usersDetList);
-        // console.log('usersDetList[userIndex]',userIndex);
-        // console.log('usersDetList[userIndex]',usersDetList[userIndex]);
-        // console.log(usersDetList[userIndex].cart);
-        // let localUserCart;
-        // if (usersDetList[userIndex].cart) {
-        //     localUserCart = usersDetList[userIndex].cart ;
-        // }else{
-            
-
-        //     localUserCart = [];
-        // }
-        console.log('usersDetList[userIndex].cart',usersDetList[userIndex].cart);
-        const localUserCart = usersDetList[userIndex].cart ;
+        const localUserCart = usersDetList[userIndex].cart;
 
         let itemFound = false;
         for (const [indexPosition, curCartItem] of this.cartItems.entries()) {
             if (curCartItem.item.itemId === item.itemId) {
-                console.log("curCartItem.qty  ", curCartItem.qty);
-                if (index != null && item.availableQty > curCartItem.qty) {
-                    // if (index != null && actualItem.availableQty > 0) {
+                
+                //On-Click Add to Cart From ItemList
+                if (index != null && item.availableQty > curCartItem.qty) { 
                     curCartItem.item.price += item.price;
                     this.updateLocalStorage(localUserCart, curCartItem, false);
                     curCartItem.qty += 1;
-                    // actualItem.availableQty -= 1;
-                } else if (decreaseQuantity == null && item.availableQty > curCartItem.qty) {
-                    // } else if (decreaseQuantity == null && actualItem.availableQty > 0) {
+                } 
+                //On-Click + From CartDetails
+                else if (decreaseQuantity == null && item.availableQty > curCartItem.qty) { 
                     curCartItem.item.price += item.price / curCartItem.qty;
                     this.updateLocalStorage(localUserCart, curCartItem, false);
                     curCartItem.qty += 1;
-                    // actualItem.availableQty -= 1;
-                } else if (decreaseQuantity && curCartItem.qty > 1) {
+                }
+                //Decreases CartItem quantity => On-Click - From CartDetails
+                else if (decreaseQuantity && curCartItem.qty > 1) { 
                     curCartItem.item.price -= item.price / curCartItem.qty;
                     this.updateLocalStorage(localUserCart, curCartItem, true);
                     curCartItem.qty = curCartItem.qty - 1;
-                    // actualItem.availableQty += 1;
-                } else if (decreaseQuantity) {
+                }
+                //Removes CartItem => On-Click - From CartDetails 
+                else if (decreaseQuantity) { 
                     this.updateLocalStorage(localUserCart, curCartItem, true);
                     this.cartItems.splice(indexPosition, 1);
-                    // actualItem.availableQty += 1;
                     this.toastr.warning('Item removed from cart!!');
-                } else {
+                }
+                //CartItem quantity reached available quantity 
+                else {
                     this.toastr.warning('Not Available in Stock!!');
                 }
-
                 itemFound = true;
                 break;
             }
         }
+        //On-Click Add to Cart From ItemList in case of empty Cart
         if (!itemFound) {
             console.log('itemNot found');
             localUserCart.push({ id: item.itemId, qty: 1, checked: true });
             this.cartItems.push(new CartItem(item, 1, true));
-            // actualItem.availableQty -= 1;
         }
         this.calculateTotalAmount();
         this.cartItemsChanged.next(this.cartItems);
-
-        console.log(this.cartItems);
         localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
     }
 
+    //UPdates local storage as per UserCart
     updateLocalStorage(localUserCart, curCartItem, decreaseQuantity) {
         for (let [indexPosition, localCart] of localUserCart.entries()) {
             console.log('curCartItem.qty : ', curCartItem.qty)
@@ -117,87 +108,44 @@ export class CartService {
         }
     }
 
-    // getItems() {
-    //     console.log('getItems called : ');
-    //     console.log(this.cartItems);
-    //     if (!!this.userService.loggedUser && !!this.itemService.items) {
-    //         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-    //         const userIndex = this.userService.loggedUserIndex;
-    //         // let localUserCart: { id: number, qty: number, checked: boolean }[] = usersDetList[userIndex].cart;
-    //         let localUserCart = [];
-    //         if (usersDetList && usersDetList[userIndex] && usersDetList[userIndex].cart) {
-    //             localUserCart = usersDetList[userIndex].cart;
-    //         }
-    //         this.cartItems = [];
-    //         // for (const localCart of localUserCart) {
-    //         for (let [indexPosition, localCart] of localUserCart.entries()) {
-    //             const foundItem = { ...this.itemService.items.find(item => item.itemId === localCart.id)};
 
-    //             console.log('found Item from getItems : ', foundItem);
-    //             console.log('found localCart from getItems : ', localCart[indexPosition]);
-    //             foundItem.price = foundItem.price * localCart[indexPosition].qty;
-
-    //             if (foundItem && !this.cartItems.find(item => item.item.itemId == localCart[indexPosition].id)) {
-    //                 console.log('from getItems if')
-    //                 // this.itemService.items.find(item => item.itemId === localCart.id).availableQty -= localCart.qty;
-    //                 this.cartItems.push(new CartItem(foundItem, localCart[indexPosition].qty, localCart.checked));
-    //             }
-    //         }
-    //         this.calculateTotalAmount();
-    //         this.cartItemsChanged.next(this.cartItems);
-    //         return this.cartItems;
-    //     }
-    // }
-
+    //Retrives UserCart Data
     getItems() {
         if (!!this.userService.loggedUser && !!this.itemService.items) {
             const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
             const userIndex = this.userService.loggedUserIndex;
             const localUserCart = usersDetList?.[userIndex]?.cart || [];
-    
             this.cartItems = [];
-    
             for (const cartItem of localUserCart) {
                 const foundItem = { ...this.itemService.items.find(item => item.itemId === cartItem.id) };
-    
                 if (foundItem) {
                     const totalPrice = foundItem.price * cartItem.qty;
                     foundItem.price = totalPrice;
-    
                     const existingCartItem = this.cartItems.find(item => item.item.itemId === cartItem.id);
-    
                     if (!existingCartItem) {
                         this.cartItems.push(new CartItem(foundItem, cartItem.qty, cartItem.checked));
                     }
                 }
             }
-    
             this.calculateTotalAmount();
             this.cartItemsChanged.next(this.cartItems);
             return this.cartItems;
         }
     }
-    
 
+
+    //Calculates TotalCart Amount & Selected CartItems's TotalAmount
     calculateTotalAmount() {
         this.totalCartAmount = this.cartItems.reduce((total, item) => total + item.item.price, 0);
         this.totalSelectedCartAmount = this.cartItems.reduce((total, item) => total + (item.checked ? (item.item.price) : 0), 0);
     }
 
 
+    //Removes CartItems
     clearCart(orderPlaced?: boolean) {
         const userIndex = this.userService.loggedUserIndex;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
         let usercart = usersDetList[userIndex].cart;
-        if (!!orderPlaced) {
-            for (const cartItem of usercart) {
-                // console.log(this.itemService.items[this.itemService.getItemIndexById(cartItem.id)].availableQty);
-                // this.itemService.items[this.itemService.getItemIndexById(cartItem.id)].availableQty -= cartItem.qty;
-                // console.log(this.itemService.items[this.itemService.getItemIndexById(cartItem.id)].availableQty);
-            }
-            this.dataStorageService.storeItems();
-        }
-
         usersDetList[userIndex].cart = [];
         localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));
         this.cartItems = [];

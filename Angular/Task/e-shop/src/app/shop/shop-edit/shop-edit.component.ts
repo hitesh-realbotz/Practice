@@ -18,10 +18,11 @@ export class ShopEditComponent implements OnInit {
   shopForm: FormGroup;
   curUser: User;
   constructor(private userService: UserService,
-              private toastr: ToastrService,
-              private route: ActivatedRoute,
-              private router: Router) { }
+    private toastr: ToastrService,
+    private route: ActivatedRoute,
+    private router: Router) { }
 
+  //BlanlForm inCase of Shop registration or Populates Form with ShopDetails in-case of EditShop
   ngOnInit() {
     this.curUser = this.userService.loggedUser;
     this.editMode = !!this.curUser.shop;
@@ -47,6 +48,7 @@ export class ShopEditComponent implements OnInit {
     });
   }
 
+  //Registers as Seller & Updates ShopDetails or Updates Existing ShopDetails on-submit
   onSubmit() {
     const newShop = new Shop(
       this.shopForm.value['shopName'],
@@ -67,7 +69,7 @@ export class ShopEditComponent implements OnInit {
     this.onCancel();
   }
 
-
+  //Exit from Form
   onCancel() {
     this.router.navigate(['../'], { relativeTo: this.route });
   }

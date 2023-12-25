@@ -26,81 +26,58 @@ export class UserService {
 
 
 
+    //Add new user to array & on Remote-Server
     addUser(user: User) {
-        console.log(this.usersDetList);
-        console.log('after');
         this.users.push(user);
         this.loggedUser = user;
         this.loggedUserChanged.next(user);
         this.loggedUserIndex = this.users.length - 1;
-
         const userDetails = new UserDetails(user.id, user.email);
         this.updateLocalStorage(userDetails, this.loggedUserIndex);
-
-        localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
-        localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
-
+        // localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
+        // localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
         this.dataStorageService.storeUsers();
     }
 
+    //Updates LocalStorage to store UserCart Details
     updateLocalStorage(userDetails: UserDetails, loggedUserIndex: number) {
-        // Adding new user to local storage
-        // if ((JSON.parse(localStorage.getItem('usersDetailList'))) === null) {
-        //     this.usersDetList.push(userDetails);
-        // } else {
-        //     this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-        //     console.log('!!this.usersDetList.find(user=> user.id === userDetails.id)', !!this.usersDetList.find(user=> user.id === userDetails.id));
-        //     !!this.usersDetList.find(user=> user.id === userDetails.id) ? '' : this.usersDetList.push(userDetails);
-        // }
-
         this.usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-        !!this.usersDetList 
-                        ? ( !!this.usersDetList.find(user => user.id === userDetails.id) ? '' : this.usersDetList.push(userDetails) ) 
-                        : ( this.usersDetList = [userDetails] );
+        !!this.usersDetList
+            ? (!!this.usersDetList.find(user => user.id === userDetails.id) ? '' : this.usersDetList.push(userDetails))
+            : (this.usersDetList = [userDetails]);
 
         localStorage.setItem('usersDetailList', JSON.stringify(this.usersDetList));
         localStorage.setItem('loggedUserIndex', JSON.stringify(loggedUserIndex));
     }
 
 
+    //Get User
     getUsers() {
         return this.users.slice();
     }
 
+    //Set User
     setUsers(users: User[]) {
         this.users = !!users ? users : [];
         this.usersChanged.next(this.users.slice());
     }
 
-    // setLoggedUser(user: User) {
-
-    //     let index = this.getUserIndex(user.id);
-    //     if (index != -1) {
-    //         this.loggedUser = this.users[index];
-    //         this.loggedUserChanged.next(this.loggedUser);   
-    //         this.loggedUserDet = new UserDetails(user.id, user.email);
-    //         console.log('login local :'+this.loggedUserDet);
-    //         localStorage.setItem('loggedUserDetail', JSON.stringify(this.loggedUserDet));
-    //     }
-    // }
-
+    //Sets loggedUSer on Login
     setLoggedUser(user: User) {
-        console.log('set logged user called');
+        console.log('set logged user called', this.users);
         const index = this.getUserIndex(user.id);
-        
-            this.loggedUser = this.users[index];
-            console.log("Logged User ===> ");
-            console.log(this.loggedUser);
-            this.loggedUserChanged.next(this.loggedUser);
-            this.loggedUserIndex = index;
-            this.getAuthServiceInstance();
-            this.authService.user.next(this.loggedUserIndex);
-            const userDetails = new UserDetails(user.id, user.email);
-            this.updateLocalStorage(userDetails, this.loggedUserIndex);
-            // localStorage.setItem('loggedUserIndex', JSON.stringify(this.loggedUserIndex));
-        
+        this.loggedUser = this.users[index];
+        console.log("Logged User ===> ");
+        console.log(this.loggedUser);
+        this.loggedUserChanged.next(this.loggedUser);
+        this.loggedUserIndex = index;
+        this.getAuthServiceInstance();
+        this.authService.user.next(this.loggedUserIndex);
+        const userDetails = new UserDetails(user.id, user.email);
+        this.updateLocalStorage(userDetails, this.loggedUserIndex);
     }
 
+    //Updates user in array & on Remote-Server
     updateUser(upLoggedUser: User, index: number) {
         this.loggedUser = upLoggedUser;
         this.loggedUserChanged.next(upLoggedUser);
@@ -110,6 +87,7 @@ export class UserService {
     }
 
 
+    //Get UserIndex in array
     getUserIndex(id: string) {
         for (const [index, userFromList] of this.users.entries()) {
             if (userFromList.id === id) {
@@ -120,37 +98,35 @@ export class UserService {
         return -1;
     }
 
+    //Gets user's security question for Forgot Password
     getUserSecurityQuestion(email: string) {
         console.log(this.users);
         for (const userFromList of this.users) {
             if (userFromList.email === email) {
-
                 return userFromList;
             }
         }
-
     }
 
 
+    //Updates UserDetails on Password Change
     ChangePass(updatedUser: User, user: User) {
         console.log('from changePass :' + updatedUser);
-
         updatedUser.role = user.role;
         updatedUser.question = user.question;
         updatedUser.answer = user.answer;
         this.setLoggedUser(updatedUser);
-
         let index = this.getUserIndex(updatedUser.id);
         console.log(index);
         this.updateUser(updatedUser, index);
     }
 
+    //AuthService Instance to avoid dependency injection error
     getAuthServiceInstance(): AuthService {
         if (!this.authService) {
             this.authService = this.injector.get(AuthService);
         }
         return this.authService;
     }
-
 
 }
