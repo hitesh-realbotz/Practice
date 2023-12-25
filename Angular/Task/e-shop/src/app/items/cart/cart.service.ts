@@ -37,8 +37,14 @@ export class CartService {
             actualItem = this.itemService.getItemById(cartItem.item.itemId);
         }
 
-        const userIndex = this.userService.loggedUserIndex;
+        // let userIndex = this.userService.loggedUserIndex;
+        let userIndex ;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        for (let [indexPosition, user] of usersDetList.entries()) {
+            if(user.id == this.userService.loggedUser.id){
+                userIndex = indexPosition;
+            }
+        }
         const localUserCart = usersDetList[userIndex].cart;
 
         let itemFound = false;
@@ -113,8 +119,15 @@ export class CartService {
     getItems() {
         if (!!this.userService.loggedUser && !!this.itemService.items) {
             const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
-            const userIndex = this.userService.loggedUserIndex;
-            const localUserCart = usersDetList?.[userIndex]?.cart || [];
+            // let userIndex = this.userService.loggedUserIndex;
+            let userIndex ;
+            for (let [indexPosition, user] of usersDetList.entries()) {
+                if(user.id == this.userService.loggedUser.id){
+                    userIndex = indexPosition;
+                }
+            }
+            const localUserCart = usersDetList[userIndex].cart;
+            // const localUserCart = usersDetList?.[userIndex]?.cart || [];
             this.cartItems = [];
             for (const cartItem of localUserCart) {
                 const foundItem = { ...this.itemService.items.find(item => item.itemId === cartItem.id) };
@@ -143,8 +156,14 @@ export class CartService {
 
     //Removes CartItems
     clearCart(orderPlaced?: boolean) {
-        const userIndex = this.userService.loggedUserIndex;
+        // let userIndex = this.userService.loggedUserIndex;
+        let userIndex ;
         const usersDetList = JSON.parse(localStorage.getItem('usersDetailList'));
+        for (let [indexPosition, user] of usersDetList.entries()) {
+            if(user.id == this.userService.loggedUser.id){
+                userIndex = indexPosition;
+            }
+        }
         let usercart = usersDetList[userIndex].cart;
         usersDetList[userIndex].cart = [];
         localStorage.setItem('usersDetailList', JSON.stringify(usersDetList));

@@ -33,9 +33,7 @@
                         <span
                             *ngIf="(userForm.get('answer').invalid && userForm.get('answer').touched) || (userForm.invalid && userForm.touched)"
                             class="help-block">
-                            <span *ngIf="userForm.get('answer').hasError('checkWhiteSpace')">Please enter a valid Answer!</span>
-                            <!-- <span *ngIf="userForm.get('answer').errors['checkWhiteSpace']">Please enter a valid Answer!</span> -->
-                            
+                            <span *ngIf="userForm.get('answer').hasError('checkWhiteSpace')">Please enter a valid Answer!</span>                            
                             <span *ngIf="userForm.get('answer').hasError('required')"> This field is required!</span>
                         </span>
                     </div>

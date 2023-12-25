@@ -15,11 +15,12 @@ import { OrdersDetailComponent } from "../orders/orders-detail/orders-detail.com
 const routes: Routes = [
     {
         path: '', component: ShopComponent,
+        // path: '', component: ItemsListComponent,
         canLoad: [AuthGuard],
         canActivate: [AuthGuard],
         children: [
             { path: '', component: ItemsListComponent, resolve: [ItemsResolverService] },
-            { path: 'details', component: ShopEditComponent, resolve: [ItemsResolverService] },  //Registration & Updation of shop details
+            { path: 'details', component: ShopEditComponent },  //Registration & Updation of shop details
             { path: 'new', component: ItemsEditComponent, resolve: [ItemsResolverService] },     //New Item Registration
             { path: 'orders', component: OrdersListComponent, resolve: [OrdersResolverService]},     
             { path: 'orders/:id', component: OrdersDetailComponent, resolve: [OrdersResolverService]},      

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, NgZone, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -20,10 +20,12 @@ export class ShopEditComponent implements OnInit {
   constructor(private userService: UserService,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private ngZone: NgZone,) { }
 
   //BlanlForm inCase of Shop registration or Populates Form with ShopDetails in-case of EditShop
   ngOnInit() {
+    console.log('Shop Edit Init called');
     this.curUser = this.userService.loggedUser;
     this.editMode = !!this.curUser.shop;
     this.loggedUserIndex = this.userService.getUserIndex(this.curUser.id);
@@ -41,32 +43,57 @@ export class ShopEditComponent implements OnInit {
     }
 
     this.shopForm = new FormGroup({
-      'shopName': new FormControl(shopName, Validators.required),
-      'shopAddress': new FormControl(shopAddress, Validators.required),
-      'shopIntro': new FormControl(shopIntro, Validators.required),
-      'shopImage': new FormControl(shopImage, Validators.required),
+      'shopName': new FormControl(shopName, [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'shopAddress': new FormControl(shopAddress, [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'shopIntro': new FormControl(shopIntro, [Validators.required, this.checkWhiteSpace.bind(this)]),
+      'shopImage': new FormControl(shopImage, [Validators.required, this.checkWhiteSpace.bind(this)]),
+    });
+  }
+
+  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {
+    if (control.value.trim() === '') {
+      return { 'checkWhiteSpace': true };
+    }
+    return null;
+  }
+
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.shopForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
     });
   }
 
   //Registers as Seller & Updates ShopDetails or Updates Existing ShopDetails on-submit
-  onSubmit() {
-    const newShop = new Shop(
-      this.shopForm.value['shopName'],
-      this.shopForm.value['shopAddress'],
-      this.shopForm.value['shopIntro'],
-      this.shopForm.value['shopImage'],
-    );
-    this.curUser.shop = newShop;
-    if (this.editMode) {
-      this.userService.updateUser(this.curUser, this.loggedUserIndex);
-      this.toastr.info('Shop Updated!!');
+  onSubmit(event: Event) {
+
+    if (this.shopForm.valid) {
+      const newShop = new Shop(
+        this.shopForm.value['shopName'],
+        this.shopForm.value['shopAddress'],
+        this.shopForm.value['shopIntro'],
+        this.shopForm.value['shopImage'],
+      );
+      this.curUser.shop = newShop;
+      if (this.editMode) {
+        this.userService.updateUser(this.curUser, this.loggedUserIndex);
+        this.toastr.info('Shop Updated!!');
+      }
+      else {
+        this.curUser.role = 'seller';
+        this.userService.updateUser(this.curUser, this.loggedUserIndex);
+        this.router.navigate(['shop']);
+        this.toastr.success('Shop Added!!');
+      }
+      this.onCancel();
     }
     else {
-      this.curUser.role = 'seller';
-      this.userService.updateUser(this.curUser, this.loggedUserIndex);
-      this.toastr.success('Shop Added!!');
+      event.stopPropagation();
+      this.markAllAsTouched();
     }
-    this.onCancel();
+    
   }
 
   //Exit from Form

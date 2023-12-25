@@ -54,7 +54,22 @@ export class OrdersDetailComponent implements OnInit, OnDestroy {
 
   initProcess() {
     if (!!this.userService.loggedUser && !!this.orderService.orderDetList && this.index != null) {
-      this.order = this.orderService.getOrderById(this.index);
+      if (this.router.url.includes('shop')) {
+        // this.order = this.orderService.getOrdersBySellerId(this.userService.loggedUser.id);
+        this.order = JSON.parse(JSON.stringify(this.orderService.getOrderById(this.index)));
+        const orderedItems = [];
+            let totalPrice = 0;
+            for (const item of this.order.orderedItems) {
+                if (item.sellerId === this.userService.loggedUser.id) {
+                    orderedItems.push(item);
+                    totalPrice += item.price;              
+                }
+            }
+            this.order.orderedItems = orderedItems;
+            this.order.totalPrice = totalPrice;
+      }else {
+        this.order = JSON.parse(JSON.stringify(this.orderService.getOrderById(this.index)));
+      }
     }
   }
 

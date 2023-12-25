@@ -1,12 +1,16 @@
 <div class="row">
     <div class="col-xs-12">
-        <form [formGroup]="shopForm" (ngSubmit)="onSubmit()">
+        <form [formGroup]="shopForm" (ngSubmit)="onSubmit($event)" class=" form">
 
             <div class="row">
                 <div class="col-xs-12">
                     <div class="form-group">
                         <label for="shopName">Shop Name</label>
                         <input type="text" name="shopName" id="shopName" formControlName="shopName" class="form-control ">
+                        <span *ngIf="!shopForm.get('shopName').valid && shopForm.get('shopName').touched" class="help-block">
+                            <span *ngIf="shopForm.get('shopName').hasError('checkWhiteSpace')">Please enter a valid Shop Name!</span>
+                            <span *ngIf="shopForm.get('shopName').hasError('required')"> This field is required!</span>
+                        </span>
                     </div>
                 </div>
             </div> 
@@ -16,6 +20,10 @@
                         <label for="shopAddress">Shop Address</label>
                         <textarea type="text" name="shopAddress" id="shopAddress" formControlName="shopAddress"
                             class="form-control" rows="4"></textarea>
+                            <span *ngIf="!shopForm.get('shopAddress').valid && shopForm.get('shopAddress').touched" class="help-block">
+                                <span *ngIf="shopForm.get('shopAddress').errors['checkWhiteSpace']">Please enter a valid Shop Address!</span>
+                                <span *ngIf="shopForm.get('shopAddress').errors['required']"> This field is required!</span>
+                            </span>
                     </div>
                 </div>
             </div>
@@ -25,6 +33,10 @@
                         <label for="shopIntro">Shop Introduction</label>
                         <textarea type="text" name="shopIntro" id="shopIntro" formControlName="shopIntro"
                             class="form-control" rows="4"></textarea>
+                            <span *ngIf="!shopForm.get('shopIntro').valid && shopForm.get('shopIntro').touched" class="help-block">
+                                <span *ngIf="shopForm.get('shopIntro').errors['checkWhiteSpace']">Please enter a valid Shop Details!</span>
+                                <span *ngIf="shopForm.get('shopIntro').errors['required']"> This field is required!</span>
+                            </span>
                     </div>
                 </div>
             </div>
@@ -34,17 +46,22 @@
                         <label for="shopImage">Shop Image URL</label>
                         <input type="text" name="shopImage" id="shopImage" formControlName="shopImage"
                         class="form-control" #shopImage>
+                        <span *ngIf="!shopForm.get('shopImage').valid && shopForm.get('shopImage').touched" class="help-block">
+                            <span *ngIf="shopForm.get('shopImage').errors['required']"> This field is required!</span>
+                            <span *ngIf="shopForm.get('shopImage').errors['checkWhiteSpace']"> Please enter a valid Shop Image-URL!!</span>
+                        </span>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-xs-12">
                     <img [src]="shopImage.value" style="max-width: 300px; max-height: 300px;" class="img-responsive" alt="">
+                    
                 </div>
             </div>  
             
             <div class="row">
-                <div class="col-xs-12">
+                <div class="col-xs-12 form-btn-group">
                     <!-- <button type="submit" class="btn btn-success" [disabled]="!itemForm.valid">Save</button> -->
                     <button type="submit" class="btn btn-success" >{{editMode ? 'Update' : 'Register'}}</button>
                     <button type="submit" class="btn btn-danger" (click)="onCancel()">Cancel</button>

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { AuthResponseData, AuthService } from './auth.service';
@@ -19,6 +19,7 @@ export class AuthComponent {
   role: string = 'buyer';
   constructor(private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute, 
     private toastr: ToastrService,
     private userService: UserService) { }
 
@@ -30,7 +31,8 @@ export class AuthComponent {
 
   //Displays ForgotPAssword From
   onForgotPass() {
-    this.router.navigate(['/forgotpass']);
+    this.router.navigate(['auth/forgotpass']);
+    // this.router.navigate(['forgotpass'], { relativeTo: this.route });
   }
 
 
@@ -42,29 +44,41 @@ export class AuthComponent {
     }
     const email = form.value.email;
     const password = form.value.password;
+    let isSignUp = false;
     let authObs: Observable<AuthResponseData>;
     this.isLoading = true;
 
     if (this.isLoginMode) {
       authObs = this.authService.login(email, password);
     } else {
+      isSignUp = true;
       authObs = this.authService.signup(email, password);
     }
 
     authObs.subscribe(
       resData => {
         console.log('resData');
+        console.log(isSignUp);
         console.log(resData);
         this.isLoading = false;
         this.toastr.success('Welcome to E-Shop', 'Login Success!');
         // this.router.navigate(['user']);
-        this.router.navigate(['/items']);
+        if (isSignUp) {
+          this.router.navigate(['/user/profile']);
+        } else {
+          this.router.navigate(['/items']);
+        }
       },
       errorMessage => {
         console.log(errorMessage);
         this.error = errorMessage;
         this.isLoading = false;
-        this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
+        if (isSignUp) {
+          this.toastr.warning('User Already Registered!!');
+        } else {
+          this.toastr.warning('Enter Valid Credentials', 'Login Unsuccessful!');
+        }
+        
       }
     );
     form.reset();

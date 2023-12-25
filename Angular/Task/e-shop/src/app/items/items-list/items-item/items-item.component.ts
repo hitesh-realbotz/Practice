@@ -17,7 +17,8 @@ export class ItemsItemComponent implements OnInit, OnDestroy {
 
   @Input('item') item: Item;
   @Input() index: number;
-  // @Input() role: string;
+  seller: User;
+  
 
   role: string = '';
   componentSubscriptions = new Subscription();
@@ -47,6 +48,12 @@ export class ItemsItemComponent implements OnInit, OnDestroy {
         this.role = 'buyer';
       }
     }
+    this.getSellerInfo();
+  }
+
+  getSellerInfo(){
+    this.seller = this.userService.getUserById(this.item.sellerId);
+    console.log('Seller', this.seller);
   }
 
 

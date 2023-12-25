@@ -30,7 +30,6 @@ export class ItemsComponent implements OnInit, OnDestroy {
     this.componentSubscriptions.add(
       this.subService.getLoggedUserChanges().subscribe(
         (user: User) => {
-          console.log('loggedChanged in Item', user, !!user);
           !!user ? this.isAuthenticated = true : this.isAuthenticated = false;
           this.initProcess();
         })
