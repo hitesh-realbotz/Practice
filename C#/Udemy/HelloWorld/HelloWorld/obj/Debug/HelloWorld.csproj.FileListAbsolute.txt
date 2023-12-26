@@ -1,0 +1,7 @@
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe.config
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\bin\Debug\HelloWorld.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\bin\Debug\HelloWorld.pdb
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\obj\Debug\HelloWorld.csproj.AssemblyReference.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\obj\Debug\HelloWorld.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\obj\Debug\HelloWorld.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\HelloWorld\HelloWorld\obj\Debug\HelloWorld.pdb
