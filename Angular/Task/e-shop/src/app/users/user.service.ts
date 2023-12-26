@@ -55,6 +55,9 @@ export class UserService {
     getUsers() {
         return this.users.slice();
     }
+    public getUserById(id: string) {
+        return this.users.find(user => user.id === id);
+    }
 
     //Set User
     setUsers(users: User[]) {
@@ -80,10 +83,10 @@ export class UserService {
     //Updates user in array & on Remote-Server
     updateUser(upLoggedUser: User, index: number) {
         this.loggedUser = upLoggedUser;
-        this.loggedUserChanged.next(upLoggedUser);
         this.users[index] = this.loggedUser;
         console.log(this.users);
         this.dataStorageService.storeUsers();
+        this.loggedUserChanged.next(upLoggedUser);
     }
 
 
@@ -113,6 +116,9 @@ export class UserService {
     ChangePass(updatedUser: User, user: User) {
         console.log('from changePass :' + updatedUser);
         updatedUser.role = user.role;
+        if (user.role == 'seller') {
+            updatedUser.shop = user.shop;
+        }
         updatedUser.question = user.question;
         updatedUser.answer = user.answer;
         this.setLoggedUser(updatedUser);

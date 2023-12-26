@@ -67,7 +67,7 @@
                 </div>
                 <div class="col-sm-2 form-group">
                     <label for="cvv">CVV</label>
-                    <input type="text" id="cvv" name="cvv" formControlName="cvv" class="form-control" required>
+                    <input type="password" id="cvv" name="cvv" formControlName="cvv" class="form-control" required>
                     <span *ngIf="!paymentForm.get('cvv').valid && paymentForm.get('cvv').touched" class="help-block">
                         <span *ngIf="paymentForm.get('cvv').errors['checkCVV']">Please enter a valid CVV!</span>
                         <span *ngIf="paymentForm.get('cvv').errors['required']"> This field is required!</span>
@@ -75,7 +75,7 @@
                 </div>
                 <div class="col-sm-4 form-group">
                     <label for="pin">Pin</label>
-                    <input type="text" id="pin" name="pin" formControlName="pin" class="form-control" required>
+                    <input type="password" id="pin" name="pin" formControlName="pin" class="form-control" required>
                     <span *ngIf="!paymentForm.get('pin').valid && paymentForm.get('pin').touched" class="help-block">
                         <span *ngIf="paymentForm.get('pin').errors['checkPin']">Please enter a valid Pin!</span>
                         <span *ngIf="paymentForm.get('pin').errors['required']"> This field is required!</span>

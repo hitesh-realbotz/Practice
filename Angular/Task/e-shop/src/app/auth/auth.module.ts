@@ -11,9 +11,10 @@ const routes: Routes = [
         path: '', component: AuthComponent,
         children: [
             { path: '', component: AuthComponent},
-            { path: 'forgotpass', component: ForgotPassComponent},
+            // { path: 'forgotpass', component: ForgotPassComponent},
         ]
-    }
+    },
+    { path: 'forgotpass', component: ForgotPassComponent},
 ]
 
 @NgModule({

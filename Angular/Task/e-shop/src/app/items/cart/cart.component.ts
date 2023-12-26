@@ -55,6 +55,7 @@ export class CartComponent implements OnInit, OnDestroy {
         (items: CartItem[]) => {
           // if (!!items) {
             this.items = items;
+            console.log('CartItemst',this.cartService.cartItems);
             this.totalCartAmount = this.cartService.totalCartAmount;
             this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
           // }

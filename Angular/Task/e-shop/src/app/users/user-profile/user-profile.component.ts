@@ -37,6 +37,8 @@ export class UserProfileComponent implements OnInit {
       this.subService.getLoggedUserChanges().subscribe(
         (user: User) => {
           if (!!user) {
+            console.log('LoggedUser called');
+            console.log(user);
             this.loggedUser = user;
             this.initForm();
             this.loggedUserIndex = this.userService.getUserIndex(this.loggedUser.id);
@@ -54,7 +56,7 @@ export class UserProfileComponent implements OnInit {
     });
   }
 
-  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {
+  checkWhiteSpace(control: FormControl): { [s: string]: boolean } {   
     if (control.value.trim() === '') {
       return { 'checkWhiteSpace': true };
     }
@@ -81,11 +83,11 @@ export class UserProfileComponent implements OnInit {
     // if (this.formValidate()) {
     if (this.userForm.valid) {
       this.loggedUser.question = this.userForm.value['question'];
-      this.loggedUser.answer = this.userForm.value['answer'];
+      this.loggedUser.answer = this.userForm.value['answer'].trim();
       this.userService.updateUser(this.loggedUser, this.loggedUserIndex);
-      this.router.navigate(['user']);
-      this.toastr.info('User Deatils Updated', 'Update Success!');
+      this.router.navigate(['items']);
       this.userForm.reset();
+      this.toastr.info('User Deatils Updated', 'Update Success!');
     } else {
       event.stopPropagation();
       this.markAllAsTouched();

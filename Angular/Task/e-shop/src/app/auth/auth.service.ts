@@ -115,6 +115,7 @@ export class AuthService {
         )
             .pipe(
                 tap(resData => {
+                    console.log('FromServer', resData);
                     const user = this.handleAuthentication(resData.localId, resData.email, password, resData.idToken, +resData.expiresIn);
                     this.userService.addUser(user);
                 }));
@@ -132,6 +133,7 @@ export class AuthService {
             .pipe(
                 // catchError(this.handleError),
                 tap(resData => {
+                    console.log('FromServer', resData);
                     const user = this.handleAuthentication(resData.localId, resData.email, password, resData.idToken, +resData.expiresIn);
                     this.userService.setLoggedUser(user);
                 }));

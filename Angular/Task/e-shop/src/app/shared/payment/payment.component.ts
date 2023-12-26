@@ -76,6 +76,7 @@ export class PaymentComponent implements OnInit, OnDestroy {
       this.cartService.cartItemsChanged.subscribe(
         (items: CartItem[]) => {
           if (items != null) {
+            this.items = [];
             for (const item of items) {
               if (item.checked) {
                 this.items.push(item);

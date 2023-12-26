@@ -1,30 +1,56 @@
 <div class="container">
     <div class="row">
-        <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
-            <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
-                
-                <div class="form-group">
-                    <label for="email">email</label>
-                    <input type="text" id="email" formControlName="email" class="form-control" [readOnly]="isUser">
-                </div>
+        <div class="col-xs-12 col-sm-12 col-md-12 ">
+            <form [formGroup]="userForm" (ngSubmit)="onSubmit($event)" class="form">
 
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="text" id="email" formControlName="email" class="form-control" [readOnly]="isUser">
+                    <span *ngIf="userForm.get('email').errors && userForm.get('email').touched" class="help-block">
+                        <span *ngIf="userForm.get('email').hasError('required')">
+                            Required field. Please enter a valid email!
+                        </span>
+                        <span *ngIf="userForm.get('email').hasError('email') && !userForm.get('email').hasError('required')">
+                            Please enter a valid email!
+                        </span>
+                    </span>
+                </div>
+                
                 <div class="form-group" *ngIf="isUser &&  formMode == 'answerCheck'">
                     <label for="question">Question</label>
-                    <input type="text" id="question" formControlName="question" class="form-control" [readOnly]="isUser">
+                    <input type="text" id="question" formControlName="question" class="form-control"
+                        [readOnly]="isUser">
+                    <span *ngIf="(!userForm.get('question').valid && userForm.get('question').touched)"
+                        class="help-block">
+                        <span *ngIf="userForm.get('question').errors['checkQuestion']">Please select a valid
+                            Question!</span>
+                        <span *ngIf="userForm.get('question').errors['required']"> Please select a valid
+                            Question!</span>
+                    </span>
                 </div>
                 <div class="form-group" *ngIf="isUser &&  formMode == 'answerCheck'">
                     <label for="answer">Answer</label>
                     <input type="text" id="answer" formControlName="answer" class="form-control">
+                    <span
+                        *ngIf="(userForm.get('answer').invalid && userForm.get('answer').touched) || (userForm.invalid && userForm.touched)"
+                        class="help-block">
+                        <span *ngIf="userForm.get('answer').hasError('checkWhiteSpace')">Please enter a valid
+                            Answer!</span>
+                        <span *ngIf="userForm.get('answer').hasError('required')"> This field is required!</span>
+                    </span>
                 </div>
                 <div class="form-group" *ngIf="isUser &&  formMode == 'enterPassword' ">
                     <label for="password">New Password</label>
                     <input type="text" id="password" formControlName="password" class="form-control">
                 </div>
-                
+
                 <div>
                     <!-- <span *ngIf="!userForm.valid && userForm.touched" class="help-block">Please enter a valid data!</span> -->
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <div class="form-btn-group">
+
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
             </form>
         </div>
     </div>

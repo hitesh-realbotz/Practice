@@ -69,7 +69,8 @@ export class OrdersListComponent implements OnInit, OnDestroy, AfterViewInit {
       this.changeDetectorRef.detectChanges();
     } else {
       setTimeout(() => {
-        if (this.orderService.orderDetList.length < 1) {
+        // if (this.orderService.orderDetList.length < 1) {
+        if (this.orders.length < 1) {
           this.toastr.warning('Orders Not Available');
         }
       }, 1500);

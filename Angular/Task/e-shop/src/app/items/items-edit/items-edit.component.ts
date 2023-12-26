@@ -184,7 +184,9 @@ export class ItemsEditComponent implements OnInit, OnDestroy {
       else {
         this.itemService.addItem(newItem);
       }
-      this.onCancel();
+      setTimeout(() => {
+        this.router.navigate(['items']);
+      }, 1000);
 
     } else {
       event.stopPropagation();

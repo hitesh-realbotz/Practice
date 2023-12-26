@@ -24,6 +24,8 @@ export class OrderService {
 
     //Add new Order to array & on Remote-Server and Clears Cart
     newOrder(newOrder: Order, items: CartItem[]) {
+        console.log(items);
+        console.log('Orders before :', this.orderDetList);
         const orderItems: OrderItem[] = [];
         for (const selectedItem of items) {
             orderItems.push(new OrderItem(selectedItem));    
@@ -31,8 +33,11 @@ export class OrderService {
         }
         newOrder.orderedItems = orderItems;
         newOrder.orderId = this.orderDetList.length + 1;
+        console.log('Orders before :', this.orderDetList);
         this.orderDetList.push(newOrder);
+        console.log('Orders after :', this.orderDetList);
         this.ordersChanged.next(this.orderDetList);
+        console.log('Orders after :', this.orderDetList);
         this.cartService.clearCart(true);
         this.dataStorageService.storeOrders();
         this.dataStorageService.storeItems();
@@ -42,6 +47,7 @@ export class OrderService {
     //Sets Orders
     setOrders(orders: Order[]) {
         this.orderDetList = !!orders ? orders : [];
+        console.log(this.orderDetList);
         this.ordersChanged.next(this.orderDetList.slice());
     }
 

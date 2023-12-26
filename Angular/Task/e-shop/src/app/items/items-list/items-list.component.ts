@@ -56,7 +56,8 @@ export class ItemsListComponent implements OnInit, AfterViewInit, OnDestroy {
       this.changeDetectorRef.detectChanges();
     } else {
       setTimeout(() => {
-        if (this.itemService.items.length < 1) {
+        // if (this.itemService.items.length < 1) {
+        if (this.items.length < 1) {
           this.toastr.warning('Items Not Available');
         }
       }, 1500);
@@ -118,7 +119,7 @@ export class ItemsListComponent implements OnInit, AfterViewInit, OnDestroy {
     this.componentSubscriptions.add(
       this.subService.getItemChanges().subscribe(
         (items: Item[]) => {
-          this.items = this.itemService.getItems();
+          this.items = items;
           this.initProcess();
         })
     );
@@ -131,7 +132,7 @@ export class ItemsListComponent implements OnInit, AfterViewInit, OnDestroy {
         this.role = this.userService.loggedUser.role;
         this.items = this.itemService.getItemsBySellerId(this.userService.loggedUser.id);
       } else {
-        this.items = this.itemService.getItems();
+        this.items = this.itemService.items;
       }
       this.length = this.items.length;
       this.getPagedData();

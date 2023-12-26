@@ -56,11 +56,14 @@ export class ItemsService {
     //Add new item to array & on Remote-Server
     addItem(item: Item) {
         item.sellerId = this.userService.loggedUser.id;
-        item.itemId = (this.items.length + 1);
-
+        if (this.items.length === 0) {
+            item.itemId = (this.items.length + 1);
+        }else{
+            item.itemId = this.items[this.items.length - 1].itemId + 1;
+        }
         this.items.push(item);
-        this.itemChanged.next(this.items.slice());
         this.dataStorageService.storeItems();
+        this.itemChanged.next(this.items);
         this.toastr.info('New Item Added', 'Add Action');
     }
 
