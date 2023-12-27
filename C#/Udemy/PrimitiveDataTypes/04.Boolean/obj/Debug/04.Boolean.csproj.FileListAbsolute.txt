@@ -1,0 +1,7 @@
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\bin\Debug\04.Boolean.exe.config
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\bin\Debug\04.Boolean.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\bin\Debug\04.Boolean.pdb
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\obj\Debug\04.Boolean.csproj.AssemblyReference.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\obj\Debug\04.Boolean.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\obj\Debug\04.Boolean.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\PrimitiveDataTypes\04.Boolean\obj\Debug\04.Boolean.pdb

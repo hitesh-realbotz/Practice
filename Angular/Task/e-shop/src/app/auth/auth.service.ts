@@ -6,6 +6,7 @@ import { UserService } from "../users/user.service";
 import { Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { ItemsService } from "../items/items.service";
+import { environment } from "src/environments/environment";
 
 export interface AuthResponseData {
     idToken: string;
@@ -88,7 +89,8 @@ export class AuthService {
     //Password updation
     upPassValues(resData: any, user: User, newPassword: any) {
         this.logout();
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        // return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:update?key='+ environment.firebaseAPIKey,
             {
                 "idToken": resData.idToken,
                 "password": newPassword,
@@ -106,7 +108,8 @@ export class AuthService {
 
     //SignUp Processing
     signup(email: string, password: string) {
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        // return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key='+ environment.firebaseAPIKey,
             {
                 email: email,
                 password: password,
@@ -123,7 +126,8 @@ export class AuthService {
 
     //Login Processing
     login(email: string, password: string) {
-        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        // return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDtTcyhpDusuHkmfcfhcigrAkLN9EhLGSU',
+        return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key='+ environment.firebaseAPIKey,
             {
                 email: email,
                 password: password,
