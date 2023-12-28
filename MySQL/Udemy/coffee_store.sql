@@ -38,3 +38,27 @@ ADD column Coffe_origin varchar(30);
 
 ALTER table products
 DROP column Coffe_origin ;
+
+select * from products;
+select * from customers;
+select * from orders;
+
+insert into products (name, price,coffe_origin) values ( 'Espresso', 2.50, 'Brazil');
+insert into products (name, price,coffe_origin)
+values ( 'Macchiato', 3.00, 'Brazil'), 
+		( 'Cappuccino', 3.50, 'Costa Rica') ;
+insert into products (name, price,coffe_origin)
+values 	( 'Latte', 3.50, 'Indonesia'), 
+		( 'Americano', 3.00, 'Brazil'), 
+        ( 'Flat White', 3.50, 'Indonesia'), 
+		( 'Filter', 3.00, 'India');
+        
+UPDATE products 
+SET Coffee_origin = 'Sri Lanka' where id = 7;
+
+update products set name = 'Filter2', Coffee_origin = 'Sri Lanka2' where Coffee_origin = 'Sri Lanka' ;
+
+
+SET sql_safe_updates = false;
+SET sql_safe_updates = true;
+
