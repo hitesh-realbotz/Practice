@@ -1,0 +1,7 @@
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\TempPractice.exe.config
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\TempPractice.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\TempPractice.pdb
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.csproj.AssemblyReference.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.csproj.CoreCompileInputs.cache
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.pdb
