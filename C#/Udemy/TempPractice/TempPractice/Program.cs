@@ -1,7 +1,10 @@
-﻿using System;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -221,6 +224,18 @@ namespace TempPractice
             //Console.WriteLine(string.Join(", ", array));
 
 
+            //Random rng = new Random();
+            //int[] array = new int[10];
+            //for (int i = 0; i < array.Length; i++)
+            //{
+            //    array[i] = rng.Next(50, 150);
+
+            //}
+            ////string[] array = { "cherry", "strawberry", "blueberry" };
+            //printArray(array);
+            //Array.Sort(array);
+            //printArray(array);
+
             ////Binary Search
             //Random rng = new Random();
             //int[] array = new int[1000];
@@ -230,6 +245,8 @@ namespace TempPractice
             //    array[i] = i;
             //}
             //Array.Sort(array);
+            //printArray(array);
+
             //int lookingFor = 100;
             //int start = 0;
             //int end = array.Length - 1;
@@ -290,8 +307,18 @@ namespace TempPractice
             //    if ((array[i] >= 5) && (array[i] <= 10))
             //    {
             //        ourFirstList.Add(array[i]);
+
             //    }
             //}
+            //int fromList = 0;
+
+            //foreach (var item in ourFirstList)
+            //{
+            //    Console.WriteLine($"List ==> {item}");
+            //    fromList = item;
+            //}
+            //Console.WriteLine($"last from List ==> {fromList}");
+
 
             //Console.WriteLine(string.Join(", ", array));
             //Console.WriteLine(new string('-', 40));
@@ -504,92 +531,387 @@ namespace TempPractice
             //PrintMatrix(matrixThree);
 
 
-            //Image
-            Random rng = new Random();
+            ////Image
+            //Random rng = new Random();
 
-            byte[,,] colors = new byte[3, 1080, 1920];
+            //byte[,,] colors = new byte[3, 1080, 1920];
 
-            for (int color = 0; color < colors.GetLength(0); color++)
-            {
-                for (int row = 0; row < colors.GetLength(1); row++)
-                {
-                    for (int col = 0; col < colors.GetLength(2); col++)
-                    {
-                        //if (color == 0)
-                        //{
-                        //    colors[color, row, col] = (byte)rng.Next(255, 256);
-                        //}
-                        //else
-                        //{
-                        //    colors[color, row, col] = (byte)0;
-                        //}
-                        colors[color, row, col] = (byte)rng.Next(0, 255);
-                    }
-                }
-            }
-
-            Bitmap bitmapImage = new Bitmap(colors.GetLength(2), colors.GetLength(1), PixelFormat.Format24bppRgb);
-
-            for (int row = 0; row < bitmapImage.Height; row++)
-            {
-                for (int col = 0; col < bitmapImage.Width; col++)
-                {
-                    bitmapImage.SetPixel(col, row, Color.FromArgb(colors[0, row, col], colors[1, row, col], colors[2, row, col]));
-                    //bitmapImage.SetPixel(col, row, Color.FromArgb(255, 0 , 0));
-                }
-            }
-
-            bitmapImage.Save("test.png");
-            //bitmapImage.Save("test2.png");
-            
-            ////Create Image
-            //Bitmap bitmapImage2 = new Bitmap(colors.GetLength(2), colors.GetLength(1), PixelFormat.Format24bppRgb);
-            //for (int row = 0; row < bitmapImage2.Height; row++)
+            //for (int color = 0; color < colors.GetLength(0); color++)
             //{
-            //    for (int col = 0; col < bitmapImage2.Width; col++)
-            //    {                    
-            //        bitmapImage.SetPixel(col, row, Color.FromArgb(255, 0 , 0));
+            //    for (int row = 0; row < colors.GetLength(1); row++)
+            //    {
+            //        for (int col = 0; col < colors.GetLength(2); col++)
+            //        {
+            //            //if (color == 0)
+            //            //{
+            //            //    colors[color, row, col] = (byte)rng.Next(255, 256);
+            //            //}
+            //            //else
+            //            //{
+            //            //    colors[color, row, col] = (byte)0;
+            //            //}
+            //            colors[color, row, col] = (byte)rng.Next(0, 255);
+            //        }
             //    }
             //}
-            //bitmapImage.Save("test2.png");
+
+            //Bitmap bitmapImage = new Bitmap(colors.GetLength(2), colors.GetLength(1), PixelFormat.Format24bppRgb);
+
+            //for (int row = 0; row < bitmapImage.Height; row++)
+            //{
+            //    for (int col = 0; col < bitmapImage.Width; col++)
+            //    {
+            //        bitmapImage.SetPixel(col, row, Color.FromArgb(colors[0, row, col], colors[1, row, col], colors[2, row, col]));
+            //        //bitmapImage.SetPixel(col, row, Color.FromArgb(255, 0 , 0));
+            //    }
+            //}
+
+            //bitmapImage.Save("test.png");
+            ////bitmapImage.Save("test2.png");
+
+            //////Create Image
+            ////Bitmap bitmapImage2 = new Bitmap(colors.GetLength(2), colors.GetLength(1), PixelFormat.Format24bppRgb);
+            ////for (int row = 0; row < bitmapImage2.Height; row++)
+            ////{
+            ////    for (int col = 0; col < bitmapImage2.Width; col++)
+            ////    {                    
+            ////        bitmapImage.SetPixel(col, row, Color.FromArgb(255, 0 , 0));
+            ////    }
+            ////}
+            ////bitmapImage.Save("test2.png");
 
 
-            Bitmap readImage = new Bitmap(System.Drawing.Image.FromFile("test.png"));
+            //Bitmap readImage = new Bitmap(System.Drawing.Image.FromFile("test.png"));
 
-            Color[,] readColors = new Color[readImage.Height, readImage.Width];
+            //Color[,] readColors = new Color[readImage.Height, readImage.Width];
 
-            for (int row = 0; row < readColors.GetLength(0); row++)
-            {
-                for (int col = 0; col < readColors.GetLength(1); col++)
-                {
-                    readColors[row, col] = readImage.GetPixel(col, row);
-                }
-            }
+            //for (int row = 0; row < readColors.GetLength(0); row++)
+            //{
+            //    for (int col = 0; col < readColors.GetLength(1); col++)
+            //    {
+            //        readColors[row, col] = readImage.GetPixel(col, row);
+            //    }
+            //}
 
-            colors[0, 100, 150] = 0;
+            //colors[0, 100, 150] = 0;
 
-            bool equal = true;
+            //bool equal = true;
 
-            for (int row = 0; row < readColors.GetLength(0); row++)
-            {
-                for (int col = 0; col < readColors.GetLength(1); col++)
-                {
-                    if ((readColors[row, col].R != colors[0, row, col]) ||
-                        (readColors[row, col].G != colors[1, row, col]) ||
-                        (readColors[row, col].B != colors[2, row, col]))
-                    {
-                        Console.WriteLine($"Difference found at pixel row = {row}, col = {col}");
-                        equal = false;
-                        break;
-                    }
-                }
-            }
+            //for (int row = 0; row < readColors.GetLength(0); row++)
+            //{
+            //    for (int col = 0; col < readColors.GetLength(1); col++)
+            //    {
+            //        if ((readColors[row, col].R != colors[0, row, col]) ||
+            //            (readColors[row, col].G != colors[1, row, col]) ||
+            //            (readColors[row, col].B != colors[2, row, col]))
+            //        {
+            //            Console.WriteLine($"Difference found at pixel row = {row}, col = {col}");
+            //            equal = false;
+            //            break;
+            //        }
+            //    }
+            //}
 
-            Console.WriteLine($"Is the image the same as the original array: {equal}");
+            //Console.WriteLine($"Is the image the same as the original array: {equal}");
 
+
+
+            ////String
+            //char[] charactersToSplitBy = { ' ', ',', 'T', 'H', 'a', 'o' };
+
+            ////string namesV1 = "Tod Bob Maria Helena Jacky John";
+            //string namesV1 = "Tod Bob Maria Helena Jacky John";
+            //string namesV2 = "Tod, Bob, Maria, Helena, Jacky, John";
+            //string namesV3 = "Tod,,,THao Bob,,,THao Maria,,,THao Helena,,,THao Jacky,,,THao John";
+
+            //string[] splitNamesV1 = namesV1.Split(' ');
+            //string[] splitNamesV2 = namesV2.Split(new char[] { ' ', ',' }, StringSplitOptions.None);
+            //string[] splitNamesV3 = namesV3.Split(new string[] { ",,,TH", "ao " }, StringSplitOptions.RemoveEmptyEntries);
+            //string[] splitNamesV4 = namesV1.Split('A');
+
+            //foreach (var name in splitNamesV3)
+            //{
+            //    Console.WriteLine(name);
+            //}foreach (var name in splitNamesV4)
+            //{
+            //    Console.WriteLine(name);
+            //}
+
+            //IWebDriver driver = new ChromeDriver();
+            ////driver.Navigate().GoToUrl("http://testing.todvachev.com/sitemap-posttype-post.xml");
+            //driver.Navigate().GoToUrl("http://localhost:4200/items");
+            ////string pageSource = driver.PageSource;
+            ////Console.WriteLine(pageSource);
+
+            //string[] pageSource = driver.PageSource.Split('>');
+            //foreach (var line in pageSource)
+            //{
+            //    Console.WriteLine(line);
+            //}
+
+            //int startIndex = 0;
+            //int length = 0;
+            //List<string> links = new List<string>();
+
+            //foreach (var link in pageSource)
+            //{
+            //    if (link.Contains(@"""http://testing.todvachev.com"))
+            //    {
+            //        startIndex = link.IndexOf('"') + 1;
+            //        length = link.LastIndexOf('"') - startIndex;
+            //        links.Add(link.Substring(startIndex, length));
+            //    }
+            //}
+
+            //foreach (var link in links)
+            //{
+            //    Console.WriteLine(link);
+            //}
+
+
+
+
+            //string stringToTrim = "abTodab";
+            //char[] charactersToRemove = { 'a', 'b' };
+
+            //stringToTrim = Trimming(stringToTrim, charactersToRemove);
+
+            //Console.WriteLine(stringToTrim);
+
+            //string[] namesV1 = { "  Tod  ", "  Bob ", " Maria    ", "  Helena  ", "  Jacky  ", " John " };
+
+            //for (int i = 0; i < namesV1.Length; i++)
+            //{
+            //    namesV1[i] = namesV1[i].Trim();
+            //}
+
+            //foreach (var name in namesV1)
+            //{
+            //    Console.WriteLine(name);
+            //}
+
+            ////name = name.Trim(new char[] { ' ', 'g', 'd', 'f' });
+
+            ////Console.WriteLine(name);
+
+
+            //string fileDirectory = @"C:\Program Files\Microsoft\Word\Wo....rd.exe";
+            //string extension = string.Empty;
+            //string fileName = string.Empty;
+            //string firstFolder = string.Empty;
+            //string secondFolder = string.Empty;
+
+            //int startIndex = fileDirectory.IndexOf('P');
+            //int length = fileDirectory.IndexOf('s') + 1 - startIndex;
+            //firstFolder = fileDirectory.Substring(startIndex, length);
+            //Console.WriteLine(firstFolder);
+
+            //startIndex = fileDirectory.LastIndexOf('.') + 1;
+            //length = fileDirectory.Length - startIndex;
+            //extension = fileDirectory.Substring(startIndex, length);
+            //Console.WriteLine(extension);
+
+            //startIndex = fileDirectory.LastIndexOf('\\') + 1;
+            //length = fileDirectory.LastIndexOf('.') - startIndex;
+            //fileName = fileDirectory.Substring(startIndex, length);
+            //Console.WriteLine(fileName);
+
+            //startIndex = NthIndexOf(fileDirectory, @"\", 2) + 1;
+            //length = NthIndexOf(fileDirectory, @"\", 3) - startIndex;
+            //secondFolder = fileDirectory.Substring(startIndex, length);
+            //Console.WriteLine(secondFolder);
+
+
+            //DateTime start = DateTime.Now;
+            //string testOne = Concatenator('a', 20000);
+            //DateTime end = DateTime.Now;
+            //Console.WriteLine(end - start);
+
+            //DateTime startTwo = DateTime.Now;
+            //StringBuilder testTwo = ConcatenatorSB('a', 2000000);
+            //DateTime endTwo = DateTime.Now;
+            //Console.WriteLine(endTwo - startTwo);
+
+            //string testThree = testTwo.ToString();
+            //Console.WriteLine(testOne.ElementAt(19999));
+            //Console.WriteLine(testTwo[1999999 ]);
+            //Console.WriteLine(testThree.Length);
+
+
+
+            ////try
+            //{
+            //    int number = Convert.ToInt32(Console.ReadLine());
+            //    int secondNumber = Convert.ToInt32(Console.ReadLine());
+
+            //    int result = number / secondNumber;
+            //}
+            //catch (FormatException)
+            //{
+            //    Console.WriteLine("Your input was not a number!");
+            //}
+            //catch (DivideByZeroException)
+            //{
+            //    Console.WriteLine("You can not divide by zero!");
+            //}
+            //catch (Exception)
+            //{
+            //    Console.WriteLine("Unexpected error!");
+            //}
+            //Console.WriteLine("After the try/catch block");
+
+            //try
+            //{
+            //    int[] array = { 1, 2, 3, 4, 5, 0, 0, 6, 7, 8 };
+            //    //int[] array = { 1, 2, 3, 4, 5, 6, 7, 8 };
+
+            //    int number = Convert.ToInt32(Console.ReadLine());
+            //    int calculated = 0;
+
+            //    for (int i = 0; i <= array.Length; i++)
+            //    {
+            //        calculated = number / array[i];
+            //        Console.WriteLine(array[i]);
+            //    }
+            //}
+            //catch (FormatException ex)
+            //{
+            //    int startIndex = ex.StackTrace.IndexOf(':') - 1;
+            //    int length = ex.StackTrace.Length - startIndex;
+            //    string fileName = ex.StackTrace.Substring(startIndex, length);
+
+            //    Console.WriteLine(ex.Message);
+            //    Console.WriteLine(fileName);
+            //}
+            //catch (DivideByZeroException ex)
+            //{
+            //    Console.WriteLine("Attempted to divide by zero!");
+            //}
+            //catch (IndexOutOfRangeException ex)
+            //{
+            //    Console.WriteLine("Attempted to access non-existent element from the array! Index out of range!");
+            //    Console.WriteLine(ex);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("Unexpected error!");
+            //}
+
+
+
+            //StreamWriter sw = null;
+            //try
+            //{
+            //    sw = File.AppendText(Directory.GetCurrentDirectory() + @"\test.txt");
+            //    int number = Convert.ToInt32(Console.ReadLine());
+            //    int divided = 5 / number;
+
+            //    sw.Write(divided);
+            //    sw.WriteLine();
+            //    sw.Close();
+            //}
+            //catch (FormatException ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+            //catch (DivideByZeroException ex)
+            //{
+            //    Console.WriteLine(ex.Message);
+            //}
+            //finally
+            //{
+            //    sw.Close();
+            //}
+
+            //try
+            //{
+            //    StreamReader sr = File.OpenText(Directory.GetCurrentDirectory() + @"\test.txt");
+            //    Console.WriteLine(sr.ReadToEnd());
+            //}
+            //catch (IOException ex)
+            //{
+            //    Console.WriteLine("From Reader");
+            //    Console.WriteLine(ex.Message);
+            //}
 
         }
 
+
+        static string Concatenator(char characterToConcatenate, int count)
+        {
+            string concatenatedString = string.Empty;
+
+            for (int i = 0; i < count; i++)
+            {
+                concatenatedString += characterToConcatenate;
+            }
+            return concatenatedString;
+        }
+
+        static StringBuilder ConcatenatorSB(char characterToConcatenate, int count)
+        {
+            StringBuilder concatenatedString = new StringBuilder();
+
+            for (int i = 0; i < count; i++)
+            {
+                concatenatedString.Append(characterToConcatenate);
+            }
+            Console.WriteLine(concatenatedString.Capacity);
+
+            return concatenatedString;
+        }
+
+
+        static int NthIndexOf(string input, string toFind, int occurance)
+        {
+            int index = 0;
+            int startIndex = 0;
+
+            if (!input.Contains(toFind))
+            {
+                index = -1;
+                return index;
+            }
+
+            for (int i = 0; i < occurance; i++)
+            {
+                index = input.IndexOf(toFind, startIndex);
+                startIndex = index + 1;
+
+                if (startIndex > input.Length)
+                {
+                    index = -1;
+                    return index;
+                }
+            }
+
+            return index;
+        }
+
+        private static void printArray<T>(T[] array)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write(array[i] + ", ");
+            }
+            Console.WriteLine(new string('-', 40));
+        }
+        //private static void printArray(int[] array)
+        //{
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        Console.Write(array[i] + ", ");
+        //    }
+        //    Console.WriteLine(new string('-', 40));
+        //}
+        //private static void printArray(string[] array)
+        //{
+        //    for (int i = 0; i < array.Length; i++)
+        //    {
+        //        Console.Write(array[i] + ", ");
+        //    }
+        //    Console.WriteLine(new string('-', 40));
+        //}
 
         static void PrintMatrix(int[,] matrix)
         {
@@ -633,6 +955,72 @@ namespace TempPractice
 
             return isMatched;
         }
+
+
+        static string Trimming(string stringToTrim, char[] charactersToRemove)
+        {
+            string trimmedString = string.Empty;
+            List<int> indexesToSkip = new List<int>();
+            int counter = 0;
+
+            for (int i = 0; i < stringToTrim.Length; i++)
+            {
+                for (int j = 0; j < charactersToRemove.Length; j++)
+                {
+                    if (stringToTrim[i] == charactersToRemove[j])
+                    {
+                        indexesToSkip.Add(i);
+                        break;
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+                }
+
+                if (counter == charactersToRemove.Length)
+                {
+                    break;
+                }
+
+                counter = 0;
+            }
+
+            for (int i = stringToTrim.Length - 1; i >= 0; i--)
+            {
+                for (int j = 0; j < charactersToRemove.Length; j++)
+                {
+                    if (stringToTrim[i] == charactersToRemove[j])
+                    {
+                        indexesToSkip.Add(i);
+                        break;
+                    }
+                    else
+                    {
+                        counter++;
+                    }
+                }
+
+                if (counter == charactersToRemove.Length)
+                {
+                    break;
+                }
+
+                counter = 0;
+            }
+
+            for (int i = 0; i < stringToTrim.Length; i++)
+            {
+                if (!indexesToSkip.Contains(i))
+                {
+                    trimmedString += stringToTrim[i];
+                }
+            }
+
+            return trimmedString;
+        }
+
+
 
     }
 }
