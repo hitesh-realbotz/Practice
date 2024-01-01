@@ -79,7 +79,7 @@ where name < 'D';
 select * from customers
 where phone_number 
 is null; 
--- is no- t null;
+-- is not null;
 
 select first_name, phone_number from customers
 where gender = 'F' AND last_name = 'Bluth';
@@ -95,7 +95,7 @@ Where last_name between 'A' and 'L';
 
 select * from orders;
 select * from orders
-where order_time between '2022-03-01' AND '2022-03-31 23:59:59.999999' 
+where order_time between '2023-01-01' AND '2023-01-31 23:59:59.999999'
 AND customer_id in (19,20,21,24) ;
 
 select * from orders
@@ -108,6 +108,10 @@ select * from customers
 where first_name LIKE '%o%';
 select * from customers
 where first_name LIKE '_o%';
+select * from customers limit 5;			-- count
+select * from customers limit 5 offset 5;  	-- count offset offset_count
+select * from customers limit 12, 3;		-- offset_count, count
+
 
 select * from products;
 select * from products
@@ -129,11 +133,67 @@ select * from orders;
 select * from orders 
 order by order_time ;
 
-
-
 select * from orders 
 where year(order_time) = 2023 AND month(order_time) = 2
 AND customer_id IN (19,20,21,24);
+select distinct customer_id, product_id from orders 
+where order_time between '2023-02-01' and '2023-02-28 23:59:59.999999' order by customer_id;
+select customer_id, product_id, order_time from orders 
+where product_id = 3 and order_time between '2023-02-01' and '2023-02-28 23:59:59.999999' 
+order by order_time limit 4;
+
+select coffee_origin from products;
+select distinct coffee_origin from products;
+select distinct coffee_origin as Country, id as `Product Id` from products;
+select distinctrow coffee_origin, id from products;
+
+select distinct last_name from customers order by last_name;
+
+select o.id as orderId, p.name, o.order_time from orders as o 
+inner join products p 
+on o.product_id = p.id
+where o.product_id = 5
+order by o.order_time;
+
+update orders set customer_id = null where id in (1,3,5);
+select * from orders order by customer_id;
+select * from customers;
+select * from products;
+
+select o.*, c.* from orders as o
+left join customers c on o.customer_id = c.id
+order by o.order_time;
+
+select o.*, c.* from customers c
+left join orders o on o.customer_id = c.id
+-- where o.id between 1 and 10
+order by o.id;
+
+select o.*, c.* from customers c
+right join orders o on o.customer_id = c.id
+-- where o.id between 1 and 10
+order by o.id;
+select p.name, p.price, c.first_name, c.last_name, o.order_time from products p
+join orders o on p.id = o.product_id
+join customers c on c.id = o.customer_id
+where c.last_name = 'Martin'
+order by o.order_time;
+
+select o.id, c.phone_number from orders as o
+ join customers c on o.customer_id = c.id
+where o.product_id = 4
+order by o.order_time;
+select p.name, o.order_time  from orders as o
+join products p on o.product_id = p.id
+where p.name = 'filter' and o.order_time between '2023-01-01' and '2023-03-31 23:59:59.9999'
+order by o.order_time;
+
+select p.name, p.price, o.order_time  from orders as o
+join products p on o.product_id = p.id
+join customers c on o.customer_id = c.id
+where c.gender = 'F' 
+and o.order_time between '2023-01-01' and '2023-01-31 23:59:59.9999'
+order by o.order_time;
 
 SET sql_safe_updates = false;
 SET sql_safe_updates = true;
