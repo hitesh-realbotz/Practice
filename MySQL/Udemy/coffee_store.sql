@@ -54,10 +54,86 @@ values 	( 'Latte', 3.50, 'Indonesia'),
 		( 'Filter', 3.00, 'India');
         
 UPDATE products 
-SET Coffee_origin = 'Sri Lanka' where id = 7;
+SET Coffee_origin = 'Sri Lanka', name = 'Filter' where id = 7;
+UPDATE products 
+SET Coffee_origin = 'Ethiopia', price = 3.25 where id = 5;
+update products set name = 'Filter2' , Coffee_origin = 'Sri Lanka2' where Coffee_origin = 'Sri Lanka' ;
 
-update products set name = 'Filter2', Coffee_origin = 'Sri Lanka2' where Coffee_origin = 'Sri Lanka' ;
+update products set Coffee_origin = 'Colombia' where Coffee_origin = 'Brazil' ;
 
+select * from products;
+select * from products 
+WHERE coffee_origin = 'Colombia';
+select * from products 
+WHERE price = 3.00 AND coffee_origin = 'Colombia';
+select * from products 
+WHERE price = 3.00 OR coffee_origin = 'Colombia';
+
+select * from products 
+WHERE price != 3.00;
+-- WHERE price <>  3.00;
+
+select * from products 
+where name < 'D';
+
+select * from customers
+where phone_number 
+is null; 
+-- is no- t null;
+
+select first_name, phone_number from customers
+where gender = 'F' AND last_name = 'Bluth';
+select first_name, phone_number from customers
+where gender = 'M' AND phone_number is null; 
+
+select * from customers
+Where last_name IN ('Taylor', 'Bluth', 'Armstrong');
+select * from customers
+Where last_name NOT IN ('Taylor', 'Bluth', 'Armstrong');
+select * from customers
+Where last_name between 'A' and 'L';
+
+select * from orders;
+select * from orders
+where order_time between '2022-03-01' AND '2022-03-31 23:59:59.999999' 
+AND customer_id in (19,20,21,24) ;
+
+select * from orders
+where customer_id between 3 and 7 ;
+
+select * from customers;
+select * from customers
+where last_name LIKE 'W%';
+select * from customers
+where first_name LIKE '%o%';
+select * from customers
+where first_name LIKE '_o%';
+
+select * from products;
+select * from products
+where price LIKE '3%';
+select * from products
+where price LIKE '%.5%';
+
+select * from products
+order by price asc;
+select * from products
+order by price desc;
+
+select * from customers;
+select * from customers
+where last_name = 'Bluth'
+order by last_name, first_name;
+
+select * from orders;
+select * from orders 
+order by order_time ;
+
+
+
+select * from orders 
+where year(order_time) = 2023 AND month(order_time) = 2
+AND customer_id IN (19,20,21,24);
 
 SET sql_safe_updates = false;
 SET sql_safe_updates = true;
