@@ -5,3 +5,11 @@ C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj
 C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.csproj.CoreCompileInputs.cache
 C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.exe
 C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.pdb
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\selenium-manager\linux\selenium-manager
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\selenium-manager\macos\selenium-manager
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\selenium-manager\windows\selenium-manager.exe
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\WebDriver.dll
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\bin\Debug\WebDriver.xml
+C:\Users\Administrator\Downloads\Practice\C#\Udemy\TempPractice\TempPractice\obj\Debug\TempPractice.csproj.CopyComplete
