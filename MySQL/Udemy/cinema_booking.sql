@@ -161,4 +161,54 @@ join reserved_seat rs on rs.booking_id = b.id
 group by b.customer_id, b.screening_id order by b.customer_id;
 
 
+select id, start_time, film_id from screenings 
+where film_id in ( select id from films where length_min > 120 ) ;
+
+
+select id, first_name, last_name, email  from customers
+where id in ( select customer_id from bookings where screening_id = 1 );
+
+select max(seat_count) from 
+( select booking_id, count(seat_id) as seat_count from reserved_seat group by booking_id ) b; 
+
+select * from bookings;
+select screening_id, customer_id from bookings order by screening_id;
+select screening_id, customer_id, (select count(seat_id) from reserved_seat where booking_id = b.id) as Count
+ from bookings b order by screening_id;
+
+select count(seat_id) from reserved_seat group by booking_id ;
+
+
+
+select name, length_min from films
+where length_min > ( select avg(length_min) from films ) ;
+
+select max(Count), min(Count) from 
+( select count(film_id) as Count from screenings group by film_id order by film_id ) r ;
+
+select * from films;
+select * from screenings;
+select ( select name from films where id = film_id ), film_id, count(*) as Count from screenings group by film_id ;
+
+select name, id, ( select count(*) from screenings where film_id = f.id ) from films f order by id;
+
+select * from customers;
+
+select concat(first_name,' ', last_name) as `Full Name` from customers;
+select concat(first_name, last_name) as `Full Name` from customers;
+select concat_ws(' ',first_name, last_name) as `Full Name` from customers;
+
+-- substring(string, start, length)
+select substring("Example",3,3) as Sub;
+select substring("Example",3) as Sub;
+select substring("Example",1,3) as Sub;
+select substring("Example",-2,3) as Sub;
+select substring("Example",-6,3) as Sub;
+
+select * from films;
+select substring(name, 1 , 4) as short_name from films;
+select substring(name, 5 , 6) as short_name from films;
+
+
+
 
