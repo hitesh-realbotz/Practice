@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntroToOops", "IntroToOops\IntroToOops.csproj", "{B702C326-5D02-4B15-98BA-9B8D7F196D98}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B702C326-5D02-4B15-98BA-9B8D7F196D98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B702C326-5D02-4B15-98BA-9B8D7F196D98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B702C326-5D02-4B15-98BA-9B8D7F196D98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B702C326-5D02-4B15-98BA-9B8D7F196D98}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FEB1B63D-A412-4CDD-B0C3-7D4DCCB3D991}
+	EndGlobalSection
+EndGlobal

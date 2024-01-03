@@ -1,0 +1,23 @@
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 5 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csprojResolveAssemblyReference.cache
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 5 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csproj.CoreCompileInputs.cache
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.exe.config
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.exe
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.pdb
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csprojResolveAssemblyReference.cache
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csproj.CoreCompileInputs.cache
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.exe
+G:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.pdb
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.exe.config
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.exe
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\bin\Debug\MagicDestroyers.pdb
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csprojResolveAssemblyReference.cache
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.csproj.CoreCompileInputs.cache
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.exe
+E:\CSharp OOP\Visual Studio Projects\Project\MagicDestroyers - Part 7 - Copy\MagicDestroyers\obj\Debug\MagicDestroyers.pdb
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\bin\Debug\MagicDestroyers.exe.config
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\bin\Debug\MagicDestroyers.exe
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\bin\Debug\MagicDestroyers.pdb
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\obj\Debug\MagicDestroyers.csprojResolveAssemblyReference.cache
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\obj\Debug\MagicDestroyers.csproj.CoreCompileInputs.cache
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\obj\Debug\MagicDestroyers.exe
+C:\Courses\05. C# OOP\Visual Studio Projects\Project\MagicDestroyers - Part 8\MagicDestroyers\obj\Debug\MagicDestroyers.pdb
