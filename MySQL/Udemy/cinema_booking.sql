@@ -119,9 +119,9 @@ join customers c on c.id = b.customer_id
 group by f.name,s.start_time, c.last_name, c.first_name order by s.start_time
 ;
 
-select b.customer_id, s.* from bookings b 
-join screenings s on b.screening_id = s.id
-where b.customer_id > 10;
+select f.name, s.start_time, c.last_name, c.first_name from films f join screenings s on s.film_id = f.id join bookings b on b.screening_id = s.id join customers c on c.id = b.customer_id group by f.name,s.start_time, c.last_name, c.first_name order by s.start_time;
+
+select b.customer_id, s.* from bookings b join screenings s on b.screening_id = s.id where b.customer_id > 10;
 
 select * from films;
 select * from customers;
@@ -152,7 +152,7 @@ group by f.name having f.length_min > 120
 order by f.name ;
 
 
-select f.name from films f
+select f.name, f.length_min from films f
 where f.length_min > 120;
 
 
@@ -208,7 +208,83 @@ select substring("Example",-6,3) as Sub;
 select * from films;
 select substring(name, 1 , 4) as short_name from films;
 select substring(name, 5 , 6) as short_name from films;
+select name from films;
+select lower(name) from films;
+select upper(name) from films;
+select concat(name, length_min) from films;
+select concat_ws(" - ",name, length_min) from films;
+select substring(email,5) from customers;
+select substring(email,-5) from customers;
+select ifnull((first_name), 'N/A'), upper(last_name) from customers where last_name = 'Smith';
+select (first_name), upper(last_name) from customers where last_name = 'Smith';
+select substr(name, -3) from films; 
+select concat_ws("   ", substring(first_name, 1,3), substring(last_name,1,3)) from customers;
 
 
+select * from screenings;
+select film_id, start_time from screenings where date(start_time) = '2022-06-18';
+select * from screenings where date(start_time) between '2023-03-06' and '2023-03-13';
+select * from screenings where year(start_time) = 2022 and month(start_time) = 10;
+select start_time from screenings;
+select date(start_time) from screenings;
+select  year(start_time) from screenings;
+select month(start_time) from screenings;
+select start_time, day(start_time) from screenings;
+select start_time, dayname(start_time) from screenings;
+select start_time, week(start_time) from screenings;
+select start_time, dayofyear(start_time) from screenings;
+select start_time, month(start_time), monthname(start_time) from screenings;
+select start_time, week(start_time), weekofyear(start_time), weekday(start_time), dayofweek(start_time) from screenings;
 
+SELECT WEEKDAY(CURDATE()), dayofweek(curdate());
+-- weekday starts from monday with 0 while dayofweek starts from sunday with 1
+select date('2024-01-31');
+select curdate();
+
+select * from screenings;
+select film_id, count(*) from screenings group by film_id order by film_id;
+select max( count) from
+(select film_id, count(*) as count from screenings group by film_id order by film_id) b;
+
+select f.name, count(s.film_id) as count from screenings s
+join films f on f.id = s.film_id
+group by s.film_id
+order by count desc
+limit 1;
+
+select f.name, count(s.film_id) as count from screenings s
+join films f on f.id = s.film_id
+group by s.film_id
+having count = (select max( count) from
+(select film_id, count(*) as count from screenings group by film_id order by film_id) b)
+;
+
+
+select * from films;
+select * from customers;
+select * from rooms;
+select * from screenings;
+select * from seats;
+select * from bookings;
+select * from reserved_seat;
+
+select s.id from films f 
+join screenings s on s.film_id = f.id where f.name = 'Jigsaw' and year(start_time) = 2022 and  month(start_time) = 5
+;
+select count(*) from bookings where screening_id in 
+(select s.id from films f 
+join screenings s on s.film_id = f.id where f.name = 'Jigsaw' 
+and year(start_time) = 2022 and  month(start_time) = 5)
+;
+select count(*) from bookings b
+join screenings s on s.id = b.screening_id
+join films f on f.id = s.film_id
+where f.name = 'Jigsaw' 
+and year(start_time) = 2022 and  month(start_time) = 5;
+
+
+select c.first_name, c.last_name, count(b.id) as no_bookings from bookings b
+join customers c on c.id = b.customer_id
+group by c.first_name, c.last_name
+order by no_bookings desc limit 5 ;
 
