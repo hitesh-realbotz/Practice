@@ -235,3 +235,44 @@ Increment By 20
 MinValue 100
 MaxValue 200
 Cycle 
+
+
+select P.* from sys.database_permissions P
+Join sys.database_principals U 
+On U.principal_id = P.grantee_principal_id
+Where U.name = 'admin';
+
+Grant create table to admin;
+Revoke create table to admin;
+
+Deny create table to admin;
+
+Grant select,insert,update on table_1 to admin
+Deny select,insert,update on table_1 to admin
+
+
+Revoke insert on table_1 to admin
+Revoke all on table_1 to admin
+
+
+select * from Production.ProductCostHistory;
+
+
+select ProductID, AVG(StandardCost) from Production.ProductCostHistory
+group by ProductID;
+
+select *, AVG(StandardCost) over (partition by ProductID) as 'OVER' from Production.ProductCostHistory
+
+
+
+select distinct EM.JobTitle from HumanResources.Employee EM
+join HumanResources.Employee EF 
+on EF.JobTitle = EM.JobTitle
+and EM.Gender = 'M'
+and EF.Gender = 'F';
+
+
+Exec HumanResources.GetAllGenderJobTitles @Gender1 = 'M' , @Gender2 = 'F'
+
+
+
