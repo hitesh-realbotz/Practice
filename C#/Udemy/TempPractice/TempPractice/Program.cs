@@ -16,111 +16,114 @@ namespace TempPractice
     {
         static void Main(string[] args)
         {
-            /*
-            float fNo = 673.14f;
-            double dNumber = 1234.56;
-            Console.WriteLine(fNo);
-            Console.WriteLine(dNumber);
-
-            Console.WriteLine(fNo);
-            Console.WriteLine();
-
-            //char sign = '\u00D6';
-            char sign = (char)65;
-            Console.WriteLine(sign);
-            Console.InputEncoding = Encoding.UTF8;
-            Console.OutputEncoding = Encoding.UTF8;
-            Console.WriteLine(Console.OutputEncoding);
-
-            string userName = "admin";
-
-            Console.WriteLine(userName[4]);
-
-            //int[] numbers = { 5, 6, 7, 8, 9, 1, 2, 3 };
-            int[] numbers = new int[5];
-            Console.WriteLine(numbers[2]);
             string separator = new String('*', 10);
-            Console.WriteLine(separator);
-            int intNo = 456;
-            Console.WriteLine(intNo + intNo + userName + intNo + intNo);
-            char charA = 'a';
-            char charB = 'b';
-            char charC = 'c';
-            string v1 = "First " + charA + " Second " + charB + " Third " + charC;
-            string v2 = string.Format("First {0} Second {1} Third {2} for {0} {1} {2} ", charA, charB, charC);
-            string v3 = $"First {charA} Second {charB} Third {charC} for {charA} {charB} {charC}";
-            Console.WriteLine(v1);
-            Console.WriteLine(v2);
-            Console.WriteLine(v3);
+            //float fNo = 673.14f;
+            //double dNumber = 1234.56;
+            //Console.WriteLine(fNo);
+            //Console.WriteLine(dNumber);
 
-            int number = 10;
-            string num = "5";
-            //string num = null;
-            Console.WriteLine(Convert.ToInt32(num));    //0 incase of num = null
-            Console.WriteLine(int.Parse(num));          //Exception incase of num = null
-            Console.WriteLine(separator);
-            string v4 = "C:\\Folder1\\File1";
-            v4 = "\"C:\\Folder1\\File1\"";
-            v4 = @"""C:\Folder1\File1""";
-            Console.WriteLine(v4);
+            //Console.WriteLine(fNo);
+            //Console.WriteLine();
 
-            Console.WriteLine(separator);
-            string fruit = "Strawberry";
-            string juice = "juice";
-            float dollerSign = 1000.56f;
-            Console.WriteLine("{0, 15}", fruit);
-            Console.WriteLine("{0, 15}", juice);
-            Console.WriteLine("{0, 15:C2}", dollerSign);
-            Console.WriteLine("{0:C2}", dollerSign);
-            Console.WriteLine("{0, 15:N7}", dollerSign);
-            Console.WriteLine("{0:N7}", dollerSign);
-            Console.WriteLine($"{fruit, 15}");
-            Console.WriteLine($"{juice, 15}");
-            Console.WriteLine($"{dollerSign, 15:C2}");
-            Console.WriteLine($"{dollerSign:C2}");
-            Console.WriteLine($"{dollerSign, 15:N7}");
-            Console.WriteLine($"{dollerSign:N7}");
-            
+            ////char sign = '\u00D6';
+            //char sign = (char)65;
+            //Console.WriteLine(sign);
+            //Console.InputEncoding = Encoding.UTF8;
+            //Console.OutputEncoding = Encoding.UTF8;
+            //Console.WriteLine(Console.OutputEncoding);
 
-            ConsoleKeyInfo key =  Console.ReadKey();
-            Console.WriteLine();
-            Console.WriteLine(key.KeyChar);
-            Console.WriteLine(key.Modifiers);
-            string mod = key.Modifiers.ToString();
-            string[] modArray = mod.Split(',');
-            Console.WriteLine(modArray[0]);
+            //string userName = "admin";
 
-            Console.CursorSize = 100;
+            //Console.WriteLine(userName[4]);
 
-            Console.WriteLine(Console.WindowHeight +" "+ Console.WindowWidth);
-            Console.WriteLine(Console.LargestWindowHeight +" "+ Console.LargestWindowWidth);
+            ////int[] numbers = { 5, 6, 7, 8, 9, 1, 2, 3 };
+            //int[] numbers = new int[5];
+            //Console.WriteLine(numbers[2]);
 
-            int num = Convert.ToInt32(Console.ReadLine());
-            switch (num)
-            {
-                case 0:
-                    Console.WriteLine($"Number is 0 ");
-                    break;
-                case 1:
-                    Console.WriteLine($"Number is 1");
-                    break;
-                default: Console.WriteLine("Default");
-                    break;
-            }
+            //Console.WriteLine(separator);
+            //int intNo = 456;
+            //Console.WriteLine(intNo + intNo + userName + intNo + intNo);
+            //char charA = 'a';
+            //char charB = 'b';
+            //char charC = 'c';
+            //string v1 = "First " + charA + " Second " + charB + " Third " + charC;
+            //string v2 = string.Format("First {0} Second {1} Third {2} for {0} {1} {2} ", charA, charB, charC);
+            //string v3 = $"First {charA} Second {charB} Third {charC} for {charA} {charB} {charC}";
+            //Console.WriteLine(v1);
+            //Console.WriteLine(v2);
+            //Console.WriteLine(v3);
 
-            Random rnd = new Random();
-            int counter = 0;
-            bool isMatched = false;
-            while (!isMatched)
-            {
-                int num = rnd.Next(1, 11);
-                //int num = rnd.Next(11);
-                counter++;
-                isMatched = checkIsMatched(isMatched, num); 
-                Console.WriteLine(num);
-            }
-            Console.WriteLine($"Counter : {counter}");
-            */
+            //int number = 10;
+            //string num = "5";
+            ////string num = null;
+            //Console.WriteLine(Convert.ToInt32(num));    //0 incase of num = null
+            //Console.WriteLine(int.Parse(num));          //Exception incase of num = null
+            //Console.WriteLine(separator);
+            //string v4 = "C:\\Folder1\\File1";
+            //v4 = "\"C:\\Folder1\\File1\"";
+            //v4 = @"""C:\Folder1\File1""";
+            //Console.WriteLine(v4);
+
+
+            //Console.WriteLine(separator);
+            //string fruit = "Strawberry";
+            //string juice = "juice";
+            //float dollerSign = 1000.56f;
+            //Console.WriteLine("{0, 15}", fruit);
+            //Console.WriteLine("{0, 15}", juice);
+            //Console.WriteLine("{0, 15:C2}", dollerSign);
+            //Console.WriteLine("{0:C2}", dollerSign);
+            //Console.WriteLine("{0, 15:N7}", dollerSign);
+            //Console.WriteLine("{0:N7}", dollerSign);
+            //Console.WriteLine($"{fruit, 15}");
+            //Console.WriteLine($"{juice, 15}");
+            //Console.WriteLine($"{dollerSign, 15:C2}");
+            //Console.WriteLine($"{dollerSign:C2}");
+            //Console.WriteLine($"{dollerSign, 15:N7}");
+            //Console.WriteLine($"{dollerSign:N7}");
+
+
+            //ConsoleKeyInfo key =  Console.ReadKey();
+            //Console.WriteLine();
+            //Console.WriteLine(key.KeyChar);
+            //Console.WriteLine(key.Modifiers);
+            //string mod = key.Modifiers.ToString();
+            //string[] modArray = mod.Split(',');
+            //Console.WriteLine(modArray[0]);
+
+            //Console.CursorSize = 100;
+
+            //Console.WriteLine(Console.WindowHeight +" "+ Console.WindowWidth);
+            //Console.WriteLine(Console.LargestWindowHeight +" "+ Console.LargestWindowWidth);
+
+            //int num = Convert.ToInt32(Console.ReadLine());
+            //switch (num)
+            //{
+            //    case 0:
+            //        Console.WriteLine($"Number is 0 ");
+            //        break;
+            //    case 1:
+            //        Console.WriteLine($"Number is 1");
+            //        break;
+            //    default: Console.WriteLine("Default");
+            //        break;
+            //}
+
+            //Random rnd = new Random();
+            //int counter = 0;
+            //bool isMatched = false;
+            //while (!isMatched)
+            //{
+            //    int num = rnd.Next(1, 11);
+            //    //int num = rnd.Next(11);
+            //    counter++;
+            //    isMatched = checkIsMatched(isMatched, num); 
+            //    Console.WriteLine(num);
+            //}
+            //Console.WriteLine($"Counter : {counter}");
+
+
+
 
             //int[] numbers = { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
             //double[] numbers = new double[5];            
@@ -343,7 +346,7 @@ namespace TempPractice
             //foodV3.AddRange(meatList);
 
             //List<string[]> foodV4 = new List<string[]>() { vegetablesList.ToArray(), fruitsList.ToArray(), meatList.ToArray() };
-
+            //Console.WriteLine("Food2 : *****");
             //foreach (var stringArray in foodV2)
             //{
             //    foreach (var individualFood in stringArray)
@@ -351,11 +354,13 @@ namespace TempPractice
             //        Console.WriteLine(individualFood);
             //    }
             //}
+            //Console.WriteLine("Food : *****");
             //foreach (var item in food)
             //{
             //    Console.WriteLine(item);
             //}
 
+            //Console.WriteLine("Food3 : *****");
             //foreach (var stringArray in foodV3)
             //{
             //    //foreach (var individualFood in stringArray)
@@ -365,6 +370,7 @@ namespace TempPractice
             //    Console.WriteLine(stringArray);
 
             //}
+            //Console.WriteLine("Food4 : *****");
             //foreach (var stringArray in foodV4)
             //{
             //    foreach (var individualFood in stringArray)
@@ -416,7 +422,10 @@ namespace TempPractice
             //        }
             //    }
             //}
-            //Console.WriteLine(temperatures);
+            //Console.WriteLine(temperatures[0][1,1,1]);
+            //Console.WriteLine(temperatures[0][3,3,1]);
+            //Console.WriteLine(temperatures[0][6,6,1]);
+            //Console.WriteLine(temperatures[0][9,9,1]);
 
 
             //string[,] people = new string[2, 4];
@@ -429,6 +438,7 @@ namespace TempPractice
             //    input = Console.ReadLine();
 
             //    person = input.Split(new string[] { ", " }, StringSplitOptions.None);
+
 
             //    for (int j = 0; j < people.GetLength(1); j++)
             //    {
@@ -527,7 +537,6 @@ namespace TempPractice
             //        counter = 0;
             //    }
             //}
-
             //PrintMatrix(matrixThree);
 
 
@@ -629,10 +638,15 @@ namespace TempPractice
             //string[] splitNamesV3 = namesV3.Split(new string[] { ",,,TH", "ao " }, StringSplitOptions.RemoveEmptyEntries);
             //string[] splitNamesV4 = namesV1.Split('A');
 
+            //foreach (var name in splitNamesV2)
+            //{
+            //    Console.WriteLine(name);
+            //}
             //foreach (var name in splitNamesV3)
             //{
             //    Console.WriteLine(name);
-            //}foreach (var name in splitNamesV4)
+            //}
+            //foreach (var name in splitNamesV4)
             //{
             //    Console.WriteLine(name);
             //}
@@ -690,9 +704,9 @@ namespace TempPractice
             //    Console.WriteLine(name);
             //}
 
-            ////name = name.Trim(new char[] { ' ', 'g', 'd', 'f' });
+            //name = name.Trim(new char[] { ' ', 'g', 'd', 'f' });
 
-            ////Console.WriteLine(name);
+            //Console.WriteLine(name);
 
 
             //string fileDirectory = @"C:\Program Files\Microsoft\Word\Wo....rd.exe";
@@ -734,7 +748,9 @@ namespace TempPractice
 
             //string testThree = testTwo.ToString();
             //Console.WriteLine(testOne.ElementAt(19999));
-            //Console.WriteLine(testTwo[1999999 ]);
+            //Console.WriteLine(testTwo[1999999]);
+            //Console.WriteLine(testTwo.Capacity);
+            //Console.WriteLine(testTwo.Length);
             //Console.WriteLine(testThree.Length);
 
 
@@ -820,6 +836,7 @@ namespace TempPractice
             //}
             //finally
             //{
+
             //    sw.Close();
             //}
 
@@ -833,6 +850,9 @@ namespace TempPractice
             //    Console.WriteLine("From Reader");
             //    Console.WriteLine(ex.Message);
             //}
+
+            int id = NthIndexOf("abcabcabcd", "c", 2);
+            Console.WriteLine(id);
 
         }
 
@@ -856,7 +876,6 @@ namespace TempPractice
             {
                 concatenatedString.Append(characterToConcatenate);
             }
-            Console.WriteLine(concatenatedString.Capacity);
 
             return concatenatedString;
         }
@@ -878,11 +897,11 @@ namespace TempPractice
                 index = input.IndexOf(toFind, startIndex);
                 startIndex = index + 1;
 
-                if (startIndex > input.Length)
-                {
-                    index = -1;
-                    return index;
-                }
+                //if (startIndex > input.Length)
+                //{
+                //    index = -1;
+                //    return index;
+                //}
             }
 
             return index;
