@@ -269,10 +269,17 @@ select distinct EM.JobTitle from HumanResources.Employee EM
 join HumanResources.Employee EF 
 on EF.JobTitle = EM.JobTitle
 and EM.Gender = 'M'
-and EF.Gender = 'F';
+and EF.Gender = 'F' where EM.JobTitle Like '[^P]%';
 
+select distinct EM.JobTitle from HumanResources.Employee EM
+join HumanResources.Employee EF 
+on EF.JobTitle = EM.JobTitle
+and EM.Gender = 'M'
+and EF.Gender = 'F'
+where EM.JobTitle Like '%-%'
 
 Exec HumanResources.GetAllGenderJobTitles @Gender1 = 'M' , @Gender2 = 'F'
 
 
-
+BACKUP DATABASE AdventureWorks2017
+TO DISK = 'D:\DatabaseBackup\testDB.bak';

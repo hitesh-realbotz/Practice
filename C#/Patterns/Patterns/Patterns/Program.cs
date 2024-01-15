@@ -14,6 +14,12 @@ namespace Patterns
             int n = 5;
             string space = new String(' ', 3);
             string star = " * ";
+
+            //12345
+            //1234
+            //123
+            //12
+            //1
             for (int i = 0; i < n; i++)
             {
                 for (int j = 1; j <= n - i; j++)
@@ -22,7 +28,13 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
+
+            //5
+            //44
+            //333
+            //2222
+            //11111
             for (int i = 0; i < n; i++)
             {
                 for (int j = 0; j <= i; j++)
@@ -31,8 +43,13 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
+            //    1
+            //   22
+            //  333
+            // 4444
+            //55555
             for (int i = 1; i <= n; i++)
             {
                 for (int j = 1; j <= n; j++)
@@ -48,8 +65,13 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
+            //    5
+            //   45
+            //  345
+            // 2345
+            //12345
             for (int i = 1; i <= n; i++)
             {
                 for (int j = 1; j <= n; j++)
@@ -65,53 +87,133 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
-
+            //           01
+            //         01 02 03
+            //      01 02 03 04 05
+            //   01 02 03 04 05 06 07
+            //01 02 03 04 05 06 07 08 09
+            int numberToPrint = 1;
             for (int i = 1; i <= n; i++)
             {
-                int numberToPrint = 1;
+                numberToPrint = 1;
                 for (int j = 1; j < n + i; j++)
                 {
                     if (j <= n - i)
                     {
-                        Console.Write(" ");
+                        Console.Write(space);
                     }
                     else
                     {
-                        Console.Write(numberToPrint++);
+                        Console.Write(numberToPrint++.ToString(" 00"));
                     }
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
+
+            //            01
+            //         02 03 04
+            //      05 06 07 08 09
+            //   10 11 12 13 14 15 16
+            //17 18 19 20 21 22 23 24 25
+            numberToPrint = 1;
+            for (int i = 1; i <= n; i++)
+            {
+
+                for (int j = 1; j < n + i; j++)
+                {
+                    if (j <= n - i)
+                    {
+                        Console.Write(space);
+                    }
+                    else
+                    {
+                        Console.Write(numberToPrint++.ToString(" 00"));
+                    }
+                }
+                Console.WriteLine();
+            }
+            PrintSeparator(separator);
+
+            //            01
+            //         02 01 02
+            //      03 02 01 02 03
+            //    04 03 02 01 02 03 04
+            //05 04 03 02 01 02 03 04 05
+            for (int i = 1; i <= n; i++)
+            {
+                numberToPrint = i;
+
+                for (int j = 1; j < n + i; j++)
+                {
+                    if (j <= n - i)
+                    {
+                        Console.Write(space);
+                    }
+                    else
+                    {
+                        if (j < n)
+                        {
+                            Console.Write(numberToPrint--.ToString(" 00"));
+
+                        }
+                        else if (j == n)
+                        {
+                            Console.Write(numberToPrint.ToString(" 00"));
+                        }
+                        else
+                        {
+                            ++numberToPrint;
+                            Console.Write(numberToPrint.ToString(" 00"));
+                        }
+                    }
+                }
+                Console.WriteLine();
+            }
+            PrintSeparator(separator);
+
+            //            *
+            //         *  *  *
+            //      *  *  *  *  *
+            //   *  *  *  *  *  *  *
+            //*  *  *  *  *  *  *  *  *
             for (int i = 1; i <= n; i++)
             {
                 for (int j = 1; j < n + i; j++)
                 {
                     if (j <= n - i)
                     {
-                        Console.Write(" ");
+                        Console.Write(space);
                     }
                     else
                     {
-                        Console.Write('*');
+                        Console.Write(star);
                     }
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
+
+            //         *
+            //      *  *  *
+            //   *  *  *  *  *
+            //*  *  *  *  *  *  *
+            //   *  *  *  *  *
+            //      *  *  *
+            //         *
             n = 7;
+            int refIndex = (n / 2) + 1;
             int topPartLoop = 0;
             int bottomPartLoop = 0;
             for (int i = 1; i <= n; i++)
             {
                 if (i <= (n / 2) + 1)
                 {
-
-                    for (int j = 1; j < (n / 2) + 1 + i; j++)
+                    for (int j = 1; j < refIndex + i; j++)
                     {
-                        if (j <= (n / 2) + 1 - i)
+                        if (j <= refIndex - i)
                         {
                             Console.Write(space);
                         }
@@ -125,9 +227,9 @@ namespace Patterns
                 }
                 else
                 {
-                    for (int j = 1; j <= (n / 2) + 1 + (n - i); j++)
+                    for (int j = 1; j <= refIndex + (n - i); j++)
                     {
-                        if (j <= i - ((n / 2) + 1))
+                        if (j <= i - refIndex)
                         {
                             Console.Write(space);
                         }
@@ -139,14 +241,21 @@ namespace Patterns
                     }
                     Console.WriteLine();
                 }
-
-
             }
             Console.WriteLine("topPartLoop iterations :" + topPartLoop);
             Console.WriteLine("bottomPartLoop iterations :" + bottomPartLoop);
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
+
+
+            //         *
+            //      *     *
+            //   *           *
+            //*                 *
+            //   *           *
+            //      *     *
+            //         *
             n = 7;
-            int refIndex = (n / 2) + 1;
+            
             for (int i = 1; i <= n; i++)
             {
                 //For First & Last Row
@@ -196,9 +305,16 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
 
+            //*  *  *  *  *  *  *
+            //*              *
+            //*           *
+            //*        *
+            //*     *
+            //*  *
+            //*
             for (int i = 0; i < n; i++)
             {
                 for (int j = 1; j <= n - i; j++)
@@ -215,8 +331,15 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
+            //*  *  *  *  *  *  *
+            //*                 *
+            //*                 *
+            //*                 *
+            //*                 *
+            //*                 *
+            //*  *  *  *  *  *  *
             for (int i = 0; i < n; i++)
             {
                 for (int j = 1; j <= n; j++)
@@ -233,8 +356,15 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
+            //01 02 03 04 05 06 07
+            //24                08
+            //23                09
+            //22                10
+            //21                11
+            //20                12
+            //19 18 17 16 15 14 13
             int ascNum = 1;
             int descNum = (n * 4) - 4;
             for (int i = 0; i < n; i++)
@@ -264,13 +394,22 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            PrintSeparator(separator);
 
+
+            //01 02 03 04 05 06 07
+            //14 13 12 11 10 09 08
+            //15 16 17 18 19 20 21
+            //28 27 26 25 24 23 22
+            //29 30 31 32 33 34 35
+            //42 41 40 39 38 37 36
+            //43 44 45 46 47 48 49
             ascNum = 1;
             for (int i = 0; i < n; i++)
             {
                 for (int j = 1; j <= n; j++)
                 {
+                    //For Odd no row 1/3/5
                     if (i % 2 == 0)
                     {
                         Console.Write(ascNum++.ToString(" 00"));
@@ -279,6 +418,7 @@ namespace Patterns
                             ascNum += (n - 1);
                         }
                     }
+                    //For Odd no row 2/4/6
                     else
                     {
                         Console.Write(ascNum--.ToString(" 00"));
@@ -291,26 +431,37 @@ namespace Patterns
                 }
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
-            ascNum = 1;
+            PrintSeparator(separator);
+
+            //01 08 15 22 29 36 43
+            //02 09 16 23 30 37 44
+            //03 10 17 24 31 38 45
+            //04 11 18 25 32 39 46
+            //05 12 19 26 33 40 47
+            //06 13 20 27 34 41 48
+            //07 14 21 28 35 42 49
             for (int i = 1; i <= n; i++)
             {
-
+                ascNum = i;
                 for (int j = 1; j <= n; j++)
                 {
-                    Console.Write(ascNum.ToString(" 00"));
+                    //Console.Write(ascNum.ToString(" 00"));
+                    Console.Write($"{ascNum,3}");
                     ascNum += n;
-
                 }
-                ascNum = i + 1;
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
-            ascNum = 1;
+            PrintSeparator(separator);
+
+            //01 10 11 20 21
+            //02 09 12 19 22
+            //03 08 13 18 23
+            //04 07 14 17 24
+            //05 06 15 16 25
             n = 5;
             for (int i = 1; i <= n; i++)
             {
-
+                ascNum = i;
                 for (int j = 1; j <= n; j++)
                 {
                     //For first row
@@ -318,7 +469,6 @@ namespace Patterns
                     {
                         if (j % 2 == 0)
                         {
-
                             Console.Write(ascNum.ToString(" 00"));
                             ascNum++;
                         }
@@ -333,7 +483,6 @@ namespace Patterns
                     {
                         if (j % 2 != 0)
                         {
-
                             Console.Write(ascNum.ToString(" 00"));
                             ascNum++;
                         }
@@ -358,11 +507,18 @@ namespace Patterns
                         }
                     }
                 }
-                ascNum = i + 1;
                 Console.WriteLine();
             }
-            Console.WriteLine(new String(separator, 40));
+            
+            PrintSeparator(separator);
 
         }
+
+        public static void PrintSeparator(char separator)
+        {
+            Console.WriteLine(new String(separator, 40));
+        }
     }
+
+
 }
