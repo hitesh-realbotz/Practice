@@ -1,0 +1,30 @@
+Pizza Restaurant API
+
+Database arn:aws:dynamodb:us-west-2:439044626894:table/Pizza
+
+Database Access Role
+
+IAM
+Create Role
+		AWS Service
+		Lambda
+		Next
+Filter Policies => AWSLAmbdaBasicExecutionRole
+					Next
+					Next
+Role Name => 	PizzaRole
+				Create Role
+				
+				
+PizzaRole from Roles => Add Permission
+						Create Inline Policy
+						
+						Service => DynamoDB
+						Action => 	GetItem
+									PutItem
+						Resources => Add ARN
+										Resource ARN => add table ARN
+										Ass ARNs
+						Next
+						Policy name 
+						Create Policy
