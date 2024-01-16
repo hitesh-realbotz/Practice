@@ -1,0 +1,7 @@
+<Pizza>
+	<Size>Small</Size>
+	<Toppings>
+		<Topping>Onions</Topping>
+		<Topping>Mushroom</Topping>
+	</Toppings>
+</Pizza>
