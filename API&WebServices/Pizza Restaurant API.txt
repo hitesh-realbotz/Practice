@@ -5,19 +5,19 @@ Database arn:aws:dynamodb:us-west-2:439044626894:table/Pizza
 Database Access Role
 
 IAM
-Create Role
+	Create Role
 		AWS Service
 		Lambda
 		Next
-Filter Policies => AWSLAmbdaBasicExecutionRole
-					Next
-					Next
-Role Name => 	PizzaRole
-				Create Role
+	Filter Policies => 	AWSLAmbdaBasicExecutionRole
+						Next
+						Next
+	Role Name => 		PizzaRole
+						Create Role
 				
 				
-PizzaRole from Roles => Add Permission
-						Create Inline Policy
+	PizzaRole from Roles =>	Add Permission
+							Create Inline Policy
 						
 						Service => DynamoDB
 						Action => 	GetItem
@@ -27,4 +27,23 @@ PizzaRole from Roles => Add Permission
 										Ass ARNs
 						Next
 						Policy name 
+
 						Create Policy
+
+Create Lambda Function
+
+Lambda 
+		Function name => PizzaGetFunction
+		Execution Role =>	Existing Role => PizzaRole
+		Create Function
+		
+		Add custome function 
+		
+		Test => 
+				Event Name => PizzaTest1
+				
+				
+		
+		
+		
+		
