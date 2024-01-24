@@ -15,9 +15,20 @@ namespace NZWalksAPI.Repositories
         }
 
         public async Task<List<Region>> GetAllAsync()
+        //public async Task<List<Region>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
         {
-            var regions = await this.dbContext.Regions.ToListAsync();
-            return regions;
+            //var regions =  this.dbContext.Regions.AsQueryable();
+
+            //if (string.IsNullOrWhiteSpace(filterOn) == false && string.IsNullOrWhiteSpace(filterQuery))
+            //{
+            //    if (filterOn.Equals("Name", StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        regions = regions.Where(x => x.Name.Contains(filterQuery));
+            //    }
+            //}
+            //return await regions.ToListAsync();
+
+            return await this.dbContext.Regions.ToListAsync();
         }
 
         public async Task<Region?> GetByIdAsync(Guid id)

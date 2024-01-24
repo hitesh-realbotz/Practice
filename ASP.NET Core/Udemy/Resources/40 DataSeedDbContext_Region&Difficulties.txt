@@ -1,41 +1,26 @@
-﻿using Microsoft.EntityFrameworkCore;
-using NZWalksAPI.Models.Domain;
+using Microsoft.EntityFrameworkCore;
+using NZWalks.API.Models.Domain;
 
-namespace NZWalksAPI.Data
+namespace NZWalks.API.Data
 {
-    public class NZWalksDbContext : DbContext
+    public class NZWalksDbContext: DbContext
     {
-        public NZWalksDbContext(DbContextOptions dbContextOptions) : base(dbContextOptions)
+        public NZWalksDbContext(DbContextOptions dbContextOptions): base(dbContextOptions)
         {
 
         }
 
         public DbSet<Difficulty> Difficulties { get; set; }
+
         public DbSet<Region> Regions { get; set; }
+
         public DbSet<Walk> Walks { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            //var difficulties = new List<Difficulty>()
-            //{
-            //new Difficulty()
-            //{
-            //    Id = Guid.Parse("4f346032-ac24-4dc2-adf2-8303a9fd7075"),
-            //    Name = "Easy"
-            //},
-            //new Difficulty()
-            //{
-            //    Id = Guid.Parse("64b04db4-ed10-412f-8a9c-e81a7ca2a09c"),
-            //    Name = "Medium"
-            //},
-            //new Difficulty()
-            //{
-            //    Id = Guid.Parse("7f4e11cd-c950-4250-a403-200de4772d98"),
-            //    Name = "Hard"
-            //}
-            //};
             // Seed data for Difficulties
             // Easy, Medium, Hard
             var difficulties = new List<Difficulty>()
@@ -56,7 +41,11 @@ namespace NZWalksAPI.Data
                     Name = "Hard"
                 }
             };
+
+            // Seed difficulties to the database
             modelBuilder.Entity<Difficulty>().HasData(difficulties);
+
+
 
             // Seed data for Regions
             var regions = new List<Region>
@@ -104,8 +93,8 @@ namespace NZWalksAPI.Data
                     RegionImageUrl = null
                 },
             };
-            modelBuilder.Entity<Region>().HasData(regions);
 
+            modelBuilder.Entity<Region>().HasData(regions);
         }
     }
 }
