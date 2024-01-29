@@ -9,6 +9,7 @@ using NZWalksAPI.Models.Domain;
 using NZWalksAPI.Models.DTO;
 using NZWalksAPI.Repositories;
 using System.Diagnostics;
+using System.Text.Json;
 
 namespace NZWalksAPI.Controllers
 {
@@ -20,42 +21,65 @@ namespace NZWalksAPI.Controllers
         private readonly NZWalksDbContext dbContext;
         private readonly IRegionRepository regionRepository;
         private readonly IMapper mapper;
+        private readonly ILogger<RegionsController> logger;
 
-        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper)
+        public RegionsController(NZWalksDbContext dbContext, IRegionRepository regionRepository, IMapper mapper, ILogger<RegionsController> logger
+            )
         {
             this.dbContext = dbContext;
             this.regionRepository = regionRepository;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         //Get api/region?filterOn=Name&filterQuery=Track
         [HttpGet]
-        [Authorize(Roles = "Reader, Writer")]
+        //[Authorize(Roles = "Reader, Writer")]
         public async Task<IActionResult> GetALL()
         {
-            var regionsDomain = await this.regionRepository.GetAllAsync();
+
+            //logger.LogInformation("GetAll action method Invoked");
+            //logger.LogWarning("This is Warning");
+            //logger.LogError("This is Error");
+            try
+            {
+                throw new Exception("This is custom exception");
+                
+                var regionsDomain = await this.regionRepository.GetAllAsync();
+
+                //var regionsDto = new List<RegionDto>();
+                //foreach (var regionDomain in regionsDomain)
+                //{
+                //    regionsDto.Add(new RegionDto()
+                //    {
+                //        Id = regionDomain.Id,
+                //        Name = regionDomain.Name,
+                //        Code = regionDomain.Code,
+                //        RegionImageUrl = regionDomain.RegionImageUrl
+                //    });
+                //}
+
+                var regionsDto = mapper.Map<List<RegionDto>>(regionsDomain);
+
+                logger.LogInformation($"Finished  GetAll Regions request with data : {JsonSerializer.Serialize(regionsDomain)}");
+                return Ok(regionsDto);
+
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, ex.Message);
+                throw;
+            }
+
             
-            //var regionsDto = new List<RegionDto>();
-            //foreach (var regionDomain in regionsDomain)
-            //{
-            //    regionsDto.Add(new RegionDto()
-            //    {
-            //        Id = regionDomain.Id,
-            //        Name = regionDomain.Name,
-            //        Code = regionDomain.Code,
-            //        RegionImageUrl = regionDomain.RegionImageUrl
-            //    });
-            //}
 
-            var regionsDto = mapper.Map<List<RegionDto>>(regionsDomain);
 
-            return Ok(regionsDto);
         }
 
         [HttpGet]
         //[Route("{id:Guid}")]
         [Route("{id}")]
-        [Authorize(Roles = "Reader")]
+        //[Authorize(Roles = "Reader")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         //public IActionResult GetByID(Guid id)
         {
@@ -80,7 +104,7 @@ namespace NZWalksAPI.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         [ValidateModel]
         public async Task<IActionResult> Create([FromBody] AddRegionRequestDto addRegionRequestDto)
         {
@@ -118,7 +142,7 @@ namespace NZWalksAPI.Controllers
         }
 
         [HttpPut]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         [Route("{id:Guid}")]
         [ValidateModel]
         public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto updateRegionRequestDto)
@@ -148,7 +172,7 @@ namespace NZWalksAPI.Controllers
         }
 
         [HttpDelete]
-        [Authorize(Roles = "Writer")]
+        //[Authorize(Roles = "Writer")]
         [Route("{id:Guid}")]
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Web_Api_Versioning_Nuget_Package.API.props" />
+</Project>

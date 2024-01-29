@@ -30,7 +30,7 @@ namespace NZWalksAPI.Controllers
             return Ok(walkDto);
         }
 
-        //Get api/walks?filterOn=Name&filterQuery=Track
+        //Get api/walks?filterOn=Name&filterQuery=Track&sortBy=name&isAscending=true&pageNumber=1&pageSize=5
         [HttpGet]
         public async Task<IActionResult> GetAll([FromQuery] string? filterOn, [FromQuery] string? filterQuery, [FromQuery]
                                                   string? sortBy, [FromQuery] bool? isAscending, 
@@ -38,6 +38,11 @@ namespace NZWalksAPI.Controllers
         {
             var walkDomainModels = await this.walkRepository.GetAllAsync(filterOn, filterQuery, sortBy, isAscending ?? true, pageNumber, pageSize);
             var walkDto = this.mapper.Map<List<WalkDto>>(walkDomainModels);
+
+            //create an exception
+            throw new Exception("This is new exception");
+            
+
             return Ok(walkDto);
         }
 
