@@ -15,7 +15,6 @@ namespace NZWalksAPI.Repositories
         }
 
         public async Task<List<Region>> GetAllAsync()
-        //public async Task<List<Region>> GetAllAsync(string? filterOn = null, string? filterQuery = null)
         {
             //var regions =  this.dbContext.Regions.AsQueryable();
 
