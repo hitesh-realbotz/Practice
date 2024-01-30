@@ -1,0 +1,14 @@
+Serilog
+Serilog.AspNetCore
+Serilog.Sinks.Console
+
+Serilog
+Serilog.AspNetCore
+Serilog.Sinks.File
+
+
+
+Versioning =>
+
+Microsoft.AspNetCore.Mvc.Versioning
+Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer => for Swagger correction

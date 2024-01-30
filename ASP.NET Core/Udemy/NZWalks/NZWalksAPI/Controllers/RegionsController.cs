@@ -43,7 +43,7 @@ namespace NZWalksAPI.Controllers
             //logger.LogError("This is Error");
             try
             {
-                throw new Exception("This is custom exception");
+                //throw new Exception("This is custom exception");
                 
                 var regionsDomain = await this.regionRepository.GetAllAsync();
 
