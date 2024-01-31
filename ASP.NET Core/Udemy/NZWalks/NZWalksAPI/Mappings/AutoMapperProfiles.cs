@@ -11,11 +11,14 @@ namespace NZWalksAPI.Mappings
             //CreateMap<UserDTO, UserDomain>();
             //CreateMap<UserDTO, UserDomain>().ReverseMap();
 
+           
             //CreateMap<UserDTO, UserDomain>()
             //    .ForMember(x => x.Name, opt => opt.MapFrom(x => x.FullName));
+            //    .ForMember(dest => dest.Name, options => options.MapFrom(src => src.FullName));
             //CreateMap<UserDTO, UserDomain>()
             //    .ForMember(x => x.Name, opt => opt.MapFrom(x => x.FullName))
             //    .ReverseMap();
+
 
             CreateMap<Region, RegionDto>().ReverseMap();
             CreateMap<AddRegionRequestDto, Region>();

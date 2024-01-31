@@ -16,6 +16,8 @@ namespace NZWalksAPI.Repositories
 
         public async Task<Walk> CreateAsync(Walk walk)
         {
+            //var walks = this.dbContext.Walks.Include("Region").Include("Difficulty").AsQueryable();
+            
             await dbContext.AddAsync(walk);
             await dbContext.SaveChangesAsync();
 
@@ -35,7 +37,8 @@ namespace NZWalksAPI.Repositories
             //    await dbContext.AddAsync(walkLoop);
             //    await dbContext.SaveChangesAsync();
             //}
-            return walk;
+            return await this.dbContext.Walks.Include("Region").Include("Difficulty").FirstOrDefaultAsync(w => w.Id == walk.Id);
+            //return walk;
         }
 
         //public async Task<List<Walk>> GetAllAsync()
