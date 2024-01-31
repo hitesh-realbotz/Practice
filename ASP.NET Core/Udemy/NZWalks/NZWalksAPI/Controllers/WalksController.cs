@@ -40,7 +40,7 @@ namespace NZWalksAPI.Controllers
             var walkDto = this.mapper.Map<List<WalkDto>>(walkDomainModels);
 
             //create an exception
-            throw new Exception("This is new exception");
+            //throw new Exception("This is new exception");
             
 
             return Ok(walkDto);
