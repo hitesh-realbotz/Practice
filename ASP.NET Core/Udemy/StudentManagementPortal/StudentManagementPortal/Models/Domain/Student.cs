@@ -9,7 +9,7 @@ namespace StudentManagementPortal.Models.Domain
         public string ImageUrl { get; set; }
         public long MobNumber { get; set; }
 
-        ICollection<StudentResult> StudentResults { get; set; }
+        public ICollection<Result> Results { get; set; }
         
     }
 }
