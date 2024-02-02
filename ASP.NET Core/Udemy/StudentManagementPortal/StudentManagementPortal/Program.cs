@@ -22,7 +22,11 @@ builder.Services.AddDbContext<StudentPortalDbContext>(options => options.UseSqlS
 
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<IStudentRepository, SQLStudentRepository>();
+builder.Services.AddScoped<IAdminRepository, SQLAdminRepository>();
+builder.Services.AddScoped<IResultRepository, SQLResultRepository>();
+
 builder.Services.AddScoped<ITokenHandler, StudentManagementPortal.Repositories.TokenHandler>();
+
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

@@ -11,6 +11,7 @@ namespace StudentManagementPortal.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Student> Students { get; set; }
         public DbSet<Result> Results { get; set; }
         public DbSet<ResultSubject> ResultSubjects { get; set; }
@@ -18,6 +19,9 @@ namespace StudentManagementPortal.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<Student>().ToTable("Students");
+            modelBuilder.Entity<Admin>().ToTable("Admins");
             modelBuilder.Entity<Result>()
                 .HasOne(r => r.Student)
                 .WithMany(s => s.Results)

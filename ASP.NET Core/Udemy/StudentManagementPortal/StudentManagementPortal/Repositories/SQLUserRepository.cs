@@ -24,42 +24,42 @@ namespace StudentManagementPortal.Repositories
 
         public async Task<User?> FindByEmailAsync(string email)
         {
-            var user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.Email == email);
+            var user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == email);
             return user;
         }
 
-        public async Task<User?> FindByStudentIdAsync(int studentId)
-        {
-            var user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.StudentId == studentId);
-            return user;
-        }
+        //public async Task<User?> FindByStudentIdAsync(int studentId)
+        //{
+        //    var user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.StudentId == studentId);
+        //    return user;
+        //}
 
-        public async Task<StudentProfileDto?> UpdateAsync(StudentProfileDto studentProfileDto)
-        {
-            var user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.Id == studentProfileDto.UserId);
-            if (user == null)
-            {
-                return null;
-            }
-            user.Name = studentProfileDto.Name;
-            user.Student.ImageUrl = studentProfileDto.ImageUrl;
-            await dbContext.SaveChangesAsync();
-            user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.Id == studentProfileDto.UserId);
-            var updatedStudentProfileDto = new StudentProfileDto()
-            {
-                EnrollmentId = user.Student.EnrollmentId,
-                StudentId = user.Student.Id,
-                ImageUrl = user.Student.ImageUrl,
-                MobNumber = user.Student.MobNumber,
-                UserId = user.Id,
-                Name = user.Name,
-                Email = user.Email,
-                Password = null,
-                Role = user.Role,
-                Status = user.Status
-            };
+        //public async Task<StudentProfileDto?> UpdateAsync(StudentProfileDto studentProfileDto)
+        //{
+        //    var user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.Id == studentProfileDto.UserId);
+        //    if (user == null)
+        //    {
+        //        return null;
+        //    }
+        //    user.Name = studentProfileDto.Name;
+        //    user.Student.ImageUrl = studentProfileDto.ImageUrl;
+        //    await dbContext.SaveChangesAsync();
+        //    user = await dbContext.Users.Include("Student").FirstOrDefaultAsync(u => u.Id == studentProfileDto.UserId);
+        //    var updatedStudentProfileDto = new StudentProfileDto()
+        //    {
+        //        EnrollmentId = user.Student.EnrollmentId,
+        //        StudentId = user.Student.Id,
+        //        ImageUrl = user.Student.ImageUrl,
+        //        MobNumber = user.Student.MobNumber,
+        //        UserId = user.Id,
+        //        Name = user.Name,
+        //        Email = user.Email,
+        //        Password = null,
+        //        Role = user.Role,
+        //        Status = user.Status
+        //    };
 
-            return updatedStudentProfileDto;
-        }
+        //    return updatedStudentProfileDto;
+        //}
     }
 }

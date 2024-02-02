@@ -17,12 +17,16 @@ namespace StudentManagementPortal.Controllers
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
         private readonly ITokenHandler tokenHandler;
+        private readonly IStudentRepository studentRepository;
+        private readonly IAdminRepository adminRepository;
 
-        public AuthController(IUserRepository userRepository, IMapper mapper, ITokenHandler tokenHandler)
+        public AuthController(IUserRepository userRepository, IMapper mapper, ITokenHandler tokenHandler, IStudentRepository studentRepository, IAdminRepository adminRepository)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
             this.tokenHandler = tokenHandler;
+            this.studentRepository = studentRepository;
+            this.adminRepository = adminRepository;
         }
 
         [HttpPost]
@@ -33,36 +37,62 @@ namespace StudentManagementPortal.Controllers
 
             if (user != null)
             {
-                if (user.Student.EnrollmentId == addUserRequestDto.EnrollmentId)
-                {
-                    ModelState.AddModelError(nameof(addUserRequestDto.EnrollmentId), $"{user.Student.EnrollmentId} {nameof(addUserRequestDto.EnrollmentId)} already registered. Please Register with another EnrollmentId.");
-                }
                 ModelState.AddModelError(nameof(addUserRequestDto.Email), $"{user.Email} {nameof(addUserRequestDto.Email)} already registered. Please Register with another emailId.");
                 return Conflict(ModelState);
                 //return Conflict(new { Message = "Email already exists!" });
             }
-            var userDomainModel = new User()
+
+            if (addUserRequestDto.Role == "Student")
             {
-                Name = addUserRequestDto.Name,
-                Email = addUserRequestDto.Email,
-                HashPassword = GetHashedPassword(addUserRequestDto.Password),
-                //Role = addUserRequestDto.Role,
-                Role = "Student",
-                Status = "Active",
-                Student = new Student()
+                if (addUserRequestDto.EnrollmentId != null && await IsEnrollmentIdRegistered(addUserRequestDto))
                 {
-                    EnrollmentId = addUserRequestDto.EnrollmentId,
+                    return Conflict(ModelState);
+                }
+                Student student = new Student()
+                {
+                    Name = addUserRequestDto.Name,
+                    Email = addUserRequestDto.Email,
+                    HashPassword = GetHashedPassword(addUserRequestDto.Password),
+                    Role = addUserRequestDto.Role,
+                    Status = "Active",
+                    EnrollmentId = (int)addUserRequestDto.EnrollmentId,
                     MobNumber = addUserRequestDto.MobNumber,
                     ImageUrl = addUserRequestDto.ImageUrl,
-                }
-            };
-
-            userDomainModel = await userRepository.CreateAsync(userDomainModel);
-
-            var userDto = mapper.Map<UserDto>(userDomainModel);
-            return Ok(userDto);
-
+                };
+                student = await studentRepository.CreateAsync(student);
+                return Ok(mapper.Map<StudentDto>(student));
+            }
+            else
+            {
+                Admin admin = new Admin()
+                {
+                    Name = addUserRequestDto.Name,
+                    Email = addUserRequestDto.Email,
+                    HashPassword = GetHashedPassword(addUserRequestDto.Password),
+                    Role = addUserRequestDto.Role,
+                    Status = "Active",
+                    Level = addUserRequestDto.Level
+                };
+                admin = await adminRepository.CreateAsync(admin);
+                return Ok(mapper.Map<AdminDto>(admin));
+            }
         }
+
+        private async Task<bool> IsEnrollmentIdRegistered(AddUserRequestDto addUserRequestDto)
+        {
+            var student = await studentRepository.GetStudentByEnrollmentIdAsync((int)addUserRequestDto.EnrollmentId);
+            if (student == null)
+            {
+                return false;
+            }
+            if (student.EnrollmentId == addUserRequestDto.EnrollmentId)
+            {
+                ModelState.AddModelError(nameof(addUserRequestDto.EnrollmentId), $"{student.EnrollmentId} {nameof(addUserRequestDto.EnrollmentId)} already registered. Please Register with another EnrollmentId.");
+                return true;
+            }
+            return false;
+        }
+
 
         private static string GetHashedPassword(string password)
         {
@@ -99,7 +129,7 @@ namespace StudentManagementPortal.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
             var user = await userRepository.FindByEmailAsync(loginRequestDto.Email);
-            if (user == null )
+            if (user == null)
             {
                 return BadRequest("Email incorrect");
             }

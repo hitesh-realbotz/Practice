@@ -10,8 +10,8 @@ namespace StudentManagementPortal.Models.DTOs
         public string HashPassword { get; set; }
         public string Role { get; set; }
         public string Status { get; set; }      //Active-Locked-Deactivate
-        public int? StudentId { get; set; }
+        //public int? StudentId { get; set; }
 
-        public Student? Student { get; set; }
+        //public Student? Student { get; set; }
     }
 }
