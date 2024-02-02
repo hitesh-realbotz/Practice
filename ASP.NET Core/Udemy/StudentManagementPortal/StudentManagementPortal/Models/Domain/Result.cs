@@ -2,10 +2,12 @@
 {
     public class Result
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string Year { get; set; } //2023-2024
+        public int StudentId { get; set; }
 
-        ICollection<StudentResult> StudentResults { get; set; }
-        ICollection<ResultSubject> ResultSubjects { get; set; }
+        public Student Student { get; set; }
+
+        public ICollection<ResultSubject> ResultSubjects { get; set; }
     }
 }
