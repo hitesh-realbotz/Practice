@@ -9,6 +9,6 @@ namespace StudentManagementPortal.Models.DTOs
         public int ObtainedMarks { get; set; }
         public int TotalMarks { get; set; }
         public int ResultId { get; set; }
-        public Result Result { get; set; }
+        
     }
 }

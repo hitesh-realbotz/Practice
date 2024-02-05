@@ -99,29 +99,6 @@ namespace StudentManagementPortal.Migrations
                     b.ToTable("ResultSubjects");
                 });
 
-            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Student", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EnrollmentId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("MobNumber")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Students");
-                });
-
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.User", b =>
                 {
                     b.Property<int>("Id")
@@ -150,14 +127,40 @@ namespace StudentManagementPortal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("StudentId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("StudentId");
+                    b.ToTable("Users", (string)null);
 
-                    b.ToTable("Users");
+                    b.UseTptMappingStrategy();
+                });
+
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Admin", b =>
+                {
+                    b.HasBaseType("StudentManagementPortal.Models.Domain.User");
+
+                    b.Property<string>("Level")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Admins", (string)null);
+                });
+
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Student", b =>
+                {
+                    b.HasBaseType("StudentManagementPortal.Models.Domain.User");
+
+                    b.Property<int>("EnrollmentId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MobNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("Students", (string)null);
                 });
 
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.Result", b =>
@@ -182,13 +185,22 @@ namespace StudentManagementPortal.Migrations
                     b.Navigation("Result");
                 });
 
-            modelBuilder.Entity("StudentManagementPortal.Models.Domain.User", b =>
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Admin", b =>
                 {
-                    b.HasOne("StudentManagementPortal.Models.Domain.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId");
+                    b.HasOne("StudentManagementPortal.Models.Domain.User", null)
+                        .WithOne()
+                        .HasForeignKey("StudentManagementPortal.Models.Domain.Admin", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("Student");
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Student", b =>
+                {
+                    b.HasOne("StudentManagementPortal.Models.Domain.User", null)
+                        .WithOne()
+                        .HasForeignKey("StudentManagementPortal.Models.Domain.Student", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.Result", b =>
