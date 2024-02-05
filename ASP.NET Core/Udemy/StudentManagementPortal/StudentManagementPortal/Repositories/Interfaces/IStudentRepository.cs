@@ -5,7 +5,7 @@ namespace StudentManagementPortal.Repositories.Interfaces
 {
     public interface IStudentRepository
     {
-        Task<Student> CreateAsync(Student student);
+        Task<Student?> CreateAsync(Student student);
         Task<Student?> GetStudentByEnrollmentIdAsync(int enrollmentId);
         Task<Student?> UpdateAsync(Student student);
 

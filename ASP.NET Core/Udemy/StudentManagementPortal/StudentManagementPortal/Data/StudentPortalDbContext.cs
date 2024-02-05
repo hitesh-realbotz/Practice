@@ -19,8 +19,9 @@ namespace StudentManagementPortal.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<User>().ToTable("Users");
-            modelBuilder.Entity<Student>().ToTable("Students");
+            //modelBuilder.Entity<User>().ToTable("Users");
+            modelBuilder.Entity<User>().ToTable("Users").HasIndex(u => u.Email).IsUnique();
+            modelBuilder.Entity<Student>().ToTable("Students").HasIndex(s => s.EnrollmentId).IsUnique();
             modelBuilder.Entity<Admin>().ToTable("Admins");
             modelBuilder.Entity<Result>()
                 .HasOne(r => r.Student)
