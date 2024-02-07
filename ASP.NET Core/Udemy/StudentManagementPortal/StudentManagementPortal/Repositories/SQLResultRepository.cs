@@ -46,5 +46,7 @@ namespace StudentManagementPortal.Repositories
             }
             return result;
         }
+
+        
     }
 }

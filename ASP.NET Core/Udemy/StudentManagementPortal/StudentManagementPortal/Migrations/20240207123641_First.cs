@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace StudentManagementPortal.Migrations
 {
     /// <inheritdoc />
@@ -122,6 +124,24 @@ namespace StudentManagementPortal.Migrations
                         principalTable: "Results",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "HashPassword", "Name", "Role", "Status" },
+                values: new object[,]
+                {
+                    { 1, "admin@email.com", "625345a1791280f4e576dd24d1e5968a038dd06f85fda80c3bef22c1706361eb1QYVMn", "admin", "Admin", "Active" },
+                    { 2, "admin2@email.com", "5051249e2707c9fc7d64338541b1326727616b73ce674829c94b17dfd978b546VpFFRd", "admin2", "Admin", "Active" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Admins",
+                columns: new[] { "Id", "Level" },
+                values: new object[,]
+                {
+                    { 1, "L1" },
+                    { 2, "L1" }
                 });
 
             migrationBuilder.CreateIndex(

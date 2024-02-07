@@ -1,10 +1,13 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
+using System.Net;
+using System.Security.Claims;
 
 namespace StudentManagementPortal.Controllers
 {
@@ -24,6 +27,7 @@ namespace StudentManagementPortal.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var studentList = await studentRepository.GetAllAsync();
@@ -33,33 +37,41 @@ namespace StudentManagementPortal.Controllers
 
         [HttpGet]
         [Route("{enrollmentId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStudentProfile([FromRoute] int enrollmentId)
         {
             var studentDomainModel = await studentRepository.GetStudentByEnrollmentIdAsync(enrollmentId);
             if (studentDomainModel != null)
             {
-                //var userDomainModel = await userRepository.FindByStudentIdAsync(studentDomainModel.Id);
-                //var studentProfileDto = new StudentProfileDto()
-                //{
-                //    EnrollmentId = studentDomainModel.EnrollmentId,
-                //    ImageUrl = studentDomainModel.ImageUrl,
-                //    MobNumber = studentDomainModel.MobNumber,
-                //    UserId = studentDomainModel.Id,
-                //    Name = studentDomainModel.Name,
-                //    Email = studentDomainModel.Email,
-                //    Password = null,
-                //    Role = studentDomainModel.Role,
-                //    Status = studentDomainModel.Status
-                //};
                 studentDomainModel.HashPassword = null;
                 var studentProfileDto = mapper.Map<StudentProfileDto>(studentDomainModel);
                 return Ok(studentProfileDto);
-
             }
-            return BadRequest(new { Message = "Student with Id not found" });
+
+            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
         }
 
+
+        [HttpGet]
+        [Route("ByLoggedUser")]
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> GetByLoggedUser()
+        {
+            int enrollmentId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.SerialNumber));
+            var studentDomainModel = await studentRepository.GetStudentByEnrollmentIdAsync(enrollmentId);
+            if (studentDomainModel != null)
+            {
+                studentDomainModel.HashPassword = null;
+                var studentProfileDto = mapper.Map<StudentProfileDto>(studentDomainModel);
+                return Ok(studentProfileDto);
+            }
+
+            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
+        }
+
+
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateStudentProfile([FromBody] StudentProfileDto studentProfileDto)
         {
             var studentDomainModel = mapper.Map<Student>(studentProfileDto);
@@ -68,8 +80,10 @@ namespace StudentManagementPortal.Controllers
             return Ok(mapper.Map<StudentProfileDto>(studentDomainModel));
         }
 
+
         [HttpDelete]
         [Route("{enrollmentId:int}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int enrollmentId)
         {
             var deletedStudent = await studentRepository.DeleteAsync(enrollmentId);
@@ -77,7 +91,7 @@ namespace StudentManagementPortal.Controllers
             {
                 return Ok(mapper.Map<StudentProfileDto>(deletedStudent));
             }
-            return NotFound(new { Message = "Student with Id not found" });
+            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
         }
     }
 }

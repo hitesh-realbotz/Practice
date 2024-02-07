@@ -1,11 +1,14 @@
 ﻿using StudentManagementPortal.Models.Domain;
+using System.ComponentModel.DataAnnotations;
 
 namespace StudentManagementPortal.Models.DTOs
 {
     public class AddResultRequestDto
     {
-        public string Year { get; set; } //2023-2024
-        public int StudentId { get; set; }
+        [Required]
+        public string Year { get; set; }
+        [Required] 
+        public int EnrollmentId { get; set; }
 
         public List<AddSubjectRequestDto> ResultSubjects { get; set; }
     }

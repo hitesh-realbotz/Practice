@@ -19,6 +19,11 @@ namespace StudentManagementPortal.Repositories
         {
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            if (user.Role == "Student")
+            {
+                Student student = (Student)user;
+                claims.Add(new Claim(ClaimTypes.SerialNumber, student.EnrollmentId.ToString()));
+            }
             claims.Add(new Claim(ClaimTypes.Role, user.Role));
             claims.Add(new Claim(ClaimTypes.Name, user.Name));
 

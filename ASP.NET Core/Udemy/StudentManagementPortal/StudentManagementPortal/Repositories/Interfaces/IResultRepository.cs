@@ -8,5 +8,6 @@ namespace StudentManagementPortal.Repositories.Interfaces
         Task<List<Result>> GetAllAsync();
         Task<Result?> GetByIdAsync(int id);
         Task<Result?> GetByEnrollmentIdAsync(int enrollmentId);
+        //Task<Result?> GetByStudentIdAsync(int studentId);
     }
 }
