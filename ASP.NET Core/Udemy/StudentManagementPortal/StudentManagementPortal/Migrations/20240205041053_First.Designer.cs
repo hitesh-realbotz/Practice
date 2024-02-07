@@ -12,7 +12,7 @@ using StudentManagementPortal.Data;
 namespace StudentManagementPortal.Migrations
 {
     [DbContext(typeof(StudentPortalDbContext))]
-    [Migration("20240202062704_First")]
+    [Migration("20240205041053_First")]
     partial class First
     {
         /// <inheritdoc />
@@ -112,7 +112,7 @@ namespace StudentManagementPortal.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("HashPassword")
                         .IsRequired()
@@ -131,6 +131,9 @@ namespace StudentManagementPortal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.ToTable("Users", (string)null);
 
@@ -162,6 +165,10 @@ namespace StudentManagementPortal.Migrations
                     b.Property<string>("MobNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("EnrollmentId")
+                        .IsUnique()
+                        .HasFilter("[EnrollmentId] IS NOT NULL");
 
                     b.ToTable("Students", (string)null);
                 });

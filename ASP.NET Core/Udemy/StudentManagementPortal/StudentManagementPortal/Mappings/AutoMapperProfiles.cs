@@ -9,14 +9,20 @@ namespace StudentManagementPortal.Mappings
         public AutoMapperProfiles()
         {
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<AddUserRequestDto, User>().ReverseMap();
+
             CreateMap<Student, StudentDto>().ReverseMap();
             CreateMap<Student, StudentProfileDto>().ReverseMap();
+
             CreateMap<Admin, AdminDto>().ReverseMap();
-            CreateMap<AddUserRequestDto, User>().ReverseMap();
-            CreateMap<AddResultRequestDto, Result>().ReverseMap();
-            CreateMap<AddSubjectRequestDto, ResultSubject>().ReverseMap();
+
             CreateMap<Result, ResultDto>().ReverseMap();
+            CreateMap<AddResultRequestDto, Result>().ReverseMap();
+
             CreateMap<ResultSubject, ResultSubjectDto>().ReverseMap();
+            CreateMap<AddSubjectRequestDto, ResultSubject>().ReverseMap();
+
+
 
         }
 

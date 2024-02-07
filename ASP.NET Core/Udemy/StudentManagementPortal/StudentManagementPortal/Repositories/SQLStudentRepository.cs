@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StudentManagementPortal.Data;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
+using System.Text;
 
 namespace StudentManagementPortal.Repositories
 {
@@ -15,7 +16,7 @@ namespace StudentManagementPortal.Repositories
             this.dbContext = dbContext;
         }
 
-        public async Task<Student> CreateAsync(Student student)
+        public async Task<Student?> CreateAsync(Student student)
         {
             await dbContext.AddAsync(student);
             await dbContext.SaveChangesAsync();
@@ -43,13 +44,13 @@ namespace StudentManagementPortal.Repositories
         public async Task<Student?> GetStudentByEnrollmentIdAsync(int enrollmentId)
         {
             var existingStudent = await dbContext.Students.FirstOrDefaultAsync(s => s.EnrollmentId == enrollmentId);
-            
+
             return existingStudent;
         }
 
         public async Task<Student?> UpdateAsync(Student student)
         {
-           var existingStudent = await dbContext.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
+            var existingStudent = await dbContext.Students.FirstOrDefaultAsync(s => s.Id == student.Id);
             if (existingStudent == null)
             {
                 return null;

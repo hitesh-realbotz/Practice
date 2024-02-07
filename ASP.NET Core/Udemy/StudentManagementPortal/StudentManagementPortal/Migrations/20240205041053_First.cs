@@ -34,7 +34,7 @@ namespace StudentManagementPortal.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
@@ -133,6 +133,19 @@ namespace StudentManagementPortal.Migrations
                 name: "IX_ResultSubjects_ResultId",
                 table: "ResultSubjects",
                 column: "ResultId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Students_EnrollmentId",
+                table: "Students",
+                column: "EnrollmentId",
+                unique: true,
+                filter: "[EnrollmentId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_Email",
+                table: "Users",
+                column: "Email",
+                unique: true);
         }
 
         /// <inheritdoc />

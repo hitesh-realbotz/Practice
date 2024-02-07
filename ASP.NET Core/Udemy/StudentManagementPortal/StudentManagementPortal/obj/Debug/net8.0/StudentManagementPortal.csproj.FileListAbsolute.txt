@@ -144,3 +144,5 @@ C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPo
 C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPortal\StudentManagementPortal\bin\Debug\net8.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPortal\StudentManagementPortal\bin\Debug\net8.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPortal\StudentManagementPortal\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
+C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPortal\StudentManagementPortal\bin\Debug\net8.0\EntityFramework.Exceptions.Common.dll
+C:\Users\Administrator\Downloads\Practice\ASP.NET Core\Udemy\StudentManagementPortal\StudentManagementPortal\bin\Debug\net8.0\EntityFramework.Exceptions.SqlServer.dll
