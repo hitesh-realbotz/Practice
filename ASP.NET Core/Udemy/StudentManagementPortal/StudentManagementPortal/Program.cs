@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using StudentManagementPortal.CustomeActionFilter;
 using StudentManagementPortal.Data;
 using StudentManagementPortal.Mappings;
+using StudentManagementPortal.Middlewares;
 using StudentManagementPortal.Repositories;
 using StudentManagementPortal.Repositories.Interfaces;
 using System.Text;
@@ -14,7 +18,39 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "StudentPortalAPI",
+        Version = "v1"
+    });
+    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        In = ParameterLocation.Header,
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = JwtBearerDefaults.AuthenticationScheme
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = JwtBearerDefaults.AuthenticationScheme,
+                    Type = ReferenceType.SecurityScheme
+                },
+                Scheme = "Oauth2",
+                Name = JwtBearerDefaults.AuthenticationScheme,
+                In = ParameterLocation.Header
+            },
+        new List<string>()
+        }
+    });
+});
 
 
 
@@ -24,6 +60,9 @@ builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
 builder.Services.AddScoped<IStudentRepository, SQLStudentRepository>();
 builder.Services.AddScoped<IAdminRepository, SQLAdminRepository>();
 builder.Services.AddScoped<IResultRepository, SQLResultRepository>();
+builder.Services.AddScoped<ValidationFilterAttribute>();
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddScoped<ITokenHandler, StudentManagementPortal.Repositories.TokenHandler>();
 
@@ -49,6 +88,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 
 app.UseHttpsRedirection();
 

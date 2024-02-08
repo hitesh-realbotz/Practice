@@ -146,6 +146,28 @@ namespace StudentManagementPortal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.ToTable("Admins", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@email.com",
+                            HashPassword = "625345a1791280f4e576dd24d1e5968a038dd06f85fda80c3bef22c1706361eb1QYVMn",
+                            Name = "admin",
+                            Role = "Admin",
+                            Status = "Active",
+                            Level = "L1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "admin2@email.com",
+                            HashPassword = "5051249e2707c9fc7d64338541b1326727616b73ce674829c94b17dfd978b546VpFFRd",
+                            Name = "admin2",
+                            Role = "Admin",
+                            Status = "Active",
+                            Level = "L1"
+                        });
                 });
 
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.Student", b =>

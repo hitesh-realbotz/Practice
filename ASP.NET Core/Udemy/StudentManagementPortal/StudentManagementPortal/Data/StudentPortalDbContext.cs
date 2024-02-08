@@ -1,13 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StudentManagementPortal.Models.Domain;
+using StudentManagementPortal.Repositories.Interfaces;
 
 
 namespace StudentManagementPortal.Data
 {
     public class StudentPortalDbContext : DbContext
     {
-        public StudentPortalDbContext(DbContextOptions options) : base(options)
+        private readonly DbContextOptions options;
+        private readonly IAuthRepository authHandler;
+        private readonly IConfiguration configuration;
+
+        public StudentPortalDbContext(DbContextOptions options, IAuthRepository authHandler, IConfiguration configuration) : base(options)
         {
+            this.options = options;
+            this.authHandler = authHandler;
+            this.configuration = configuration;
         }
 
         public DbSet<User> Users { get; set; }
@@ -35,6 +43,31 @@ namespace StudentManagementPortal.Data
 
 
             base.OnModelCreating(modelBuilder);
+            var admins = new List<Admin>()
+            {
+                new Admin()
+                {
+                    Id = 1,
+                    Name = "admin",
+                    Email = "admin@email.com",
+                    HashPassword = authHandler.GetHashedPassword( "admin123" ),
+                    Role = "Admin",
+                    Status = "Active",
+                    Level = "L1"
+                },
+                new Admin()
+                {
+                    Id = 2,
+                    Name = "admin2",
+                    Email = "admin2@email.com",
+                    HashPassword = authHandler.GetHashedPassword( "admin123" ),
+                    Role = "Admin",
+                    Status = "Active",
+                    Level = "L1"
+                }
+
+            };
+            modelBuilder.Entity<Admin>().HasData(admins );
         }
 
     }
