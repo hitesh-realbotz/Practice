@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using StudentManagementPortal.CustomeActionFilter;
@@ -9,6 +10,8 @@ using StudentManagementPortal.Mappings;
 using StudentManagementPortal.Middlewares;
 using StudentManagementPortal.Repositories;
 using StudentManagementPortal.Repositories.Interfaces;
+using StudentManagementPortal.Services;
+using StudentManagementPortal.Services.Interfaces;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -57,11 +61,16 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddDbContext<StudentPortalDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortalConnection")));
 
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IStudentRepository, SQLStudentRepository>();
 builder.Services.AddScoped<IAdminRepository, SQLAdminRepository>();
 builder.Services.AddScoped<IResultRepository, SQLResultRepository>();
 builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IImageRepository, ImageRepository>();
+
+
+
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);
 
 builder.Services.AddScoped<ITokenHandler, StudentManagementPortal.Repositories.TokenHandler>();
@@ -96,6 +105,12 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 
 app.UseAuthorization();
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    RequestPath = "/Images"
+});
 
 app.MapControllers();
 

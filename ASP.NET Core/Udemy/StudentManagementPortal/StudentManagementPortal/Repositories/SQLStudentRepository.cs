@@ -18,6 +18,7 @@ namespace StudentManagementPortal.Repositories
 
         public async Task<Student?> CreateAsync(Student student)
         {
+            
             await dbContext.AddAsync(student);
             await dbContext.SaveChangesAsync();
             return student;

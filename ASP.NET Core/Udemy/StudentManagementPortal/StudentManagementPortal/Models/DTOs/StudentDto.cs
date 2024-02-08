@@ -1,4 +1,5 @@
-﻿using StudentManagementPortal.Models.Domain;
+﻿using Microsoft.AspNetCore.Mvc;
+using StudentManagementPortal.Models.Domain;
 
 namespace StudentManagementPortal.Models.DTOs
 {

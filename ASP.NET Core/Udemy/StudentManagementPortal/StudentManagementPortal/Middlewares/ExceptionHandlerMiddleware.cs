@@ -25,7 +25,7 @@ namespace StudentManagementPortal.Middlewares
             {
                 var errorId = Guid.NewGuid();
                 var message = new StringBuilder();
-                
+
                 if (ex.GetType() == typeof(DbUpdateException))
                 {
                     var exception = (DbUpdateException)ex;
@@ -45,23 +45,26 @@ namespace StudentManagementPortal.Middlewares
                     }
                     context.Response.StatusCode = (int)HttpStatusCode.Conflict;
                 }
-               
+                else if (ex.GetType() == typeof(BadHttpRequestException))
+                {
+                    message.AppendLine(ex.Message);
+                }
                 else
                 {
-                    message.Append("Exception Occured!");
+                    message.Append("Something went wrong!");
                     context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 }
                 var error = new
                 {
                     Id = errorId,
                     Message = message.ToString(),
-                   
+
                 };
                 context.Response.ContentType = "application/json";
                 await context.Response.WriteAsJsonAsync(error);
             }
         }
 
-        
+
     }
 }
