@@ -5,7 +5,7 @@
         public int Id { get; set; }
         public DateTime LogTime { get; set; }
         public string Detail { get; set; }
-        public string Type { get; set; }        //
-        public int LogBy { get; set; }          // UserId
+        public string Type { get; set; }        
+        public int UserId { get; set; }
     }
 }

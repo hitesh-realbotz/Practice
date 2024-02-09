@@ -3,16 +3,21 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
-using PdfSharp.Pdf;
-using PdfSharp;
+
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
 using System.Net;
 using System.Security.Claims;
-using TheArtOfDev.HtmlRenderer.PdfSharp;
 using Azure;
 using static System.Net.Mime.MediaTypeNames;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using iText.Kernel.Pdf.Canvas.Draw;
+using StudentManagementPortal.Services.Interfaces;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace StudentManagementPortal.Controllers
 {
@@ -21,68 +26,50 @@ namespace StudentManagementPortal.Controllers
     public class ResultsController : ControllerBase
     {
         private readonly IMapper mapper;
-        private readonly IResultRepository resultRepository;
-        private readonly IStudentRepository studentRepository;
+        private readonly IResultService resultService;
 
-        public ResultsController(IMapper mapper, IResultRepository resultRepository, IStudentRepository studentRepository)
+        public ResultsController(IMapper mapper, IResultService resultService)
         {
             this.mapper = mapper;
-            this.resultRepository = resultRepository;
-            this.studentRepository = studentRepository;
+            this.resultService = resultService;
         }
+
+        //Create, GetById & GeneratePdf returns PDF file in response
+
         [HttpPost]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create([FromBody] AddResultRequestDto addResultRequestDto)
         {
-
-            var student = await studentRepository.GetStudentByEnrollmentIdAsync(addResultRequestDto.EnrollmentId);
-            if (student == null)
+            var response = await resultService.CreateAsync(addResultRequestDto);
+            if (response != null)
             {
-                return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Invalid EnrollmentId!!"));
+                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                {
+                    FileDownloadName = "Result.pdf"
+                };
+                return filecontentResult;
             }
-
-            var resultDomainModel = mapper.Map<Result>(addResultRequestDto);
-            resultDomainModel.StudentId = student.Id;
-
-            resultDomainModel = await resultRepository.CreateAsync(resultDomainModel);
-            var resultDto = mapper.Map<ResultDto>(resultDomainModel);
-            return Ok(resultDto);
+            return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, $"Result data not saved!"));
         }
 
-        [HttpGet]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetAll()
-        {
-            var resultList = await resultRepository.GetAllAsync();
-            var resultListDto = mapper.Map<List<ResultDto>>(resultList);
-            return Ok(resultListDto);
-        }
+
 
         [HttpGet]
         [Route("{id:int}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
-            var result = await resultRepository.GetByIdAsync(id);
-            if (result != null)
+            var response = await resultService.GetByIdAsync(id);
+            if (response != null)
             {
-
-                return Ok(mapper.Map<ResultDto>(result));
+                //return File(dataBytes, "application/pdf");
+                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                {
+                    FileDownloadName = "Result.pdf"
+                };
+                return filecontentResult;
             }
-            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, $"Result not found for {id} id!"));
-        }
-
-        [HttpGet]
-        [Route("EnrollmentId/{enrollmentId:int}")]
-        //[Authorize(Roles = "Admin")]
-        public async Task<IActionResult> GetByEnrollmentId([FromRoute] int enrollmentId)
-        {
-            var resultList = await resultRepository.GetByEnrollmentIdAsync(enrollmentId);
-            if (resultList.IsNullOrEmpty())
-            {
-                return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, $"Result not found for {enrollmentId} enrollmentId!"));
-            }
-            return Ok(mapper.Map<List<ResultDto>>(resultList));
+            throw new Exception("Failed to generate PDF!");
         }
 
 
@@ -91,22 +78,22 @@ namespace StudentManagementPortal.Controllers
         public async Task<ActionResult> GeneratePdf([FromRoute] int id)
         {
 
-            var result = await resultRepository.GetByIdAsync(id);
-            if (result != null)
+            var response = await resultService.GetByIdAsync(id);
+            if (response != null)
             {
+                //return File(dataBytes, "application/pdf");
 
-                return Ok(mapper.Map<ResultDto>(result));
+                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                {
+                    FileDownloadName = "Result.pdf"
+                };
+                return filecontentResult;
             }
-            var data = new PdfDocument();
-            string htmlCont = "<div><p>This is PDF Document</p></div>";
-
-            return BadRequest();
-
-           
+            throw new Exception("Failed to generate PDF!");
         }
 
 
-
+        //GetAll, ByLoggedUser, ByEnrollmentId returns Data
         [HttpGet]
         [Route("ByLoggedUser")]
         [Authorize(Roles = "Student")]
@@ -114,12 +101,33 @@ namespace StudentManagementPortal.Controllers
         {
             int enrollmentId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.SerialNumber));
 
-            var result = await resultRepository.GetByEnrollmentIdAsync(enrollmentId);
-            if (result != null)
-            {
-                return Ok(mapper.Map<ResultDto>(result));
-            }
-            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Result not found!"));
+            var resultList = await resultService.GetByEnrollmentIdAsync(enrollmentId);
+
+            return Ok(mapper.Map<List<ResultDto>>(resultList));
         }
+
+
+
+        [HttpGet]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetAll()
+        {
+            var resultList = await resultService.GetAllAsync();
+            var resultListDto = mapper.Map<List<ResultDto>>(resultList);
+            return Ok(resultListDto);
+        }
+
+
+        [HttpGet]
+        [Route("EnrollmentId/{enrollmentId:int}")]
+        //[Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetByEnrollmentId([FromRoute] int enrollmentId)
+        {
+            var resultList = await resultService.GetByEnrollmentIdAsync(enrollmentId);
+
+            return Ok(mapper.Map<List<ResultDto>>(resultList));
+        }
+
+
     }
 }

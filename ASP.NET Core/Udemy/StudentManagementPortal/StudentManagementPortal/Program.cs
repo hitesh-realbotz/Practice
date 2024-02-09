@@ -59,16 +59,22 @@ builder.Services.AddSwaggerGen(options =>
 
 
 builder.Services.AddDbContext<StudentPortalDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("StudentPortalConnection")));
+builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<IResultService, ResultService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<ILoggerService, LoggerService>();
+
 
 builder.Services.AddScoped<IUserRepository, SQLUserRepository>();
-builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddScoped<IStudentRepository, SQLStudentRepository>();
 builder.Services.AddScoped<IAdminRepository, SQLAdminRepository>();
 builder.Services.AddScoped<IResultRepository, SQLResultRepository>();
-builder.Services.AddScoped<ValidationFilterAttribute>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IImageRepository, ImageRepository>();
+builder.Services.AddScoped<ILoggerRepository, SQLLoggerRepository>();
 
+builder.Services.AddScoped<ValidationFilterAttribute>();
 
 
 builder.Services.Configure<ApiBehaviorOptions>(options => options.SuppressModelStateInvalidFilter = true);

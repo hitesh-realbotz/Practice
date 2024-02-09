@@ -8,9 +8,9 @@ namespace StudentManagementPortal.Models.Domain
     {
 
         public int EnrollmentId { get; set; }
-        public string ImageUrl { get; set; }
-        public string MobNumber { get; set; }
-
+        public string? ImageUrl { get; set; }
+        public string? MobNumber { get; set; }
+        
         [NotMapped]
         public IFormFile Image { get; set; }
 

@@ -60,15 +60,15 @@ namespace StudentManagementPortal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LogBy")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("LogTime")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -83,7 +83,16 @@ namespace StudentManagementPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<bool>("IsPass")
+                        .HasColumnType("bit");
+
                     b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalMarks")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalObtainedMarks")
                         .HasColumnType("int");
 
                     b.Property<string>("Year")
@@ -104,6 +113,9 @@ namespace StudentManagementPortal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsPass")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -178,18 +190,8 @@ namespace StudentManagementPortal.Migrations
                         {
                             Id = 1,
                             Email = "admin@email.com",
-                            HashPassword = "7cc42a90c69d3ebe1700ab0be713102fd26de09cc4fcbf37ceea2589b528287dYSumnj",
+                            HashPassword = "766be5da85a6d28596c66b692629f7df9c7059ea26879f9df7bf881a920b61edtbj1jB",
                             Name = "admin",
-                            Role = "Admin",
-                            Status = "Active",
-                            Level = "L1"
-                        },
-                        new
-                        {
-                            Id = 2,
-                            Email = "admin2@email.com",
-                            HashPassword = "9b8a39a540dad7f60153f3fbe02c72cd090fdeb899b954000ff3682fbb3f2995yzh7xn",
-                            Name = "admin2",
                             Role = "Admin",
                             Status = "Active",
                             Level = "L1"
@@ -204,11 +206,9 @@ namespace StudentManagementPortal.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MobNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasIndex("EnrollmentId")

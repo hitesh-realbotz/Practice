@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
+using StudentManagementPortal.Services.Interfaces;
 using System.Net;
 using System.Security.Claims;
 
@@ -15,22 +16,21 @@ namespace StudentManagementPortal.Controllers
     [ApiController]
     public class StudentsController : ControllerBase
     {
-        private readonly IStudentRepository studentRepository;
-        private readonly IUserRepository userRepository;
-        private readonly IMapper mapper;
 
-        public StudentsController(IStudentRepository studentRepository, IUserRepository userRepository, IMapper mapper)
+        private readonly IMapper mapper;
+        private readonly IStudentService studentService;
+
+        public StudentsController(IMapper mapper, IStudentService studentService)
         {
-            this.studentRepository = studentRepository;
-            this.userRepository = userRepository;
             this.mapper = mapper;
+            this.studentService = studentService;
         }
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
-            var studentList = await studentRepository.GetAllAsync();
+            var studentList = await studentService.GetAllAsync();
             var studentListDto = mapper.Map<List<StudentProfileDto>>(studentList);
             return Ok(studentListDto);
         }
@@ -40,15 +40,10 @@ namespace StudentManagementPortal.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetStudentProfile([FromRoute] int enrollmentId)
         {
-            var studentDomainModel = await studentRepository.GetStudentByEnrollmentIdAsync(enrollmentId);
-            if (studentDomainModel != null)
-            {
-                studentDomainModel.HashPassword = null;
-                var studentProfileDto = mapper.Map<StudentProfileDto>(studentDomainModel);
-                return Ok(studentProfileDto);
-            }
+            var student = await studentService.GetStudentByEnrollmentIdAsync(enrollmentId);
 
-            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
+            var studentProfileDto = mapper.Map<StudentProfileDto>(student);
+            return Ok(studentProfileDto);
         }
 
 
@@ -58,15 +53,10 @@ namespace StudentManagementPortal.Controllers
         public async Task<IActionResult> GetByLoggedUser()
         {
             int enrollmentId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.SerialNumber));
-            var studentDomainModel = await studentRepository.GetStudentByEnrollmentIdAsync(enrollmentId);
-            if (studentDomainModel != null)
-            {
-                studentDomainModel.HashPassword = null;
-                var studentProfileDto = mapper.Map<StudentProfileDto>(studentDomainModel);
-                return Ok(studentProfileDto);
-            }
+            var student = await studentService.GetStudentByEnrollmentIdAsync(enrollmentId);
 
-            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
+            var studentProfileDto = mapper.Map<StudentProfileDto>(student);
+            return Ok(studentProfileDto);
         }
 
 
@@ -74,10 +64,10 @@ namespace StudentManagementPortal.Controllers
         [Authorize]
         public async Task<IActionResult> UpdateStudentProfile([FromBody] StudentProfileDto studentProfileDto)
         {
-            var studentDomainModel = mapper.Map<Student>(studentProfileDto);
-            studentDomainModel = await studentRepository.UpdateAsync(studentDomainModel);
+            var student = mapper.Map<Student>(studentProfileDto);
+            student = await studentService.UpdateAsync(studentProfileDto);
 
-            return Ok(mapper.Map<StudentProfileDto>(studentDomainModel));
+            return Ok(mapper.Map<StudentProfileDto>(student));
         }
 
 
@@ -86,12 +76,8 @@ namespace StudentManagementPortal.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete([FromRoute] int enrollmentId)
         {
-            var deletedStudent = await studentRepository.DeleteAsync(enrollmentId);
-            if (deletedStudent != null)
-            {
-                return Ok(mapper.Map<StudentProfileDto>(deletedStudent));
-            }
-            return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Student with Id not found"));
+            var deletedStudent = await studentService.DeleteAsync(enrollmentId);
+            return Ok(mapper.Map<StudentProfileDto>(deletedStudent));
         }
     }
 }

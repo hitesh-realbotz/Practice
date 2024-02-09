@@ -55,18 +55,7 @@ namespace StudentManagementPortal.Data
                     Role = "Admin",
                     Status = "Active",
                     Level = "L1"
-                },
-                new Admin()
-                {
-                    Id = 2,
-                    Name = "admin2",
-                    Email = "admin2@email.com",
-                    HashPassword = authHandler.GetHashedPassword( "admin123" ),
-                    Role = "Admin",
-                    Status = "Active",
-                    Level = "L1"
                 }
-
             };
             modelBuilder.Entity<Admin>().HasData(admins);
         }

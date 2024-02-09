@@ -17,10 +17,20 @@ namespace StudentManagementPortal.Mappings
             CreateMap<Admin, AdminDto>().ReverseMap();
 
             CreateMap<Result, ResultDto>().ReverseMap();
-            CreateMap<AddResultRequestDto, Result>().ReverseMap();
-
             CreateMap<ResultSubject, ResultSubjectDto>().ReverseMap();
-            CreateMap<AddSubjectRequestDto, ResultSubject>().ReverseMap();
+
+
+            CreateMap<AddResultRequestDto, Result>()
+                .ForMember(r => r.TotalObtainedMarks, opt => opt.MapFrom(rd => rd.ResultSubjects.Sum(rs => rs.ObtainedMarks)))
+                .ForMember(r => r.TotalMarks, opt => opt.MapFrom(rd => rd.ResultSubjects.Sum(rs => rs.TotalMarks)))
+                .ForMember(r => r.IsPass, opt => opt.MapFrom(rd => rd.ResultSubjects.All(rs => rs.ObtainedMarks >= (0.35 * rs.TotalMarks))));
+                
+
+            CreateMap<AddSubjectRequestDto, ResultSubject>().ForMember(rs => rs.IsPass, opt => opt.MapFrom(sd => sd.ObtainedMarks >= (0.35 * sd.TotalMarks)));
+
+            
+            
+
 
 
 

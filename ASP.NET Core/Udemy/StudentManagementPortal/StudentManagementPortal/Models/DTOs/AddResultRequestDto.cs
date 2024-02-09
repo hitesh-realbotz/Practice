@@ -7,9 +7,11 @@ namespace StudentManagementPortal.Models.DTOs
     {
         [Required]
         public string Year { get; set; }
-        [Required] 
+        [Required]
         public int EnrollmentId { get; set; }
 
         public List<AddSubjectRequestDto> ResultSubjects { get; set; }
+
+        
     }
 }
