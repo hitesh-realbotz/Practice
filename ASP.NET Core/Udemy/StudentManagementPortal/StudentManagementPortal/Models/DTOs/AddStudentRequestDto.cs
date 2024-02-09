@@ -21,7 +21,12 @@ namespace StudentManagementPortal.Models.DTOs
 
         [Required(ErrorMessage = "Please enter valid enrollmentId.")]
         public int EnrollmentId { get; set; }
+
+        public IFormFile File { get; set; }
         public string? ImageUrl { get; set; }
         public string? MobNumber { get; set; }
+
+
+
     }
 }

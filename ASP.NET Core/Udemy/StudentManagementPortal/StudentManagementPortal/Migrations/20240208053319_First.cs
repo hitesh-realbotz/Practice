@@ -85,6 +85,27 @@ namespace StudentManagementPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Images",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Data = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    StudentId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Images", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Images_Students_StudentId",
+                        column: x => x.StudentId,
+                        principalTable: "Students",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Results",
                 columns: table => new
                 {
@@ -131,8 +152,8 @@ namespace StudentManagementPortal.Migrations
                 columns: new[] { "Id", "Email", "HashPassword", "Name", "Role", "Status" },
                 values: new object[,]
                 {
-                    { 1, "admin@email.com", "625345a1791280f4e576dd24d1e5968a038dd06f85fda80c3bef22c1706361eb1QYVMn", "admin", "Admin", "Active" },
-                    { 2, "admin2@email.com", "5051249e2707c9fc7d64338541b1326727616b73ce674829c94b17dfd978b546VpFFRd", "admin2", "Admin", "Active" }
+                    { 1, "admin@email.com", "7cc42a90c69d3ebe1700ab0be713102fd26de09cc4fcbf37ceea2589b528287dYSumnj", "admin", "Admin", "Active" },
+                    { 2, "admin2@email.com", "9b8a39a540dad7f60153f3fbe02c72cd090fdeb899b954000ff3682fbb3f2995yzh7xn", "admin2", "Admin", "Active" }
                 });
 
             migrationBuilder.InsertData(
@@ -143,6 +164,11 @@ namespace StudentManagementPortal.Migrations
                     { 1, "L1" },
                     { 2, "L1" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Images_StudentId",
+                table: "Images",
+                column: "StudentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Results_StudentId",
@@ -173,6 +199,9 @@ namespace StudentManagementPortal.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Admins");
+
+            migrationBuilder.DropTable(
+                name: "Images");
 
             migrationBuilder.DropTable(
                 name: "LogInfos");

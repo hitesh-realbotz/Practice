@@ -24,6 +24,7 @@ namespace StudentManagementPortal.Data
         public DbSet<Result> Results { get; set; }
         public DbSet<ResultSubject> ResultSubjects { get; set; }
         public DbSet<LogInfo> LogInfos { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -67,7 +68,7 @@ namespace StudentManagementPortal.Data
                 }
 
             };
-            modelBuilder.Entity<Admin>().HasData(admins );
+            modelBuilder.Entity<Admin>().HasData(admins);
         }
 
     }

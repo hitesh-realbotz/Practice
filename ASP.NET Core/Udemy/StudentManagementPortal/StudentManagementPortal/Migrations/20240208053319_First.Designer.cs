@@ -12,7 +12,7 @@ using StudentManagementPortal.Data;
 namespace StudentManagementPortal.Migrations
 {
     [DbContext(typeof(StudentPortalDbContext))]
-    [Migration("20240207123641_First")]
+    [Migration("20240208053319_First")]
     partial class First
     {
         /// <inheritdoc />
@@ -24,6 +24,32 @@ namespace StudentManagementPortal.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Data")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("StudentId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StudentId");
+
+                    b.ToTable("Images");
+                });
 
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.LogInfo", b =>
                 {
@@ -155,7 +181,7 @@ namespace StudentManagementPortal.Migrations
                         {
                             Id = 1,
                             Email = "admin@email.com",
-                            HashPassword = "625345a1791280f4e576dd24d1e5968a038dd06f85fda80c3bef22c1706361eb1QYVMn",
+                            HashPassword = "7cc42a90c69d3ebe1700ab0be713102fd26de09cc4fcbf37ceea2589b528287dYSumnj",
                             Name = "admin",
                             Role = "Admin",
                             Status = "Active",
@@ -165,7 +191,7 @@ namespace StudentManagementPortal.Migrations
                         {
                             Id = 2,
                             Email = "admin2@email.com",
-                            HashPassword = "5051249e2707c9fc7d64338541b1326727616b73ce674829c94b17dfd978b546VpFFRd",
+                            HashPassword = "9b8a39a540dad7f60153f3fbe02c72cd090fdeb899b954000ff3682fbb3f2995yzh7xn",
                             Name = "admin2",
                             Role = "Admin",
                             Status = "Active",
@@ -193,6 +219,17 @@ namespace StudentManagementPortal.Migrations
                         .HasFilter("[EnrollmentId] IS NOT NULL");
 
                     b.ToTable("Students", (string)null);
+                });
+
+            modelBuilder.Entity("StudentManagementPortal.Models.Domain.Image", b =>
+                {
+                    b.HasOne("StudentManagementPortal.Models.Domain.Student", "Student")
+                        .WithMany()
+                        .HasForeignKey("StudentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentManagementPortal.Models.Domain.Result", b =>

@@ -26,14 +26,9 @@ namespace StudentManagementPortal.Repositories
             return await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).ToListAsync();
         }
 
-        public async Task<Result?> GetByEnrollmentIdAsync(int enrollmentId)
+        public async Task<List<Result>?> GetByEnrollmentIdAsync(int enrollmentId)
         {
-            var result = await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).FirstOrDefaultAsync(r => r.Student.EnrollmentId == enrollmentId);
-            if (result == null)
-            {
-                return null;
-            }
-            return result;
+            return await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).Where(r => r.Student.EnrollmentId == enrollmentId).ToListAsync(); ;
         }
 
         public async Task<Result?> GetByIdAsync(int id)
@@ -47,6 +42,6 @@ namespace StudentManagementPortal.Repositories
             return result;
         }
 
-        
+
     }
 }

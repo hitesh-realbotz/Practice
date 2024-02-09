@@ -1,12 +1,14 @@
 ﻿using AutoMapper;
 using EntityFramework.Exceptions.Common;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using StudentManagementPortal.CustomeActionFilter;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
+using StudentManagementPortal.Services.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.Data.Common;
 using System.Net;
@@ -21,19 +23,18 @@ namespace StudentManagementPortal.Controllers
     {
         private readonly IUserRepository userRepository;
         private readonly IMapper mapper;
-        private readonly IStudentRepository studentRepository;
-        private readonly IAdminRepository adminRepository;
-        private readonly IConfiguration configuration;
         private readonly IAuthRepository authRepository;
+        private readonly IImageRepository imageRepository;
 
-        public AuthController(IUserRepository userRepository, IMapper mapper, IStudentRepository studentRepository, IAdminRepository adminRepository, IConfiguration configuration, IAuthRepository authRepository)
+        private readonly IStudentService studentService;
+
+        public AuthController(IUserRepository userRepository, IMapper mapper, IAuthRepository authRepository, IImageRepository imageRepository, IStudentService studentService)
         {
             this.userRepository = userRepository;
             this.mapper = mapper;
-            this.studentRepository = studentRepository;
-            this.adminRepository = adminRepository;
-            this.configuration = configuration;
             this.authRepository = authRepository;
+            this.imageRepository = imageRepository;
+            this.studentService = studentService;
         }
 
 
@@ -42,23 +43,35 @@ namespace StudentManagementPortal.Controllers
         [HttpPost]
         [Route("Register")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
-        public async Task<IActionResult> Register([FromBody] AddStudentRequestDto addStudentRequestDto)
+        public async Task<IActionResult> Register([FromForm] AddStudentRequestDto addStudentRequestDto)
         {
-            Student student = new Student()
+
+            var student = await studentService.CreateAsync(addStudentRequestDto);
+            if (student == null)
             {
-                Name = addStudentRequestDto.Name,
-                Email = addStudentRequestDto.Email,
-                HashPassword = authRepository.GetHashedPassword(addStudentRequestDto.Password),
-                Role = "Student",
-                Status = "Active",
-                EnrollmentId = addStudentRequestDto.EnrollmentId,
-                MobNumber = addStudentRequestDto.MobNumber,
-                ImageUrl = addStudentRequestDto.ImageUrl,
-            };
-            student = await studentRepository.CreateAsync(student);
-            return Ok(mapper.Map<StudentDto>(student));
+                throw new Exception();
+            }
+            return Ok(mapper.Map<Student>(student));
         }
 
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> Download([FromRoute] int id)
+        {
+            var image = await imageRepository.GetByIdAsync(id);
+            if (image != null)
+            {
+                var filecontentResult = new FileContentResult(image.Data, "application/octet-stream")
+                {
+                    FileDownloadName = image.Name
+                };
+
+                return filecontentResult;                   //To return downloadable file
+                //return File(image.Data, "image/jpeg");    //To return file content view
+            }
+            return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Image Not Found!"));
+        }
 
 
         [HttpPost]
