@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories;
@@ -39,8 +40,7 @@ namespace StudentManagementPortal.Services
                 Role = "Student",
                 Status = "Active",
                 EnrollmentId = addStudentRequestDto.EnrollmentId,
-                MobNumber = addStudentRequestDto.MobNumber,
-                ImageUrl = addStudentRequestDto.ImageUrl,
+                MobNumber = addStudentRequestDto.MobNumber.IsNullOrEmpty() ? null : addStudentRequestDto.MobNumber
             };
 
             student = await studentRepository.CreateAsync(student);
@@ -53,12 +53,55 @@ namespace StudentManagementPortal.Services
             {
                 throw new BadHttpRequestException("Student registered but image not saved. Please re-upload image by updating profile!");
             }
-            var urlFilePath = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/{image.StudentId}";
+            var urlFilePath = $"{httpContextAccessor.HttpContext.Request.Scheme}://{httpContextAccessor.HttpContext.Request.Host}{httpContextAccessor.HttpContext.Request.PathBase}/api/Images/{image.StudentId}";
             student.ImageUrl = urlFilePath;
             student = await studentRepository.UpdateAsync(student);
-            
+
             return student;
 
+        }
+
+        public async Task<Student?> DeleteAsync(int enrollmentId)
+        {
+            var deletedStudent = await studentRepository.DeleteAsync(enrollmentId);
+            if (deletedStudent == null)
+            {
+                throw new BadHttpRequestException($"Student with {enrollmentId} enrollmentId not found!");
+            }
+            return deletedStudent;
+        }
+
+        public async Task<List<Student>> GetAllAsync()
+        {
+            return await studentRepository.GetAllAsync();
+        }
+
+        public async Task<Student> GetStudentByEnrollmentIdAsync(int enrollmentId)
+        {
+            var student = await studentRepository.GetStudentByEnrollmentIdAsync(enrollmentId);
+            if (student == null)
+            {
+                throw new BadHttpRequestException($"Student with {enrollmentId} enrollmentId not found!");
+            }
+            student.HashPassword = null;
+
+            return student;
+
+
+        }
+
+        public async Task<Student> UpdateAsync(StudentProfileDto studentProfileDto)
+        {
+            var student = mapper.Map<Student>(studentProfileDto);
+            student = await studentRepository.UpdateAsync(student);
+            if (student == null)
+            {
+                throw new BadHttpRequestException($"Student with {studentProfileDto.EnrollmentId} enrollmentId not found!");
+            }
+
+            student.HashPassword = null;
+
+            return student;
         }
     }
 }

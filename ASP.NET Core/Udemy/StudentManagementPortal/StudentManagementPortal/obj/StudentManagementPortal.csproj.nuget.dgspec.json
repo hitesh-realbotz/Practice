@@ -57,10 +57,6 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
-            "HtmlRenderer.PdfSharp": {
-              "target": "Package",
-              "version": "[1.5.0.6, )"
-            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.1, )"
@@ -83,10 +79,6 @@
               "target": "Package",
               "version": "[7.3.0, )"
             },
-            "PDFsharp": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
@@ -94,6 +86,14 @@
             "System.IdentityModel.Tokens.Jwt": {
               "target": "Package",
               "version": "[7.3.0, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[8.0.3, )"
+            },
+            "itext7.bouncy-castle-adapter": {
+              "target": "Package",
+              "version": "[8.0.3, )"
             }
           },
           "imports": [

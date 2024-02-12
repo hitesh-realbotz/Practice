@@ -13,11 +13,11 @@ namespace StudentManagementPortal.Repositories
         {
             this.dbContext = dbContext;
         }
-        public async Task<Result> CreateAsync(Result resultDomainModel)
+        public async Task<Result> CreateAsync(Result result)
         {
-            await dbContext.Results.AddAsync(resultDomainModel);
+            await dbContext.Results.AddAsync(result);
             await dbContext.SaveChangesAsync();
-            return resultDomainModel;
+            return result;
 
         }
 

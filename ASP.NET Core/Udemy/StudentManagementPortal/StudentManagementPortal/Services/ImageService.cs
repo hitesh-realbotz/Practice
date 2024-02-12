@@ -16,10 +16,15 @@ namespace StudentManagementPortal.Services
         {
             this.imageRepository = imageRepository;
         }
-        public async Task<Image?> GetByStudentId(int studentId)
+        public async Task<Image?> GetByStudentIdAsync(int studentId)
         {
-            return  await imageRepository.GetByStudentIdAsync(studentId);
-           
+            var image = await imageRepository.GetByStudentIdAsync(studentId);
+            if (image == null)
+            {
+                throw new BadHttpRequestException($"Image not found for {studentId} StudentId!!");
+            }
+            return image;
+
         }
     }
 }

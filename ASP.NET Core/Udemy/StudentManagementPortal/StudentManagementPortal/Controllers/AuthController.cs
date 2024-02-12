@@ -21,20 +21,19 @@ namespace StudentManagementPortal.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository userRepository;
+        private readonly IUserService userService;
         private readonly IMapper mapper;
-        private readonly IAuthRepository authRepository;
-        private readonly IImageRepository imageRepository;
-
+        private readonly IAuthService authService;
         private readonly IStudentService studentService;
+        private readonly ILoggerService loggerService;
 
-        public AuthController(IUserRepository userRepository, IMapper mapper, IAuthRepository authRepository, IImageRepository imageRepository, IStudentService studentService)
+        public AuthController(IUserService userService, IMapper mapper, IAuthService authService, IStudentService studentService, ILoggerService loggerService)
         {
-            this.userRepository = userRepository;
+            this.userService = userService;
             this.mapper = mapper;
-            this.authRepository = authRepository;
-            this.imageRepository = imageRepository;
+            this.authService = authService;        
             this.studentService = studentService;
+            this.loggerService = loggerService;
         }
 
 
@@ -51,51 +50,34 @@ namespace StudentManagementPortal.Controllers
             {
                 throw new Exception();
             }
+            student.HashPassword = null;
             return Ok(mapper.Map<Student>(student));
         }
 
 
-        [HttpGet]
-        [Route("{id:int}")]
-        public async Task<IActionResult> Download([FromRoute] int id)
-        {
-            var image = await imageRepository.GetByIdAsync(id);
-            if (image != null)
-            {
-                var filecontentResult = new FileContentResult(image.Data, "application/octet-stream")
-                {
-                    FileDownloadName = image.Name
-                };
-
-                return filecontentResult;                   //To return downloadable file
-                //return File(image.Data, "image/jpeg");    //To return file content view
-            }
-            return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Image Not Found!"));
-        }
-
-
+        
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var user = await userRepository.FindByEmailAsync(loginRequestDto.Email);
+            var user = await userService.FindByEmailAsync(loginRequestDto.Email);
             if (user == null)
             {
-                return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Email incorrect!"));
+                return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Email incorrect!"));
             }
             if (user.Status == "Active")
             {
-                var isValid = authRepository.VerifyHashedPassword(loginRequestDto.Password, user.HashPassword);
+                var isValid = authService.VerifyHashedPassword(loginRequestDto.Password, user.HashPassword);
                 if (isValid)
                 {
                     //Generate Token
-                    var token = authRepository.CreateJWTToken(user);
+                    var token = authService.CreateJWTToken(user);
                     return Ok(new ApiErrorResponse(HttpStatusCode.OK, token));
                 }
                 else
                 {
-                    LogInfo logInfo = new LogInfo();
-                    return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Password Incorrect!"));
+                    LogInfo logInfo = await loggerService.CreateAsync(user);
+                    return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, $"Password Incorrect! {Convert.ToUInt32(logInfo.Detail)} of 3 attemps!!!"));
                 }
             }
             return BadRequest(new ApiErrorResponse(HttpStatusCode.Locked, "User is Locked!"));

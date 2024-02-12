@@ -16,6 +16,7 @@ namespace StudentManagementPortal.Repositories
         {
             this.configuration = configuration;
         }
+
         public string GetHashedPassword(string password)
         {
             using (var sha256 = SHA256.Create())
@@ -57,6 +58,7 @@ namespace StudentManagementPortal.Repositories
                 Student student = (Student)user;
                 claims.Add(new Claim(ClaimTypes.SerialNumber, student.EnrollmentId.ToString()));
             }
+            claims.Add(new Claim(ClaimTypes.Sid, user.Id.ToString()));
             claims.Add(new Claim(ClaimTypes.Role, user.Role));
             claims.Add(new Claim(ClaimTypes.Name, user.Name));
 

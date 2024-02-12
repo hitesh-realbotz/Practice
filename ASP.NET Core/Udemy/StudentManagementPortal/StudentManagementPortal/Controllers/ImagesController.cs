@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
+using StudentManagementPortal.Services.Interfaces;
 using System.Net;
 
 namespace StudentManagementPortal.Controllers
@@ -10,29 +11,24 @@ namespace StudentManagementPortal.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
-        private readonly IImageRepository imageRepository;
+        private readonly IImageService imageService;
 
-        public ImagesController(IImageRepository imageRepository)
+        public ImagesController(IImageService imageService)
         {
-            this.imageRepository = imageRepository;
+            this.imageService = imageService;
         }
         [HttpGet]
         [Route("{studentId:int}")]
         public async Task<IActionResult> GetByStudentId([FromRoute] int studentId)
         {
-            var image = await imageRepository.GetByStudentIdAsync(studentId);
-            if (image == null)
-            {
-                return NotFound(new ApiErrorResponse(HttpStatusCode.NotFound, "Image Not Found!"));
+            var image = await imageService.GetByStudentIdAsync(studentId);
 
-            }
-            var filecontentResult = new FileContentResult(image.Data, "application/octet-stream")
-            {
-                FileDownloadName = image.Name
-            };
-
-            return filecontentResult;                   //To return downloadable file
-            //return File(image.Data, "image/jpeg");    //To return file content view
+            //var filecontentResult = new FileContentResult(image.Data, "application/octet-stream")
+            //{
+            //    FileDownloadName = image.Name
+            //};
+            //return filecontentResult;                   //To return downloadable file
+            return File(image.Data, "image/jpeg");    //To return file content view
         }
 
     }
