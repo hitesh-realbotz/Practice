@@ -36,6 +36,7 @@ namespace StudentManagementPortal.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     HashPassword = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Salt = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
@@ -151,8 +152,8 @@ namespace StudentManagementPortal.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "HashPassword", "Name", "Role", "Status" },
-                values: new object[] { 1, "admin@email.com", "766be5da85a6d28596c66b692629f7df9c7059ea26879f9df7bf881a920b61edtbj1jB", "admin", "Admin", "Active" });
+                columns: new[] { "Id", "Email", "HashPassword", "Name", "Role", "Salt", "Status" },
+                values: new object[] { 1, "admin@email.com", "2146e5f0cec73fbe7beb5231106eb45aef62b0ac616cd2d20b086269e7acab85", "admin", "Admin", "kxHlOZ", "Active" });
 
             migrationBuilder.InsertData(
                 table: "Admins",

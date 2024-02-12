@@ -31,7 +31,7 @@ namespace StudentManagementPortal.Controllers
         {
             this.userService = userService;
             this.mapper = mapper;
-            this.authService = authService;        
+            this.authService = authService;
             this.studentService = studentService;
             this.loggerService = loggerService;
         }
@@ -44,43 +44,23 @@ namespace StudentManagementPortal.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         public async Task<IActionResult> Register([FromForm] AddStudentRequestDto addStudentRequestDto)
         {
-
             var student = await studentService.CreateAsync(addStudentRequestDto);
-            if (student == null)
-            {
-                throw new Exception();
-            }
-            student.HashPassword = null;
-            return Ok(mapper.Map<Student>(student));
+
+            return Ok(mapper.Map<StudentProfileDto>(student));
         }
 
 
-        
+
         [HttpPost]
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto loginRequestDto)
         {
-            var user = await userService.FindByEmailAsync(loginRequestDto.Email);
-            if (user == null)
+            var token = await authService.AuthenticateUserAsync(loginRequestDto);
+            if (token == null)
             {
                 return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, "Email incorrect!"));
             }
-            if (user.Status == "Active")
-            {
-                var isValid = authService.VerifyHashedPassword(loginRequestDto.Password, user.HashPassword);
-                if (isValid)
-                {
-                    //Generate Token
-                    var token = authService.CreateJWTToken(user);
-                    return Ok(new ApiErrorResponse(HttpStatusCode.OK, token));
-                }
-                else
-                {
-                    LogInfo logInfo = await loggerService.CreateAsync(user);
-                    return BadRequest(new ApiErrorResponse(HttpStatusCode.BadRequest, $"Password Incorrect! {Convert.ToUInt32(logInfo.Detail)} of 3 attemps!!!"));
-                }
-            }
-            return BadRequest(new ApiErrorResponse(HttpStatusCode.Locked, "User is Locked!"));
+            return Ok(new ApiErrorResponse(HttpStatusCode.OK, token));
         }
 
     }

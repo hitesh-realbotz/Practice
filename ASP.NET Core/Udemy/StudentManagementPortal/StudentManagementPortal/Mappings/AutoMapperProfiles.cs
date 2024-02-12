@@ -19,6 +19,8 @@ namespace StudentManagementPortal.Mappings
             CreateMap<Result, ResultDto>().ReverseMap();
             CreateMap<ResultSubject, ResultSubjectDto>().ReverseMap();
 
+            CreateMap<UpdateStudentRequestDto, Student>();
+            CreateMap<UpdateStudentByAdminRequestDto, Student>();
 
             CreateMap<AddResultRequestDto, Result>()
                 .ForMember(r => r.TotalObtainedMarks, opt => opt.MapFrom(rd => rd.ResultSubjects.Sum(rs => rs.ObtainedMarks)))

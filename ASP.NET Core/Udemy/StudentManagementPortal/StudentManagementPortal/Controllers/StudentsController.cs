@@ -26,14 +26,15 @@ namespace StudentManagementPortal.Controllers
             this.studentService = studentService;
         }
 
+
         [HttpGet]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetAll()
         {
             var studentList = await studentService.GetAllAsync();
-            var studentListDto = mapper.Map<List<StudentProfileDto>>(studentList);
-            return Ok(studentListDto);
+            return Ok(mapper.Map<List<StudentProfileDto>>(studentList));
         }
+
 
         [HttpGet]
         [Route("{enrollmentId:int}")]
@@ -41,31 +42,42 @@ namespace StudentManagementPortal.Controllers
         public async Task<IActionResult> GetStudentProfile([FromRoute] int enrollmentId)
         {
             var student = await studentService.GetStudentByEnrollmentIdAsync(enrollmentId);
-
-            var studentProfileDto = mapper.Map<StudentProfileDto>(student);
-            return Ok(studentProfileDto);
+            return Ok(mapper.Map<StudentProfileDto>(student));
         }
 
 
         [HttpGet]
-        [Route("ByLoggedUser")]
+        [Route("MyProfile")]
         [Authorize(Roles = "Student")]
         public async Task<IActionResult> GetByLoggedUser()
         {
             int enrollmentId = Convert.ToInt32(HttpContext.User.FindFirstValue(ClaimTypes.SerialNumber));
             var student = await studentService.GetStudentByEnrollmentIdAsync(enrollmentId);
-
-            var studentProfileDto = mapper.Map<StudentProfileDto>(student);
-            return Ok(studentProfileDto);
+            return Ok(mapper.Map<StudentProfileDto>(student));
         }
 
 
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> UpdateStudentProfile([FromBody] StudentProfileDto studentProfileDto)
+        [Authorize(Roles = "Student")]
+        public async Task<IActionResult> UpdateStudentProfile([FromForm] UpdateStudentRequestDto updateStudentRequestDto)
         {
-            var student = mapper.Map<Student>(studentProfileDto);
-            student = await studentService.UpdateAsync(studentProfileDto);
+            var student = mapper.Map<Student>(updateStudentRequestDto);
+
+            student = await studentService.UpdateAsync(student);
+
+            return Ok(mapper.Map<StudentProfileDto>(student));
+        }
+
+
+        [HttpPut]
+        [Authorize(Roles = "Admin")]
+        [Route("ByAdmin")]
+        public async Task<IActionResult> UpdateStudentProfileByAdmin([FromForm] UpdateStudentByAdminRequestDto updateStudentByAdminRequestDto)
+        {
+
+            var student = mapper.Map<Student>(updateStudentByAdminRequestDto);
+
+            student = await studentService.UpdateAsync(student);
 
             return Ok(mapper.Map<StudentProfileDto>(student));
         }

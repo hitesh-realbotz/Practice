@@ -8,9 +8,10 @@ namespace StudentManagementPortal.Services.Interfaces
         public Task<Student?> CreateAsync(AddStudentRequestDto addStudentRequestDto);
 
         Task<Student> GetStudentByEnrollmentIdAsync(int enrollmentId);
-        Task<Student> UpdateAsync(StudentProfileDto studentProfileDto);
+        Task<Student> UpdateAsync(Student student);
 
         Task<List<Student>> GetAllAsync();
         Task<Student?> DeleteAsync(int enrollmentId);
+
     }
 }
