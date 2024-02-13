@@ -5,13 +5,10 @@ using iText.Layout.Properties;
 using Microsoft.AspNetCore.Mvc;
 using StudentManagementPortal.Repositories.Interfaces;
 using StudentManagementPortal.Services.Interfaces;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 using iText.Layout;
 using StudentManagementPortal.Models.Domain;
 using AutoMapper;
 using StudentManagementPortal.Models.DTOs;
-using System.Net;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Http;
 
@@ -19,15 +16,11 @@ namespace StudentManagementPortal.Services
 {
     public class ResultService : IResultService
     {
-        private readonly IResultRepository resultRepository;
-        private readonly IStudentRepository studentRepository;
         private readonly IMapper mapper;
         private readonly IUnitOfWork unitOfWork;
 
-        public ResultService(IResultRepository resultRepository, IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
+        public ResultService(IMapper mapper, IUnitOfWork unitOfWork)
         {
-            this.resultRepository = resultRepository;
-            this.studentRepository = studentRepository;
             this.mapper = mapper;
             this.unitOfWork = unitOfWork;
         }
@@ -45,7 +38,7 @@ namespace StudentManagementPortal.Services
                 }
                 var result = mapper.Map<Result>(addResultRequestDto);
                 result.StudentId = student.Id;
-                result = await resultRepository.CreateAsync(result);
+                result = await unitOfWork.ResultRepository.CreateAsync(result);
                 unitOfWork.Commit();
                 return GetResultByteData(result);
             }
@@ -60,7 +53,7 @@ namespace StudentManagementPortal.Services
 
         public async Task<byte[]> GetByIdAsync(int id)
         {
-            var result = await resultRepository.GetByIdAsync(id);
+            var result = await unitOfWork.ResultRepository.GetByIdAsync(id);
             if (result == null)
             {
                 throw new BadHttpRequestException($"Result not found for {id} Result-Id");
@@ -70,7 +63,7 @@ namespace StudentManagementPortal.Services
 
         public async Task<List<Result>> GetByEnrollmentIdAsync(int enrollmentId)
         {
-            var resultList = await resultRepository.GetByEnrollmentIdAsync(enrollmentId);
+            var resultList = await unitOfWork.ResultRepository.GetByEnrollmentIdAsync(enrollmentId);
             if (resultList.IsNullOrEmpty())
             {
                 throw new BadHttpRequestException($"Invalid {enrollmentId} EnrollmentId!!");
@@ -81,7 +74,7 @@ namespace StudentManagementPortal.Services
 
         public async Task<List<Result>> GetAllAsync()
         {
-            var resultList = await resultRepository.GetAllAsync();
+            var resultList = await unitOfWork.ResultRepository.GetAllAsync();
             if (resultList.IsNullOrEmpty())
             {
                 throw new BadHttpRequestException("Results not found");
@@ -126,7 +119,7 @@ namespace StudentManagementPortal.Services
             document.Add(new Paragraph($"Subjects : "));
             document.Add(lineSeparator);
 
-            foreach (var sub in result.ResultSubjects)
+            foreach (var sub in result.Subjects)
             {
 
                 Paragraph subject = new Paragraph($"{sub.Name} => Marks: {sub.ObtainedMarks}/{sub.TotalMarks} => {(sub.IsPass ? $"Pass" : $"Fail")} ");

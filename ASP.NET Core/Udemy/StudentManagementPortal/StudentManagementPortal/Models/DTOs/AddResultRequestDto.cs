@@ -1,5 +1,4 @@
-﻿using StudentManagementPortal.Models.Domain;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentManagementPortal.Models.DTOs
 {
@@ -10,7 +9,7 @@ namespace StudentManagementPortal.Models.DTOs
         [Required]
         public int EnrollmentId { get; set; }
 
-        public List<AddSubjectRequestDto> ResultSubjects { get; set; }
+        public List<AddSubjectRequestDto> Subjects { get; set; }
 
         
     }

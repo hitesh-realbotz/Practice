@@ -1,6 +1,4 @@
-﻿
-using StudentManagementPortal.Models.Domain;
-using StudentManagementPortal.Models.DTOs;
+﻿using StudentManagementPortal.Models.Domain;
 
 namespace StudentManagementPortal.Repositories.Interfaces
 {

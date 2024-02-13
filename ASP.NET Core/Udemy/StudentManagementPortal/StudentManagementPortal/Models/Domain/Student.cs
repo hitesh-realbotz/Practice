@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace StudentManagementPortal.Models.Domain
 {
@@ -13,7 +11,6 @@ namespace StudentManagementPortal.Models.Domain
         
         [NotMapped]
         public IFormFile File { get; set; }
-
 
         public ICollection<Result> Results { get; set; }
 

@@ -23,18 +23,18 @@ namespace StudentManagementPortal.Repositories
 
         public async Task<List<Result>> GetAllAsync()
         {
-            return await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).ToListAsync();
+            return await dbContext.Results.Include(r => r.Student).Include(r => r.Subjects).ToListAsync();
         }
 
         public async Task<List<Result>?> GetByEnrollmentIdAsync(int enrollmentId)
         {
-            return await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).Where(r => r.Student.EnrollmentId == enrollmentId).ToListAsync(); ;
+            return await dbContext.Results.Include(r => r.Student).Include(r => r.Subjects).Where(r => r.Student.EnrollmentId == enrollmentId).ToListAsync(); ;
         }
 
         public async Task<Result?> GetByIdAsync(int id)
         {
 
-            var result = await dbContext.Results.Include(r => r.Student).Include(r => r.ResultSubjects).FirstOrDefaultAsync(r => r.Id == id);
+            var result = await dbContext.Results.Include(r => r.Student).Include(r => r.Subjects).FirstOrDefaultAsync(r => r.Id == id);
             if (result == null)
             {
                 return null;

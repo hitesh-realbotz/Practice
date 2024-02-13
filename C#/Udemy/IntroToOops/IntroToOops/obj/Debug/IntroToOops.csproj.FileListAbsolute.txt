@@ -1,7 +1,0 @@
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\bin\Debug\IntroToOops.exe.config
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\bin\Debug\IntroToOops.exe
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\bin\Debug\IntroToOops.pdb
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\obj\Debug\IntroToOops.csproj.AssemblyReference.cache
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\obj\Debug\IntroToOops.csproj.CoreCompileInputs.cache
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\obj\Debug\IntroToOops.exe
-C:\Users\Administrator\Downloads\Practice\C#\Udemy\IntroToOops\IntroToOops\obj\Debug\IntroToOops.pdb

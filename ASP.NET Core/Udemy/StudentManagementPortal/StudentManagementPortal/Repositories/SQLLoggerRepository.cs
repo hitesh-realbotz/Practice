@@ -3,7 +3,6 @@ using StudentManagementPortal.Constants;
 using StudentManagementPortal.Data;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
-using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 namespace StudentManagementPortal.Repositories
 {
@@ -30,8 +29,8 @@ namespace StudentManagementPortal.Repositories
 
         public async Task<LogInfo?> GetByLastPasswordFail(int userId)
         {
-            var logType = Const.LogType.SIGNIN_AFTER_PASS_FAIL.ToString();
-            return await dbContext.LogInfos.OrderByDescending(x => x.LogTime).FirstOrDefaultAsync(x => (x.UserId == userId && x.Type.Contains(logType)));
+            var lastSignInOrPassFail = Const.LogType.SIGN_IN.ToString();
+            return await dbContext.LogInfos.OrderByDescending(x => x.LogTime).FirstOrDefaultAsync(x => (x.UserId == userId && x.Type.Contains(lastSignInOrPassFail)));
         }
 
         public async Task<LogInfo?> GetByUserId(int userId)

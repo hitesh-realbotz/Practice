@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using StudentManagementPortal.Constants;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
-using StudentManagementPortal.Repositories;
 using StudentManagementPortal.Repositories.Interfaces;
 using StudentManagementPortal.Services.Interfaces;
 using System.Net;
@@ -17,16 +15,14 @@ namespace StudentManagementPortal.Services
     public class StudentService : IStudentService
     {
         private readonly IAuthService authService;
-        private readonly IMapper mapper;
         private readonly IHttpContextAccessor httpContextAccessor;
         private readonly IUnitOfWork unitOfWork;
         private readonly ILoggerService loggerService;
 
-        public StudentService(IAuthService authService, IMapper mapper, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, ILoggerService loggerService)
+        public StudentService(IAuthService authService, IHttpContextAccessor httpContextAccessor, IUnitOfWork unitOfWork, ILoggerService loggerService)
         {
 
             this.authService = authService;
-            this.mapper = mapper;
             this.httpContextAccessor = httpContextAccessor;
             this.unitOfWork = unitOfWork;
             this.loggerService = loggerService;
@@ -159,7 +155,7 @@ namespace StudentManagementPortal.Services
                 unitOfWork.Rollback();
                 throw ex;
             }
-            
+
         }
 
 

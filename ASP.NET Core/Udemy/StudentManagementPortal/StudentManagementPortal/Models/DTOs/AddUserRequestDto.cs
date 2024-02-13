@@ -1,5 +1,4 @@
-﻿using StudentManagementPortal.Models.Domain;
-
+﻿
 namespace StudentManagementPortal.Models.DTOs
 {
     public class AddUserRequestDto
@@ -12,7 +11,6 @@ namespace StudentManagementPortal.Models.DTOs
         public int? EnrollmentId { get; set; }
         public string? ImageUrl { get; set; }
         public string? MobNumber { get; set; }
-
         public string? Level { get; set; }
     }
 }

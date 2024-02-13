@@ -1,6 +1,4 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using StudentManagementPortal.Constants;
-using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

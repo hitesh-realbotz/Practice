@@ -6,6 +6,7 @@ namespace StudentManagementPortal.Services.Interfaces
     {
         Task<LogInfo> CreateAsync(User user, bool isSignIn = false);
         Task<LogInfo> CreateUpdateLogAsync(string actionOn, object actionData);
+        Task<LogInfo> CreateStatusUpdateLogAsync(string actionOn, object actionData);
         Task<LogInfo> CreateDeleteLogAsync(string actionOn, object actionData);
     }
 }
