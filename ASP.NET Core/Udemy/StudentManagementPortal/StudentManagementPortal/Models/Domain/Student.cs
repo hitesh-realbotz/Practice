@@ -12,7 +12,7 @@ namespace StudentManagementPortal.Models.Domain
         public string? MobNumber { get; set; }
         
         [NotMapped]
-        public IFormFile Image { get; set; }
+        public IFormFile File { get; set; }
 
 
         public ICollection<Result> Results { get; set; }

@@ -1,4 +1,5 @@
-﻿using StudentManagementPortal.Models.Domain;
+﻿
+using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
 
 namespace StudentManagementPortal.Repositories.Interfaces
@@ -7,7 +8,8 @@ namespace StudentManagementPortal.Repositories.Interfaces
     {
         Task<Student?> CreateAsync(Student student);
         Task<Student?> GetStudentByEnrollmentIdAsync(int enrollmentId);
-        Task<Student?> UpdateAsync(Student student);
+        Task<Student?> UpdateAsync(Student student, bool isStudent = true);
+        Task<Student?> UpdateStatusAsync(int enrollmentId, string status);
 
         Task<List<Student>> GetAllAsync();
         Task<Student?> DeleteAsync(int enrollmentId);

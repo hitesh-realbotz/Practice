@@ -1,38 +1,116 @@
-﻿using StudentManagementPortal.Models.Domain;
+﻿using StudentManagementPortal.Constants;
+using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
 using StudentManagementPortal.Services.Interfaces;
+using System.Security.Claims;
+using static StudentManagementPortal.Constants.Const;
 
 namespace StudentManagementPortal.Services
 {
     public class LoggerService : ILoggerService
     {
-        private readonly ILoggerRepository loggerRepository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public LoggerService(ILoggerRepository loggerRepository)
+        public LoggerService(IUnitOfWork unitOfWork, IHttpContextAccessor httpContextAccessor)
         {
-            this.loggerRepository = loggerRepository;
+            this.unitOfWork = unitOfWork;
+            this.httpContextAccessor = httpContextAccessor;
         }
-        public async Task<LogInfo> CreateAsync(User user)
+        public async Task<LogInfo> CreateAsync(User user, bool isSignIn)
         {
-
-            LogInfo logInfo = await loggerRepository.GetByUserId(user.Id);
             var newLogInfo = new LogInfo();
-            if (logInfo != null)
+            if (isSignIn)
             {
-                newLogInfo.Detail = (Convert.ToInt32(logInfo.Detail) + 1).ToString();
-
+                newLogInfo.Type = LogType.SIGNIN_AFTER_PASS_FAIL;
+                newLogInfo.Detail = $"User with email {user.Email} logged-in!";
             }
             else
             {
+                LogInfo logInfo = await unitOfWork.LoggerRepository.GetByLastPasswordFail(user.Id);
 
-                newLogInfo.Detail = 1.ToString();
+                if (logInfo == null)
+                {
+                    newLogInfo.Type = LogType.PASSWORDFAIL_1;
+                }
+                else
+                {
+
+                    switch (logInfo.Type)
+                    {
+                        case LogType.PASSWORDFAIL_1:
+                            newLogInfo.Type = LogType.PASSWORDFAIL_2;
+                            break;
+
+                        case LogType.PASSWORDFAIL_2:
+                            newLogInfo.Type = LogType.PASSWORDFAIL_3;
+                            break;
+                        case LogType.PASSWORDFAIL_3:
+                            newLogInfo.Type = LogType.PASSWORDFAIL_1;
+                            break;
+                        default:
+                            break;
+                    }
+                    //var attemptIndex = Convert.ToInt32(logInfo.Type.IndexOf('-')) + 1;
+                    //var attemptCount = Convert.ToInt32(logInfo.Type.Substring(attemptIndex)) + 1;
+                    //newLogInfo.Type = $"{logInfo.Type.Substring(0, attemptIndex)}{attemptCount}";
+                }
+                newLogInfo.Detail = $"Password fail-attempt by user with Id {user.Id} {(user.Role == Role.STUDENT ? $"& EnrollmentId as {((Student)user).EnrollmentId}" : $"")}";
             }
-            newLogInfo.UserId = user.Id;
-            newLogInfo.LogTime = DateTime.Now;
-            newLogInfo.Type = "Password Fail";
 
-            return await loggerRepository.CreateAsync(newLogInfo);
+            newLogInfo.LogTime = DateTime.Now;
+            newLogInfo.UserId = user.Id;
+            return await unitOfWork.LoggerRepository.CreateAsync(newLogInfo);
         }
 
+        public async Task<LogInfo> CreateUpdateLogAsync(string actionOn, object actionData)
+        {
+            var newLogInfo = new LogInfo();
+
+            if (actionOn == ActionOn.STUDENT_PROFILE)
+            {
+                var logBy = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+                var student = (Student)actionData;
+                newLogInfo.Detail = $"{actionOn} updated for student with userId {student.Id} by {(logBy == Role.STUDENT ? $"self" : $"admin")}.";
+                newLogInfo.UserId = student.Id;
+
+            }
+            else if (actionOn == ActionOn.RESULT)
+            {
+                var result = (Result)actionData;
+                newLogInfo.Detail = $"{actionOn} updated with ResultId as {result.Id} & studentId as {result.StudentId} by admin.";
+                newLogInfo.UserId = Convert.ToInt32(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
+            }
+
+
+            newLogInfo.Type = LogType.UPDATE;
+            newLogInfo.LogTime = DateTime.Now;
+
+            return newLogInfo;
+        }
+
+        public async Task<LogInfo> CreateDeleteLogAsync(string actionOn, object actionData)
+        {
+            var newLogInfo = new LogInfo();
+
+            if (actionOn == ActionOn.STUDENT)
+            {
+                var logBy = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+                var student = (Student)actionData;
+                newLogInfo.Detail = $"{actionOn} deleted with enrollmentId as {student.EnrollmentId} by admin.";
+                newLogInfo.UserId = Convert.ToInt32(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
+            }
+            else if (actionOn == ActionOn.RESULT)
+            {
+                var result = (Result)actionData;
+                newLogInfo.Detail = $"{actionOn} deleted with ResultId as {result.Id} & studentId as {result.StudentId} by admin.";
+                newLogInfo.UserId = Convert.ToInt32(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
+            }
+
+            newLogInfo.Type = LogType.UPDATE;
+            newLogInfo.LogTime = DateTime.Now;
+
+            return newLogInfo;
+        }
     }
 }

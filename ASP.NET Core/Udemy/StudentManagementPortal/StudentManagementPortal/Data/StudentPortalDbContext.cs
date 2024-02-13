@@ -1,6 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using StudentManagementPortal.Constants;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
+using StudentManagementPortal.Services.Interfaces;
 
 
 namespace StudentManagementPortal.Data
@@ -8,13 +11,13 @@ namespace StudentManagementPortal.Data
     public class StudentPortalDbContext : DbContext
     {
         private readonly DbContextOptions options;
-        private readonly IAuthRepository authHandler;
+        private readonly IAuthRepository authRepository;
         private readonly IConfiguration configuration;
 
-        public StudentPortalDbContext(DbContextOptions options, IAuthRepository authHandler, IConfiguration configuration) : base(options)
+        public StudentPortalDbContext(DbContextOptions options, IAuthRepository authRepository, IConfiguration configuration) : base(options)
         {
             this.options = options;
-            this.authHandler = authHandler;
+            this.authRepository = authRepository;
             this.configuration = configuration;
         }
 
@@ -44,6 +47,7 @@ namespace StudentManagementPortal.Data
 
 
             base.OnModelCreating(modelBuilder);
+            var salt = authRepository.GetSalt();
             var admins = new List<Admin>()
             {
                 new Admin()
@@ -51,9 +55,10 @@ namespace StudentManagementPortal.Data
                     Id = 1,
                     Name = "admin",
                     Email = "admin@email.com",
-                    HashPassword = authHandler.GetHashedPassword( "admin123" ),
-                    Role = "Admin",
-                    Status = "Active",
+                    Salt = salt,
+                    HashPassword = authRepository.GetHashedPassword("admin123",salt),
+                    Role = Const.Role.ADMIN,
+                    Status = Const.Status.ACTIVE,
                     Level = "L1"
                 }
             };

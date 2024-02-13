@@ -4,10 +4,9 @@ namespace StudentManagementPortal.Repositories.Interfaces
 {
     public interface IAuthRepository
     {
-        string GetHashedPassword(string password);
+        string GetSalt();
+        string GetHashedPassword(string password, string salt);
 
-        string CreateJWTToken(User user);
 
-        bool VerifyHashedPassword(string password, string userHashedPass);
     }
 }

@@ -24,13 +24,12 @@ namespace StudentManagementPortal.Repositories
             return await dbContext.Images.FirstOrDefaultAsync(i => i.StudentId == studentId);
         }
 
-        public async Task<Image?> UploadAsync(IFormFile file, Student student)
+        public async Task<Image?> UploadAsync(IFormFile file, int studentId)
         {
             var image = new Image()
             {
                 Name = file.FileName,
-                StudentId = student.Id,
-                
+                StudentId = studentId,
             };
             using (var memoryStream = new MemoryStream())
             {
@@ -38,6 +37,23 @@ namespace StudentManagementPortal.Repositories
                 image.Data = memoryStream.ToArray();
             }
             await dbContext.Images.AddAsync(image);
+            await dbContext.SaveChangesAsync();
+            return image;
+        }
+        public async Task<Image?> UpdateAsync(IFormFile file, int studentId)
+        {
+            var image = await dbContext.Images.FirstOrDefaultAsync(i => i.StudentId == studentId);
+
+            image.Name = file.FileName;
+            image.StudentId = studentId;
+
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await file.CopyToAsync(memoryStream);
+                image.Data = memoryStream.ToArray();
+            }
+
             await dbContext.SaveChangesAsync();
             return image;
         }

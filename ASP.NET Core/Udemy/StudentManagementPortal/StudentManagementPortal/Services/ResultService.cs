@@ -13,6 +13,7 @@ using StudentManagementPortal.Models.DTOs;
 using System.Net;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Http;
 
 namespace StudentManagementPortal.Services
 {
@@ -21,32 +22,38 @@ namespace StudentManagementPortal.Services
         private readonly IResultRepository resultRepository;
         private readonly IStudentRepository studentRepository;
         private readonly IMapper mapper;
+        private readonly IUnitOfWork unitOfWork;
 
-        public ResultService(IResultRepository resultRepository, IStudentRepository studentRepository, IMapper mapper)
+        public ResultService(IResultRepository resultRepository, IStudentRepository studentRepository, IMapper mapper, IUnitOfWork unitOfWork)
         {
             this.resultRepository = resultRepository;
             this.studentRepository = studentRepository;
             this.mapper = mapper;
+            this.unitOfWork = unitOfWork;
         }
 
 
         public async Task<byte[]> CreateAsync(AddResultRequestDto addResultRequestDto)
         {
-            var student = await studentRepository.GetStudentByEnrollmentIdAsync(addResultRequestDto.EnrollmentId);
-            if (student == null)
+            unitOfWork.BeginTransaction();
+            try
             {
-                throw new BadHttpRequestException($"Invalid {addResultRequestDto.EnrollmentId} EnrollmentId!!");
+                var student = await unitOfWork.StudentRepository.GetStudentByEnrollmentIdAsync(addResultRequestDto.EnrollmentId);
+                if (student == null)
+                {
+                    throw new BadHttpRequestException($"Invalid {addResultRequestDto.EnrollmentId} EnrollmentId!!");
+                }
+                var result = mapper.Map<Result>(addResultRequestDto);
+                result.StudentId = student.Id;
+                result = await resultRepository.CreateAsync(result);
+                unitOfWork.Commit();
+                return GetResultByteData(result);
             }
-
-            var result = mapper.Map<Result>(addResultRequestDto);
-            result.StudentId = student.Id;
-
-            result = await resultRepository.CreateAsync(result);
-            if (result == null)
+            catch (Exception ex)
             {
-                throw new BadHttpRequestException($"Result not saved");
+                unitOfWork.Rollback();
+                throw ex;
             }
-            return GetResultByteData(result);
         }
 
 
@@ -60,6 +67,29 @@ namespace StudentManagementPortal.Services
             }
             return GetResultByteData(result);
         }
+
+        public async Task<List<Result>> GetByEnrollmentIdAsync(int enrollmentId)
+        {
+            var resultList = await resultRepository.GetByEnrollmentIdAsync(enrollmentId);
+            if (resultList.IsNullOrEmpty())
+            {
+                throw new BadHttpRequestException($"Invalid {enrollmentId} EnrollmentId!!");
+            }
+            //mapper.Map<List<ResultDto>>(resultList);
+            return resultList;
+        }
+
+        public async Task<List<Result>> GetAllAsync()
+        {
+            var resultList = await resultRepository.GetAllAsync();
+            if (resultList.IsNullOrEmpty())
+            {
+                throw new BadHttpRequestException("Results not found");
+            }
+
+            return resultList;
+        }
+
 
         private static byte[] GetResultByteData(Result? result)
         {
@@ -110,26 +140,5 @@ namespace StudentManagementPortal.Services
             return dataBytes;
         }
 
-        public async Task<List<Result>> GetByEnrollmentIdAsync(int enrollmentId)
-        {
-            var resultList = await resultRepository.GetByEnrollmentIdAsync(enrollmentId);
-            if (resultList.IsNullOrEmpty())
-            {
-                throw new BadHttpRequestException($"Invalid {enrollmentId} EnrollmentId!!");
-            }
-            //mapper.Map<List<ResultDto>>(resultList);
-            return resultList;
-        }
-
-        public async Task<List<Result>> GetAllAsync()
-        {
-            var resultList = await resultRepository.GetAllAsync();
-            if (resultList.IsNullOrEmpty())
-            {
-                throw new BadHttpRequestException("Results not found");
-            }
-            
-            return resultList;
-        }
     }
 }

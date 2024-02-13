@@ -1,4 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using StudentManagementPortal.Constants;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Repositories.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
@@ -17,7 +18,7 @@ namespace StudentManagementPortal.Repositories
             this.configuration = configuration;
         }
 
-        public string GetHashedPassword(string password)
+        public string GetSalt()
         {
             using (var sha256 = SHA256.Create())
             {
@@ -28,51 +29,19 @@ namespace StudentManagementPortal.Repositories
                 {
                     salt.Append(saltOptions.Substring(new Random().Next(0, 61), 1));
                 }
-                var saltString = salt.ToString();
-                password = password + saltString;
-
-                var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-                return (string)(BitConverter.ToString(hashedBytes).Replace("-", "").ToLower()) + saltString;
+                return salt.ToString();
             }
         }
 
-        public bool VerifyHashedPassword(string password, string userHashedPass)
+        public string GetHashedPassword(string password, string salt)
         {
             using (var sha256 = SHA256.Create())
             {
-                string saltString = userHashedPass.Substring(userHashedPass.Length - Convert.ToInt32(configuration["Jwt:SaltLength"]));
-                password = password + saltString;
+                password = password + salt;
                 var hashedBytes = sha256.ComputeHash(Encoding.UTF8.GetBytes(password));
-
-                var hashTobeValidated = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower() + saltString;
-                return (hashTobeValidated.Equals(userHashedPass)) ? true : false;
+                return BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
             }
         }
 
-        public string CreateJWTToken(User user)
-        {
-            var claims = new List<Claim>();
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-            if (user.Role == "Student")
-            {
-                Student student = (Student)user;
-                claims.Add(new Claim(ClaimTypes.SerialNumber, student.EnrollmentId.ToString()));
-            }
-            claims.Add(new Claim(ClaimTypes.Sid, user.Id.ToString()));
-            claims.Add(new Claim(ClaimTypes.Role, user.Role));
-            claims.Add(new Claim(ClaimTypes.Name, user.Name));
-
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]));
-            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                configuration["Jwt:Issuer"],
-                configuration["Jwt:Audience"],
-                claims,
-                expires: DateTime.Now.AddMinutes(15),
-                signingCredentials: credentials
-                );
-
-            return new JwtSecurityTokenHandler().WriteToken(token);
-        }
     }
 }
