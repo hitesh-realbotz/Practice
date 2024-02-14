@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using StudentManagementPortal.Constants;
 using StudentManagementPortal.Models.DTOs;
 using StudentManagementPortal.Repositories.Interfaces;
 using StudentManagementPortal.Services.Interfaces;
@@ -28,7 +29,9 @@ namespace StudentManagementPortal.Controllers
             //    FileDownloadName = image.Name
             //};
             //return filecontentResult;                   //To return downloadable file
-            return File(image.Data, "image/jpeg");    //To return file content view
+
+            //return File(image.Data, "image/jpeg");    //To return file content view
+            return File(image.Data, $"{Const.Content.IMAGE}/{Const.FilExtension.JPEG.Substring(1)}");    //To return file content view
         }
 
     }

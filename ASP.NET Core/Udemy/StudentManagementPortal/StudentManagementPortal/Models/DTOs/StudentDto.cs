@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using StudentManagementPortal.Models.Domain;
 
 namespace StudentManagementPortal.Models.DTOs
 {

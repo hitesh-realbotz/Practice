@@ -22,7 +22,7 @@ namespace StudentManagementPortal.Services
             var newLogInfo = new LogInfo();
             if (isSignIn)
             {
-                newLogInfo.Type = LogType.SIGNIN_AFTER_PASS_FAIL;
+                newLogInfo.Type = LogType.SIGN_IN;
                 newLogInfo.Detail = $"User with email {user.Email} logged-in!";
             }
             else
@@ -49,6 +49,7 @@ namespace StudentManagementPortal.Services
                             newLogInfo.Type = LogType.PASSWORDFAIL_1;
                             break;
                         default:
+                            newLogInfo.Type = LogType.PASSWORDFAIL_1;
                             break;
                     }
                     //var attemptIndex = Convert.ToInt32(logInfo.Type.IndexOf('-')) + 1;
@@ -71,7 +72,7 @@ namespace StudentManagementPortal.Services
             {
                 var logBy = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
                 var student = (Student)actionData;
-                newLogInfo.Detail = $"{actionOn} updated for student with userId {student.Id} by {(logBy == Role.STUDENT ? $"self" : $"admin")}.";
+                newLogInfo.Detail = $"{actionOn} updated for student with userId {student.Id} {(logBy == Role.STUDENT ? $"by self" : $"by admin")}.";
                 newLogInfo.UserId = student.Id;
 
             }
@@ -106,6 +107,21 @@ namespace StudentManagementPortal.Services
                 newLogInfo.Detail = $"{actionOn} deleted with ResultId as {result.Id} & studentId as {result.StudentId} by admin.";
                 newLogInfo.UserId = Convert.ToInt32(httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Sid));
             }
+
+            newLogInfo.Type = LogType.UPDATE;
+            newLogInfo.LogTime = DateTime.Now;
+
+            return newLogInfo;
+        }
+
+        public async Task<LogInfo> CreateStatusUpdateLogAsync(string actionOn, object actionData)
+        {
+            var newLogInfo = new LogInfo();
+
+            var logBy = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+            var student = (Student)actionData;
+            newLogInfo.Detail = $"{actionOn} status updated to for student with userId {student.Id} {(logBy == Role.ADMIN ? $"by admin" : $"")}.";
+            newLogInfo.UserId = student.Id;
 
             newLogInfo.Type = LogType.UPDATE;
             newLogInfo.LogTime = DateTime.Now;

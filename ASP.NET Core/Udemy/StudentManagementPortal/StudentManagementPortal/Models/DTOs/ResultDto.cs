@@ -1,5 +1,4 @@
-﻿using StudentManagementPortal.Models.Domain;
-
+﻿
 namespace StudentManagementPortal.Models.DTOs
 {
     public class ResultDto
@@ -12,6 +11,6 @@ namespace StudentManagementPortal.Models.DTOs
 
         public StudentProfileDto Student { get; set; }
 
-        public List<ResultSubjectDto> ResultSubjects { get; set; }
+        public List<SubjectDto> Subjects { get; set; }
     }
 }

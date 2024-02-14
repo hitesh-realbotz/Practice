@@ -2,7 +2,6 @@
 using StudentManagementPortal.Constants;
 using StudentManagementPortal.Models.Domain;
 using StudentManagementPortal.Models.DTOs;
-using StudentManagementPortal.Repositories;
 using StudentManagementPortal.Repositories.Interfaces;
 using StudentManagementPortal.Services.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
@@ -103,6 +102,10 @@ namespace StudentManagementPortal.Services
                 {
                     //Generate Token
                     var token = this.CreateJWTToken(user);
+                    if (token != null)
+                    {
+                        await loggerService.CreateAsync(user, true);
+                    }
                     return token;
                 }
                 else
@@ -111,6 +114,8 @@ namespace StudentManagementPortal.Services
                     if (logInfo.Type == LogType.PASSWORDFAIL_3 && user.Role == Const.Role.STUDENT)
                     {
                         user = await unitOfWork.StudentRepository.UpdateStatusAsync(((Student)user).EnrollmentId, Status.LOCKED);
+                        var log = await loggerService.CreateStatusUpdateLogAsync(Const.ActionOn.STUDENT_PROFILE, (Student)user);
+                        await unitOfWork.LoggerRepository.CreateAsync(log);
 
                     }
                     throw new BadHttpRequestException($"{(user.Status == Status.LOCKED ? $"Your Account Locked! Contact to Admin to get access." : $"")} Provided {loginRequestDto.Password} Password is Incorrect! " +

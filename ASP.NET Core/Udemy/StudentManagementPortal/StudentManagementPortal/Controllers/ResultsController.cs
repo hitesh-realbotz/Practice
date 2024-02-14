@@ -18,6 +18,7 @@ using iText.Layout.Properties;
 using iText.Kernel.Pdf.Canvas.Draw;
 using StudentManagementPortal.Services.Interfaces;
 using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
+using StudentManagementPortal.Constants;
 
 namespace StudentManagementPortal.Controllers
 {
@@ -43,9 +44,9 @@ namespace StudentManagementPortal.Controllers
             var response = await resultService.CreateAsync(addResultRequestDto);
             if (response != null)
             {
-                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                var filecontentResult = new FileContentResult(response, $"{Const.Content.Application}/{Const.FilExtension.OCTATE_STREAM}")
                 {
-                    FileDownloadName = "Result.pdf"
+                    FileDownloadName = $"Result{Const.FilExtension.PDF}"
                 };
                 return filecontentResult;
             }
@@ -63,9 +64,9 @@ namespace StudentManagementPortal.Controllers
             if (response != null)
             {
                 //return File(dataBytes, "application/pdf");
-                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                var filecontentResult = new FileContentResult(response, $"{Const.Content.Application}/{Const.FilExtension.OCTATE_STREAM}")
                 {
-                    FileDownloadName = "Result.pdf"
+                    FileDownloadName = $"Result{Const.FilExtension.PDF}"
                 };
                 return filecontentResult;
             }
@@ -81,11 +82,10 @@ namespace StudentManagementPortal.Controllers
             var response = await resultService.GetByIdAsync(id);
             if (response != null)
             {
-                //return File(dataBytes, "application/pdf");
-
-                var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                //var filecontentResult = new FileContentResult(response, "application/octet-stream")
+                var filecontentResult = new FileContentResult(response, $"{Const.Content.Application}/{Const.FilExtension.OCTATE_STREAM}")
                 {
-                    FileDownloadName = "Result.pdf"
+                    FileDownloadName = $"Result{Const.FilExtension.PDF}"
                 };
                 return filecontentResult;
             }

@@ -11,7 +11,7 @@
 
         public int StudentId { get; set; }
         public Student Student { get; set; }
-        public ICollection<ResultSubject> ResultSubjects { get; set; }
+        public ICollection<Subject> Subjects { get; set; }
 
     }
 }

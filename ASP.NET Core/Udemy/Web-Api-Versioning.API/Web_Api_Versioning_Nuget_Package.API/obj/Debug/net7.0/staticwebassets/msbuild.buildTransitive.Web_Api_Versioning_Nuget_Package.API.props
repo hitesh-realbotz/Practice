@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Web_Api_Versioning_Nuget_Package.API.props" />
-</Project>
