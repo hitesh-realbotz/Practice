@@ -1,0 +1,45 @@
+npm install -g @angular/cli@16
+
+ng new client
+
+ng add ngx-bootstrap
+
+npm install font-awesome
+
+
+https://github.com/FiloSottile/mkcert
+mkcert  -install
+mkcert localhost
+
+ng g c nav --dry-run
+ng g c nav --skip-tests --dry-run
+ng g c nav --skip-tests
+
+
+For bootstrap dropdown component
+ng add ngx-bootstrap  --component dropdowns
+
+
+For Toast => select version as per compatability
+https://github.com/scttcper/ngx-toastr
+npm install ngx-toastr@17
+
+
+For Guard
+ng g g _guards/auth --skip-tests 
+
+
+For Theme
+npm install bootswatch
+
+
+For module without subfolder
+ng g m _modules/shared --flat
+
+
+ng g interceptor _interceptor/error --skip-tests
+
+
+
+
+
