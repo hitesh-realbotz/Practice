@@ -40,6 +40,20 @@ ng g m _modules/shared --flat
 ng g interceptor _interceptor/error --skip-tests
 
 
+For JSON to TS
+https://transform.tools/json-to-typescript
 
+For configuration
+ng g environments
+
+
+ng g s _services/members --skip-tests
+
+
+For Tabs
+ng add ngx-bootstrap  --component tabs
+
+For GalleryImages
+https://ngx-gallery.netlify.app/#/getting-started/gallery
 
 
