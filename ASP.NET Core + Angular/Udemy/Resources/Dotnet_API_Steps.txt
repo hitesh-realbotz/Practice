@@ -11,13 +11,16 @@ dotnet sln -h
 dotnet sln add API
 
 
-=>EF Core
+EF Core
 dotnet tool install --global dotnet-ef --version 8.0.2
 
 dotnet ef migrations add Initial -o Data/Migrations
 
 dotnet ef database update
 
+
+DataSeeding JSON generator
+https://json-generator.com/#
 
 
 
