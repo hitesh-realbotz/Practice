@@ -24,7 +24,7 @@ export class MemberEditComponent implements OnInit {
 
   constructor(private accountService: AccountService, private memberService: MembersService,
     private toastr: ToastrService) {
-    
+
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => this.user = user
     });
@@ -42,14 +42,12 @@ export class MemberEditComponent implements OnInit {
   }
 
   updateMember() {
-console.log(this.member);
-    this.toastr.success('Profile updated successfully');
+    console.log(this.member);
+    this.memberService.updateMember(this.editForm?.value).subscribe({
+      next: _ => {
+        this.toastr.success('Profile updated successfully');
         this.editForm?.reset(this.member);
-    // this.memberService.updateMember(this.editForm?.value).subscribe({
-    //   next: _ => {
-    //     this.toastr.success('Profile updated successfully');
-    //     this.editForm?.reset(this.member);
-    //   }
-    // })
+      }
+    })
   }
 }
