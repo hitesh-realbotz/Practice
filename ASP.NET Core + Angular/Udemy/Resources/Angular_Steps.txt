@@ -57,3 +57,27 @@ For GalleryImages
 https://ngx-gallery.netlify.app/#/getting-started/gallery
 
 
+For Spinner
+https://napster2210.github.io/ngx-spinner/
+https://github.com/Napster2210/ngx-spinner
+
+npm install ngx-spinner@16
+
+ng g s _services/busy --skip-tests
+ng g interceptor _interceptor/loading --skip-tests
+
+
+
+For file upload
+https://valor-software.com/ng2-file-upload/
+https://github.com/valor-software/ng2-file-upload
+
+npm install ng2-file-upload
+
+
+
+
+
+
+
+
