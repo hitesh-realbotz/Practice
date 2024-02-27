@@ -45,8 +45,7 @@ namespace DatingApp.Data
                 _ => query.OrderByDescending(u => u.LastActive)
             };
 
-            return await PagedList<MemberDto>.CreateAsync(query.AsNoTracking()
-                .ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+            return await PagedList<MemberDto>.CreateAsync(query.AsNoTracking().ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
                     userParams.PageNumber, userParams.PageSize);
         }
 
