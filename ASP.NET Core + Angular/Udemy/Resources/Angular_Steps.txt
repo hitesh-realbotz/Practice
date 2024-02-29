@@ -80,6 +80,9 @@ For TimeAgo feature
 npm install ngx-timeago
 
 
+For SignalR
+npm install @microsoft/signalr
+
 
 
 
