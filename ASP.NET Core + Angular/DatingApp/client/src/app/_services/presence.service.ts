@@ -41,6 +41,13 @@ export class PresenceService {
         next: usernames => this.onlineUsersSource.next([...usernames.filter(x => x !== username)])
       })
     })
+    // this.hubConnection.on('UserIsOffline', user => {
+    //   console.log(user);
+    //   console.log(user.userName);
+    //   this.onlineUsers$.pipe(take(1)).subscribe({
+    //     next: usernames => this.onlineUsersSource.next([...usernames.filter(x => x !== user.userName)])
+    //   })
+    // })
 
     this.hubConnection.on('GetOnlineUsers', usernames => {
       this.onlineUsersSource.next(usernames);
