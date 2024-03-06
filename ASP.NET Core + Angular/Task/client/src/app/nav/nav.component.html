@@ -1,0 +1,46 @@
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark" aria-label="Third navbar example">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">BookStore</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03"
+            aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarsExample03">
+            <ul class="navbar-nav me-auto mb-2 mb-sm-0">
+                <li routerLinkActive="active" class="nav-item">
+                    <!-- <a class="nav-link" aria-current="page" [routerLink]="isAuthenticated ? '/items' : '/items'">Home</a> -->
+                    <a class="nav-link" aria-current="page">Home</a>
+                </li>
+
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" aria-current="page" routerLink="/aboutus">About Us</a>
+                </li>
+                <ng-container *ngIf="isAuthenticated ">
+                    <li routerLinkActive="active" class="nav-item">
+                        <a class="nav-link" aria-current="page" routerLink="/user">DashBoard</a>
+                    </li>
+                    <li routerLinkActive="active" class="nav-item">
+                        <!-- <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a> -->
+                        <a class="nav-link" aria-current="page" routerLink="/items">Profile</a>
+                    </li>
+                    <!-- <li routerLinkActive="active" class="nav-item" >
+              <a class="nav-link" aria-current="page" [routerLink]="role === 'buyer' ? 'shop/details' : 'shop'"> {{role === 'buyer' ? 'Become a Seller' : 'Shop'}}</a>
+            </li> -->
+
+                </ng-container>
+
+            </ul>
+            <ul class="navbar-nav me-right mb-2 mb-sm-0">
+                <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">
+                    <a class="nav-link" aria-current="page" routerLink="/auth" (click)="onLogout()">Logout</a>
+                </li>
+                <li routerLinkActive="active" class="nav-item">
+                    <a class="nav-link" aria-current="page" routerLink="auth" >Login</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+

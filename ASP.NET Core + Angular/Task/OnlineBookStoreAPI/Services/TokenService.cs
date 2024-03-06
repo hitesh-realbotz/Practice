@@ -23,21 +23,25 @@ namespace OnlineBookStoreAPI.Services
             {
                  new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
-            };
+                new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                new Claim(ClaimTypes.Authentication, user.TwoFactorEnabled ? "True" : "False")
+        };
 
 
-            var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(claims),
-                Expires = DateTime.Now.AddDays(7),
-                SigningCredentials = cred
-            };
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var token = tokenHandler.CreateToken(tokenDescriptor);
+        var cred = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(7),
+            SigningCredentials = cred
+        };
+            
+        var tokenHandler = new JwtSecurityTokenHandler();
+            
+        var token = tokenHandler.CreateToken(tokenDescriptor);
+            
 
             return tokenHandler.WriteToken(token);
         }
-    }
+}
 }

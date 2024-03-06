@@ -56,10 +56,9 @@ namespace OnlineBookStoreAPI.Controllers
 
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
-            if (!result)
-            {
-                return Unauthorized("Invalid Password!");
-            }
+            if (!result) return Unauthorized("Invalid Password!");
+
+            //if (!user.TwoFactorEnabled) return Unauthorized("2FA not enabled!");
 
             return new UserDto
             {

@@ -10,8 +10,11 @@ using OnlineBookStoreAPI.Services.Interfaces;
 using QRCoder;
 using System.Text;
 using System.Text.Encodings.Web;
-using ZXing.QrCode;
-using ZXing.QrCode.Internal;
+using System.Drawing;
+using System.IO;
+using Google.Authenticator;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace OnlineBookStoreAPI.Controllers
 {
@@ -33,6 +36,46 @@ namespace OnlineBookStoreAPI.Controllers
             _signInManager = signInManager;
             _urlEncoder = urlEncoder;
         }
+
+        [HttpPost("2fa-login")]
+        [Authorize]
+        public async Task<ActionResult<UserDto>> TwoFALogin(TwoFALoginDto twoFALoginDto)
+        {
+            //var ch = HttpContext.User.FindFirstValue(ClaimTypes.Authentication).ToString();
+            if (HttpContext.User.FindFirstValue(ClaimTypes.Authentication) == "True")
+            {
+                var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+
+                var user = await _userManager.Users
+                    //.Include(p => p.Photos)
+                    .SingleOrDefaultAsync(x => x.UserName == HttpContext.User.FindFirstValue(ClaimTypes.Name));
+
+                if (user == null) return Unauthorized("Invalid username");
+
+                //var result = await _userManager.CheckPasswordAsync(user, twoFALoginDto.Password);
+                //if (!result) return Unauthorized("Invalid Password!");
+                //var TwoFactorEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
+                //if (!TwoFactorEnabled) return Unauthorized("2FA not enabled!");
+
+                var verificationCode = twoFALoginDto.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+
+                var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+
+                if (isValid)
+                {
+                    return Ok(new UserDto
+                    {
+                        UserName = user.UserName,
+                        Token = await _tokenService.CreateToken(user),
+                        Gender = user.Gender
+                    });
+                }
+                return Unauthorized("Invalid 2FA Code");
+
+            }
+            return Unauthorized("2FA not enabled!");
+        }
+
 
         [HttpPost("get-qr")]
         public async Task<ActionResult<UserDto>> GenerateQRCode(LoginDto loginDto)
@@ -72,6 +115,7 @@ namespace OnlineBookStoreAPI.Controllers
             //var AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
             //var qrCodeGenerator = new QRCodeGenerator();
             //var qrCodeData = qrCodeGenerator.CreateQrCode(AuthenticatorUri, QRCodeGenerator.ECCLevel.Q);
+
 
             return Ok(new AuthenticatorDetailsVM
             {
