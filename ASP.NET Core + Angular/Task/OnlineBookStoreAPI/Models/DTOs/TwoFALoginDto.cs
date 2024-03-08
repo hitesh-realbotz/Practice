@@ -2,12 +2,13 @@
 
 namespace OnlineBookStoreAPI.Models.DTOs
 {
-    public class RegisterDto
+    public class TwoFALoginDto
     {
         [Required]
         public string UserName { get; set; }
-        public string Email { get; set; }
+        [Required]
         public string Password { get; set; }
-        public string Gender { get; set; }
+        [Required]
+        public string Code { get; set; }
     }
 }
