@@ -8,6 +8,7 @@ import { NavComponent } from './nav/nav.component';
 import { SharedModule } from './_modules/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core.module';
 // import { AuthModule } from './auth/auth.module';
 
 @NgModule({
@@ -25,6 +26,7 @@ import { AppRoutingModule } from './app-routing.module';
     ReactiveFormsModule,
     SharedModule,
     HttpClientModule,
+    CoreModule
     // AuthModule
   ],
   providers: [],

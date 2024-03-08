@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import { SharedModule } from '../_modules/shared/shared.module';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './text-input/text-input.component';
+import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {
@@ -20,13 +21,15 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     AuthComponent,
-    TextInputComponent
+    TextInputComponent,
+    RegisterComponent
   ],
   imports: [
     CommonModule,
     SharedModule,
     RouterModule.forChild(routes),
     ReactiveFormsModule,
+    FormsModule
 
   ]
 })

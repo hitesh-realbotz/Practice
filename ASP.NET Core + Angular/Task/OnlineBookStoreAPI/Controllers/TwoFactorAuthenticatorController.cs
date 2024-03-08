@@ -38,19 +38,19 @@ namespace OnlineBookStoreAPI.Controllers
         }
 
         [HttpPost("2fa-login")]
-        [Authorize]
-        public async Task<ActionResult<UserDto>> TwoFALogin(TwoFALoginDto twoFALoginDto)
+        //[Authorize]
+        public async Task<ActionResult<LoginResponseDto>> TwoFALogin(TwoFALoginDto twoFALoginDto)
         {
             //var ch = HttpContext.User.FindFirstValue(ClaimTypes.Authentication).ToString();
             if (HttpContext.User.FindFirstValue(ClaimTypes.Authentication) == "True")
             {
-                var userName = HttpContext.User.FindFirstValue(ClaimTypes.Name);
+                var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
                 var user = await _userManager.Users
                     //.Include(p => p.Photos)
-                    .SingleOrDefaultAsync(x => x.UserName == HttpContext.User.FindFirstValue(ClaimTypes.Name));
+                    .SingleOrDefaultAsync(x => x.Email == HttpContext.User.FindFirstValue(ClaimTypes.Email));
 
-                if (user == null) return Unauthorized("Invalid username");
+                if (user == null) return Unauthorized("Invalid Email");
 
                 //var result = await _userManager.CheckPasswordAsync(user, twoFALoginDto.Password);
                 //if (!result) return Unauthorized("Invalid Password!");
@@ -63,11 +63,12 @@ namespace OnlineBookStoreAPI.Controllers
 
                 if (isValid)
                 {
-                    return Ok(new UserDto
+                    return Ok(new LoginResponseDto
                     {
-                        UserName = user.UserName,
+                        Email = user.Email,
                         Token = await _tokenService.CreateToken(user),
-                        Gender = user.Gender
+                        Gender = user.Gender,
+                        IsTwoFAEnabled =  user.TwoFactorEnabled
                     });
                 }
                 return Unauthorized("Invalid 2FA Code");
@@ -82,9 +83,9 @@ namespace OnlineBookStoreAPI.Controllers
         {
             var user = await _userManager.Users
                 //.Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.UserName == loginDto.UserName);
-
-            if (user == null) return Unauthorized("Invalid username");
+                .SingleOrDefaultAsync(x => x.Email == loginDto.Email);
+           
+            if (user == null) return Unauthorized("Invalid email");
 
             var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
 
@@ -97,10 +98,8 @@ namespace OnlineBookStoreAPI.Controllers
             {
                 var setTwoFactor = await _userManager.SetTwoFactorEnabledAsync(user, true);
             }
-            var HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
-            var TwoFactorClientRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
-
-
+            //var HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
+            //var TwoFactorClientRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
 
             // Load the authenticator key & QR code URI to display on the form
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
