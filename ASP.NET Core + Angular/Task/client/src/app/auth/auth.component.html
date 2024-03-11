@@ -1,4 +1,43 @@
-<form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
+<div class="row">
+    <div class="col-xs-12 col-md-6 offset-md-3">
+        <!-- <div *ngIf="isLoading" style="text-align: center;">
+            <app-loading-spinner></app-loading-spinner>
+        </div> -->
+
+        <form class="form" (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">
+            <div class="row">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" name="email" id="email" class="form-control" ngModel required email [readOnly]="is2FAMode">
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" ngModel required minlength="6" [readOnly]="is2FAMode">
+                </div>
+            </div>
+            <div class="row" *ngIf="is2FAMode">
+                <div class="form-group">
+                    <label for="code">2FA OTP</label>
+                    <input type="password" name="code" id="code" class="form-control" ngModel required>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-btn-group">
+                    <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">{{ isLoginMode? 'Login' :
+                        'Sign-Up' }}</button> |
+                    <button class="btn btn-light" type="button" (click)="onSwitchMode()">Switch To {{ isLoginMode?
+                        'Sign-Up' : 'Login' }}</button> |
+                    <!-- <button class="btn btn-light" type="button" (click)="onForgotPass()">ForgotPassword</button> -->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- <form [formGroup]="registerForm" (ngSubmit)="registerForm.valid && register()" autocomplete="off">
     <h2 class="text-center text-primary">Sign up</h2>
     <hr>
 
@@ -12,18 +51,15 @@
         </label>
     </div>
 
-    
-    <app-text-input [formControl]="$any(registerForm.controls['username'])"
-        [label]="'Username'"></app-text-input>
 
-    <app-text-input [formControl]="$any(registerForm.controls['email'])"
-        [label]="'email'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['username'])" [label]="'Username'"></app-text-input>
 
-    <app-text-input [formControl]="$any(registerForm.controls['password'])"
-        [label]="'Password'" [type]="'password'"></app-text-input>
-    <app-text-input
-        [formControl]="$any(registerForm.controls['confirmPassword'])"
-        [label]="'Confirm Password'" [type]="'password'"></app-text-input>
+    <app-text-input [formControl]="$any(registerForm.controls['email'])" [label]="'email'"></app-text-input>
+
+    <app-text-input [formControl]="$any(registerForm.controls['password'])" [label]="'Password'"
+        [type]="'password'"></app-text-input>
+    <app-text-input *ngIf="!isLoginMode" [formControl]="$any(registerForm.controls['confirmPassword'])" [label]="'Confirm Password'"
+        [type]="'password'"></app-text-input>
 
     <div class="row" *ngIf="validationErrors">
         <ul class="text-danger">
@@ -32,12 +68,14 @@
             </li>
         </ul>
     </div>
-    
+
 
     <div class="form-group text-center">
-        <button [disabled]="!registerForm.valid" class="btn btn-success me-2" 
-            type="submit">Register</button>
-        <button class="btn btn-default me-2" (click)="cancel()"
-            type="button">Cancel</button>
+        <button [disabled]="!registerForm.valid" class="btn btn-success me-2" type="submit">Register</button> 
+        <button class="btn btn-primary" type="submit" [disabled]="!registerForm.valid">{{ isLoginMode? 'Login' :
+            'Sign-Up' }}</button> |
+        <button class="btn btn-light" type="button" (click)="onSwitchMode()">Switch To {{ isLoginMode?
+            'Sign-Up' : 'Login' }}</button>
+        <button class="btn btn-default me-2" (click)="cancel()" type="button">Cancel</button>
     </div>
-</form>
+</form> -->

@@ -12,7 +12,7 @@ using OnlineBookStoreAPI.Data;
 namespace OnlineBookStoreAPI.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20240305110009_First")]
+    [Migration("20240308044927_First")]
     partial class First
     {
         /// <inheritdoc />
