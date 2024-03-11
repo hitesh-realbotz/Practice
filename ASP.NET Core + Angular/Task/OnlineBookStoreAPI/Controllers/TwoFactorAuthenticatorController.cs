@@ -79,7 +79,7 @@ namespace OnlineBookStoreAPI.Controllers
 
 
         [HttpPost("get-qr")]
-        public async Task<ActionResult<UserDto>> GenerateQRCode(LoginDto loginDto)
+        public async Task<ActionResult<UserProfileDto>> GenerateQRCode(LoginDto loginDto)
         {
             var user = await _userManager.Users
                 //.Include(p => p.Photos)

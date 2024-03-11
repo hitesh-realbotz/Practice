@@ -124,7 +124,7 @@ namespace OnlineBookStoreAPI.Controllers
 
         [HttpPost("getqr")]
         [Authorize]
-        public async Task<ActionResult<UserDto>> GenerateQRCode()
+        public async Task<ActionResult<UserProfileDto>> GenerateQRCode()
         {
             var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 
@@ -168,7 +168,7 @@ namespace OnlineBookStoreAPI.Controllers
         
         [HttpPost("setTwoFA")]
         [Authorize]
-        public async Task<ActionResult<UserDto>> SetTwoFA(SetTwoFADto setTwoFADto)
+        public async Task<ActionResult<UserProfileDto>> SetTwoFA(SetTwoFADto setTwoFADto)
         {
             var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
 

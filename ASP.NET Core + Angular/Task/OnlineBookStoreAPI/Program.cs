@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookStoreAPI.Data;
 using OnlineBookStoreAPI.Extensions;
-using OnlineBookStoreAPI.Services;
-using OnlineBookStoreAPI.Services.Interfaces;
-using System.Text;
+using OnlineBookStoreAPI.Models.Domain;
+using OnlineBookStoreAPI.Repositories.Interfaces;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -46,5 +46,20 @@ if (app.Environment.IsDevelopment())
 //app.UseAuthorization();
 
 app.MapControllers();
+
+
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+try
+{
+    var context = services.GetRequiredService<BookStoreDbContext>();
+    await context.Database.MigrateAsync();
+    await Seed.SeedBooks(context);
+}
+catch (Exception ex)
+{
+    var logger = services.GetService<ILogger<Program>>();
+    logger.LogError(ex, "An error occured during migration");
+}
 
 app.Run();
