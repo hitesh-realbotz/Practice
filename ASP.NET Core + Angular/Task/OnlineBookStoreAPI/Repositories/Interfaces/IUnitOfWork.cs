@@ -3,6 +3,7 @@
     public interface IUnitOfWork : IDisposable
     {
         public IBookRepository BookRepository { get; }
+        public IUserRepository UserRepository { get; }
 
         void SaveChanges();
         Task<bool> SaveChangesAsync();

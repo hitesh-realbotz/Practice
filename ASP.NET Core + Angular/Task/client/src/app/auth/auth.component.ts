@@ -37,22 +37,11 @@ export class AuthComponent implements OnInit {
 
   initializeForm() {
     this.registerForm = this.fb.group({
-      gender: ['male'],
-      username: ['', Validators.required],
       email: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
-      confirmPassword: ['', [Validators.required, this.matchValues('password')]]
-    });
-    this.registerForm.controls['password'].valueChanges.subscribe({
-      next: () => this.registerForm.controls['confirmPassword'].updateValueAndValidity()
     });
   }
 
-  matchValues(matchTo: string): ValidatorFn {
-    return (control: AbstractControl) => {
-      return control?.value === control?.parent?.get(matchTo)?.value ? null : { isMatching: true }
-    }
-  }
 
   onSubmit(form: NgForm) {
     let authObs: Observable<any>;
@@ -64,7 +53,9 @@ export class AuthComponent implements OnInit {
     authObs.subscribe(
       {
         next: response => {
+          console.log(response);
           if (!this.isLoginMode || !response.isTwoFAEnabled || this.is2FAMode) {
+
             if (!this.isLoginMode) {
               this.toastr.success('SetUp 2FA Login Method', 'Account Created!');
               this.router.navigate(['/user/profile']);
@@ -80,8 +71,7 @@ export class AuthComponent implements OnInit {
         },
         error: error => {
           console.log(error);
-          console.log(error.error);
-          this.toastr.info("Try again!", error.error);
+          this.toastr.info(error.error.message, "Try again!");
           this.validationErrors = error;
         }
       }

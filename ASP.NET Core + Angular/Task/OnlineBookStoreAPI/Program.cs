@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using OnlineBookStoreAPI.Data;
 using OnlineBookStoreAPI.Extensions;
+using OnlineBookStoreAPI.Middlewares;
 using OnlineBookStoreAPI.Models.Domain;
 using OnlineBookStoreAPI.Repositories.Interfaces;
 
@@ -40,6 +41,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 //app.UseHttpsRedirection();
 

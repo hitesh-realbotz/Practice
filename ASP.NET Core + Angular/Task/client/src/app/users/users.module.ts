@@ -5,7 +5,8 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { QRCodeModule } from 'angularx-qrcode';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../_modules/shared/shared.module';
 
 
 @NgModule({
@@ -16,9 +17,11 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     UsersRoutingModule,
+    SharedModule,
     TabsModule.forRoot(),
     QRCodeModule,
-    FormsModule
+    FormsModule,
+    ReactiveFormsModule,
   ]
 })
 export class UsersModule { }

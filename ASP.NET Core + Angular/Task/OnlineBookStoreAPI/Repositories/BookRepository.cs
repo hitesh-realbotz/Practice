@@ -1,6 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using OnlineBookStoreAPI.Constants;
 using OnlineBookStoreAPI.Data;
+using OnlineBookStoreAPI.Helpers;
 using OnlineBookStoreAPI.Models.Domain;
+using OnlineBookStoreAPI.Models.DTOs;
 using OnlineBookStoreAPI.Repositories.Interfaces;
 
 namespace OnlineBookStoreAPI.Repositories
@@ -8,10 +14,12 @@ namespace OnlineBookStoreAPI.Repositories
     public class BookRepository : IBookRepository
     {
         private readonly BookStoreDbContext dbContext;
+        private readonly IMapper mapper;
 
-        public BookRepository(BookStoreDbContext dbContext)
+        public BookRepository(BookStoreDbContext dbContext, IMapper mapper)
         {
             this.dbContext = dbContext;
+            this.mapper = mapper;
         }
 
         public async Task<Book> CreateAsync(Book book)
@@ -21,9 +29,32 @@ namespace OnlineBookStoreAPI.Repositories
             return book;
         }
 
-        public async Task<Book> GetByTitleAsync(string title)
+        public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
         {
-            return await dbContext.Books.FirstOrDefaultAsync(b => b.Title == title);
+            var query = dbContext.Books.AsQueryable();
+            
+            if (bookParams.MaxPrice >= bookParams.MinPrice)
+            {
+                query.Where(b => b.Price >= bookParams.MinPrice && b.Price <= bookParams.MaxPrice);
+            }
+            else
+            {
+                query = query.Where(b => b.Price >= bookParams.MinPrice);
+            }
+            query = bookParams.SortBy switch
+            {
+                Const.TITLE => (bookParams.SortOrder == Const.ASCENDING ? query.OrderBy(b => b.Title) : query.OrderByDescending(b => b.Title)),
+                Const.AUTHOR => (bookParams.SortOrder == Const.ASCENDING ? query.OrderBy(b => b.Author) : query.OrderByDescending(b => b.Author)),
+                Const.PRICE => (bookParams.SortOrder == Const.ASCENDING ? query.OrderBy(b => b.Price) : query.OrderByDescending(b => b.Price)),
+            };
+
+            return await PagedList<BookDto>.CreateAsync(query.AsNoTracking().ProjectTo<BookDto>(mapper.ConfigurationProvider), bookParams.PageNumber, bookParams.PageSize);
+
+        }
+
+        public async Task<Book?> GetByTitleAsync(string title)
+        {
+            return await dbContext.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Title == title);
         }
     }
 }

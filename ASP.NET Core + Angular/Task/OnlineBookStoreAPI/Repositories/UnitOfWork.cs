@@ -16,9 +16,12 @@ namespace OnlineBookStoreAPI.Repositories
             this.dbContext = dbContext;
             this.dbContext = dbContext;
             BookRepository = serviceProvider.GetRequiredService<IBookRepository>();
+            UserRepository = serviceProvider.GetRequiredService<IUserRepository>();
             this.serviceProvider = serviceProvider;
         }
         public IBookRepository BookRepository { get; }
+
+        public IUserRepository UserRepository { get; }
 
         public void BeginTransaction()
         {
