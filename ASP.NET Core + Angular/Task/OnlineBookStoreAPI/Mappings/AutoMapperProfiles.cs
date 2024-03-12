@@ -9,8 +9,10 @@ namespace OnlineBookStoreAPI.Mappings
         public AutoMapperProfiles() { 
             CreateMap<RegisterDto, AppUser>().ReverseMap();
             CreateMap<LoginDto, AppUser>().ReverseMap();
-            CreateMap<AppUser, UserDto>().ReverseMap();
-        
+            CreateMap<AppUser, UserProfileDto>().ReverseMap();
+            CreateMap<BookDto, Book>().ReverseMap();
+            CreateMap<PhotoDto, Photo>().ReverseMap();
+            
         }
     }
 }
