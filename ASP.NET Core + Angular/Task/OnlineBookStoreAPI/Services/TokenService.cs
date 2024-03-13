@@ -24,7 +24,8 @@ namespace OnlineBookStoreAPI.Services
                  //new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
                 //new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(ClaimTypes.Authentication, user.TwoFactorEnabled ? "True" : "False")
+                new Claim(ClaimTypes.Authentication, user.TwoFactorEnabled ? "True" : "False"),
+                new Claim(ClaimTypes.Sid, user.Id )
         };
 
 

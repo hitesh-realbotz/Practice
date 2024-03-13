@@ -39,7 +39,7 @@ export class AccountService {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<User>(this.baseUrl + 'account/verify', model).pipe(
       tap(response => {
-        console.log("Serv Verfiy = "+response.isTwoFAEnabled);
+        console.log("Serv Verfiy = " + response.twoFactorEnabled);
         const user = response;
         if (user) {
           this.setCurrentUser(user);
@@ -51,7 +51,19 @@ export class AccountService {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<User>(this.baseUrl + 'account/setTwoFA', model).pipe(
       tap(response => {
-        console.log("Serv set = "+response.isTwoFAEnabled);
+        console.log("Serv set = " + response.twoFactorEnabled);
+        const user = response;
+        if (user) {
+          this.setCurrentUser(user);
+        }
+      })
+    )
+  }
+  updateProfile(model: any) {
+    return this.http.post<User>(this.baseUrl + 'account/update', model).pipe(
+      tap(response => {
+        console.log("Serv update = " + response.twoFactorEnabled);
+        console.log("Serv update = " + response);
         const user = response;
         if (user) {
           this.setCurrentUser(user);
@@ -63,8 +75,8 @@ export class AccountService {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<QRData>(this.baseUrl + 'account/getqr', {}).pipe(
       tap(response => {
-        console.log("Serv GetQR = "+response.authenticatorUri);
-        
+        console.log("Serv GetQR = " + response.authenticatorUri);
+
       })
     )
   }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using OnlineBookStoreAPI.Helpers;
 using OnlineBookStoreAPI.Models.Domain;
 using OnlineBookStoreAPI.Models.DTOs;
 using OnlineBookStoreAPI.Repositories.Interfaces;
@@ -57,6 +58,18 @@ namespace OnlineBookStoreAPI.Services
             return bookDtoList;
 
 
+        }
+
+        public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
+        {
+           return await uow.BookRepository.GetBooksAsync(bookParams);
+        }
+
+        public async Task<BookDto?> GetBookByTitleAsync(string title)
+        {
+            var book = await uow.BookRepository.GetByTitleAsync(title);
+            if (book == null) return null;
+            return mapper.Map<BookDto?>(book);
         }
     }
 }

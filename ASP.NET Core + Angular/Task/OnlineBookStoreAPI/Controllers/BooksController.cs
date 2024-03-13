@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using OnlineBookStoreAPI.Extensions;
+using OnlineBookStoreAPI.Helpers;
 using OnlineBookStoreAPI.Models.DTOs;
 using OnlineBookStoreAPI.Services.Interfaces;
 
@@ -15,6 +18,25 @@ namespace OnlineBookStoreAPI.Controllers
         public BooksController(IBookService bookService)
         {
             this.bookService = bookService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks([FromQuery] BookParams bookParams)
+        {
+            var books = await bookService.GetBooksAsync(bookParams);
+
+            Response.AddPaginationHeader(new PaginationHeader(books.CurrentPage, books.PageSize, books.TotalCount, books.TotalPages));
+            return Ok(books);
+        }
+
+        [HttpGet("{title}")]
+        public async Task<ActionResult<BookDto>> GetBook(string title)
+        {
+            var book =  await bookService.GetBookByTitleAsync(title);
+            //if(book == null) throw new BadHttpRequestException( $"Book with {title} title Not Found");
+            if (book == null) return BadRequest();
+
+            return Ok(book);    
         }
 
         [HttpPost("add-photo")]

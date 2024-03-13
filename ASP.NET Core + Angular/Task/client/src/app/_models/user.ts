@@ -1,7 +1,13 @@
+import { Photo } from "./photo";
+
 export interface User {
-    userName: string;
+    name: string;
     email: string;
     token: string;
     gender: string;
-    isTwoFAEnabled: boolean
+    city: string;
+    country: string;
+    twoFactorEnabled: boolean;
+    photos: Photo[];
+
 }

@@ -21,66 +21,37 @@ namespace OnlineBookStoreAPI.Controllers
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
         private readonly UrlEncoder _urlEncoder;
+        private readonly IAccountService accountService;
+        private readonly IUserService userService;
 
-        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, UrlEncoder urlEncoder)
+        public AccountController(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, UrlEncoder urlEncoder, IAccountService accountService, IUserService userService)
         {
             _userManager = userManager;
             _tokenService = tokenService;
             _mapper = mapper;
             _urlEncoder = urlEncoder;
+            this.accountService = accountService;
+            this.userService = userService;
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<LoginResponseDto>> Register(RegisterDto registerDto)
+        public async Task<ActionResult<UserProfileDto>> Register(RegisterDto registerDto)
         {
-            if (await UserExists(registerDto.Email)) return BadRequest("Email is taken");
-
-            var user = _mapper.Map<AppUser>(registerDto);
-
-            user.UserName = registerDto.Email.ToLower();
-
-            var result = await _userManager.CreateAsync(user, registerDto.Password);
-
-            if (!result.Succeeded) return BadRequest(result.Errors);
-
-            return new LoginResponseDto
-            {
-                Email = user.Email,
-                Token = await _tokenService.CreateToken(user),
-                Gender = user.Gender,
-                IsTwoFAEnabled = user.TwoFactorEnabled
-            };
+            return await accountService.CreateAsync(registerDto);
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<LoginResponseDto>> Login(LoginDto loginDto)
+        public async Task<ActionResult<UserProfileDto>> Login(LoginDto loginDto)
         {
-            var user = await _userManager.Users
-                //.Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.Email == loginDto.Email);
+            return await accountService.LoginAsync(loginDto);
+        }
 
-            if (user == null) return Unauthorized("Invalid username");
 
-            var result = await _userManager.CheckPasswordAsync(user, loginDto.Password);
-
-            if (!result) return Unauthorized("Invalid Password!");
-
-            //if (!user.TwoFactorEnabled) return Unauthorized("2FA not enabled!");
-
-            //return new UserDto
-            //{
-            //    Email = user.Email,
-            //    Token = await _tokenService.CreateToken(user),
-            //    Gender = user.Gender
-            //};
-            return new LoginResponseDto
-            {
-                Email = user.Email,
-                Token = await _tokenService.CreateToken(user),
-                Gender = user.Gender,
-                IsTwoFAEnabled = user.TwoFactorEnabled
-            };
-
+        [HttpPost("update")]
+        [Authorize]
+        public async Task<ActionResult<UserProfileDto>> UpdateProfile(UserProfileUpdateDto userProfileUpdateDto)
+        {
+            return await userService.UpdateAsync(userProfileUpdateDto);
         }
 
         [HttpPost("verify")]
@@ -96,11 +67,6 @@ namespace OnlineBookStoreAPI.Controllers
                     .SingleOrDefaultAsync(x => x.Email == email);
 
                 if (user == null) return Unauthorized("Invalid Email");
-
-                //var result = await _userManager.CheckPasswordAsync(user, twoFALoginDto.Password);
-                //if (!result) return Unauthorized("Invalid Password!");
-                //var TwoFactorEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
-                //if (!TwoFactorEnabled) return Unauthorized("2FA not enabled!");
 
                 var verificationCode = twoFALoginDto.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
 
@@ -164,8 +130,8 @@ namespace OnlineBookStoreAPI.Controllers
                 AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey)
             });
         }
-        
-        
+
+
         [HttpPost("setTwoFA")]
         [Authorize]
         public async Task<ActionResult<UserProfileDto>> SetTwoFA(SetTwoFADto setTwoFADto)

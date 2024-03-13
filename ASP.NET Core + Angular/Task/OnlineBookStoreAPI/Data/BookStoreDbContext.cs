@@ -25,8 +25,9 @@ namespace OnlineBookStoreAPI.Data
             modelbuilder.Entity<AppUser>().HasIndex(u => u.Email).IsUnique();
             modelbuilder.Entity<AppUser>().HasIndex(u => u.NormalizedEmail).IsUnique();
 
-            modelbuilder.Entity<Book>().Property(b => b.ISBN).IsRequired();
+            //modelbuilder.Entity<Book>().Property(b => b.ISBN).IsRequired();
             modelbuilder.Entity<Book>().HasIndex(b => b.ISBN).IsUnique();
+            modelbuilder.Entity<Book>().HasIndex(b => b.Title).IsUnique();
 
         }
 
