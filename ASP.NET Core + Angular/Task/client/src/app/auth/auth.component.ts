@@ -61,7 +61,7 @@ export class AuthComponent implements OnInit {
               this.router.navigate(['/user/profile']);
             } else {
               this.toastr.success('Welcome to bookStore', 'Login Success!');
-              this.router.navigate(['/user/profile']);
+              this.router.navigate(['/book']);
               // this.router.navigateByUrl('/book');
             }
           } else {

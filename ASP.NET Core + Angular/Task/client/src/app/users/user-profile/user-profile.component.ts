@@ -6,6 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { QRData } from 'src/app/_models/qrdata';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
+import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -19,7 +20,7 @@ export class UserProfileComponent implements OnInit {
   twoFAForm: FormGroup = new FormGroup({});
   userForm: FormGroup = new FormGroup({});
 
-  constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router) { }
+  constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router, private ngZone: NgZone, private userService: UserService) { }
   ngOnInit(): void {
     this.accountService.currentUser$.subscribe({
       next: data => {
@@ -33,14 +34,15 @@ export class UserProfileComponent implements OnInit {
   }
   initializeForm() {
     this.twoFAForm = this.fb.group({
-      code: ['', Validators.required],
+      code: ['', [Validators.required, this.checkWhiteSpace.bind(this)]],
     });
     this.userForm = this.fb.group({
-      email: [this.user.email, Validators.required, Validators.email],
-      name: [this.user.name, Validators.required, this.checkWhiteSpace.bind(this)],
-      city: [this.user.city, Validators.required, this.checkWhiteSpace.bind(this)],
-      country: [this.user.country, Validators.required, this.checkWhiteSpace.bind(this)],
+      email: [this.user.email, [Validators.required, Validators.email]],
+      name: [this.user.name, [Validators.required, this.checkWhiteSpace.bind(this)]],
+      city: [this.user.city, [Validators.required, this.checkWhiteSpace.bind(this)]],
+      country: [this.user.country, [Validators.required, this.checkWhiteSpace.bind(this)]],
       gender: [this.user.gender || 'male'],
+
     });
   }
 
@@ -49,6 +51,15 @@ export class UserProfileComponent implements OnInit {
       return { 'checkWhiteSpace': true };
     }
     return null;
+  }
+
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.userForm.controls).forEach(control => {
+        control.markAsTouched();
+      });
+    });
   }
 
   OnGetQR() {
@@ -71,32 +82,42 @@ export class UserProfileComponent implements OnInit {
       })
     }
   }
-  onSubmitProfile() {
-    const modal = this.userForm.value;
-    this.accountService.updateProfile(modal).subscribe({
-      next: response => {
-        this.toastr.success("Profile updated!");
-      },
-      error: error => {
-        console.log(error.error);
-        this.toastr.info("Try again!", error.error);
-      }
-    })
+  onSubmitProfile(event: Event) {
+    if (this.userForm.valid) {
+      this.userService.updateProfile(this.userForm.value).subscribe({
+        next: response => {
+          this.toastr.success("Profile updated!");
+        },
+        error: error => {
+          console.log(error.error);
+          this.toastr.info("Try again!", error.error);
+        }
+      })
+    } else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
+
   }
 
 
-  onSubmit(twoFAForm: NgForm) {
-
-    this.accountService.setTwoFA(twoFAForm.value).subscribe({
-      next: response => {
-        console.log("2FA Set " + response.twoFactorEnabled);
-        this.qrData = {} as QRData;
-      },
-      error: error => {
-        console.log(error.error);
-        this.toastr.info("Try again!", error.error);
-      }
-    });
+  onSubmit(event: Event) {
+    if (this.userForm.valid) {
+      this.accountService.setTwoFA(this.twoFAForm.value).subscribe({
+        next: response => {
+          console.log("2FA Set " + response.twoFactorEnabled);
+          this.qrData = {} as QRData;
+        },
+        error: error => {
+          console.log(error.error);
+          this.toastr.info("Try again!", error.error);
+        }
+      });
+    }
+    else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
   }
 
   //Exit from Form

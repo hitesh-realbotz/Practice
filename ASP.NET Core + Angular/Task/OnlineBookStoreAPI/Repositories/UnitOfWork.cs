@@ -28,17 +28,19 @@ namespace OnlineBookStoreAPI.Repositories
             transaction = dbContext.Database.BeginTransaction();
         }
 
-        public async void Commit()
+        public async Task<bool> Commit()
         {
             try
             {
                 await dbContext.SaveChangesAsync();
                 await transaction.CommitAsync();
+                return true;
             }
             catch (Exception)
             {
 
                 Rollback();
+                return false;
             }
         }
 
