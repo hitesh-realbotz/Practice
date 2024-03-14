@@ -47,12 +47,12 @@ namespace OnlineBookStoreAPI.Controllers
         }
 
 
-        [HttpPost("update")]
-        [Authorize]
-        public async Task<ActionResult<UserProfileDto>> UpdateProfile(UserProfileUpdateDto userProfileUpdateDto)
-        {
-            return await userService.UpdateAsync(userProfileUpdateDto);
-        }
+        //[HttpPost("update")]
+        //[Authorize]
+        //public async Task<ActionResult<UserProfileDto>> UpdateProfile(UserProfileUpdateDto userProfileUpdateDto)
+        //{
+        //    return await userService.UpdateAsync(userProfileUpdateDto);
+        //}
 
         [HttpPost("verify")]
         [Authorize]

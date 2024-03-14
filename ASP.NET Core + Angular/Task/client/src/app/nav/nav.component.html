@@ -22,19 +22,27 @@
                     </li>
                     <li routerLinkActive="active" class="nav-item">
                         <!-- <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a> -->
-                        <a class="nav-link" aria-current="page" routerLink="/items">Profile</a>
+                        <a class="nav-link" aria-current="page" routerLink="/user/profile">Profile</a>
                     </li>
                     <!-- <li routerLinkActive="active" class="nav-item" >
               <a class="nav-link" aria-current="page" [routerLink]="role === 'buyer' ? 'shop/details' : 'shop'"> {{role === 'buyer' ? 'Become a Seller' : 'Shop'}}</a>
             </li> -->
 
                 </ng-container>
-
             </ul>
+
+            <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
+                <img src="{{user.photoUrl || './assets/user.png'}}" alt="user photo">
+                <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>Welcome {{user.name| titlecase}}</a>
+                <div class="dropdown-menu" *dropdownMenu>
+                  <a routerLink="/user/profile" class="dropdown-item">Edit Profile</a>
+                  <a class="dropdown-item" routerLink="/auth" (click)="onLogout()">Logout</a>
+                </div>
+              </div>
             <ul class="navbar-nav me-right mb-2 mb-sm-0">
-                <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">
+                <!-- <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">
                     <a class="nav-link" aria-current="page" routerLink="/auth" (click)="onLogout()">Logout</a>
-                </li>
+                </li> -->
                 <li routerLinkActive="active" class="nav-item" *ngIf="!isAuthenticated">
                     <a class="nav-link" aria-current="page" routerLink="auth" >Login</a>
                 </li>

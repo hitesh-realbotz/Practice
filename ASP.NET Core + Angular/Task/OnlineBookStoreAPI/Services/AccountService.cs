@@ -44,13 +44,13 @@ namespace OnlineBookStoreAPI.Services
                 }
                 throw new BadHttpRequestException(sb.ToString());
             }
-            var signUpResponse = new SignUpResponseDto
-            {
-                Email = user.Email,
-                Token = await tokenService.CreateToken(user),
-                IsTwoFAEnabled = user.TwoFactorEnabled
-            };
-            return mapper.Map<UserProfileDto>(signUpResponse);
+            //var signUpResponse = new SignUpResponseDto
+            //{
+            //    Email = user.Email,
+            //    Token = await tokenService.CreateToken(user),
+            //    IsTwoFAEnabled = user.TwoFactorEnabled
+            //};
+            return mapper.Map<UserProfileDto>(user);
         }
 
         public async Task<UserProfileDto?> LoginAsync(LoginDto loginDto)
@@ -65,9 +65,7 @@ namespace OnlineBookStoreAPI.Services
 
             if (!result) throw new UnauthorizedAccessException("Invalid Password!");
 
-            var userProfileDto = mapper.Map<UserProfileDto>(user);
-            userProfileDto.Token = await tokenService.CreateToken(user);
-            return userProfileDto;
+            return mapper.Map<UserProfileDto>(user);
         }
 
         private string FormatKey(string unformattedKey)

@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using OnlineBookStoreAPI.Repositories.Interfaces;
 using OnlineBookStoreAPI.Repositories;
 using OnlineBookStoreAPI.Helpers;
+using OnlineBookStoreAPI.Mappings;
+using Microsoft.AspNetCore.Hosting;
 
 namespace OnlineBookStoreAPI.Extensions
 {
@@ -14,8 +16,8 @@ namespace OnlineBookStoreAPI.Extensions
         {
 
             services.AddCors();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<ITokenService, TokenService>();
+            services.AddAutoMapper(cfg => cfg.AddProfile(new AutoMapperProfiles(config)), typeof(AutoMapperProfiles));
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IBookService, BookService>();
             services.AddScoped<IUserService, UserService>();

@@ -8,7 +8,7 @@
         void SaveChanges();
         Task<bool> SaveChangesAsync();
         void BeginTransaction();
-        void Commit();
+        Task<bool> Commit();
         void Rollback();
     }
 }

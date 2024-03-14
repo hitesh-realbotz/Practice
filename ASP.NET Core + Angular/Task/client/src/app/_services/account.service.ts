@@ -12,7 +12,7 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   private currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
-  constructor(private http: HttpClient,) { }
+  constructor(private http: HttpClient) { }
 
 
   register(model: any) {
@@ -59,18 +59,19 @@ export class AccountService {
       })
     )
   }
-  updateProfile(model: any) {
-    return this.http.post<User>(this.baseUrl + 'account/update', model).pipe(
-      tap(response => {
-        console.log("Serv update = " + response.twoFactorEnabled);
-        console.log("Serv update = " + response);
-        const user = response;
-        if (user) {
-          this.setCurrentUser(user);
-        }
-      })
-    )
-  }
+  // updateProfile(model: any) {
+  //   return this.http.post<User>(this.baseUrl + 'account/update', model).pipe(
+  //     tap(response => {
+  //       console.log("Serv update = " + response.twoFactorEnabled);
+  //       console.log("Serv update = " + response);
+  //       const user = response;
+  //       if (user) {
+  //         this.setCurrentUser(user);
+  //       }
+  //     })
+  //   );
+  // }
+
   getQR() {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<QRData>(this.baseUrl + 'account/getqr', {}).pipe(
@@ -82,10 +83,6 @@ export class AccountService {
   }
 
   setCurrentUser(user: User) {
-    // user.roles = [];
-    // const roles = this.getDecodedToken(user.token).role;
-    // Array.isArray(roles) ? user.roles = roles : user.roles.push(roles);
-    console.log('from serv = ' + user);
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
 

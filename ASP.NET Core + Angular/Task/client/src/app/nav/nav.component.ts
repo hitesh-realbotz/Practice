@@ -11,7 +11,7 @@ export class NavComponent implements OnInit {
   user: User = {} as User;
   isAuthenticated = false;
 
-  constructor(private accountService: AccountService) { }
+  constructor(public accountService: AccountService) { }
   ngOnInit(): void {
     this.accountService.currentUser$.subscribe({
       next: data => {
