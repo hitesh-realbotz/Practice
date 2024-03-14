@@ -9,17 +9,18 @@ import { exhaustMap, take } from 'rxjs';
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(private accountService: AccountService) { }
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-      return this.accountService.currentUser$.pipe(take(1), exhaustMap(user => {
-          if (!user) {
-              return next.handle(req);
-          }
-          const modifiedReq = req.clone({
-              // params: new HttpParams().set('auth', user.token)
-              setHeaders: {
-                Authorization: `Bearer ${user.token}`
-              }
-          });
-          return next.handle(modifiedReq);
-      }))
+    console.log(req.params.toString());
+    return this.accountService.currentUser$.pipe(take(1), exhaustMap(user => {
+      if (!user) {
+        return next.handle(req);
+      }
+      const modifiedReq = req.clone({
+        setHeaders: {
+          Authorization: `Bearer ${user.token}`
+        }
+      });
+      console.log(modifiedReq.params.toString());
+      return next.handle(modifiedReq);
+    }))
   }
 }

@@ -7,6 +7,9 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
 import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookItemComponent } from './book-list/book-item/book-item.component';
 import { CartComponent } from './cart/cart.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SharedModule } from '../_modules/shared/shared.module';
+import { RouterModule } from '@angular/router';
 
 
 @NgModule({
@@ -21,6 +24,9 @@ import { CartComponent } from './cart/cart.component';
   imports: [
     CommonModule,
     BooksRoutingModule,
+    SharedModule,
+    ReactiveFormsModule,
+    RouterModule
     
   ]
 })

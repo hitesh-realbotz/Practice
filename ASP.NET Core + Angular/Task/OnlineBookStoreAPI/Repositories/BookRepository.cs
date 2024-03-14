@@ -35,7 +35,7 @@ namespace OnlineBookStoreAPI.Repositories
             
             if (bookParams.MaxPrice >= bookParams.MinPrice)
             {
-                query.Where(b => b.Price >= bookParams.MinPrice && b.Price <= bookParams.MaxPrice);
+                query = query.Where(b => b.Price >= bookParams.MinPrice && b.Price <= bookParams.MaxPrice);
             }
             else
             {
@@ -48,7 +48,7 @@ namespace OnlineBookStoreAPI.Repositories
                 Const.PRICE => (bookParams.SortOrder == Const.ASCENDING ? query.OrderBy(b => b.Price) : query.OrderByDescending(b => b.Price)),
             };
 
-            return await PagedList<BookDto>.CreateAsync(query.AsNoTracking().ProjectTo<BookDto>(mapper.ConfigurationProvider), bookParams.PageNumber, bookParams.PageSize);
+            return await PagedList<BookDto>.CreateAsync(query.ProjectTo<BookDto>(mapper.ConfigurationProvider), bookParams.PageNumber, bookParams.PageSize);
 
         }
 
