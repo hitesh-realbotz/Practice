@@ -57,8 +57,7 @@
 </div>
 
 <div class="row">
-    <div class="col-2">
-        <!-- <app-member-card [member]="member"></app-member-card> -->
+    <div class="col-12" >
         <app-book-item *ngFor="let book of books" [book]="book"></app-book-item>
     </div>
 </div>
@@ -68,7 +67,7 @@
         [boundaryLinks]="true" 
         [totalItems]="pagination.totalItems" 
         [itemsPerPage]="pagination.itemsPerPage" 
-        [btnRadio]="pagination.currentPage"
+        [(ngModel)]="pagination.currentPage"
         (pageChanged)="pageChanged($event)" 
         [maxSize]="pagination.totalPages"  
         previousText="&lsaquo;" 

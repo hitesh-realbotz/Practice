@@ -8,6 +8,7 @@ namespace OnlineBookStoreAPI.Repositories.Interfaces
     {
         public Task<Book> CreateAsync(Book book);
         public Task<Book?> GetByTitleAsync(string title);
+        public Task<Book?> GetByISBNAsync(string isbn);
         public Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams);
     }
 }

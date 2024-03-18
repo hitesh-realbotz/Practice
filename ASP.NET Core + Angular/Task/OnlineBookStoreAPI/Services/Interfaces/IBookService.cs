@@ -9,6 +9,7 @@ namespace OnlineBookStoreAPI.Services.Interfaces
     {
         public Task<BookDto> CreateAsync(BookDto dto);
         public Task<BookDto> GetBookByTitleAsync(string title);
+        public Task<BookDto> GetBookByISBNAsync(string isbn);
         public Task<List<BookDto?>> AddPhotoAsync(List<IFormFile> files);
         public Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams);
         

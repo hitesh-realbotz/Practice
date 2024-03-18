@@ -1,52 +1,35 @@
-<div class="card mb-4" *ngIf="book">
+<!-- <div class="card mb-4" *ngIf="book">
     <div class="card-img-wrapper">
         <p>{{book.title}}</p>
         <p>{{book.price}}</p>
     </div>
-</div>
-
-<!-- <a class="list-group list-group-item clearfix" (click)="onItem(index)" routerLinkActive="active"> -->
-    <!-- <a class="list-group list-group-item clearfix" (click)="onItem(book)" routerLinkActive="active">
+</div> -->
+<div class="card m-1" *ngIf="book">
+    <a class="list-group list-group-item clearfix" (click)="onItem(book)" routerLinkActive="active">
         <div class="item col-12">
             <div class="item-image col-3 col-md-3 col-lg-3">
-                <img [src]="item.image" alt="ImageNotAvailable" class="img-responsive">
+                <img [src]="book.photoUrl" alt="ImageNotAvailable" class="img-responsive">
             </div>
             <div class="item-details col-8 col-md-8 col-lg-8">
                 <div class="item-title">
-                    <h4  class="list-group-item-heading">{{item.name}}</h4>
+                    <h4  class="list-group-item-heading">{{book.title}}</h4> 
+                    <span class="m-2">by <strong>{{book.author}}</strong></span>
                 </div>
-                <div class="item-description float-end">
+                <div class="item-description">
                     <div>
-                        <p class="list-group-item-text">{{item.description}}</p>
+                        <p class="list-group-item-text">{{book.description}}</p>
                     </div>
-                    <div>
-                        <p class="list-group-item-text">Price : {{item.price}}</p>
-                    </div>
-                    <div>
-                        <p class="list-group-item-text">Availble Qty : {{item.availableQty}}</p>
-                    </div>
-                    <div>
-                        <p class="list-group-item-text">Sold By : {{seller.shop.shopName }} </p>
-                    </div>
-                </div>
-    
-    
+                                        
+                </div>    
                 <div class="item-actions">
-                    <div class="item-action" *ngIf="role === 'buyer'">
-                        <button class="btn btn-success" (click)="onAddToCart($event, item)">Add to Cart</button>
-                    </div>
-    
-                    <div class="item-action" *ngIf="role === 'seller'">
-                        <button class="btn btn-outline-secondary" (click)="onEditItem($event, item)">Edit</button>
-                    </div>
-                    <div class="item-action" *ngIf="role === 'seller'">
-                        <button class="btn btn-outline-secondary" (click)="onDeleteItem($event, item)">Delete</button>
+                    <span class="list-group-item-text">Price : {{book.price}}</span>
+                    <span class="list-group-item-text">Availble Qty : {{book.availableQuantity}}</span>
+                    <div class="item-action " *ngIf="(accountService.currentUser$ | async) != null">
+                        <button class="btn btn-success d-flex-row-cnt-cnt" (click)="onAddToCart($event, book)">Add to Cart</button>
                     </div>
                 </div>
     
             </div>
         </div>
-    </a> -->
-    <!-- <div class="item-action" *ngIf="role === 'seller'">
-        <button class="btn btn-outline-secondary" (click)="onEditItem(index)">Edit</button>
-    </div> -->
+    </a>
+</div>

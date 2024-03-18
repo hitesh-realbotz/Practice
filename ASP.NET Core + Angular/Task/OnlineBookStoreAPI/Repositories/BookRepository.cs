@@ -31,7 +31,7 @@ namespace OnlineBookStoreAPI.Repositories
 
         public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
         {
-            var query = dbContext.Books.AsQueryable();
+            var query = dbContext.Books.Include(b => b.Photos).AsQueryable();
             
             if (bookParams.MaxPrice >= bookParams.MinPrice)
             {
@@ -55,6 +55,10 @@ namespace OnlineBookStoreAPI.Repositories
         public async Task<Book?> GetByTitleAsync(string title)
         {
             return await dbContext.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Title == title);
+        }
+        public async Task<Book?> GetByISBNAsync(string isbn)
+        {
+            return await dbContext.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.ISBN == isbn);
         }
     }
 }
