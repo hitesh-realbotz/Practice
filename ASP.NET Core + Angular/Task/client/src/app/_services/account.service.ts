@@ -73,7 +73,6 @@ export class AccountService {
   // }
 
   getQR() {
-    // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<QRData>(this.baseUrl + 'account/getqr', {}).pipe(
       tap(response => {
         console.log("Serv GetQR = " + response.authenticatorUri);

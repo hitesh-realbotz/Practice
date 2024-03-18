@@ -10,5 +10,4 @@ export interface User {
     country: string;
     twoFactorEnabled: boolean;
     photos: Photo[];
-
 }
