@@ -71,5 +71,11 @@ namespace OnlineBookStoreAPI.Services
             if (book == null) return null;
             return mapper.Map<BookDto?>(book);
         }
+        public async Task<BookDto?> GetBookByISBNAsync(string isbn)
+        {
+            var book = await uow.BookRepository.GetByISBNAsync(isbn);
+            if (book == null) throw new BadHttpRequestException("Book not found!");
+            return mapper.Map<BookDto?>(book);
+        }
     }
 }

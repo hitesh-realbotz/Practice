@@ -6,6 +6,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -18,7 +19,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     ModalModule.forRoot(),
     FileUploadModule,
     BsDropdownModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    FormsModule
 
 
   ],
@@ -28,7 +30,8 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
     ModalModule,
     FileUploadModule,
     BsDropdownModule,
-    PaginationModule
+    PaginationModule,
+    FormsModule
     
   ]
 })

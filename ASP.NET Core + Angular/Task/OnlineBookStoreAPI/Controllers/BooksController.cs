@@ -29,10 +29,21 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(books);
         }
 
-        [HttpGet("{title}")]
-        public async Task<ActionResult<BookDto>> GetBook(string title)
+        [HttpGet("byTitle/{title}")]
+        public async Task<ActionResult<BookDto>> GetBookByTitle(string title)
         {
             var book =  await bookService.GetBookByTitleAsync(title);
+            //if(book == null) throw new BadHttpRequestException( $"Book with {title} title Not Found");
+            if (book == null) return BadRequest();
+
+            return Ok(book);    
+        }
+
+
+        [HttpGet("{isbn}")]
+        public async Task<ActionResult<BookDto>> GetBook(string isbn)
+        {
+            var book =  await bookService.GetBookByISBNAsync(isbn);
             //if(book == null) throw new BadHttpRequestException( $"Book with {title} title Not Found");
             if (book == null) return BadRequest();
 

@@ -1,1 +1,32 @@
-<p>cart works!</p>
+<div class="row cart" >
+    <div class="col-md-12 col-sm-12" *ngIf="!!items ">
+        <table class="table table-primary">
+            <thead>
+                <tr>
+                    <th>Item Name</th>
+                    <th>Price</th>
+                    <th></th>
+                    <th>Qty</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                
+            </tbody>
+        </table>
+        <div>
+            Total Price for Cart Items: {{ totalCartAmount }}
+        </div>
+        <div>
+            Total Price for Checked Items: {{ totalSelectedCartAmount }}
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 col-lg-12 col-12 form-btn-group">
+            <button class="btn btn-primary form-btn" (click)="onCheckout()"
+                [disabled]="totalSelectedCartAmount <= 0">Checkout</button>
+            <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="!!items">Clear
+                Cart</button>
+        </div>
+    </div>
+</div>

@@ -28,12 +28,18 @@ namespace OnlineBookStoreAPI.Mappings
 
             CreateMap<UserProfileDto, AppUser>();
 
-            CreateMap<BookDto, Book>().ReverseMap();
+            CreateMap<Book, BookDto>()
+                .ForMember(bd => bd.PhotoUrl, opt => opt.MapFrom(b => b.Photos.FirstOrDefault(p => p.IsMain).Url));
+            CreateMap<BookDto, Book>();
             CreateMap<PhotoDto, Photo>().ReverseMap();
 
             CreateMap<UserProfileDto, SignUpResponseDto>();
             CreateMap<SignUpResponseDto, UserProfileDto>();
-                
+            CreateMap<CartItem, CartItemDto>()
+                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => (c.Quantity * c.Book.Price)));
+            CreateMap<Cart, CartDto>()
+               .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => (c.CartItems.Sum(ci => (ci.Quantity * ci.Book.Price)))))
+               .ForMember(cd => cd.TotalCheckedPrice, opt => opt.MapFrom(c => (c.CartItems.Sum(ci => ci.Checked ? (ci.Quantity * ci.Book.Price) : 0))));               
         }
 
 
