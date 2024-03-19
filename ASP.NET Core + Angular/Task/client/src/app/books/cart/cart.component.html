@@ -1,5 +1,5 @@
 <div class="row cart" >
-    <div class="col-md-12 col-sm-12" *ngIf="!!items ">
+    <div class="col-md-12 col-sm-12" *ngIf="!!cart ">
         <table class="table table-primary">
             <thead>
                 <tr>
@@ -11,7 +11,27 @@
                 </tr>
             </thead>
             <tbody>
-                
+                <tr *ngFor="let item of cart.cartItem; let i = index">
+                    <td class="cart-item-name">
+                        <label class="checkbox">
+                            <!-- <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(i)"> -->
+                            <input type="checkbox" [checked]="item.checked">
+                        </label>
+                        <span>{{ item.book.title }}</span>
+                    </td>
+                    <td class="cart-item-price"> {{ item.book.price }} </td>
+                    <td class="cart-item-qty-action">
+                        <a (click)="decreaseQuantity(i, item)">-</a>
+                    </td>
+                    <td class="cart-item-qty">
+                        <span>
+                            {{ item.qty }}
+                        </span>
+                    </td>
+                    <td class="cart-item-qty-action">
+                        <a (click)="increaseQuantity(item)">+</a>
+                    </td>
+                </tr>
             </tbody>
         </table>
         <div>
@@ -25,8 +45,9 @@
         <div class="col-md-12 col-lg-12 col-12 form-btn-group">
             <button class="btn btn-primary form-btn" (click)="onCheckout()"
                 [disabled]="totalSelectedCartAmount <= 0">Checkout</button>
-            <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="!!items">Clear
+            <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="!!cart">Clear
                 Cart</button>
         </div>
     </div>
 </div>
+<div>Cart</div>

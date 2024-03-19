@@ -13,7 +13,5 @@ namespace OnlineBookStoreAPI.Models.DTOs
         public string Description { get; set; }
         public string PhotoUrl { get; set; }
         public List<PhotoDto> Photos { get; set; }
-
-
     }
 }

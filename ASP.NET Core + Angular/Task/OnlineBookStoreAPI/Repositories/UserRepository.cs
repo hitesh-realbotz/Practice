@@ -18,7 +18,7 @@ namespace OnlineBookStoreAPI.Repositories
         public async Task<AppUser?> GetUserByEmailAsync(string email)
         {
 
-            return await dbContext.Users.Include(u => u.Photos).FirstOrDefaultAsync(u => u.Email == email);
+            return await dbContext.Users.Include(u => u.Photos).Include(u => u.Cart).FirstOrDefaultAsync(u => u.Email == email);
         }
 
 

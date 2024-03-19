@@ -1,3 +1,4 @@
+import { Cart } from "./cart";
 import { Photo } from "./photo";
 
 export interface User {
@@ -10,4 +11,5 @@ export interface User {
     country: string;
     twoFactorEnabled: boolean;
     photos: Photo[];
+    cart: Cart;
 }

@@ -58,7 +58,9 @@ namespace OnlineBookStoreAPI.Repositories
         }
         public async Task<Book?> GetByISBNAsync(string isbn)
         {
-            return await dbContext.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.ISBN == isbn);
+            return await dbContext.Books.Include(b => b.Photos).SingleOrDefaultAsync(book => book.ISBN == isbn);
+            //return null;
+
         }
     }
 }

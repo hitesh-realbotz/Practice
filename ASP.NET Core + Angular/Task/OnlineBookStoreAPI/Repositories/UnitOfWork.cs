@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
 using OnlineBookStoreAPI.Data;
 using OnlineBookStoreAPI.Repositories.Interfaces;
 
@@ -8,24 +9,27 @@ namespace OnlineBookStoreAPI.Repositories
     {
         private readonly IServiceProvider serviceProvider;
         private readonly BookStoreDbContext dbContext;
+        private readonly IMapper mapper;
         private IDbContextTransaction transaction;
 
-        public UnitOfWork(IServiceProvider serviceProvider, BookStoreDbContext dbContext)
+        public UnitOfWork(IServiceProvider serviceProvider, BookStoreDbContext dbContext, IMapper mapper)
         {
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
-            this.dbContext = dbContext;
+            this.mapper = mapper;
             BookRepository = serviceProvider.GetRequiredService<IBookRepository>();
             UserRepository = serviceProvider.GetRequiredService<IUserRepository>();
-            this.serviceProvider = serviceProvider;
+            CartRepository = serviceProvider.GetRequiredService<ICartRepository>();
+
         }
         public IBookRepository BookRepository { get; }
-
         public IUserRepository UserRepository { get; }
+        public ICartRepository CartRepository { get; }
 
-        public void BeginTransaction()
+        public async Task<bool> BeginTransaction()
         {
             transaction = dbContext.Database.BeginTransaction();
+            return true;
         }
 
         public async Task<bool> Commit()
