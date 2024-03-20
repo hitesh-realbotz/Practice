@@ -22,7 +22,7 @@ return this.bookService.bookChanged;
 // getOrderChanges(){
 // return this.orderService.ordersChanged;
 // }
-getCartChangesChanges(){
+getCartChanges(){
 return this.cartService.cartChanged;
 }
 }

@@ -36,10 +36,13 @@ namespace OnlineBookStoreAPI.Mappings
             CreateMap<UserProfileDto, SignUpResponseDto>();
             CreateMap<SignUpResponseDto, UserProfileDto>();
             CreateMap<CartItem, CartItemDto>()
-                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => (c.Quantity * c.Book.Price)));
+                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.Quantity * c.Book.Price)));
+
             CreateMap<Cart, CartDto>()
-               .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => (c.CartItems.Sum(ci => (ci.Quantity * ci.Book.Price)))))
-               .ForMember(cd => cd.TotalCheckedPrice, opt => opt.MapFrom(c => (c.CartItems.Sum(ci => ci.Checked ? (ci.Quantity * ci.Book.Price) : 0))));               
+               .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => (ci.Quantity * ci.Book.Price)))))
+               .ForMember(cd => cd.TotalCheckedPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => ci.Checked ? (ci.Quantity * ci.Book.Price) : 0))));
+            CreateMap<CartDto, Cart>();
+            CreateMap<CartItemDto, CartItem>();
         }
 
 

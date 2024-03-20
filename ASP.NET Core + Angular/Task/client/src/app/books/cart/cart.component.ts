@@ -17,7 +17,7 @@ import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit, OnDestroy {
-  items: Cart | undefined;
+  cart: Cart | undefined;
   totalCartAmount: number = 0;
   totalSelectedCartAmount: number = 0;
   componentSubscriptions = new Subscription();
@@ -33,30 +33,29 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    //Subscribe to LoggedUserChanges
-    this.componentSubscriptions.add(
-      
-    );
-
     //Subscribe to ItemsChanges
     this.componentSubscriptions.add(
-      this.subService.getBookChanges().subscribe(
-        (Books: Book[]) => {
-          // this.cartService.getItems();
-        })
+      this.subService.getBookChanges().subscribe({
+        next: (Books: Book[]) => {
+
+        }
+      })
     );
 
     //Subscribe to CartItemsChanges
     this.componentSubscriptions.add(
-      this.subService.getCartChangesChanges().subscribe(
-        (items: Cart) => {
-          // if (!!items) {
-            this.items = items;
-            console.log('CartItemst',this.cartService.cart);
-            this.totalCartAmount = this.cartService.totalCartAmount;
-            this.totalSelectedCartAmount = this.cartService.totalSelectedCartAmount;
-          // }
+      this.subService.getCartChanges().subscribe({
+        next: (cart: Cart | null) => {
+          if (cart != null) {
+            this.cart = this.cartService.cart;
+          } else {
+            this.toastr.info("Cart Blank!");
+          }
+        },
+        error: error => {
+          this.toastr.info("Try again!", error.error.message);
         }
+      }
       )
     );
   }
@@ -79,7 +78,7 @@ export class CartComponent implements OnInit, OnDestroy {
     // this.cartService.AddToCart(null, itemEl, null);
   }
 
-  
+
 
   //Redirects to Payment Page
   onCheckout() {

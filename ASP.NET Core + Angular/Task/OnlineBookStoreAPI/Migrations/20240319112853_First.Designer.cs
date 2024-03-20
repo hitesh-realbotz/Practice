@@ -12,7 +12,7 @@ using OnlineBookStoreAPI.Data;
 namespace OnlineBookStoreAPI.Migrations
 {
     [DbContext(typeof(BookStoreDbContext))]
-    [Migration("20240312070617_First")]
+    [Migration("20240319112853_First")]
     partial class First
     {
         /// <inheritdoc />
@@ -20,7 +20,7 @@ namespace OnlineBookStoreAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -297,12 +297,6 @@ namespace OnlineBookStoreAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("TotalCheckedPrice")
-                        .HasColumnType("float");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AppUserId")
@@ -325,14 +319,11 @@ namespace OnlineBookStoreAPI.Migrations
                     b.Property<int>("CartId")
                         .HasColumnType("int");
 
-                    b.Property<bool>("IsChecked")
+                    b.Property<bool>("Checked")
                         .HasColumnType("bit");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
-
-                    b.Property<double>("TotalPrice")
-                        .HasColumnType("float");
 
                     b.HasKey("Id");
 

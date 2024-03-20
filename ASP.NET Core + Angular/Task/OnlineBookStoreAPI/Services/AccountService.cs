@@ -57,6 +57,7 @@ namespace OnlineBookStoreAPI.Services
         {
             var user = await userManager.Users
                  .Include(p => p.Photos)
+                 .Include(u => u.Cart)
                  .SingleOrDefaultAsync(x => x.Email == loginDto.Email);
 
             if (user == null) throw new UnauthorizedAccessException("Invalid username");

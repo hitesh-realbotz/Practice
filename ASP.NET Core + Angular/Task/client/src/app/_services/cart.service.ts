@@ -7,6 +7,7 @@ import { ToastrService } from 'ngx-toastr';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Cart } from '../_models/cart';
+import { Book } from '../_models/book';
 
 @Injectable({
   providedIn: 'root'
@@ -31,14 +32,21 @@ export class CartService {
         })
       );
   }
-  addToCart(cartItem: CartItem){
-    return this.http.post<Cart>(this.baseUrl + 'cart', cartItem).pipe(
-      tap(response => {
-        if (response) {
-          this.setCartItems(response);
-        }
-      })
-    );
+
+  addToCart(cartItem: CartItem) {
+    return this.http.post<Cart>(this.baseUrl + 'cart', cartItem)
+      .pipe(
+        tap(response => {
+          if (response) {
+            this.setCartItems(response);
+          }
+        })
+      );
+  }
+
+  addToCartFromItem(book: Book) {
+    const cartItem = new CartItem(book, 1, book.price, true);
+    return this.addToCart(cartItem);
   }
 
   setCartItems(cart: Cart) {

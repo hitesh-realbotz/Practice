@@ -1,9 +1,10 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, map, tap } from 'rxjs';
 import { User } from '../_models/user';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { QRData } from '../_models/qrdata';
+import { CartService } from './cart.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,9 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   public currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
-  constructor(private http: HttpClient) { }
+
+  private cartService: CartService | undefined;
+  constructor(private http: HttpClient, private injector: Injector) { }
 
 
   register(model: any) {
@@ -31,6 +34,8 @@ export class AccountService {
         const user = response;
         if (user) {
           this.setCurrentUser(user);
+          this.getCartServiceInstance();
+          this.cartService?.setCartItems(user.cart);
         }
       })
     )
@@ -91,6 +96,13 @@ export class AccountService {
     this.currentUserSource.next(null);
 
   }
+
+  getCartServiceInstance(): CartService {
+    if (!this.cartService) {
+        this.cartService = this.injector.get(CartService);
+    }
+    return this.cartService;
+}
 
 
 }

@@ -185,8 +185,6 @@ namespace OnlineBookStoreAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
-                    TotalCheckedPrice = table.Column<double>(type: "float", nullable: false),
                     AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
@@ -255,9 +253,8 @@ namespace OnlineBookStoreAPI.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    IsChecked = table.Column<bool>(type: "bit", nullable: false),
+                    Checked = table.Column<bool>(type: "bit", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    TotalPrice = table.Column<double>(type: "float", nullable: false),
                     CartId = table.Column<int>(type: "int", nullable: false),
                     BookId = table.Column<int>(type: "int", nullable: false)
                 },
