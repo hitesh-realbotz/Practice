@@ -4,8 +4,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px; 
-    /* Adjust as needed for spacing between controls */
-}
+    }
 
 .sort-control {
     flex: 1;
@@ -15,26 +14,20 @@
     justify-content: flex-end;
 }
 
-/* Optional: Adjust styling for labels and inputs/selects */
+
 .sort-control label {
-    margin-right: 5px; /* Add spacing between label and input/select */
+    margin-right: 5px; 
 }
 
 .sort-control  input,
 .sort-control select { 
-    height: 30px;  
+    height: 35px;  
     border: 1px solid black;
     border-radius: 5px;
-    width: 100%; /* Input/select takes full width of the container */
+    width: 100%;
 }
 
 .sort-control button{ 
-    height: 30px;
-    border: 1px solid black;
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%; /* Input/select takes full width of the container */
+    width: 100%;
 }
 

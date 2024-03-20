@@ -2,7 +2,6 @@ import { Component, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Book } from 'src/app/_models/book';
-import { CartItem } from 'src/app/_models/cart';
 import { AccountService } from 'src/app/_services/account.service';
 import { BookService } from 'src/app/_services/book.service';
 import { CartService } from 'src/app/_services/cart.service';
@@ -41,8 +40,11 @@ export class BookItemComponent {
     event.stopPropagation();
     if (book.availableQuantity >= 1) {
       this.cartService.addToCartFromItem(book).subscribe({
+        next: response => {
+          this.toastr.success("Book added in cart!");
+        },
         error: error => {
-          this.toastr.info(error.error.message);
+          this.toastr.warning(error.error.message);
         }
       });
     } else {

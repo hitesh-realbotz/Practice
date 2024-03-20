@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Book } from 'src/app/_models/book';
 import { AccountService } from 'src/app/_services/account.service';
 import { BookService } from 'src/app/_services/book.service';
+import { CartService } from 'src/app/_services/cart.service';
 
 @Component({
   selector: 'app-book-detail',
@@ -15,7 +16,7 @@ export class BookDetailComponent implements OnInit {
   index: string = '';
   book: Book | undefined;
   constructor(private route: ActivatedRoute,
-    private router: Router, private bookService: BookService, private toastr: ToastrService, private accountService: AccountService) { }
+    private router: Router, private bookService: BookService, private toastr: ToastrService, private accountService: AccountService, private cartService: CartService) { }
 
   ngOnInit(): void {
     const bk = this.bookService.books;
@@ -39,15 +40,19 @@ export class BookDetailComponent implements OnInit {
   }
 
   //OnClick AddToCart Item
-  onAddToCart(event: Event, index: string) {
+  onAddToCart(event: Event, book: Book) {
     event.stopPropagation();
-    if (!this.accountService.currentUser$) {
-      
-      // this.cartService.AddToCart(index);
-      this.router.navigate(['items']);
+    if (book.availableQuantity >= 1) {
+      this.cartService.addToCartFromItem(book).subscribe({
+        next: response => {
+          this.toastr.success("Book added in cart!");
+        },
+        error: error => {
+          this.toastr.warning(error.error.message);
+        }
+      });
     } else {
-      this.router.navigate(['/auth']);
-      this.toastr.warning('Login to Place Order');
+      this.toastr.info("Selected book is out of stock!");
     }
   }
 

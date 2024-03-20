@@ -1,28 +1,15 @@
-import { Book } from "./book";
+import { CartItem } from "./cartItem";
 
 export class Cart {
-    public cartItem: CartItem[];
+    public cartItems: CartItem[];
     public totalPrice: number;
     public totalCheckedPrice: number;
 
     
-    constructor(cartItem: CartItem[], totalPrice: number, totalCheckedPrice: number) {
-      this.cartItem = cartItem;
+    constructor(cartItems: CartItem[], totalPrice: number, totalCheckedPrice: number) {
+      this.cartItems = cartItems;
       this.totalPrice = totalPrice;
       this.totalCheckedPrice = totalCheckedPrice;
     }
   }
   
-export class CartItem {
-    public book: Book;
-    public qty: number;
-    public checked: boolean;
-    public totalPrice: number;
-    
-    constructor(book: Book, qty: number, totalPrice: number, checked: boolean) {
-      this.book = book;
-      this.qty = qty;
-      this.checked = checked;
-      this.totalPrice = totalPrice;
-    }
-  }

@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
@@ -29,15 +29,28 @@ export class CartComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private subService: SubscriptionsService) { }
+    private subService: SubscriptionsService, private cdr: ChangeDetectorRef) { }
 
   ngOnInit() {
 
+    this.cartService.getCart();
     //Subscribe to ItemsChanges
     this.componentSubscriptions.add(
       this.subService.getBookChanges().subscribe({
         next: (Books: Book[]) => {
-
+            this.cartService.getCart();
+        }
+      })
+    );
+    //Subscribe to ItemsChanges
+    this.componentSubscriptions.add(
+      this.subService.getLoggedUserChanges().subscribe({
+        next: (user: User | null) => {
+          if (user != null) {
+            
+            this.cart = user.cart;
+            this.cartService.getCart();
+          }
         }
       })
     );
@@ -47,14 +60,12 @@ export class CartComponent implements OnInit, OnDestroy {
       this.subService.getCartChanges().subscribe({
         next: (cart: Cart | null) => {
           if (cart != null) {
-            this.cart = this.cartService.cart;
-          } else {
-            this.toastr.info("Cart Blank!");
+            this.cart = cart;
+            // this.cdr.detectChanges();
+          }else{
+            this.cart = undefined;
           }
         },
-        error: error => {
-          this.toastr.info("Try again!", error.error.message);
-        }
       }
       )
     );
@@ -62,22 +73,57 @@ export class CartComponent implements OnInit, OnDestroy {
 
   //Removes Cart Items
   onClearCart() {
-    // this.items = this.cartService.clearCart();
+    this.cartService.clearCart().subscribe({
+      next: response => {
+        this.toastr.info("All CartItems Removed!");
+      },
+      error: error => {
+        this.toastr.warning(error.error.message);
+      }
+    });
   }
 
   //Decrease CartItem quantity
-  decreaseQuantity(index: number, itemEl: CartItem) {
-    console.log('index : ', index);
-    console.log('itemEl : ', itemEl);
-    // this.cartService.AddToCart(null, itemEl, true);
+  decreaseQuantity( item: CartItem) {
+    this.cartService.decreaseQty(item).subscribe({
+      next: response => {
+        if (!!response) {
+          this.toastr.info("CartItem's quantity decremented!");
+        } else {
+          this.toastr.info("CartItem removed!");
+        }
+      },
+      error: error => {
+        this.toastr.warning(error.error.message);
+      }
+    })
   }
 
   //Increases CartItem quantity
-  increaseQuantity(itemEl: CartItem) {
-    console.log('itemEl : ', itemEl);
-    // this.cartService.AddToCart(null, itemEl, null);
+  increaseQuantity(item: CartItem) {
+    this.cartService.addToCart(item).subscribe({
+      next: response => {
+        this.toastr.info("CartItem's quantity incremented!");
+      },
+      error: error => {
+        this.toastr.warning(error.error.message);
+      }
+    })
   }
 
+
+  //Toggles checkbox for CartItem selection
+  toggleItemCheck(item: CartItem) {
+    
+    this.cartService.toggleCheckItem(item).subscribe({
+      next: response => {
+        this.toastr.info("CartItem Toggled!!");
+      },
+      error: error => {
+        this.toastr.warning(error.error.message);
+      }
+    })
+  }
 
 
   //Redirects to Payment Page

@@ -40,6 +40,13 @@ export class AccountService {
       })
     )
   }
+  autoLogin(){
+    const userString = localStorage.getItem('user');
+    if (!userString) return;
+    const user: User = JSON.parse(userString);
+        this.setCurrentUser(user);
+        
+  }
   verifyTwoFA(model: any) {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<User>(this.baseUrl + 'account/verify', model).pipe(
@@ -89,7 +96,6 @@ export class AccountService {
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
-
   }
   logout() {
     localStorage.removeItem('user');

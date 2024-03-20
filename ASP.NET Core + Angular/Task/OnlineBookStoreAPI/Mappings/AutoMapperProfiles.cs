@@ -24,7 +24,8 @@ namespace OnlineBookStoreAPI.Mappings
 
             CreateMap<AppUser, UserProfileDto>()
                 .ForMember(up => up.PhotoUrl, opt => opt.MapFrom(u => u.Photos.FirstOrDefault(p => p.IsMain).Url))
-                .ForMember(up => up.Token, opt => opt.MapFrom(u => tokenConfig.CreateToken(u).Result));
+                .ForMember(up => up.Token, opt => opt.MapFrom(u => tokenConfig.CreateToken(u).Result))
+                .ForMember(up => up.Cart, opt => opt.MapFrom(u => u.Cart != null ? u.Cart : null));
 
             CreateMap<UserProfileDto, AppUser>();
 
@@ -41,6 +42,8 @@ namespace OnlineBookStoreAPI.Mappings
             CreateMap<Cart, CartDto>()
                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => (ci.Quantity * ci.Book.Price)))))
                .ForMember(cd => cd.TotalCheckedPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => ci.Checked ? (ci.Quantity * ci.Book.Price) : 0))));
+
+
             CreateMap<CartDto, Cart>();
             CreateMap<CartItemDto, CartItem>();
         }

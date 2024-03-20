@@ -99,9 +99,7 @@ export class BookListComponent implements OnInit {
       const startIndex = (this.pagination.currentPage - 1) * this.pagination.itemsPerPage;
       const endIndex = startIndex + this.pagination.itemsPerPage;
       this.books = this.bookService.books.slice(startIndex, endIndex);
-      this.books.forEach(element => {
-        console.log(element.photoUrl);
-      });
+    
     }
   }
 

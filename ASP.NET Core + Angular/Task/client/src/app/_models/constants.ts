@@ -1,5 +1,5 @@
 export class Constants {
-    static minPrice = 1;
+    static minPrice = 0;
     static maxPrice = 0;
 
     static pageNumber = 1;

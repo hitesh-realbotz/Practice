@@ -33,7 +33,7 @@ namespace OnlineBookStoreAPI.Repositories
         {
             var query = dbContext.Books.Include(b => b.Photos).AsQueryable();
             
-            if (bookParams.MaxPrice >= bookParams.MinPrice)
+            if (bookParams.MaxPrice > bookParams.MinPrice)
             {
                 query = query.Where(b => b.Price >= bookParams.MinPrice && b.Price <= bookParams.MaxPrice);
             }

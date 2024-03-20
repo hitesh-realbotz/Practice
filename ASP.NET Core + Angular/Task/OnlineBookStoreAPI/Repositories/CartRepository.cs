@@ -16,10 +16,8 @@ namespace OnlineBookStoreAPI.Repositories
 
         public async Task<bool> ClearCartAsync(Cart cart)
         {
-             var result = dbContext.Carts.Remove(cart);
-            
-            return await dbContext.SaveChangesAsync() > 0;
-            
+            dbContext.Carts.Remove(cart);  
+            return await dbContext.SaveChangesAsync() > 0;           
         }
 
         public async Task<Cart> CreateAsync(Cart cart)

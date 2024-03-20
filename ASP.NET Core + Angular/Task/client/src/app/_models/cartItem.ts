@@ -2,13 +2,13 @@ import { Book } from "./book";
 
 export class CartItem {
   public book: Book;
-  public qty: number;
+  public quantity: number;
   public checked: boolean;
   public totalPrice: number;
   
-  constructor(book: Book, qty: number, totalPrice: number, checked: boolean) {
+  constructor(book: Book, quantity: number, totalPrice: number, checked: boolean) {
     this.book = book;
-    this.qty = qty;
+    this.quantity = quantity;
     this.checked = checked;
     this.totalPrice = totalPrice;
   }

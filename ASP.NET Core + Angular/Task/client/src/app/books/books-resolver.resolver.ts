@@ -28,7 +28,7 @@ export const booksResolverResolver: ResolveFn<boolean | Book[] | Observable<Book
       if (response.result && response.pagination) {
         bookService.pagination = response.pagination;
         bookService.setBooks(response.result);
-        bookService.books.forEach(ele => console.log("Resover ="+ele.photoUrl));
+        // bookService.books.forEach(ele => console.log("Resover ="+ele.photoUrl));
         
         return bookService.books;
       } 
