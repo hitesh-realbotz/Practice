@@ -1,15 +1,15 @@
 <div *ngIf="isAuthenticated; else notLoggedIn">
     <div class="row">
-        <div class="col-md-9">
+        <div class="col-md-9 col-9">
             <router-outlet></router-outlet>
         </div>
-        <div class="col-md-3">
+        <div class="col-md-3 col-3">
             <app-cart></app-cart>
         </div>
     </div>
 </div>
 <ng-template #notLoggedIn>
-    <div class="col-md-12">
+    <div class="col-md-12 col-12">
         <router-outlet></router-outlet>
     </div>
 </ng-template>

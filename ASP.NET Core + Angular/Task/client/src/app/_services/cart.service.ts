@@ -43,6 +43,40 @@ export class CartService {
         })
       );
   }
+  decreaseQty(cartItem: CartItem) {
+    return this.http.post<Cart>(this.baseUrl + 'cart/decrease-qty', cartItem)
+      .pipe(
+        tap(response => {
+          if (response) {
+            this.cart = response;
+            this.cartChanged.next(this.cart);
+          }
+        })
+      );
+  }
+
+  toggleCheckItem(cartItem: CartItem){
+    return this.http.post<Cart>(this.baseUrl + 'cart/toggle-check', cartItem)
+      .pipe(
+        tap(response => {
+          if (response) {
+            this.setCartItems(response);
+          }
+        })
+      );
+  }
+
+  clearCart() {
+    return this.http.delete<boolean>(this.baseUrl + 'cart')
+      .pipe(
+        tap(bool => {
+          if (bool) {
+            this.cart = undefined;
+            this.cartChanged.next(null);
+          }
+        })
+      );
+  }
 
   addToCartFromItem(book: Book) {
     const cartItem = new CartItem(book, 1, book.price, true);

@@ -15,7 +15,5 @@ namespace OnlineBookStoreAPI.Models.DTOs
         public bool TwoFactorEnabled { get; set; }
         public List<PhotoDto> Photos { get; set; }
         public CartDto Cart { get; set; }
-
-
     }
 }

@@ -1,1 +1,49 @@
 /* You can add global styles to this file, and also import other style files */
+html, body { height: 100%; }
+
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.form{
+    padding: 10px;
+    background-color: #d7e2dc;
+    margin: auto;
+    margin-top: 10px;
+    max-width: 800px;
+    border: 1px solid #ac9f9f;
+}
+
+.form-btn-group{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+}
+
+.btn{
+    margin: 0px 0px;
+}
+
+.row{
+    margin: 5px;
+}
+
+.form label{
+    font-weight: bolder;
+}
+
+.help-block{
+    color: red;
+}
+
+a{
+    cursor: pointer;
+}
+
+.d-flex-row-cnt-cnt{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+

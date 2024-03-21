@@ -20,11 +20,13 @@ namespace OnlineBookStoreAPI.Repositories
             BookRepository = serviceProvider.GetRequiredService<IBookRepository>();
             UserRepository = serviceProvider.GetRequiredService<IUserRepository>();
             CartRepository = serviceProvider.GetRequiredService<ICartRepository>();
+            CartItemRepository = serviceProvider.GetRequiredService<ICartItemRepository>();
 
         }
         public IBookRepository BookRepository { get; }
         public IUserRepository UserRepository { get; }
         public ICartRepository CartRepository { get; }
+        public ICartItemRepository CartItemRepository { get; }
 
         public async Task<bool> BeginTransaction()
         {

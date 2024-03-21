@@ -25,6 +25,19 @@ namespace OnlineBookStoreAPI.Controllers
         {
             return Ok(await cartService.AddToCartAsync(cartItemDto));
         }
+        [HttpPost("decrease-qty")]
+        [Authorize]
+        public async Task<ActionResult<CartDto>> DecreaseCartItemQty(CartItemDto cartItemDto)
+        {
+            return Ok(await cartService.DecreaseCartItemQtyAsync(cartItemDto));
+        }
+        
+        [HttpPost("toggle-check")]
+        [Authorize]
+        public async Task<ActionResult<CartDto>> ToggleCheckCartItem(CartItemDto cartItemDto)
+        {
+            return Ok(await cartService.ToggleCheckCartItemAsync(cartItemDto));
+        }
 
         [HttpGet]
         [Authorize]

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../_services/user.service';
 import { AccountService } from '../_services/account.service';
+import { SubscriptionsService } from '../_services/subscriptions.service';
 
 @Component({
   selector: 'app-books',
@@ -9,15 +10,19 @@ import { AccountService } from '../_services/account.service';
 })
 export class BooksComponent implements OnInit {
   isAuthenticated: boolean = false;
-
-  constructor(private accountService: AccountService){ }
+  
+  constructor(private accountService: AccountService, private subService: SubscriptionsService, ){ }
 
   ngOnInit(): void {
-    this.accountService.currentUser$.subscribe({
+
+
+    this.subService.getLoggedUserChanges().subscribe({
       next: user => {
         !!user ? this.isAuthenticated = true : this.isAuthenticated = false;
+       
       }
     })
+    
   }
 
 }

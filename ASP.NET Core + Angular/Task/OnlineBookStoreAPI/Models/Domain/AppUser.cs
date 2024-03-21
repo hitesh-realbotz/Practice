@@ -13,7 +13,5 @@ namespace OnlineBookStoreAPI.Models.Domain
         public List<Photo> Photos { get; set; } = new();
         public Cart Cart { get; set; }
         public List<Order> Orders { get; set; }
-
-
     }
 }
