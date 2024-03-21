@@ -1,9 +1,10 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { take } from 'rxjs';
+import { Subscription, take } from 'rxjs';
 import { Photo } from 'src/app/_models/photo';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
+import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
 import { UserService } from 'src/app/_services/user.service';
 import { environment } from 'src/environments/environment';
 
@@ -12,22 +13,23 @@ import { environment } from 'src/environments/environment';
   templateUrl: './photo-editor.component.html',
   styleUrls: ['./photo-editor.component.css']
 })
-export class PhotoEditorComponent implements OnInit {
+export class PhotoEditorComponent implements OnInit, OnDestroy {
   @Input() user: User | undefined;
   uploader: FileUploader | undefined;
   hasBaseDropzoneOver = false;
   baseUrl = environment.apiUrl;
+  componentSubscriptions = new Subscription();
 
 
-  constructor(private accountService: AccountService, private userService: UserService) {
+  constructor(private accountService: AccountService, private userService: UserService,  private subService: SubscriptionsService) {
 
   }
   ngOnInit(): void {
-    this.accountService.currentUser$.subscribe({
+    this.componentSubscriptions.add(this.subService.getLoggedUserChanges().subscribe({
       next: user => {
         if (user) this.user = user
       }
-    });
+    }));
     this.initializeUploader();
   }
 
@@ -89,6 +91,8 @@ export class PhotoEditorComponent implements OnInit {
     })
   }
 
-
+  ngOnDestroy(): void {
+    this.componentSubscriptions.unsubscribe();
+  }
 
 }

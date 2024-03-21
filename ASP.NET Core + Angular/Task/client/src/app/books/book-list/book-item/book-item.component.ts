@@ -21,18 +21,7 @@ export class BookItemComponent {
 
   //Navigate to ItemDetails OnClick of Item
   onItem(book: Book) {
-    // this.bookService.getBook(book).subscribe({
-    //   next: response => {
-    //     if (response) {
-    //       this.router.navigate([response.isbn], { relativeTo: this.route.parent })
-    //     }
-    //   }
-    // });
-    // let index = this.bookService.getBookIndexByISBN(book.isbn);
-    // if (index >= 0) {
-    //   this.router.navigate([index], { relativeTo: this.route.parent })
-    // }
-    this.router.navigate([book.isbn], { relativeTo: this.route.parent })
+        this.router.navigate([book.isbn], { relativeTo: this.route.parent })
   }
 
   //OnClick AddToCart Item

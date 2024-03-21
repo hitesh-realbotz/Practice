@@ -12,4 +12,14 @@ export interface User {
     twoFactorEnabled: boolean;
     photos: Photo[];
     cart: Cart;
+    
+}
+
+export interface UserWithQRData{
+    userProfile: User;
+    qRData: QRData;
+}
+export interface QRData{
+    sharedKey: string;
+    authenticatorUri: string;
 }

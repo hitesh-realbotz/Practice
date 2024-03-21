@@ -1,6 +1,6 @@
 ﻿namespace OnlineBookStoreAPI.Models.DTOs
 {
-    public class AuthenticatorDetailsVM
+    public class QRDetailsDto
     {
         public string SharedKey { get; set; }
 

@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using OnlineBookStoreAPI.Models.Domain;
 using OnlineBookStoreAPI.Models.DTOs;
 using OnlineBookStoreAPI.Services.Interfaces;
+using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
+using static QRCoder.PayloadGenerator;
 
 namespace OnlineBookStoreAPI.Services
 {
@@ -15,13 +17,15 @@ namespace OnlineBookStoreAPI.Services
         private readonly ITokenService tokenService;
         private readonly IMapper mapper;
         private readonly UrlEncoder urlEncoder;
+        private readonly IHttpContextAccessor httpContextAccessor;
 
-        public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, UrlEncoder urlEncoder)
+        public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, UrlEncoder urlEncoder, IHttpContextAccessor httpContextAccessor)
         {
             this.userManager = userManager;
             this.tokenService = tokenService;
             this.mapper = mapper;
             this.urlEncoder = urlEncoder;
+            this.httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<UserProfileDto?> CreateAsync(RegisterDto registerDto)
@@ -44,29 +48,70 @@ namespace OnlineBookStoreAPI.Services
                 }
                 throw new BadHttpRequestException(sb.ToString());
             }
-            //var signUpResponse = new SignUpResponseDto
-            //{
-            //    Email = user.Email,
-            //    Token = await tokenService.CreateToken(user),
-            //    IsTwoFAEnabled = user.TwoFactorEnabled
-            //};
+
             return mapper.Map<UserProfileDto>(user);
+        }
+
+        public async Task<QRDetailsDto?> GenerateTwoFAQRCodeAsync()
+        {
+            var email = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+
+            var user = await userManager.Users.SingleOrDefaultAsync(x => x.Email == email.ToLower());
+
+            if (user == null) throw new UnauthorizedAccessException("Re-Login & Try again!");
+
+            // Load the authenticator key & QR code URI to display on the form
+            var unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
+            if (string.IsNullOrEmpty(unformattedKey))
+            {
+                await userManager.ResetAuthenticatorKeyAsync(user);
+                unformattedKey = await userManager.GetAuthenticatorKeyAsync(user);
+            }
+
+            return new QRDetailsDto
+            {
+                SharedKey = FormatKey(unformattedKey),
+                AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey)
+            };
         }
 
         public async Task<UserProfileDto?> LoginAsync(LoginDto loginDto)
         {
-            var user = await userManager.Users
-                 .Include(p => p.Photos)
-                 .Include(u => u.Cart).ThenInclude(c => c.CartItems).ThenInclude(ci => ci.Book).ThenInclude(b => b.Photos)
-                 .SingleOrDefaultAsync(x => x.Email == loginDto.Email);
-
-            if (user == null) throw new UnauthorizedAccessException("Invalid username");
+            
+            AppUser? user = await GetUser(loginDto.Email);
+            if (user == null) throw new UnauthorizedAccessException("Invalid email!");
 
             var result = await userManager.CheckPasswordAsync(user, loginDto.Password);
 
             if (!result) throw new UnauthorizedAccessException("Invalid Password!");
 
             return mapper.Map<UserProfileDto>(user);
+        }
+
+        private async Task<AppUser?> GetUser(string email)
+        {
+            return await userManager.Users
+                 .Include(p => p.Photos)
+                 .Include(u => u.Cart).ThenInclude(c => c.CartItems).ThenInclude(ci => ci.Book).ThenInclude(b => b.Photos)
+                 .SingleOrDefaultAsync(x => x.Email == email.ToLower());
+        }
+
+        public async Task<UserProfileDto?> SetTwoFAAsync(string code)
+        {
+            var email = httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Email);
+            var user = await GetUser(email);
+            if (user == null) throw new UnauthorizedAccessException("Re-Login & Try again!");
+
+            var verificationCode = code.Replace(" ", string.Empty).Replace("-", string.Empty);
+
+            var isValid = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+            if (isValid)
+            {
+                await userManager.SetTwoFactorEnabledAsync(user, true);
+
+                return mapper.Map<UserProfileDto>(user);
+            }
+            throw new BadHttpRequestException("Enter Valid Code!");
         }
 
         private string FormatKey(string unformattedKey)

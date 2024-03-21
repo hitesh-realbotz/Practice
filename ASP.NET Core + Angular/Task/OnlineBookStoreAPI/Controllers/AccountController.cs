@@ -46,14 +46,6 @@ namespace OnlineBookStoreAPI.Controllers
             return await accountService.LoginAsync(loginDto);
         }
 
-
-        //[HttpPost("update")]
-        //[Authorize]
-        //public async Task<ActionResult<UserProfileDto>> UpdateProfile(UserProfileUpdateDto userProfileUpdateDto)
-        //{
-        //    return await userService.UpdateAsync(userProfileUpdateDto);
-        //}
-
         [HttpPost("verify")]
         [Authorize]
         public async Task<ActionResult<LoginResponseDto>> Verify(TwoFALoginDto twoFALoginDto)
@@ -90,75 +82,17 @@ namespace OnlineBookStoreAPI.Controllers
 
         [HttpPost("getqr")]
         [Authorize]
-        public async Task<ActionResult<UserProfileDto>> GenerateQRCode()
+        public async Task<ActionResult<QRDetailsDto>> GenerateQRCode()
         {
-            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-
-            var user = await _userManager.Users
-                //.Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.Email == email);
-
-            if (user == null) return Unauthorized("Invalid email");
-
-            var TwoFactorEnabled = await _userManager.GetTwoFactorEnabledAsync(user);
-            //if (!TwoFactorEnabled)
-            //{
-            //    var setTwoFactor = await _userManager.SetTwoFactorEnabledAsync(user, true);
-            //}
-            //var HasAuthenticator = await _userManager.GetAuthenticatorKeyAsync(user) != null;
-            //var TwoFactorClientRemembered = await _signInManager.IsTwoFactorClientRememberedAsync(user);
-
-            // Load the authenticator key & QR code URI to display on the form
-            var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
-            if (string.IsNullOrEmpty(unformattedKey))
-            {
-                await _userManager.ResetAuthenticatorKeyAsync(user);
-                unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
-            }
-
-            //var email = await _userManager.GetEmailAsync(user);
-
-            //var AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
-            //var qrCodeGenerator = new QRCodeGenerator();
-            //var qrCodeData = qrCodeGenerator.CreateQrCode(AuthenticatorUri, QRCodeGenerator.ECCLevel.Q);
-
-
-            return Ok(new AuthenticatorDetailsVM
-            {
-                SharedKey = FormatKey(unformattedKey),
-
-                AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey)
-            });
+            return await accountService.GenerateTwoFAQRCodeAsync();
         }
 
 
         [HttpPost("setTwoFA")]
         [Authorize]
-        public async Task<ActionResult<UserProfileDto>> SetTwoFA(SetTwoFADto setTwoFADto)
+        public async Task<ActionResult<UserProfileDto>> SetTwoFA([FromQuery] string code)
         {
-            var email = HttpContext.User.FindFirstValue(ClaimTypes.Email);
-
-            var user = await _userManager.Users
-                //.Include(p => p.Photos)
-                .SingleOrDefaultAsync(x => x.Email == email);
-
-            if (user == null) return Unauthorized("Invalid email");
-
-            var verificationCode = setTwoFADto.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
-
-            var isValid = await _userManager.VerifyTwoFactorTokenAsync(user, _userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
-            if (isValid)
-            {
-                await _userManager.SetTwoFactorEnabledAsync(user, true);
-                return Ok(new LoginResponseDto
-                {
-                    Email = user.Email,
-                    Token = await _tokenService.CreateToken(user),
-                    Gender = user.Gender,
-                    IsTwoFAEnabled = user.TwoFactorEnabled
-                });
-            }
-            return Unauthorized("Enter Valid Code!");
+            return await accountService.SetTwoFAAsync(code);
         }
 
         private string FormatKey(string unformattedKey)
