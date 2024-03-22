@@ -24,6 +24,11 @@ const routes: Routes = [
       return import('./books/books.module').then(m => m.BooksModule);
     }
   },
+  {
+    path: 'error', loadChildren: () => {
+      return import('./errors/errors.module').then(m => m.ErrorsModule);
+    }
+  },
   // { path: 'book', component: BooksComponent }
 
 ]

@@ -62,7 +62,7 @@ namespace OnlineBookStoreAPI.Services
 
         public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
         {
-           return await uow.BookRepository.GetBooksAsync(bookParams);
+            return await uow.BookRepository.GetBooksAsync(bookParams);
         }
 
         public async Task<BookDto?> GetBookByTitleAsync(string title)

@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { BehaviorSubject, map, tap } from 'rxjs';
-import { User } from '../_models/user';
-import { HttpClient } from '@angular/common/http';
+import { User, UserWithQRData } from '../_models/user';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { QRData } from '../_models/qrdata';
 import { CartService } from './cart.service';
@@ -21,9 +21,8 @@ export class AccountService {
   register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       tap(response => {
-        const user = response;
-        if (user) {
-          this.setCurrentUser(user);
+        if (response) {
+          this.setCurrentUser(response);
         }
       })
     )
@@ -31,11 +30,10 @@ export class AccountService {
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       tap(response => {
-        const user = response;
-        if (user) {
-          this.setCurrentUser(user);
+        if (response) {
+          this.setCurrentUser(response);
           this.getCartServiceInstance();
-          this.cartService?.setCartItems(user.cart);
+          this.cartService?.setCartItems(response.cart);
         }
       })
     )
@@ -59,9 +57,10 @@ export class AccountService {
       })
     )
   }
-  setTwoFA(model: any) {
+  setTwoFA(code: string) {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
-    return this.http.post<User>(this.baseUrl + 'account/setTwoFA', model).pipe(
+    // return this.http.post<User>(this.baseUrl + 'account/setTwoFA?code='+code, {}).pipe(
+    return this.http.post<User>(this.baseUrl + 'account/setTwoFA?code='+code, {}).pipe(
       tap(response => {
         console.log("Serv set = " + response.twoFactorEnabled);
         const user = response;

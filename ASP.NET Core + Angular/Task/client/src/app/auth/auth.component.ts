@@ -16,7 +16,7 @@ export class AuthComponent implements OnInit {
   model: any = {};
   registerForm: FormGroup = new FormGroup({});
   maxDate: Date = new Date();
-  validationErrors: string[] | undefined;
+  // validationErrors: string[] | undefined;
   isLoginMode = true;
   is2FAMode = false;
   isLoading: boolean = false;
@@ -59,21 +59,25 @@ export class AuthComponent implements OnInit {
             if (!this.isLoginMode) {
               this.toastr.success('SetUp 2FA Login Method', 'Account Created!');
               this.router.navigate(['/user/profile']);
-            } else {
+            }
+            else {
               this.toastr.success('Welcome to bookStore', 'Login Success!');
-              this.router.navigate(['/book']);
-              // this.router.navigateByUrl('/book');
+              if (!response.twoFactorEnabled || response.name == null) {
+                this.router.navigate(['/user/profile']);
+              } else {
+                this.router.navigateByUrl('/book');
+              }
             }
           } else {
             this.is2FAMode = true;
             this.toastr.success('Verify 2FA OTP!');
           }
         },
-        error: error => {
-          console.log(error);
-          this.toastr.info(error.error.message, "Try again!");
-          this.validationErrors = error;
-        }
+        // error: error => {
+        //   console.log(error);
+        //   this.toastr.info(error.error.message, "Try again!");
+        //   this.validationErrors = error;
+        // }
       }
     )
 
@@ -82,11 +86,5 @@ export class AuthComponent implements OnInit {
   cancel() {
     this.cancelRegister.emit(false);
   }
-
-  // private GetDateOnly(dob: string | undefined) {
-  //   if (!dob) return;
-  //   let theDob = new Date(dob);
-  //   return new Date(theDob.setMinutes(theDob.getMinutes() - theDob.getTimezoneOffset())).toISOString().slice(0, 10);
-  // }
 
 }

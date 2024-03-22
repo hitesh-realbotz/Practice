@@ -11,12 +11,9 @@ const routes: Routes = [
     path: '', component: BooksComponent,
     children: [
       { path: '', component: BookListComponent, resolve: [booksResolverResolver] },
-      // { path: 'forgotpass', component: ForgotPassComponent},
       { path: ':id', component: BookDetailComponent, resolve: [booksResolverResolver] },
-            // { path: ':id/edit', component: ItemsEditComponent, resolve: [ItemsResolverService]},
     ]
   },
-  // { path: 'forgotpass', component: ForgotPassComponent},
 ]
 
 @NgModule({

@@ -27,6 +27,7 @@ namespace OnlineBookStoreAPI.Mappings
                 .ForMember(up => up.Token, opt => opt.MapFrom(u => tokenConfig.CreateToken(u).Result))
                 .ForMember(up => up.Cart, opt => opt.MapFrom(u => u.Cart != null ? u.Cart : null));
 
+
             CreateMap<UserProfileDto, AppUser>();
 
             CreateMap<Book, BookDto>()

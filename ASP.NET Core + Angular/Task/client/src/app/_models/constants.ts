@@ -10,4 +10,7 @@ export class Constants {
     static sortByAuthor = "Author";
     static sortOrderAsc = "Ascending";
     static sortOrderDsc = "Descending";
+
+    static defaultGender = "male";
+    static otpLength = 6;
 }

@@ -42,12 +42,12 @@ export class CartComponent implements OnInit, OnDestroy {
         }
       })
     );
+
     //Subscribe to ItemsChanges
     this.componentSubscriptions.add(
       this.subService.getLoggedUserChanges().subscribe({
         next: (user: User | null) => {
-          if (user != null) {
-            
+          if (user != null) {           
             this.cart = user.cart;
             this.cartService.getCart();
           }

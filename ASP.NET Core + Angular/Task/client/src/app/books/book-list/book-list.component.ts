@@ -1,17 +1,19 @@
-import { Component, NgZone, OnInit } from '@angular/core';
+import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Pagination } from 'src/app/_models/Helpers/pagination';
 import { Book } from 'src/app/_models/book';
 import { BookParams } from 'src/app/_models/bookParamas';
 import { Constants } from 'src/app/_models/constants';
 import { BookService } from 'src/app/_services/book.service';
+import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
 
 @Component({
   selector: 'app-book-list',
   templateUrl: './book-list.component.html',
   styleUrls: ['./book-list.component.css']
 })
-export class BookListComponent implements OnInit {
+export class BookListComponent implements OnInit, OnDestroy {
 
   books: Book[] = [];
   bookParms: BookParams | undefined;
@@ -19,9 +21,9 @@ export class BookListComponent implements OnInit {
   sortForm: FormGroup = new FormGroup({});
   sortByOptions: string[] = [Constants.sortByTitle, Constants.sortByPrice, Constants.sortByAuthor];
   sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
-  // currentPage: number = 1;
+  componentSubscriptions = new Subscription();
 
-  constructor(private bookService: BookService, private fb: FormBuilder, private ngZone: NgZone) {
+  constructor(private bookService: BookService, private fb: FormBuilder, private ngZone: NgZone, private subService: SubscriptionsService) {
     this.bookParms = this.bookService.getBookParams();
   }
 
@@ -33,12 +35,12 @@ export class BookListComponent implements OnInit {
       maxPrice: [this.bookParms?.maxPrice, [Validators.required]],
     });
     
-    this.bookService.bookChanged.subscribe(
+    this.componentSubscriptions.add(this.subService.getBookChanges().subscribe(
       (books: Book[]) => {
         this.pagination = this.bookService.pagination;
         this.getPagedData();
       }
-    )
+    ))
     
   }
 
@@ -101,6 +103,10 @@ export class BookListComponent implements OnInit {
       this.books = this.bookService.books.slice(startIndex, endIndex);
     
     }
+  }
+
+  ngOnDestroy(): void {
+    this.componentSubscriptions.unsubscribe();
   }
 
 }

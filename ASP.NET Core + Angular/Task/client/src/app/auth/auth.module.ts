@@ -5,7 +5,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TextInputComponent } from './text-input/text-input.component';
-import { RegisterComponent } from './register/register.component';
 
 const routes: Routes = [
   {
@@ -22,7 +21,6 @@ const routes: Routes = [
   declarations: [
     AuthComponent,
     TextInputComponent,
-    RegisterComponent
   ],
   imports: [
     CommonModule,

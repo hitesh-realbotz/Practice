@@ -116,7 +116,7 @@ namespace OnlineBookStoreAPI.Controllers
             //var qrCodeData = qrCodeGenerator.CreateQrCode(AuthenticatorUri, QRCodeGenerator.ECCLevel.Q);
 
 
-            return Ok(new AuthenticatorDetailsVM
+            return Ok(new QRDetailsDto
             {
                 SharedKey = FormatKey(unformattedKey),
 

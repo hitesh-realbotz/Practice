@@ -7,6 +7,8 @@ import { FileUploadModule } from 'ng2-file-upload';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormsModule } from '@angular/forms';
+import { NgxOtpInputModule } from 'ngx-otp-input';
+
 
 @NgModule({
   declarations: [],
@@ -20,7 +22,8 @@ import { FormsModule } from '@angular/forms';
     FileUploadModule,
     BsDropdownModule.forRoot(),
     PaginationModule.forRoot(),
-    FormsModule
+    FormsModule,
+    NgxOtpInputModule
 
 
   ],
@@ -31,7 +34,8 @@ import { FormsModule } from '@angular/forms';
     FileUploadModule,
     BsDropdownModule,
     PaginationModule,
-    FormsModule
+    FormsModule,
+    NgxOtpInputModule
     
   ]
 })
