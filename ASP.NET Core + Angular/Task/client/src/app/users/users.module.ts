@@ -6,7 +6,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { QRCodeModule } from 'angularx-qrcode';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../_modules/shared/shared.module';
+import { SharedModule } from '../_shared/shared.module';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { DetailsComponent } from './user-profile/details/details.component';
 import { SecurityComponent } from './user-profile/security/security.component';

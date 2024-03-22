@@ -31,9 +31,6 @@ export class BookItemComponent {
       this.cartService.addToCartFromItem(book).subscribe({
         next: response => {
           this.toastr.success("Book added in cart!");
-        },
-        error: error => {
-          this.toastr.warning(error.error.message);
         }
       });
     } else {

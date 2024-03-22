@@ -15,6 +15,8 @@ namespace OnlineBookStoreAPI.Data
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<OrderBook> OrderBooks { get; set; }
         public DbSet<Photo> Photos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
@@ -28,6 +30,9 @@ namespace OnlineBookStoreAPI.Data
             //modelbuilder.Entity<Book>().Property(b => b.ISBN).IsRequired();
             modelbuilder.Entity<Book>().HasIndex(b => b.ISBN).IsUnique();
             modelbuilder.Entity<Book>().HasIndex(b => b.Title).IsUnique();
+
+            modelbuilder.Entity<OrderBook>().HasIndex(b => b.ISBN);
+            modelbuilder.Entity<OrderBook>().HasIndex(b => b.Title);
 
         }
 

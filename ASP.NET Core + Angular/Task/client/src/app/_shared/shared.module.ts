@@ -6,12 +6,15 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { FileUploadModule } from 'ng2-file-upload';
 import { BsDropdownModule } from 'ngx-bootstrap/dropdown';
 import { PaginationModule } from 'ngx-bootstrap/pagination';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxOtpInputModule } from 'ngx-otp-input';
+import { PaymentComponent } from './payment/payment.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    PaymentComponent
+  ],
   imports: [
     CommonModule,
     ToastrModule.forRoot({
@@ -23,7 +26,8 @@ import { NgxOtpInputModule } from 'ngx-otp-input';
     BsDropdownModule.forRoot(),
     PaginationModule.forRoot(),
     FormsModule,
-    NgxOtpInputModule
+    NgxOtpInputModule,
+    ReactiveFormsModule
 
 
   ],
@@ -35,7 +39,8 @@ import { NgxOtpInputModule } from 'ngx-otp-input';
     BsDropdownModule,
     PaginationModule,
     FormsModule,
-    NgxOtpInputModule
+    NgxOtpInputModule,
+    ReactiveFormsModule
     
   ]
 })

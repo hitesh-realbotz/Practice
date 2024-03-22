@@ -6,6 +6,7 @@
         public IUserRepository UserRepository { get; }
         public ICartRepository CartRepository { get; }
         public ICartItemRepository CartItemRepository { get; }
+        public IOrderRepository OrderRepository { get; }
 
         void SaveChanges();
         Task<bool> SaveChangesAsync();

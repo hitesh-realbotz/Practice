@@ -70,10 +70,6 @@ export class DetailsComponent implements OnInit {
       this.userService.updateProfile(this.userForm.value).subscribe({
         next: response => {
           this.toastr.success("Profile updated!");
-        },
-        error: error => {
-          console.log(error.error);
-          this.toastr.info("Try again!", error.error);
         }
       })
     } else {

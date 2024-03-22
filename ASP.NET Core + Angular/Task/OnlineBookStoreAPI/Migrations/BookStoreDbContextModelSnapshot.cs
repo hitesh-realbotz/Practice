@@ -350,8 +350,16 @@ namespace OnlineBookStoreAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("OrderDate")
+                    b.Property<string>("ContactNo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("ShippingMethod")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("float");
@@ -363,6 +371,47 @@ namespace OnlineBookStoreAPI.Migrations
                     b.ToTable("Orders");
                 });
 
+            modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderBook", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Author")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("BookId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ISBN")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BookId");
+
+                    b.HasIndex("ISBN");
+
+                    b.HasIndex("Title");
+
+                    b.ToTable("OrderBooks");
+                });
+
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderItem", b =>
                 {
                     b.Property<int>("Id")
@@ -371,10 +420,10 @@ namespace OnlineBookStoreAPI.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("BookId")
+                    b.Property<int>("OrderBookId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderId")
+                    b.Property<int>("OrderId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -385,11 +434,11 @@ namespace OnlineBookStoreAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BookId");
+                    b.HasIndex("OrderBookId");
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItems");
                 });
 
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.Photo", b =>
@@ -409,6 +458,9 @@ namespace OnlineBookStoreAPI.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
+                    b.Property<int?>("OrderBookId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -422,6 +474,8 @@ namespace OnlineBookStoreAPI.Migrations
                     b.HasIndex("AppUserId");
 
                     b.HasIndex("BookId");
+
+                    b.HasIndex("OrderBookId");
 
                     b.ToTable("Photos");
                 });
@@ -516,19 +570,32 @@ namespace OnlineBookStoreAPI.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderItem", b =>
+            modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderBook", b =>
                 {
                     b.HasOne("OnlineBookStoreAPI.Models.Domain.Book", "Book")
-                        .WithMany("OrderItems")
+                        .WithMany("OrderBooks")
                         .HasForeignKey("BookId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderItem", b =>
+                {
+                    b.HasOne("OnlineBookStoreAPI.Models.Domain.OrderBook", "OrderBook")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderBookId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OnlineBookStoreAPI.Models.Domain.Order", null)
                         .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("Book");
+                    b.Navigation("OrderBook");
                 });
 
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.Photo", b =>
@@ -541,9 +608,15 @@ namespace OnlineBookStoreAPI.Migrations
                         .WithMany("Photos")
                         .HasForeignKey("BookId");
 
+                    b.HasOne("OnlineBookStoreAPI.Models.Domain.OrderBook", "OrderBook")
+                        .WithMany("Photos")
+                        .HasForeignKey("OrderBookId");
+
                     b.Navigation("AppUser");
 
                     b.Navigation("Book");
+
+                    b.Navigation("OrderBook");
                 });
 
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.AppUser", b =>
@@ -560,7 +633,7 @@ namespace OnlineBookStoreAPI.Migrations
                 {
                     b.Navigation("CartItems");
 
-                    b.Navigation("OrderItems");
+                    b.Navigation("OrderBooks");
 
                     b.Navigation("Photos");
                 });
@@ -573,6 +646,13 @@ namespace OnlineBookStoreAPI.Migrations
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderBook", b =>
+                {
+                    b.Navigation("OrderItems");
+
+                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

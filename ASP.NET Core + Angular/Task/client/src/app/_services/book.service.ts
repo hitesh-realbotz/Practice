@@ -1,9 +1,8 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Book } from '../_models/book';
-import { Subject, map, tap } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
+import { BehaviorSubject, tap } from 'rxjs';
 import { BookParams } from '../_models/bookParamas';
 import { getPaginatedResult, getPaginationHeaders } from '../_models/Helpers/paginationHelper';
 import { Pagination } from '../_models/Helpers/pagination';
@@ -16,11 +15,12 @@ export class BookService {
   baseUrl = environment.apiUrl;
 
   books: Book[] = [];
-  bookChanged = new Subject<Book[]>();
+  // bookChanged = new Subject<Book[]>();
+  bookChanged = new BehaviorSubject<Book[] | null>(null);
   bookParams: BookParams = new BookParams();
   pagination: Pagination | undefined;
 
-  constructor(private http: HttpClient, private toastr: ToastrService) { }
+  constructor(private http: HttpClient) { }
 
 
   getBookParams() {

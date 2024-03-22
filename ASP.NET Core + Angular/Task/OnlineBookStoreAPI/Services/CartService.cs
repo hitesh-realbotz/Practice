@@ -49,7 +49,7 @@ namespace OnlineBookStoreAPI.Services
                 {
                     if (item.BookId == book.Id)
                     {
-                        item.Quantity++;
+                        _ = (book.AvailableQuantity > item.Quantity) ? item.Quantity++ : throw new BadHttpRequestException($"Book's available qty is less than required quantity!!"); ;
                         isCartItem = true;
                     }
                 }

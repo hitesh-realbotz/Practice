@@ -32,11 +32,18 @@ namespace OnlineBookStoreAPI.Mappings
 
             CreateMap<Book, BookDto>()
                 .ForMember(bd => bd.PhotoUrl, opt => opt.MapFrom(b => b.Photos.FirstOrDefault(p => p.IsMain).Url));
-            CreateMap<BookDto, Book>();
+            CreateMap<OrderDto, Order>();
+
+            CreateMap<OrderBook, OrderBookDto>()
+                .ForMember(bd => bd.PhotoUrl, opt => opt.MapFrom(b => b.Photos.FirstOrDefault(p => p.IsMain).Url));
+            CreateMap<OrderBookDto, OrderBook>();
+            
+
             CreateMap<PhotoDto, Photo>().ReverseMap();
 
             CreateMap<UserProfileDto, SignUpResponseDto>();
             CreateMap<SignUpResponseDto, UserProfileDto>();
+
             CreateMap<CartItem, CartItemDto>()
                 .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.Quantity * c.Book.Price)));
 
@@ -47,8 +54,10 @@ namespace OnlineBookStoreAPI.Mappings
 
             CreateMap<CartDto, Cart>();
             CreateMap<CartItemDto, CartItem>();
+
+            CreateMap<OrderItem, OrderItemDto>().ReverseMap();
+            CreateMap<Order, OrderDto>().ReverseMap();
+
         }
-
-
     }
 }

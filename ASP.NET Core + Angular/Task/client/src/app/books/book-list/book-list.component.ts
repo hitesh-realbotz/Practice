@@ -36,7 +36,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     });
     
     this.componentSubscriptions.add(this.subService.getBookChanges().subscribe(
-      (books: Book[]) => {
+      (books) => {
         this.pagination = this.bookService.pagination;
         this.getPagedData();
       }

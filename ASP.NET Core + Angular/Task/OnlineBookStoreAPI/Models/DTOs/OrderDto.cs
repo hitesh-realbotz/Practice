@@ -1,15 +1,16 @@
-﻿namespace OnlineBookStoreAPI.Models.Domain
+﻿using OnlineBookStoreAPI.Models.Domain;
+
+namespace OnlineBookStoreAPI.Models.DTOs
 {
-    public class Order
+    public class OrderDto
     {
-        public int Id { get; set; }
+        public int Id { get; set; } = 0;
         public string BillingName { get; set; }
         public string Address { get; set; }
         public string ContactNo { get; set; }
         public string ShippingMethod { get; set; }
-        public double TotalPrice { get; set; }
         public DateTime Date { get; set; } = DateTime.Now;
-        public AppUser AppUser { get; set; }
-        public List<OrderItem> OrderItems { get; set; }
+        public double TotalPrice { get; set; }
+        public List<OrderItemDto> OrderItems { get; set; }
     }
 }

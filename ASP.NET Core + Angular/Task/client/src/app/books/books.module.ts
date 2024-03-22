@@ -8,7 +8,7 @@ import { BookEditComponent } from './book-edit/book-edit.component';
 import { BookItemComponent } from './book-list/book-item/book-item.component';
 import { CartComponent } from './cart/cart.component';
 import { ReactiveFormsModule } from '@angular/forms';
-import { SharedModule } from '../_modules/shared/shared.module';
+import { SharedModule } from '../_shared/shared.module';
 import { RouterModule } from '@angular/router';
 
 
@@ -25,9 +25,9 @@ import { RouterModule } from '@angular/router';
     CommonModule,
     BooksRoutingModule,
     SharedModule,
-    ReactiveFormsModule,
-    RouterModule
-    
+    RouterModule,
+
+
   ]
 })
 export class BooksModule { }
