@@ -16,7 +16,7 @@ export class CartService {
 
   baseUrl = environment.apiUrl;
   cartChanged = new BehaviorSubject<Cart | null>(null);
-  cart: Cart | undefined;
+  cart!: Cart | null;
   totalCartAmount: number = 0;
   totalSelectedCartAmount: number = 0;
 
@@ -57,10 +57,10 @@ export class CartService {
     return this.http.post<Cart>(this.baseUrl + 'cart/decrease-qty', cartItem)
       .pipe(
         tap(response => {
-          if (response) {
+          // if (response) {
             this.cart = response;
             this.cartChanged.next(this.cart);
-          }
+          // }
         })
       );
   }
@@ -81,7 +81,7 @@ export class CartService {
       .pipe(
         tap(bool => {
           if (bool) {
-            this.cart = undefined;
+            this.cart = null;
             this.cartChanged.next(null);
           }
         })
@@ -89,11 +89,11 @@ export class CartService {
   }
 
   addToCartFromItem(book: Book) {
-    const cartItem = new CartItem(book, 1, book.price, true);
+    const cartItem = new CartItem(book, 1, book.unitPrice, true);
     return this.addToCart(cartItem);
   }
 
-  setCartItems(cart: Cart) {
+  setCartItems(cart: Cart | null) {
     this.cart = cart;
     this.cartChanged.next(this.cart);
   }

@@ -10,6 +10,7 @@ import { SharedModule } from '../_shared/shared.module';
 import { PhotoEditorComponent } from './photo-editor/photo-editor.component';
 import { DetailsComponent } from './user-profile/details/details.component';
 import { SecurityComponent } from './user-profile/security/security.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 
 @NgModule({
@@ -18,7 +19,8 @@ import { SecurityComponent } from './user-profile/security/security.component';
     UserProfileComponent,
     PhotoEditorComponent,
     DetailsComponent,
-    SecurityComponent
+    SecurityComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,

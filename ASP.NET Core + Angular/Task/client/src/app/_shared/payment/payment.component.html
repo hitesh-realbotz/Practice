@@ -76,7 +76,7 @@
                 </div>
                 <div class="col-sm-4 form-group">
                     <label for="pin">Pin</label>
-                    <input type="password" id="pin" name="pin" formControlName="pin" class="form-control" required>
+                    <input type="password" id="pin" name="pin" formControlName="pin" class="form-control" placeholder="Enter OTP" required>
                     <span *ngIf="!paymentForm.get('pin')?.valid && paymentForm.get('pin')?.touched" class="help-block">
                         <span *ngIf="paymentForm.get('pin')?.hasError('checkPin')">Please enter a valid Pin!</span>
                         <span *ngIf="paymentForm.get('pin')?.hasError('required')"> This field is required!</span>

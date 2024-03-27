@@ -123,6 +123,12 @@ namespace OnlineBookStoreAPI.Services
             return existingUser;
         }
 
-       
+        public async Task<UserDashboardStatisticDto?> GetUserDashStatAsync()
+        {
+            var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value.ToString();
+            var user = await uow.UserRepository.GetUserCartAndOrdersAsync(email);
+            if (user == null) throw new BadHttpRequestException($"User with {email} not found!");
+            return mapper.Map<UserDashboardStatisticDto>(user);
+        }
     }
 }

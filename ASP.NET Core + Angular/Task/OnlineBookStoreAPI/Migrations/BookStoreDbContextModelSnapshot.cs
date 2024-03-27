@@ -261,15 +261,15 @@ namespace OnlineBookStoreAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<double>("UnitPrice")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
@@ -344,6 +344,7 @@ namespace OnlineBookStoreAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("AppUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("BillingName")
@@ -394,9 +395,6 @@ namespace OnlineBookStoreAPI.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -426,10 +424,17 @@ namespace OnlineBookStoreAPI.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
+                    b.Property<string>("PhotoUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
                     b.Property<double>("TotalPrice")
+                        .HasColumnType("float");
+
+                    b.Property<double>("UnitPrice")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
@@ -458,9 +463,6 @@ namespace OnlineBookStoreAPI.Migrations
                     b.Property<bool>("IsMain")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("OrderBookId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -474,8 +476,6 @@ namespace OnlineBookStoreAPI.Migrations
                     b.HasIndex("AppUserId");
 
                     b.HasIndex("BookId");
-
-                    b.HasIndex("OrderBookId");
 
                     b.ToTable("Photos");
                 });
@@ -565,7 +565,9 @@ namespace OnlineBookStoreAPI.Migrations
                 {
                     b.HasOne("OnlineBookStoreAPI.Models.Domain.AppUser", "AppUser")
                         .WithMany("Orders")
-                        .HasForeignKey("AppUserId");
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("AppUser");
                 });
@@ -608,15 +610,9 @@ namespace OnlineBookStoreAPI.Migrations
                         .WithMany("Photos")
                         .HasForeignKey("BookId");
 
-                    b.HasOne("OnlineBookStoreAPI.Models.Domain.OrderBook", "OrderBook")
-                        .WithMany("Photos")
-                        .HasForeignKey("OrderBookId");
-
                     b.Navigation("AppUser");
 
                     b.Navigation("Book");
-
-                    b.Navigation("OrderBook");
                 });
 
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.AppUser", b =>
@@ -651,8 +647,6 @@ namespace OnlineBookStoreAPI.Migrations
             modelBuilder.Entity("OnlineBookStoreAPI.Models.Domain.OrderBook", b =>
                 {
                     b.Navigation("OrderItems");
-
-                    b.Navigation("Photos");
                 });
 #pragma warning restore 612, 618
         }

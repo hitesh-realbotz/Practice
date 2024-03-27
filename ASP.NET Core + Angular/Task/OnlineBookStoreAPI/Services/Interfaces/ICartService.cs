@@ -7,7 +7,8 @@ namespace OnlineBookStoreAPI.Services.Interfaces
         public Task<CartDto> AddToCartAsync(CartItemDto cartItemDto);
         public Task<CartDto> DecreaseCartItemQtyAsync(CartItemDto cartItemDto);
         public Task<CartDto> ToggleCheckCartItemAsync(CartItemDto cartItemDto);
-        public Task<CartDto> GetUserCartAsync();
+        public Task<CartDto?> GetUserCartAsync();
+        //public Task<string> GetUserCartAsync();
         public Task<bool> ClearCartAsync();
     }
 }

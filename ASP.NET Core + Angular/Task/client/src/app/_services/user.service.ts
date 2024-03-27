@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment';
 import { AccountService } from './account.service';
 import { User } from '../_models/user';
 import { tap } from 'rxjs';
+import { UserDashboardStat } from '../_models/userDashboardStat';
 
 @Injectable({
   providedIn: 'root'
@@ -35,4 +36,9 @@ export class UserService {
   deletePhoto(publicId: string) {
     return this.http.delete<User>(this.baseUrl + 'users/delete-photo'+ '?publicId='+publicId);
   }
+
+  getUserDashboardStat() {
+    return this.http.get<UserDashboardStat>(this.baseUrl + 'users');
+  }
+
 }

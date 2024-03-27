@@ -13,7 +13,7 @@
                 <p class="list-group-item-text">{{book.description}}</p>
             </div>
             <div>
-                <p class="list-group-item-text">Unit Price : {{book.price}} </p>
+                <p class="list-group-item-text">Unit Price : {{book.unitPrice}} </p>
             </div>
             <div>
                 <p class="list-group-item-text">Available Quantity : {{book.availableQuantity}}</p>
@@ -21,7 +21,7 @@
         </div>
         <div class="item-actions">
             <div class="item-action">
-                <button class="btn btn-success" (click)="onAddToCart($event, book)">Add to Cart</button>
+                <button class="btn btn-primary" (click)="onAddToCart($event, book)">Add to Cart</button>
             </div>
 
         </div>

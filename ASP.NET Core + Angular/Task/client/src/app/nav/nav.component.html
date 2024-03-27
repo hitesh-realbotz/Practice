@@ -16,39 +16,41 @@
                 <li routerLinkActive="active" class="nav-item">
                     <a class="nav-link" aria-current="page" routerLink="/aboutus">About Us</a>
                 </li>
-                <ng-container *ngIf="isAuthenticated ">
+                <!-- <ng-container *ngIf="isAuthenticated ">
                     <li routerLinkActive="active" class="nav-item">
                         <a class="nav-link" aria-current="page" routerLink="/user">DashBoard</a>
                     </li>
                     <li routerLinkActive="active" class="nav-item">
-                        <!-- <a class="nav-link" aria-current="page" routerLink="/items"  (click)="onProfile()">Profile</a> -->
                         <a class="nav-link" aria-current="page" routerLink="/user/profile">Profile</a>
                     </li>
-                    <!-- <li routerLinkActive="active" class="nav-item" >
-              <a class="nav-link" aria-current="page" [routerLink]="role === 'buyer' ? 'shop/details' : 'shop'"> {{role === 'buyer' ? 'Become a Seller' : 'Shop'}}</a>
-            </li> -->
-
-                </ng-container>
+                    <li routerLinkActive="active" class="nav-item">
+                        <a class="nav-link" aria-current="page"
+                            [routerLink]="role === 'buyer' ? 'shop/details' : 'shop'"> {{role === 'buyer' ? 'Become a
+                            Seller' : 'Shop'}}</a>
+                    </li>
+                </ng-container> -->
             </ul>
 
             <div class="dropdown" *ngIf="(accountService.currentUser$ | async) as user" dropdown>
                 <img src="{{user.photoUrl || './assets/user.png'}}" alt="user photo">
-                <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>Welcome {{user.name| titlecase}}</a>
+                <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>Welcome {{user.name|
+                    titlecase}}</a>
                 <div class="dropdown-menu" *dropdownMenu>
-                  <a routerLink="/user/profile" class="dropdown-item">Edit Profile</a>
-                  <a class="dropdown-item" routerLink="/auth" (click)="onLogout()">Logout</a>
+                    <a routerLink="/user/profile" class="dropdown-item">Edit Profile</a>
+                    <a routerLink="/user/cart" class="dropdown-item">Cart - <span class="stats">
+                            {{cartItemCount}} </span></a>
+                    <a routerLink="/order" class="dropdown-item">Orders - <span class="stats"> {{ordersCount}} </span></a>
+                    <a class="dropdown-item" routerLink="/auth" (click)="onLogout()">Logout</a>
                 </div>
-              </div>
+            </div>
             <ul class="navbar-nav me-right mb-2 mb-sm-0">
                 <!-- <li routerLinkActive="active" class="nav-item" *ngIf="isAuthenticated">
                     <a class="nav-link" aria-current="page" routerLink="/auth" (click)="onLogout()">Logout</a>
                 </li> -->
                 <li routerLinkActive="active" class="nav-item" *ngIf="!isAuthenticated">
-                    <a class="nav-link" aria-current="page" routerLink="auth" >Login</a>
+                    <a class="nav-link" aria-current="page" routerLink="auth">Login</a>
                 </li>
             </ul>
         </div>
     </div>
 </nav>
-
-

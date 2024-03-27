@@ -20,6 +20,11 @@ namespace OnlineBookStoreAPI.Repositories
 
             return await dbContext.Users.Include(u => u.Photos).Include(u => u.Cart).FirstOrDefaultAsync(u => u.Email == email);
         }
+        public async Task<AppUser?> GetUserCartAndOrdersAsync(string email)
+        {
+
+            return await dbContext.Users.Include(u => u.Photos).Include(u => u.Cart).ThenInclude(c => c.CartItems).Include(u => u.Orders).FirstOrDefaultAsync(u => u.Email == email);
+        }
 
 
     }

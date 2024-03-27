@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, map, tap } from 'rxjs';
+import { BehaviorSubject, Observable, map, tap } from 'rxjs';
 import { User, UserWithQRData } from '../_models/user';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { QRData } from '../_models/qrdata';
 import { CartService } from './cart.service';
@@ -13,7 +13,7 @@ export class AccountService {
   baseUrl = environment.apiUrl;
   public currentUserSource = new BehaviorSubject<User | null>(null);
   currentUser$ = this.currentUserSource.asObservable();
-
+  user!: User | null;
   private cartService: CartService | undefined;
   constructor(private http: HttpClient, private injector: Injector) { }
 
@@ -21,20 +21,21 @@ export class AccountService {
   register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       tap(response => {
-        if (response) {
-          this.setCurrentUser(response);
-        }
+        this.user = response ;
       })
     )
   }
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       tap(response => {
-        if (response) {
+        if (response.twoFactorEnabled) {
           this.setCurrentUser(response);
           this.getCartServiceInstance();
           this.cartService?.setCartItems(response.cart);
+        }else{
+          this.user = response ;
         }
+
       })
     )
   }
@@ -47,9 +48,8 @@ export class AccountService {
   }
   verifyTwoFA(model: any) {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
-    return this.http.post<User>(this.baseUrl + 'account/verify', model).pipe(
+    return this.http.post<User>(this.baseUrl + 'account/two-fa-login', model).pipe(
       tap(response => {
-        console.log("Serv Verfiy = " + response.twoFactorEnabled);
         const user = response;
         if (user) {
           this.setCurrentUser(user);
@@ -84,7 +84,11 @@ export class AccountService {
   // }
 
   getQR() {
-    return this.http.post<QRData>(this.baseUrl + 'account/getqr', {}).pipe(
+    return this.http.post<QRData>(this.baseUrl + 'account/getqr', {
+      headers: new HttpHeaders({
+        Authorization : 'Bearer '+this.user?.token
+      })
+    }).pipe(
       tap(response => {
         console.log("Serv GetQR = " + response.authenticatorUri);
 

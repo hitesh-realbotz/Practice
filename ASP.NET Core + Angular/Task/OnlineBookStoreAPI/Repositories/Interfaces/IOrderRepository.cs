@@ -6,7 +6,8 @@ namespace OnlineBookStoreAPI.Repositories.Interfaces
 {
     public interface IOrderRepository
     {
-        public Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams);
+        public Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams, string userId);
+        public Task<Order?> GetOrderByIdAsync(int id, string userId);
         public Task<Order> CreateAsync(Order order);
     }
 }

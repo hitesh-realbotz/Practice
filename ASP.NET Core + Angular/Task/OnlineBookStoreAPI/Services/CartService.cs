@@ -148,12 +148,15 @@ namespace OnlineBookStoreAPI.Services
 
 
 
-        public async Task<CartDto> GetUserCartAsync()
+        public async Task<CartDto?> GetUserCartAsync()
         {
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value.ToString();
-            Cart userCart = await uow.CartRepository.GetByUserId(userId);
-            if (userCart == null) throw new BadHttpRequestException("Cart is blank!");
-            return mapper.Map<CartDto>(userCart);
+            Cart cart = await uow.CartRepository.GetByUserId(userId);
+            if (cart == null) throw new BadHttpRequestException("");
+            //if (userCart == null) return null;
+            return mapper.Map<CartDto>(cart);
+
+            //return userCart.GetTotalPrice().ToString();
         }
 
         private async Task<Book> BookExists(Book book)
@@ -163,7 +166,7 @@ namespace OnlineBookStoreAPI.Services
             return existingBook;
         }
 
-        
+
     }
 }
 

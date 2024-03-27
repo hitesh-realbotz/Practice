@@ -1,0 +1,119 @@
+
+
+.sorting-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; 
+    }
+
+.sort-control {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: normal;
+    justify-content: flex-end;
+}
+
+
+.sort-control label {
+    margin-right: 5px; 
+}
+
+.sort-control  input,
+.sort-control select { 
+    height: 35px;  
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 100%;
+}
+
+.sort-control button{ 
+    width: 100%;
+}
+
+.order{
+    display: flex;
+    width: 100%;
+    cursor: pointer;
+    /* height: 175px; */
+}
+.order-detail{
+    display: flex;
+    flex-direction: column;
+}
+
+/* .order:hover {
+    background-color: rgb(213, 228, 235);
+} */
+
+.item {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.item-image img {
+    width: 35px;
+    height: 35px;
+    object-fit: fill;
+    overflow: hidden;
+}
+
+.item-details {
+    display: flex;
+}
+
+.item-title {
+    width: 30%;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.item-description {
+    width: 40%;
+}
+
+strong{  
+    display: inline-block;
+    width: 120px;
+}
+
+  .no-items-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+ .no-items-container h1 {
+    font-size: 36px;
+    color: #ff0000;
+  }
+  
+  .no-items-container p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+
+  
+.card,
+.card .list-group-item {
+    border-top: inherit;
+    border-bottom: inherit;
+    background-color: lavender;
+}
+.card:hover,
+.card .list-group-item:hover {
+    border-top: inherit;
+    border-bottom: inherit;
+    background-color: rgb(191 191 227);
+}
+.card .list-group-item-heading{
+    color: red;
+    font-weight: 600;
+}
+.card .list-group-item-author{
+    color: #4a4d4f;
+}
+.list-group-item-tag{
+    color: #4a4d4f;
+    font-weight: 600;
+}

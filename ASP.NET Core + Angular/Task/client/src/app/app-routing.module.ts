@@ -3,13 +3,16 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AuthComponent } from './auth/auth.component';
 import { BooksComponent } from './books/books.component';
+import { NotFoundComponent } from './errors/not-found/not-found.component';
+import { authGuard } from './_guards/auth.guard';
+import { AboutUsComponent } from './_shared/about-us/about-us.component';
 
 const routes: Routes = [
-
+  {path: 'aboutus', component: AboutUsComponent },
   {
     path: 'user',
-    // canLoad: [AuthGuard],
-    // canActivate: [AuthGuard],
+    canLoad: [authGuard],
+    canActivate: [authGuard],
     loadChildren: () => {
         return import('./users/users.module').then(m => m.UsersModule);
     }
@@ -25,11 +28,17 @@ const routes: Routes = [
     }
   },
   {
+    path: 'order', loadChildren: () => {
+      return import('./orders/orders.module').then(m => m.OrdersModule);
+    }
+  },
+  {
     path: 'error', loadChildren: () => {
       return import('./errors/errors.module').then(m => m.ErrorsModule);
     }
   },
-  // { path: 'book', component: BooksComponent }
+  { path: '', redirectTo: '/book', pathMatch: 'full' },
+  { path: '**', component: NotFoundComponent },
 
 ]
 

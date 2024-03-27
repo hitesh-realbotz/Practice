@@ -9,5 +9,6 @@ namespace OnlineBookStoreAPI.Services.Interfaces
         public Task<UserProfileDto> SetMainPhotoAsync(string publicId);
         public Task<UserProfileDto> DeletePhotoAsync(string publicId);
         public Task<UserProfileDto> GetUserAsync(string email);
+        public Task<UserDashboardStatisticDto> GetUserDashStatAsync();
     }
 }

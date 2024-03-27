@@ -24,8 +24,10 @@ export interface Order {
 }
 
 export interface OrderItem {
-    quantity: number;   
+    quantity: number;  
+    unitPrice: number; 
     totalPrice: number;
+    photoUrl: string;
     orderBook?: OrderBook; 
 }
 
@@ -33,9 +35,8 @@ export interface OrderBook {
     title: string;
     author: string;
     isbn: string;
-    photoUrl: string;
-    price: number;
     description: string;
-    photos: Photo[];
+    bookId: number;
+   
 
 }

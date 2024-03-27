@@ -7,6 +7,7 @@
         public ICartRepository CartRepository { get; }
         public ICartItemRepository CartItemRepository { get; }
         public IOrderRepository OrderRepository { get; }
+        public IOrderBookRepository OrderBookRepository { get; }
 
         void SaveChanges();
         Task<bool> SaveChangesAsync();

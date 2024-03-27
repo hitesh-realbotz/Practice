@@ -17,7 +17,7 @@ import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
   styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit, OnDestroy {
-  cart: Cart | undefined;
+  cart!: Cart | null;
   totalCartAmount: number = 0;
   totalSelectedCartAmount: number = 0;
   componentSubscriptions = new Subscription();
@@ -33,7 +33,7 @@ export class CartComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    this.cartService.getCart();
+    // this.cartService.getCart();
     //Subscribe to ItemsChanges
     this.componentSubscriptions.add(
       this.subService.getBookChanges().subscribe({
@@ -47,7 +47,9 @@ export class CartComponent implements OnInit, OnDestroy {
     this.componentSubscriptions.add(
       this.subService.getLoggedUserChanges().subscribe({
         next: (user: User | null) => {
-          if (user != null) {           
+          console.log('logUser Subscribed');
+          console.log(!!user);
+          if (!!user) {           
             this.cart = user.cart;
             this.cartService.getCart();
           }
@@ -63,7 +65,7 @@ export class CartComponent implements OnInit, OnDestroy {
             this.cart = cart;
             // this.cdr.detectChanges();
           }else{
-            this.cart = undefined;
+            this.cart = null;
           }
         },
       }
@@ -117,10 +119,12 @@ export class CartComponent implements OnInit, OnDestroy {
   //Redirects to Payment Page
   onCheckout() {
     // this.router.navigate(['items/payment'], { relativeTo: this.route });
-    this.router.navigate(['items/payment']);
+    this.router.navigate(['book/payment']);
   }
 
-
+  onHome(){
+    this.router.navigate(['/book']);
+  }
   //Unsubscribe to all subscriptions
   ngOnDestroy() {
     this.componentSubscriptions.unsubscribe();

@@ -7,9 +7,8 @@ namespace OnlineBookStoreAPI.Models.DTOs
         public string Title { get; set; }
         public string Author { get; set; }
         public string ISBN { get; set; }
-        public double Price { get; set; }
         public string Description { get; set; }
-        public List<PhotoDto> Photos { get; set; }
-        public string PhotoUrl { get; set; }
+        public int BookId { get; set; }
+        //public List<PhotoDto> Photos { get; set; }
     }
 }

@@ -9,11 +9,15 @@ import { PaginationModule } from 'ngx-bootstrap/pagination';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgxOtpInputModule } from 'ngx-otp-input';
 import { PaymentComponent } from './payment/payment.component';
+import { AboutUsComponent } from './about-us/about-us.component';
+import { OtpInputModalComponent } from './otp-input-modal/otp-input-modal.component';
 
 
 @NgModule({
   declarations: [
-    PaymentComponent
+    PaymentComponent,
+    AboutUsComponent,
+    OtpInputModalComponent
   ],
   imports: [
     CommonModule,

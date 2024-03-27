@@ -77,7 +77,7 @@ namespace OnlineBookStoreAPI.Services
 
         public async Task<UserProfileDto?> LoginAsync(LoginDto loginDto)
         {
-            
+
             AppUser? user = await GetUser(loginDto.Email);
             if (user == null) throw new UnauthorizedAccessException("Invalid email!");
 
@@ -146,6 +146,19 @@ namespace OnlineBookStoreAPI.Services
         private async Task<bool> UserExists(string email)
         {
             return await userManager.Users.AnyAsync(x => x.Email == email.ToLower());
+        }
+
+        public async Task<UserProfileDto?> TwoFALoginAsync(TwoFALoginDto twoFALoginDto)
+        {
+            var user = await GetUser(twoFALoginDto.Email);
+            if (user == null) throw new UnauthorizedAccessException("Re-Login & Try again!");
+
+            var verificationCode = twoFALoginDto.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+
+            var isValid = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
+            if (isValid) return mapper.Map<UserProfileDto>(user);
+
+            throw new BadHttpRequestException("Enter Valid Code!");
         }
     }
 }
