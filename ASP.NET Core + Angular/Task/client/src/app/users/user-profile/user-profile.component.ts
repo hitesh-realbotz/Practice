@@ -36,7 +36,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
         }
       }
     }));
-    // this.initializeForm();
   }
 
 

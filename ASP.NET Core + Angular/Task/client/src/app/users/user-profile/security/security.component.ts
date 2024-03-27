@@ -31,7 +31,7 @@ export class SecurityComponent implements OnInit {
 
 
   ngOnInit(): void {
-    if (!!this.user) {
+    if (!!this.user && !this.user.twoFactorEnabled) {
       this.OnGetQR();
     } 
   }
@@ -59,11 +59,8 @@ export class SecurityComponent implements OnInit {
           console.log("Two Factor Authentication Set!" + response.twoFactorEnabled);
           this.qrData = {} as QRData;          
           this.toastr.success("Two FA Set!");
-        },
-        error: error => {
-          console.log(error.error);
-          this.toastr.info("Try again!", error.error.message);
-        }
+          this.router.navigate(['/user/profile']);
+        }        
       });
     }
     else {
@@ -72,6 +69,7 @@ export class SecurityComponent implements OnInit {
       this.toastr.info("Enter OTP!!");
     }
     this.code = '';
+    this.onClear();
   }
   //Exit from Form
   onClear() {

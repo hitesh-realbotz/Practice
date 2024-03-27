@@ -8,5 +8,6 @@
         public string PublicId { get; set; }
         public AppUser? AppUser { get; set; }
         public Book? Book { get; set; }
+        public OrderBook? OrderBook { get; set; }
     }
 }

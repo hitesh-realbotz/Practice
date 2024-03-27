@@ -1,0 +1,96 @@
+<div class="row">
+    <div class="col-xs-12" >
+        <form class="form"  [formGroup]="paymentForm" (ngSubmit)="onSubmit($event)">
+            <!-- <form class="form" [formGroup]="userForm" (ngSubmit)="onSubmitProfile($event)"> -->
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <label for="billingName">Buyer Name</label>
+                        <input type="text" name="billingName" id="billingName" formControlName="billingName" class="form-control ">
+                        <span *ngIf="!paymentForm.get('billingName')?.valid && paymentForm.get('billingName')?.touched" class="help-block">
+                            <span *ngIf="paymentForm.get('billingName')?.hasError('checkWhiteSpace')">Please enter a valid Buyer Name!</span>
+                            <span *ngIf="paymentForm.get('billingName')?.hasError('required')"> This field is required!</span>
+                        </span>
+                        
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label for="contactNo">Contact No.</label>
+                        <input type="text" name="contactNo" id="contactNo" formControlName="contactNo" class="form-control ">
+                        <span *ngIf="!paymentForm.get('contactNo')?.valid && paymentForm.get('contactNo')?.touched" class="help-block">
+                            <span *ngIf="paymentForm.get('contactNo')?.hasError('checkContactNo')">Min. 10 digit ContactNo required!</span>
+                            <span *ngIf="paymentForm.get('contactNo')?.hasError('required')"> This field is required!</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group">
+                        <label for="address">Delivery Address</label>
+                        <textarea type="text" name="address" id="address" formControlName="address" class="form-control" rows="2"></textarea>
+                        <span *ngIf="!paymentForm.get('address')?.valid && paymentForm.get('address')?.touched" class="help-block">
+                            <span *ngIf="paymentForm.get('address')?.hasError('checkWhiteSpace')">Please enter a valid Address!</span>
+                            <span *ngIf="paymentForm.get('address')?.hasError('required')"> This field is required!</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-6 form-group">
+                <label for="shippingMethod">Shipping Method</label>
+                <!-- <select name="shippingMethod" id="shippingMethod" class="form-control" formControlName="shippingMethod">
+                    <option value="standard" selected>Standard</option>
+                    <option value="byair">By-Air</option>
+                </select> -->
+                <select name="shippingMethod" id="shippingMethod" class="form-control" formControlName="shippingMethod">
+                    <!-- <option *ngFor="let method of ['standard', 'byair']" [value]="method">{{ method | titlecase }}</option> -->
+                    <option *ngFor="let method of shippingMethods" [value]="method">{{ method | titlecase }}</option>
+                  </select>
+            </div>
+                <div class="col-sm-6 form-group">
+                    <label for="totalPrice">Amount</label>
+                    <input type="totalPrice" id="totalPrice" name="totalPrice" formControlName="totalPrice" class="form-control" readonly>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="col-sm-6 form-group">
+                    <label for="cardNo">Card No.</label>
+                    <input type="text" id="cardNo" name="cardNo" formControlName="cardNo" class="form-control">
+                    <span *ngIf="!paymentForm.get('cardNo')?.valid && paymentForm.get('cardNo')?.touched" class="help-block">
+                        <span *ngIf="paymentForm.get('cardNo')?.hasError('checkCardNo')">Please enter a valid Card No.!</span>
+                        <span *ngIf="paymentForm.get('cardNo')?.hasError('checkCardNoLength')">Min. 16 digit Card No. required!!</span>
+                        <span *ngIf="paymentForm.get('cardNo')?.hasError('required')"> This field is required!</span>
+                    </span>
+                </div>
+                <div class="col-sm-2 form-group">
+                    <label for="cvv">CVV</label>
+                    <input type="password" id="cvv" name="cvv" formControlName="cvv" class="form-control" required>
+                    <span *ngIf="!paymentForm.get('cvv')?.valid && paymentForm.get('cvv')?.touched" class="help-block">
+                        <span *ngIf="paymentForm.get('cvv')?.hasError('checkCVV')">Please enter a valid CVV!</span>
+                        <span *ngIf="paymentForm.get('cvv')?.hasError('required')"> This field is required!</span>
+                    </span>
+                </div>
+                <div class="col-sm-4 form-group">
+                    <label for="pin">Pin</label>
+                    <input type="password" id="pin" name="pin" formControlName="pin" class="form-control" required>
+                    <span *ngIf="!paymentForm.get('pin')?.valid && paymentForm.get('pin')?.touched" class="help-block">
+                        <span *ngIf="paymentForm.get('pin')?.hasError('checkPin')">Please enter a valid Pin!</span>
+                        <span *ngIf="paymentForm.get('pin')?.hasError('required')"> This field is required!</span>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 form-btn-group">
+                    <!-- <button type="submit" class="btn btn-success form-btn" [disabled]="!paymentForm.valid">Confirm</button> -->
+                    <button type="submit" class="btn btn-success form-btn" >Confirm</button>
+                    <button type="button" class="btn btn-danger form-btn" (click)="onCancel()">Cancel</button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>

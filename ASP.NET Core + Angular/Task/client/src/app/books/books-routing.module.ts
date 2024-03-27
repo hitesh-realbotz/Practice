@@ -5,8 +5,12 @@ import { BooksComponent } from './books.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { booksResolverResolver } from './books-resolver.resolver';
+import { PaymentComponent } from '../_shared/payment/payment.component';
+import { cartResolver } from '../_resolver/cart.resolver';
 
 const routes: Routes = [
+
+  { path: 'payment', component: PaymentComponent, resolve: [cartResolver]},
   {
     path: '', component: BooksComponent,
     children: [

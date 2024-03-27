@@ -37,7 +37,7 @@ export class CartComponent implements OnInit, OnDestroy {
     //Subscribe to ItemsChanges
     this.componentSubscriptions.add(
       this.subService.getBookChanges().subscribe({
-        next: (Books: Book[]) => {
+        next: (Books) => {
             this.cartService.getCart();
         }
       })
@@ -76,9 +76,6 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartService.clearCart().subscribe({
       next: response => {
         this.toastr.info("All CartItems Removed!");
-      },
-      error: error => {
-        this.toastr.warning(error.error.message);
       }
     });
   }
@@ -92,9 +89,6 @@ export class CartComponent implements OnInit, OnDestroy {
         } else {
           this.toastr.info("CartItem removed!");
         }
-      },
-      error: error => {
-        this.toastr.warning(error.error.message);
       }
     })
   }
@@ -104,9 +98,6 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartService.addToCart(item).subscribe({
       next: response => {
         this.toastr.info("CartItem's quantity incremented!");
-      },
-      error: error => {
-        this.toastr.warning(error.error.message);
       }
     })
   }
@@ -118,9 +109,6 @@ export class CartComponent implements OnInit, OnDestroy {
     this.cartService.toggleCheckItem(item).subscribe({
       next: response => {
         this.toastr.info("CartItem Toggled!!");
-      },
-      error: error => {
-        this.toastr.warning(error.error.message);
       }
     })
   }

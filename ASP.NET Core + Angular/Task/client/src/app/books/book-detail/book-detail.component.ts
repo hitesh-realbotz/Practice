@@ -35,7 +35,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
             this.book = book;
           },
           error: error => {
-            this.toastr.info("Try again!", error.error.message);
             this.router.navigate(['/book']);
           }
         });
@@ -49,9 +48,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       this.cartService.addToCartFromItem(book).subscribe({
         next: response => {
           this.toastr.success("Book added in cart!");
-        },
-        error: error => {
-          this.toastr.warning(error.error.message);
         }
       });
     } else {

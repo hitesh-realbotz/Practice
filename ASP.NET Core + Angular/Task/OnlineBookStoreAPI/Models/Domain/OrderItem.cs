@@ -5,6 +5,9 @@
         public int Id { get; set; }
         public int Quantity { get; set; }
         public double TotalPrice { get; set; }
-        public Book Book { get; set; }
+        public int OrderId { get; set; }
+        public int OrderBookId { get; set; }
+        public OrderBook OrderBook { get; set; }
+       
     }
 }

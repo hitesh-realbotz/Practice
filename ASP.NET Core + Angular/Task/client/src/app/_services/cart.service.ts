@@ -32,6 +32,16 @@ export class CartService {
         })
       );
   }
+  getCheckedCartItemsPrice() {
+    return this.http.get<Cart>(this.baseUrl + 'cart/checked-item-price')
+      .pipe(
+        tap(response => {
+          if (response) {
+            this.setCartItems(response);
+          }
+        })
+      );
+  }
 
   addToCart(cartItem: CartItem) {
     return this.http.post<Cart>(this.baseUrl + 'cart', cartItem)

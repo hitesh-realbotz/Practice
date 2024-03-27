@@ -4,38 +4,20 @@ import { inject } from '@angular/core';
 import { Book } from '../_models/book';
 import { Observable, tap } from 'rxjs';
 
-export const booksResolverResolver: ResolveFn<boolean | Book[] | Observable<Book[]> | Promise<Book[] >> = (route, state) => {
+export const booksResolverResolver: ResolveFn<boolean | Book[] | Observable<Book[]> | Promise<Book[]>> = (route, state) => {
   const bookService = inject(BookService);
 
-  
-    bookService.getBooks(bookService.getBookParams())
-      // .pipe(
-      //   tap(response => {
-      //     if (response.result && response.pagination) {
-      //       bookService.setBooks(response.result);
-      //       bookService.books.forEach(ele => console.log("Resover =" + ele.photoUrl));
-      //       bookService.pagination = response.pagination;
-      //       return true;
-      //     }
-      //     return true;
-      //   })
-      // );
-      // return bookService.books;
-  
-
-  .subscribe({
-    next: response => {
-      if (response.result && response.pagination) {
-        bookService.pagination = response.pagination;
-        bookService.setBooks(response.result);
-        // bookService.books.forEach(ele => console.log("Resover ="+ele.photoUrl));
-        
-        return bookService.books;
-      } 
-      return bookService.books;
-    }
-  });
-  return bookService.books;
+  bookService.getBooks(bookService.getBookParams())
+    .subscribe({
+      next: response => {
+        if (response.result && response.pagination) {
+          bookService.pagination = response.pagination;
+          bookService.setBooks(response.result);
+        }
+        return true;
+      }
+    });
+  return true;
 
 
 };
