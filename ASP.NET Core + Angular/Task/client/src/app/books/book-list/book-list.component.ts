@@ -23,7 +23,9 @@ export class BookListComponent implements OnInit, OnDestroy {
     Constants.sortByPrice,
     Constants.sortByAuthor,
   ];
-  sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  // sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  sortOrderOptions: string[] = Constants.sortOrderOptions;
+  pageSizeOptions: number[] = Constants.pageSizeOptions;
   componentSubscriptions = new Subscription();
 
   constructor(
@@ -40,6 +42,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     this.sortForm = this.fb.group({
       sortBy: [this.bookParms?.sortBy, [Validators.required]],
       sortOrder: [this.bookParms?.sortOrder, [Validators.required]],
+      pageSize: [this.bookParms?.pageSize, [Validators.required]],
       minPrice: [this.bookParms?.minPrice, [Validators.required]],
       maxPrice: [this.bookParms?.maxPrice, [Validators.required]],
     });
@@ -91,6 +94,7 @@ export class BookListComponent implements OnInit, OnDestroy {
       this.bookService.setBookParams(bP);
       this.bookParms = this.bookService.getBookParams();
       this.loadBooks();
+      !!this.pagination ? this.pagination.currentPage = Constants.pageNumber : '';
     } else {
       event.stopPropagation();
       this.markAllAsTouched();

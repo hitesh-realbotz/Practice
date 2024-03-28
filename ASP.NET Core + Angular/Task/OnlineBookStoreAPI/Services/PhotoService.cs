@@ -10,16 +10,18 @@ namespace OnlineBookStoreAPI.Services
     public class PhotoService : IPhotoService
     {
         private readonly Cloudinary cloudinary;
+        private readonly IConfiguration config;
 
-        public PhotoService(IOptions<CloudinarySettings> config)
+        public PhotoService(IOptions<CloudinarySettings> configuration, IConfiguration config)
         {
             var acc = new Account
                 (
-                    config.Value.CloudName,
-                    config.Value.ApiKey,
-                    config.Value.ApiSecret
+                    configuration.Value.CloudName,
+                    configuration.Value.ApiKey,
+                    configuration.Value.ApiSecret
                 );
             this.cloudinary = new Cloudinary(acc);
+            this.config = config;
         }
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
         {
@@ -37,11 +39,10 @@ namespace OnlineBookStoreAPI.Services
                                                 .Chain()
                                                 .Crop("fill").Gravity(Gravity.Center),
 
-                    Folder = "BookStore"
+                    Folder = config["ProjectName"]
                 };
                 uploadResult = await this.cloudinary.UploadAsync(uploadParams);
             }
-
             return uploadResult;
         }
 

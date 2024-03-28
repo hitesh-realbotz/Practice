@@ -5,7 +5,6 @@ namespace OnlineBookStoreAPI.Services.Interfaces
 {
     public interface IOrderService
     {
-        public Task<OrderDto> GetAllOrdersAsync();
         public Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams);
         public Task<OrderDto?> GetOrderByIdAsync(int id);
         public Task<OrderItemDto?> GetOrderItemAsync(int id, string id2);

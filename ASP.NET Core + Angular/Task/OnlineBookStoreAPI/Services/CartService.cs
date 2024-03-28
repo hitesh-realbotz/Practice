@@ -6,7 +6,6 @@ using OnlineBookStoreAPI.Models.DTOs;
 using OnlineBookStoreAPI.Repositories.Interfaces;
 using OnlineBookStoreAPI.Services.Interfaces;
 using System.Security.Claims;
-using System.Text.Json;
 
 namespace OnlineBookStoreAPI.Services
 {
@@ -153,10 +152,7 @@ namespace OnlineBookStoreAPI.Services
             var userId = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Sid).Value.ToString();
             Cart cart = await uow.CartRepository.GetByUserId(userId);
             if (cart == null) throw new BadHttpRequestException("");
-            //if (userCart == null) return null;
             return mapper.Map<CartDto>(cart);
-
-            //return userCart.GetTotalPrice().ToString();
         }
 
         private async Task<Book> BookExists(Book book)

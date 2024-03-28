@@ -9,14 +9,12 @@ namespace OnlineBookStoreAPI.Repositories
     {
         private readonly IServiceProvider serviceProvider;
         private readonly BookStoreDbContext dbContext;
-        private readonly IMapper mapper;
         private IDbContextTransaction transaction;
 
-        public UnitOfWork(IServiceProvider serviceProvider, BookStoreDbContext dbContext, IMapper mapper)
+        public UnitOfWork(IServiceProvider serviceProvider, BookStoreDbContext dbContext)
         {
             this.serviceProvider = serviceProvider;
             this.dbContext = dbContext;
-            this.mapper = mapper;
             BookRepository = serviceProvider.GetRequiredService<IBookRepository>();
             UserRepository = serviceProvider.GetRequiredService<IUserRepository>();
             CartRepository = serviceProvider.GetRequiredService<ICartRepository>();

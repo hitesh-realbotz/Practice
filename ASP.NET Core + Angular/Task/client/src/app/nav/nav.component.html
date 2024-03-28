@@ -36,11 +36,11 @@
                 <a class="dropdown-toggle text-light text-decoration-none ms-2" dropdownToggle>Welcome {{user.name|
                     titlecase}}</a>
                 <div class="dropdown-menu" *dropdownMenu>
-                    <a routerLink="/user/profile" class="dropdown-item">Edit Profile</a>
-                    <a routerLink="/user/cart" class="dropdown-item">Cart - <span class="stats">
+                    <a routerLink="/user/profile" class="dropdown-item"><i class="fa fa-user" aria-hidden="true"></i> Profile</a>
+                    <a routerLink="/user/cart" class="dropdown-item"><i class="fa fa-shopping-cart" aria-hidden="true"></i> Cart - <span class="stats">
                             {{cartItemCount}} </span></a>
-                    <a routerLink="/order" class="dropdown-item">Orders - <span class="stats"> {{ordersCount}} </span></a>
-                    <a class="dropdown-item" routerLink="/auth" (click)="onLogout()">Logout</a>
+                    <a routerLink="/order" class="dropdown-item"><i class="fa fa-shopping-bag" aria-hidden="true"></i> Orders - <span class="stats"> {{ordersCount}} </span></a>
+                    <a class="dropdown-item" routerLink="/auth" (click)="onLogout()"><i class="fa fa-power-off" aria-hidden="true"></i> Logout</a>
                 </div>
             </div>
             <ul class="navbar-nav me-right mb-2 mb-sm-0">

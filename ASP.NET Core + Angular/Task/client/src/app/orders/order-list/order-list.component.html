@@ -1,90 +1,102 @@
-<div *ngIf="!!orders.length; else noOrders">
-    <div class="container" *ngIf="orderParams">
-        <form [formGroup]="sortForm" class="sorting-controls" (ngSubmit)="onSubmit($event)">
-            <div class="sort-control">
-                <div>
-                    <label for="sortBy">Sort By:</label>
+<div class="container">
+    <div *ngIf="!!orders.length; else noOrders">
+        <div class="container" *ngIf="orderParams">
+            <form [formGroup]="sortForm" class="sorting-controls" (ngSubmit)="onSubmit($event)">
+                <div class="sort-control">
+                    <div>
+                        <label for="sortBy">Sort By:</label>
+                    </div>
+                    <div>
+                        <select id="sortBy" formControlName="sortBy" (change)="onSubmit($event)">
+                            <option *ngFor="let option of sortByOptions" [value]="option">{{ option }}</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <select id="sortBy" formControlName="sortBy" (change)="onSubmit($event)">
-                        <option *ngFor="let option of sortByOptions" [value]="option">{{ option }}</option>
-                    </select>
-                </div>
-            </div>
 
-            <div class="sort-control">
-                <div>
-                    <label for="sortOrder">Sort Order:</label>
+                <div class="sort-control">
+                    <div>
+                        <label for="sortOrder">Sort Order:</label>
+                    </div>
+                    <div>
+                        <select id="sortOrder" formControlName="sortOrder" (change)="onSubmit($event)">
+                            <option *ngFor="let option of sortOrderOptions" [value]="option">{{ option }}</option>
+                        </select>
+                    </div>
                 </div>
-                <div>
-                    <select id="sortOrder" formControlName="sortOrder" (change)="onSubmit($event)">
-                        <option *ngFor="let option of sortOrderOptions" [value]="option">{{ option }}</option>
-                    </select>
+                <div class="sort-control">
+                    <div>
+                        <label for="pageSize">Page Size:</label>
+                    </div>
+                    <div>
+                        <select id="pageSize" formControlName="pageSize" (change)="onSubmit($event)">
+                            <option *ngFor="let option of pageSizeOptions" [value]="option">{{ option }}</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
-            <!-- <div class="sort-control">
+                <!-- <div class="sort-control">
                 <div>
                     <button class="btn btn-primary ms-1" type="submit">Apply Filters</button>
                 </div>
             </div> -->
-            <div class="sort-control">
-                <div>
-                    <button (click)="resetFilters()" class="btn btn-secondary ms-1" type="submit">Reset Filters</button>
-                </div>
-            </div>
-        </form>
-    </div>
-
-    <div class="row">
-
-        <div class="card m-1" *ngFor="let orderEl of orders; let i = index">
-            <div class="list-group list-group-item clearfix">
-                <div class="order col-12" (click)="onOrder(orderEl.id)">
-                    <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                        <!-- Order details -->
-                        <div><strong>OrderId</strong> : {{orderEl.id}}</div>
-                        <div><strong>Order Date</strong> : {{orderEl.date | date: 'dd/MM/yyyy' }}</div>
-                        <div><strong>Billing Name</strong> : {{orderEl.billingName}}</div>
-                        <div><strong>Address</strong> : {{orderEl.address}}</div>
-                        <div><strong>Contact No.</strong> : {{orderEl.contactNo}}</div>
-                        <div><strong>Total Price</strong> : {{orderEl.totalPrice}}</div>
+                <div class="sort-control">
+                    <div>
+                        <button (click)="resetFilters()" class="btn btn-secondary ms-1" type="submit">Filters</button>
                     </div>
-                    <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                        <!-- Loop through each order item -->
-                        <div *ngFor="let orderItem of orderEl.orderItems; let j = index" class="row ">
-                            <div class="item-details" (click)="onItem($event, orderEl, orderItem)">
-                                <div class="item-image">
-                                    <img [src]="orderItem.photoUrl" alt="ImageNotAvailable" class="img-responsive">
+                </div>
+            </form>
+        </div>
+
+        <div class="row">
+
+            <div class="card m-1" *ngFor="let orderEl of orders; let i = index">
+                <div class="list-group list-group-item clearfix">
+                    <div class="order col-12" (click)="onOrder(orderEl.id)">
+                        <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <!-- Order details -->
+                            <div><strong>OrderId</strong> : {{orderEl.id}}</div>
+                            <div><strong>Order Date</strong> : {{orderEl.date | date: 'dd/MM/yyyy' }}</div>
+                            <div><strong>Billing Name</strong> : {{orderEl.billingName}}</div>
+                            <div><strong>Address</strong> : {{orderEl.address}}</div>
+                            <div><strong>Contact No.</strong> : {{orderEl.contactNo}}</div>
+                            <div><strong>Total Price</strong> : <i class="fa fa-inr " aria-hidden="true"></i> {{orderEl.totalPrice}}/-</div>
+                        </div>
+                        <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                            <!-- Loop through each order item -->
+                            <div *ngFor="let orderItem of orderEl.orderItems; let j = index" class="row ">
+                                <div class="item-details" (click)="onItem($event, orderEl, orderItem)">
+                                    <div class="item-image">
+                                        <img [src]="orderItem.photoUrl" alt="ImageNotAvailable" class="img-responsive">
+                                    </div>
+
+                                    <div class="item-title">
+                                        <h5 class="list-group-item-heading">{{orderItem.orderBook?.title}}</h5>
+                                    </div>
+                                    <div class="item-description">
+                                        <p class="list-group-item-text">{{orderItem.quantity}} nos. x  <i class="fa fa-inr " aria-hidden="true"></i> {{orderItem.unitPrice}} = <i class="fa fa-inr " aria-hidden="true"></i> {{orderItem.totalPrice}}/-</p>
+                                    </div>
                                 </div>
 
-                                <div class="item-title">
-                                    <h5 class="list-group-item-heading">{{orderItem.orderBook?.title}}</h5>
-                                </div>
-                                <div class="item-description">
-                                    <p class="list-group-item-text">{{orderItem.quantity}} * {{orderItem.unitPrice}} =
-                                        {{orderItem.totalPrice}}/-</p>
-                                </div>
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="d-flex justify-content-center" *ngIf="pagination">
+            <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems"
+                [itemsPerPage]="pagination.itemsPerPage" [(ngModel)]="pagination.currentPage"
+                (pageChanged)="pageChanged($event)" [maxSize]="pagination.totalPages" previousText="&lsaquo;"
+                nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+
+            </pagination>
+        </div>
     </div>
 
-    <div class="d-flex justify-content-center" *ngIf="pagination">
-        <pagination [boundaryLinks]="true" [totalItems]="pagination.totalItems" [itemsPerPage]="pagination.itemsPerPage"
-            [(ngModel)]="pagination.currentPage" (pageChanged)="pageChanged($event)" [maxSize]="pagination.totalPages"
-            previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
-
-        </pagination>
-    </div>
+    <ng-template #noOrders>
+        <div class="no-items-container">
+            <h1>Haven't Ordered Yet!</h1>
+            <p><a (click)="onHome()">Let's take a look at books!</a>.</p>
+        </div>
+    </ng-template>
 </div>
-
-<ng-template #noOrders>
-    <div class="no-items-container">
-        <h1>Haven't Ordered Yet!</h1>
-        <p><a (click)="onHome()">Let's take a look at books!</a>.</p>
-    </div>
-</ng-template>

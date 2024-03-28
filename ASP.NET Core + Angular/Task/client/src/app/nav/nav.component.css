@@ -2,6 +2,13 @@
     cursor: pointer;
 }
 
+.dropdown-menu{
+    background-color: lavender;
+}
+.dropdown-item:hover{
+    background-color: rgb(191 191 227);
+}
+
 img {
     height: 50px;
     width: 50px;
@@ -11,6 +18,6 @@ img {
 
 .stats{
     color: rgb(224, 85, 206);
-    background-color: rgb(189, 221, 176);
+    
     
 }

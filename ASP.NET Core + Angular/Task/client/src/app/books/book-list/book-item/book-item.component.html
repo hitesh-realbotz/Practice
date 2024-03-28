@@ -1,35 +1,53 @@
-<!-- <div class="card mb-4" *ngIf="book">
-    <div class="card-img-wrapper">
-        <p>{{book.title}}</p>
-        <p>{{book.price}}</p>
-    </div>
-</div> -->
-<div class="card m-1" *ngIf="book">
-    <a class="list-group list-group-item clearfix" (click)="onItem(book)" routerLinkActive="active">
-        <div class="item col-12">
-            <div class="item-image col-3 col-md-3 col-lg-3">
-                <img [src]="book.photoUrl" alt="ImageNotAvailable" class="img-responsive">
+<ng-container *ngIf="!!book">
+    <div class="card" (click)="onItem(book)">
+        <div class="d-flex-row-cnt-cnt">
+            <img class="card-img-top" [src]="book.photoUrl" alt="ImageNotAvailable">
+        </div>
+        <div class="card-body">
+            <div class="d-flex-col-cnt-cnt">
+                <h5 class="card-title">{{book.title}}</h5>
+                <p class="card-text">by {{book.author}}</p>   
             </div>
-            <div class="item-details col-8 col-md-8 col-lg-8">
-                <div class="item-title">
-                    <h4  class="list-group-item-heading">{{book.title}}</h4> 
-                    <span class="m-2 list-group-item-author">by <strong>{{book.author}}</strong></span>
-                </div>
-                <div class="item-description">
-                    <div>
-                        <p class="list-group-item-text">{{book.description}}</p>
-                    </div>
-                                        
-                </div>    
-                <div class="item-actions">
-                    <span class="list-group-item-text"><span class="list-group-item-tag">Price :</span> {{book.unitPrice}}</span>
-                    <span class="list-group-item-text"><span class="list-group-item-tag">Availble Qty :</span> {{book.availableQuantity}}</span>
-                    <div class="item-action " *ngIf="(accountService.currentUser$ | async) != null">
-                        <button class="btn btn-primary d-flex-row-cnt-cnt" (click)="onAddToCart($event, book)">Add to Cart</button>
-                    </div>
-                </div>
-    
+            <div class="d-flex-row-cnt-cnt">
+                <span class="card-text"><i class="fa fa-inr " aria-hidden="true"></i> {{book.unitPrice}}/-
+                <a class="m-2" (click)="onAddToCart($event, book)" *ngIf="book.availableQuantity"><i class="fa fa-cart-plus " aria-hidden="true"></i></a></span>
             </div>
         </div>
-    </a>
-</div>
+    </div>
+</ng-container>
+
+<!-- 
+<div class="container">
+    <div class="card m-1" *ngIf="book">
+        <a class="list-group list-group-item clearfix" (click)="onItem(book)" routerLinkActive="active">
+            <div class="item">
+                <div class="item-image">
+                    <img [src]="book.photoUrl" alt="ImageNotAvailable" class="img-responsive">
+                </div>
+                <div class="item-details">
+                    <div class="item-title">
+                        <h4 class="list-group-item-heading">{{book.title}}</h4>
+                        <span class="m-2 list-group-item-author">by <strong>{{book.author}}</strong></span>
+                    </div>
+                    <div class="item-description">
+                        <div>
+                            <p class="list-group-item-text">{{book.description}}</p>
+                        </div>
+
+                    </div>
+                    <div class="item-actions">
+                        <span class="list-group-item-text"><span class="list-group-item-tag">Price :</span>
+                            {{book.unitPrice}}</span>
+                        <span class="list-group-item-text"><span class="list-group-item-tag">Availble Qty :</span>
+                            {{book.availableQuantity}}</span>
+                        <div class="item-action " *ngIf="(accountService.currentUser$ | async) != null">
+                            <button class="btn btn-primary d-flex-row-cnt-cnt" (click)="onAddToCart($event, book)">Add
+                                to Cart</button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </a>
+    </div>
+</div> -->

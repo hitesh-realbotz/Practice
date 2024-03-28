@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
-import { BehaviorSubject, Observable, map, tap } from 'rxjs';
-import { User, UserWithQRData } from '../_models/user';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, tap } from 'rxjs';
+import { User } from '../_models/user';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { QRData } from '../_models/qrdata';
 import { CartService } from './cart.service';
@@ -29,9 +29,9 @@ export class AccountService {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       tap(response => {
         if (response.twoFactorEnabled) {
-          this.setCurrentUser(response);
-          this.getCartServiceInstance();
-          this.cartService?.setCartItems(response.cart);
+          // this.setCurrentUser(response);
+          // this.getCartServiceInstance();
+          // this.cartService?.setCartItems(response.cart);
         }else{
           this.user = response ;
         }
@@ -50,9 +50,10 @@ export class AccountService {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<User>(this.baseUrl + 'account/two-fa-login', model).pipe(
       tap(response => {
-        const user = response;
-        if (user) {
-          this.setCurrentUser(user);
+        if (response) {
+          this.setCurrentUser(response);
+          this.getCartServiceInstance();
+          this.cartService?.setCartItems(response.cart);
         }
       })
     )

@@ -7,25 +7,24 @@ using OnlineBookStoreAPI.Services.Interfaces;
 using System.Security.Claims;
 using System.Text;
 using System.Text.Encodings.Web;
-using static QRCoder.PayloadGenerator;
 
 namespace OnlineBookStoreAPI.Services
 {
     public class AccountService : IAccountService
     {
         private readonly UserManager<AppUser> userManager;
-        private readonly ITokenService tokenService;
         private readonly IMapper mapper;
         private readonly UrlEncoder urlEncoder;
         private readonly IHttpContextAccessor httpContextAccessor;
+        private readonly IConfiguration config;
 
-        public AccountService(UserManager<AppUser> userManager, ITokenService tokenService, IMapper mapper, UrlEncoder urlEncoder, IHttpContextAccessor httpContextAccessor)
+        public AccountService(UserManager<AppUser> userManager, IMapper mapper, UrlEncoder urlEncoder, IHttpContextAccessor httpContextAccessor, IConfiguration config)
         {
             this.userManager = userManager;
-            this.tokenService = tokenService;
             this.mapper = mapper;
             this.urlEncoder = urlEncoder;
             this.httpContextAccessor = httpContextAccessor;
+            this.config = config;
         }
 
         public async Task<UserProfileDto?> CreateAsync(RegisterDto registerDto)
@@ -102,7 +101,9 @@ namespace OnlineBookStoreAPI.Services
             var user = await GetUser(email);
             if (user == null) throw new UnauthorizedAccessException("Re-Login & Try again!");
 
-            var verificationCode = code.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var verificationCode = code
+                                    .Replace(config["QRCodeSettings:SharedKeySeparator1"], string.Empty)
+                                    .Replace(config["QRCodeSettings:SharedKeySeparator2"], string.Empty);
 
             var isValid = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
             if (isValid)
@@ -118,10 +119,11 @@ namespace OnlineBookStoreAPI.Services
         {
             var result = new StringBuilder();
             int currentPosition = 0;
-            while (currentPosition + 4 < unformattedKey.Length)
+            int keyGroupLength = Convert.ToInt32(config["QRCodeSettings:SharedKeyGroupLength"]);
+            while (currentPosition + keyGroupLength < unformattedKey.Length)
             {
-                result.Append(unformattedKey.Substring(currentPosition, 4)).Append(" ");
-                currentPosition += 4;
+                result.Append(unformattedKey.Substring(currentPosition, keyGroupLength)).Append(config["QRCodeSettings:SharedKeySeparator1"]);
+                currentPosition += keyGroupLength;
             }
             if (currentPosition < unformattedKey.Length)
             {
@@ -134,13 +136,15 @@ namespace OnlineBookStoreAPI.Services
 
         private string GenerateQrCodeUri(string email, string unformattedKey)
         {
-            const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
+            const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={3}&issuer={0}&digits={2}";
 
             return string.Format(
             AuthenticatorUriFormat,
-                urlEncoder.Encode("ASP.NET Core Identity"),
+                urlEncoder.Encode(config["ProjectName"]),
                 urlEncoder.Encode(email),
-                unformattedKey);
+                urlEncoder.Encode(config["QRCodeSettings:VerificationCodeLength"]),
+                unformattedKey
+                );
         }
 
         private async Task<bool> UserExists(string email)
@@ -153,7 +157,9 @@ namespace OnlineBookStoreAPI.Services
             var user = await GetUser(twoFALoginDto.Email);
             if (user == null) throw new UnauthorizedAccessException("Re-Login & Try again!");
 
-            var verificationCode = twoFALoginDto.Code.Replace(" ", string.Empty).Replace("-", string.Empty);
+            var verificationCode = twoFALoginDto.Code
+                                        .Replace(config["QRCodeSettings:SharedKeySeparator1"], string.Empty)
+                                        .Replace(config["QRCodeSettings:SharedKeySeparator2"], string.Empty);
 
             var isValid = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, verificationCode);
             if (isValid) return mapper.Map<UserProfileDto>(user);

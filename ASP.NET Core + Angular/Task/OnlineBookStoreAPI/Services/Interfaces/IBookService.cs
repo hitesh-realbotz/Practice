@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OnlineBookStoreAPI.Helpers;
-using OnlineBookStoreAPI.Models.Domain;
 using OnlineBookStoreAPI.Models.DTOs;
 
 namespace OnlineBookStoreAPI.Services.Interfaces

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using OnlineBookStoreAPI.Extensions;
 using OnlineBookStoreAPI.Helpers;
 using OnlineBookStoreAPI.Models.Domain;
 using OnlineBookStoreAPI.Models.DTOs;
@@ -38,7 +39,6 @@ namespace OnlineBookStoreAPI.Services
             var isValid = await userManager.VerifyTwoFactorTokenAsync(user, userManager.Options.Tokens.AuthenticatorTokenProvider, pin);
             //if (!isValid) throw new BadHttpRequestException("Enter Valid Pin!");
 
-
             Cart cart = await uow.CartRepository.GetByUserId(user.Id);
             if (cart == null) throw new BadHttpRequestException("Cart is blank!");
 
@@ -52,7 +52,6 @@ namespace OnlineBookStoreAPI.Services
                 if (item.Checked)
                 {
                     if (item.Book.AvailableQuantity < item.Quantity) throw new BadHttpRequestException($"Available quantity is {item.Book.AvailableQuantity}!");
-                    //item.Book.AvailableQuantity -= item.Quantity;
                     var orderItem = mapper.Map<OrderItem>(item);
                     var availableOrderBooks = await uow.OrderBookRepository.GetOrderBookByBookId(item.BookId);
                     var isAvaialble = false;
@@ -62,7 +61,6 @@ namespace OnlineBookStoreAPI.Services
                             availableOrderBook.Author == item.Book.Author &&
                             availableOrderBook.ISBN == item.Book.ISBN &&
                             availableOrderBook.Description == item.Book.Description &&
-                            //availableOrderBook.Photos.FirstOrDefault(p => p.IsMain).Url == item.Book.Photos.FirstOrDefault(p => p.IsMain).Url &&
                             availableOrderBook.Author == item.Book.Author
                             )
                         {
@@ -78,7 +76,6 @@ namespace OnlineBookStoreAPI.Services
                         order.OrderItems.Add(orderItem);
                     }
                 }
-
             }
 
             order = await uow.OrderRepository.CreateAsync(order);
@@ -91,19 +88,13 @@ namespace OnlineBookStoreAPI.Services
                     cart.CartItems[i].Book.AvailableQuantity -= cart.CartItems[i].Quantity;
                     cart.CartItems.RemoveAt(i);
                 }
-
             }
             if (cart.CartItems == null || cart.CartItems.Count == 0) await uow.CartRepository.ClearCartAsync(cart);
 
             if (await uow.Commit()) return mapper.Map<OrderDto>(order);
             throw new BadHttpRequestException("Problem while order placement!");
-
         }
 
-        public Task<OrderDto> GetAllOrdersAsync()
-        {
-            throw new NotImplementedException();
-        }
 
         public async Task<OrderDto?> GetOrderByIdAsync(int id)
         {
@@ -112,6 +103,7 @@ namespace OnlineBookStoreAPI.Services
 
             return mapper.Map<OrderDto>(order);
         }
+
         public async Task<OrderItemDto?> GetOrderItemAsync(int id, string id2)
         {
             var order = await uow.OrderRepository.GetOrderByIdAsync(id, GetUserIdFromToken());
@@ -123,7 +115,6 @@ namespace OnlineBookStoreAPI.Services
                     return mapper.Map<OrderItemDto>(orderItem);
                 }
             }
-
             throw new BadHttpRequestException($"OrderBook with {id2} ISBN Code against orderId {id} not found!");
         }
 
