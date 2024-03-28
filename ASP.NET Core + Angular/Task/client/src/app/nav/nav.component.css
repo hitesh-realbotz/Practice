@@ -8,3 +8,9 @@ img {
     border: 2px solid white;
     display: inline;
 }
+
+.stats{
+    color: rgb(224, 85, 206);
+    background-color: rgb(189, 221, 176);
+    
+}

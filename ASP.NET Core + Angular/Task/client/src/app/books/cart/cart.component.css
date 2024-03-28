@@ -37,3 +37,18 @@
     margin: auto;
     max-width: 800px;
 }
+
+.no-items-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+ .no-items-container h1, h3 {
+    font-size: 36px;
+    color: #ff0000;
+  }
+  
+  .no-items-container p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }

@@ -1,1 +1,38 @@
-<p>order-detail works!</p>
+<div class="row">
+    <div class="list-group col-12" *ngIf="!!order">
+        <div class="list-group-item clearfix">
+            <div class="order col-12" >
+                <div class="order-detail col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <!-- Order details -->
+                    <div><strong>OrderId</strong> : {{order.id}}</div>
+                    <div><strong>Order Date</strong> : {{order.date | date: 'dd/MM/yyyy' }}</div>
+                    <div><strong>Billing Name</strong> : {{order.billingName}}</div>
+                    <div><strong>Address</strong> : {{order.address}}</div>
+                    <div><strong>Contact No.</strong> : {{order.contactNo}}</div>
+                    <div><strong>Total Price</strong> : {{order.totalPrice}}</div>
+                    <div><strong>Date</strong> : {{order.date | date: 'dd/MM/yyyy'}}</div>
+                    <div><strong>Shipping Method</strong> : {{order.shippingMethod}}</div>
+                </div>
+                <div class="item col-8 col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                    <!-- Loop through each order item -->
+                    <div *ngFor="let orderItem of order.orderItems; let j = index" class="row ">
+                        <div class="item-details" (click)="onItem($event, order, orderItem)">
+
+                            <div class="item-image">
+                                <img [src]="orderItem.photoUrl" alt="ImageNotAvailable" class="img-responsive">
+                            </div>
+
+                            <div class="item-title">
+                                <h5 class="list-group-item-heading">{{orderItem.orderBook?.title}}</h5>
+                            </div>
+                            <div class="item-description">
+                                <p class="list-group-item-text">{{orderItem.quantity}} * {{orderItem.unitPrice}} = {{orderItem.totalPrice}}/-</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

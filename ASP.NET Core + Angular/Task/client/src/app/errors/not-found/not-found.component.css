@@ -1,0 +1,15 @@
+.error-container {
+    text-align: center;
+    margin-top: 50px;
+  }
+  
+  .error-container h1 {
+    font-size: 36px;
+    color: #ff0000;
+  }
+  
+  .error-container p {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  

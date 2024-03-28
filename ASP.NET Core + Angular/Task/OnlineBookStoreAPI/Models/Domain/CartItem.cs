@@ -10,5 +10,10 @@
         public Cart Cart { get; set; }
         public int BookId { get; set; }
         public Book Book { get; set; }
+
+        public double GetTotalPrice()
+        {
+            return Quantity * Book.UnitPrice;
+        }
     }
 }

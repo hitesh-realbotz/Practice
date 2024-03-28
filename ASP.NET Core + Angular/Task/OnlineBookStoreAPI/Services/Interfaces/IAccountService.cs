@@ -8,5 +8,6 @@ namespace OnlineBookStoreAPI.Services.Interfaces
         public Task<UserProfileDto?> LoginAsync(LoginDto loginDto);
         public Task<QRDetailsDto?> GenerateTwoFAQRCodeAsync();
         public Task<UserProfileDto?> SetTwoFAAsync(string code);
+        public Task<UserProfileDto?> TwoFALoginAsync(TwoFALoginDto twoFALoginDto);
     }
 }

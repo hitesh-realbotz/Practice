@@ -5,7 +5,7 @@ export interface Book {
     author: string;
     isbn: string;
     photoUrl: string;
-    price: number;
+    unitPrice: number;
     quantity: number;
     availableQuantity: number;
     description: string;

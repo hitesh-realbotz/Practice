@@ -7,6 +7,8 @@ namespace OnlineBookStoreAPI.Services.Interfaces
     {
         public Task<OrderDto> GetAllOrdersAsync();
         public Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams);
-        public Task<OrderDto> CreateAsync(OrderDto orderDto);
+        public Task<OrderDto?> GetOrderByIdAsync(int id);
+        public Task<OrderItemDto?> GetOrderItemAsync(int id, string id2);
+        public Task<OrderDto> CreateAsync(NewOrderDto newOrderDto);
     }
 }

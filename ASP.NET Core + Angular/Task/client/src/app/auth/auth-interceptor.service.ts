@@ -2,6 +2,7 @@ import { HttpHandler, HttpInterceptor, HttpParams, HttpRequest } from '@angular/
 import { Injectable } from '@angular/core';
 import { AccountService } from '../_services/account.service';
 import { exhaustMap, take } from 'rxjs';
+import { User } from '../_models/user';
 
 @Injectable({
   providedIn: 'root'
@@ -11,15 +12,24 @@ export class AuthInterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log(req.params.toString());
     return this.accountService.currentUser$.pipe(take(1), exhaustMap(user => {
-      if (!user) {
+      if (!!user || !!this.accountService.user) {
+        const modifiedReq = this.getModifiedRequest(req, !!user ? user : this.accountService.user! );
+        return next.handle(modifiedReq);
+
+      } else {
         return next.handle(req);
       }
-      const modifiedReq = req.clone({
-        setHeaders: {
-          Authorization: `Bearer ${user.token}`
-        }
-      });
-      return next.handle(modifiedReq);
+
     }))
   }
+
+  getModifiedRequest(req: HttpRequest<any>, user: User) {
+    const modifiedReq = req.clone({
+      setHeaders: {
+        Authorization: `Bearer ${user.token}`
+      }
+    });
+    return modifiedReq;
+  }
 }
+

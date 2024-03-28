@@ -5,9 +5,9 @@
     cursor: pointer;
 }
 
-.item:hover {
+/* .item:hover {
     background-color: rgb(213, 228, 235);
-}
+} */
 
 .item-group {
     display: flex;
@@ -65,4 +65,26 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+}
+
+.card>.list-group {
+    border-top: inherit;
+    border-bottom: inherit;
+    background-color: lavender;
+}
+.card>.list-group:hover {
+    border-top: inherit;
+    border-bottom: inherit;
+    background-color: rgb(191 191 227);
+}
+.list-group-item-heading{
+    color: red;
+    font-weight: 600;
+}
+.list-group-item-author{
+    color: #4a4d4f;
+}
+.list-group-item-tag{
+    color: #4a4d4f;
+    font-weight: 600;
 }

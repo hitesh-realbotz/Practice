@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { Book } from '../_models/book';
 import { BehaviorSubject, tap } from 'rxjs';
-import { BookParams } from '../_models/bookParamas';
+import { BookParams } from '../_models/bookParams';
 import { getPaginatedResult, getPaginationHeaders } from '../_models/Helpers/paginationHelper';
 import { Pagination } from '../_models/Helpers/pagination';
 

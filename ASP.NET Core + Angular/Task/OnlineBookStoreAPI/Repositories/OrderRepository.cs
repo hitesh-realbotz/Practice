@@ -28,9 +28,19 @@ namespace OnlineBookStoreAPI.Repositories
             return order;
         }
 
-        public async Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams)
+        public async Task<Order?> GetOrderByIdAsync(int id, string userId)
         {
-            var query = dbContext.Orders.Include(o => o.OrderItems).ThenInclude(oi => oi.OrderBook).ThenInclude(b => b.Photos).AsQueryable();
+            return await dbContext.Orders.Where(o => o.AppUserId == userId).Include(o => o.OrderItems).ThenInclude(oi => oi.OrderBook).FirstOrDefaultAsync(o => o.Id == id);
+        }
+
+        public async Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams, string userId)
+        {
+            var query = dbContext.Orders.Where(o => o.AppUserId == userId).Include(o => o.OrderItems).ThenInclude(oi => oi.OrderBook).AsQueryable();
+            query = orderParams.SortBy switch
+            {
+                Const.PRICE => (orderParams.SortOrder == Const.ASCENDING ? query.OrderBy(o => o.TotalPrice) : query.OrderByDescending(o => o.TotalPrice)),
+                _ => (orderParams.SortOrder == Const.ASCENDING ? query.OrderBy(o => o.Date) : query.OrderByDescending(o => o.Date)),
+            };
 
             return await PagedList<OrderDto>.CreateAsync(query.ProjectTo<OrderDto>(mapper.ConfigurationProvider), orderParams.PageNumber, orderParams.PageSize);
         }

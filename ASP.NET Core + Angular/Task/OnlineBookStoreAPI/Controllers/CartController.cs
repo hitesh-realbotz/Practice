@@ -11,12 +11,12 @@ namespace OnlineBookStoreAPI.Controllers
     public class CartController : ControllerBase
     {
         private readonly ICartService cartService;
-       
+
 
         public CartController(ICartService cartService)
         {
             this.cartService = cartService;
-           
+
         }
 
         [HttpPost]
@@ -31,7 +31,7 @@ namespace OnlineBookStoreAPI.Controllers
         {
             return Ok(await cartService.DecreaseCartItemQtyAsync(cartItemDto));
         }
-        
+
         [HttpPost("toggle-check")]
         [Authorize]
         public async Task<ActionResult<CartDto>> ToggleCheckCartItem(CartItemDto cartItemDto)
@@ -41,7 +41,7 @@ namespace OnlineBookStoreAPI.Controllers
 
         [HttpGet]
         [Authorize]
-        public async Task<ActionResult<CartDto>> GetUserCart()
+        public async Task<ActionResult<CartDto?>> GetUserCart()
         {
             return Ok(await cartService.GetUserCartAsync());
         }

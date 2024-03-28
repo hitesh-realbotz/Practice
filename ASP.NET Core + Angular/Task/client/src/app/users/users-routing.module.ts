@@ -3,16 +3,20 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { UsersComponent } from './users.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
+import { CartComponent } from '../books/cart/cart.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { cartResolver } from '../_resolver/cart.resolver';
+import { ordersResolver } from '../_resolver/orders.resolver';
+import { dashboardStatsResolver } from '../_resolver/dashboard-stats.resolver';
+import { authGuard } from '../_guards/auth.guard';
 
 const routes: Routes = [
   {
       path: '', component: UsersComponent,            // With LazyLoading
       children: [
-          { path: '', component: UsersComponent},
-          // { path: '', component: DashboardComponent, resolve: [OrdersResolverService]},
-          // { path: 'cart', component: CartComponent},
-          // { path: 'aboutus', component: AboutUsComponent },
-          
+          // { path: '', component: UsersComponent},
+          { path: '', component: DashboardComponent, resolve: {userDashStats: dashboardStatsResolver} },
+          { path: 'cart', component: CartComponent},          
       ]
   },
   { path: 'profile', component: UserProfileComponent },

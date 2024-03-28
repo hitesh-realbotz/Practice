@@ -1,11 +1,11 @@
 <div class="container" *ngIf="bookParms">
-    <form [formGroup]="sortForm" class="sorting-controls" (ngSubmit)="onSubmitProfile($event)">
+    <form [formGroup]="sortForm" class="sorting-controls" (ngSubmit)="onSubmit($event)">
         <div class="sort-control">
             <div>
                 <label for="sortBy">Sort By:</label>
             </div>
             <div>
-                <select id="sortBy" formControlName="sortBy">
+                <select id="sortBy" formControlName="sortBy" (change)="onSubmit($event)">
                     <option *ngFor="let option of sortByOptions" [value]="option">{{ option }}</option>
                 </select>
             </div>
@@ -16,39 +16,35 @@
                 <label for="sortOrder">Sort Order:</label>
             </div>
             <div>
-                <select id="sortOrder" formControlName="sortOrder">
+                <select id="sortOrder" formControlName="sortOrder" (change)="onSubmit($event)">
                     <option *ngFor="let option of sortOrderOptions" [value]="option">{{ option }}</option>
                 </select>
             </div>
         </div>
         <div class="sort-control">
-
             <div>
                 <label for="minPrice">Price From:</label>
             </div>
             <div>
-                <input type="numeric" id="minPrice" formControlName="minPrice" class="form-control">
+                <input type="numeric" id="minPrice" formControlName="minPrice" class="form-control" (change)="onSubmit($event)">
             </div>
         </div>
         <div class="sort-control">
-
             <div>
                 <label for="maxPrice">Price to:</label>
             </div>
             <div>
-                <input type="number" id="maxPrice" formControlName="maxPrice" class="form-control">
+                <input type="number" id="maxPrice" formControlName="maxPrice" class="form-control" (change)="onSubmit($event)">
             </div>
         </div>
-        <div class="sort-control">
-
+        <!-- <div class="sort-control">
             <div>
                 <button class="btn btn-primary ms-1" type="submit">Apply Filters</button>
             </div>
-        </div>
+        </div> -->
         <div class="sort-control">
-
             <div>
-                <button (click)="resetFilters()" class="btn btn-info ms-1" type="submit">Reset Filters</button>
+                <button (click)="resetFilters()" class="btn btn-secondary ms-1" type="submit">Reset Filters</button>
             </div>
         </div>
     </form>

@@ -1,57 +1,61 @@
-<!-- <div class="col-md-12 col-sm-12" *ngIf="!!cart ">
-    <div *ngFor="let item of cart.cartItem; let i = index">
-        <div>{{item.book.title}}</div>
-    </div>
-</div> -->
-<div class="row cart">
-    <div class="col-md-12 col-sm-12" *ngIf="cart != undefined">
-        <table class="table table-primary">
-            <thead>
-                <tr>
-                    <th>Item Name</th>
-                    <th>Price</th>
-                    <th></th>
-                    <th>Qty</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of cart.cartItems">
-                    <td class="cart-item-name">
-                        <label class="checkbox">
-                            <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(item)">
-                        </label>
-                        <span>{{ item.book.title }}</span>
-                    </td>
-                    <td class="cart-item-price"> {{ item.totalPrice }} </td>
-                    <td class="cart-item-qty-action">
-                        <a (click)="decreaseQuantity(item)">-</a>
-                    </td>
-                    <td class="cart-item-qty">
-                        <span>
-                            {{ item.quantity }}
-                        </span>
-                    </td>
-                    <td class="cart-item-qty-action">
-                        <a (click)="increaseQuantity(item)">+</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div>
-            Total Price for Cart Items: {{ cart.totalPrice }}
+<div *ngIf="!!cart; else noCartItems">
+    <div class="row cart">
+        <div class="col-md-12 col-sm-12" *ngIf="!!cart">
+            <table class="table table-primary">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Price</th>
+                        <th></th>
+                        <th>Qty</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of cart.cartItems">
+                        <td class="cart-item-name">
+                            <label class="checkbox">
+                                <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(item)">
+                            </label>
+                            <!-- <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(item)"> -->
+                            <span>{{ item.book.title }}</span>
+                        </td>
+                        <td class="cart-item-price"> {{ item.totalPrice }} </td>
+                        <td class="cart-item-qty-action">
+                            <a (click)="decreaseQuantity(item)">-</a>
+                        </td>
+                        <td class="cart-item-qty">
+                            <span>
+                                {{ item.quantity }}
+                            </span>
+                        </td>
+                        <td class="cart-item-qty-action">
+                            <a (click)="increaseQuantity(item)">+</a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div>
+                Total Price for Cart Items: {{ cart.totalPrice }}
+            </div>
+            <div>
+                Total Price for Checked Items: {{ cart.totalCheckedPrice }}
+            </div>
         </div>
-        <div>
-            Total Price for Checked Items: {{ cart.totalCheckedPrice }}
-        </div>
-    </div>
-    <div class="row">
-                <div class="col-md-12 col-lg-12 col-12 form-btn-group">
-            <button class="btn btn-primary form-btn" (click)="onCheckout()"
-                [disabled]="cart != undefined && cart.totalCheckedPrice <= 0">Checkout</button>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 col-12 form-btn-group">
+                <button class="btn btn-primary form-btn" (click)="onCheckout()"
+                    [disabled]="cart != undefined && cart.totalCheckedPrice <= 0">Checkout</button>
 
-            <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="cart == undefined">Clear
-                Cart</button>
+                <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="cart == undefined">Clear
+                    Cart</button>
+            </div>
         </div>
     </div>
 </div>
+<ng-template #noCartItems>
+    <div class="no-items-container">
+        <h3>Haven't find interesting yet!</h3>
+        <p><a (click)="onHome()">Let's take a look at books!</a>.</p>
+    </div>
+</ng-template>

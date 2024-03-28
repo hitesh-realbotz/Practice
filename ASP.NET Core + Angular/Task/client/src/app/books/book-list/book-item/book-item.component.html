@@ -13,7 +13,7 @@
             <div class="item-details col-8 col-md-8 col-lg-8">
                 <div class="item-title">
                     <h4  class="list-group-item-heading">{{book.title}}</h4> 
-                    <span class="m-2">by <strong>{{book.author}}</strong></span>
+                    <span class="m-2 list-group-item-author">by <strong>{{book.author}}</strong></span>
                 </div>
                 <div class="item-description">
                     <div>
@@ -22,10 +22,10 @@
                                         
                 </div>    
                 <div class="item-actions">
-                    <span class="list-group-item-text">Price : {{book.price}}</span>
-                    <span class="list-group-item-text">Availble Qty : {{book.availableQuantity}}</span>
+                    <span class="list-group-item-text"><span class="list-group-item-tag">Price :</span> {{book.unitPrice}}</span>
+                    <span class="list-group-item-text"><span class="list-group-item-tag">Availble Qty :</span> {{book.availableQuantity}}</span>
                     <div class="item-action " *ngIf="(accountService.currentUser$ | async) != null">
-                        <button class="btn btn-success d-flex-row-cnt-cnt" (click)="onAddToCart($event, book)">Add to Cart</button>
+                        <button class="btn btn-primary d-flex-row-cnt-cnt" (click)="onAddToCart($event, book)">Add to Cart</button>
                     </div>
                 </div>
     

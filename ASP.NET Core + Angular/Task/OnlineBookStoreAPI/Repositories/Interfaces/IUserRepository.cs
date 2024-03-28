@@ -6,5 +6,6 @@ namespace OnlineBookStoreAPI.Repositories.Interfaces
     public interface IUserRepository
     {
         public Task<AppUser?> GetUserByEmailAsync(string email);
+        public Task<AppUser?> GetUserCartAndOrdersAsync(string email);
     }
 }

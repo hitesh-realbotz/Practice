@@ -29,10 +29,16 @@ namespace OnlineBookStoreAPI.Controllers
             return await userService.UpdateAsync(userProfileUpdateDto);
         }
 
-        [HttpGet("{email}")]
-        public async Task<ActionResult<UserProfileDto>> GetUser(string email)
+        //[HttpGet("{email}")]
+        //public async Task<ActionResult<UserProfileDto>> GetUser(string email)
+        //{
+        //    return await userService.GetUserAsync(email);
+        //} 
+       
+        [HttpGet]
+        public async Task<ActionResult<UserDashboardStatisticDto>> GetUser()
         {
-            return await userService.GetUserAsync(email);
+            return await userService.GetUserDashStatAsync();
         }
 
         [HttpPost("addphoto")]

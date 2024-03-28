@@ -4,31 +4,39 @@
             <app-loading-spinner></app-loading-spinner>
         </div> -->
 
-        <form class="form" (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading">
+        <form class="form" [formGroup]="authForm" (ngSubmit)="onSubmit($event)">
+            <!-- <form class="form" (ngSubmit)="onSubmit(authForm)" #authForm="ngForm" *ngIf="!isLoading"> -->
             <div class="row">
                 <div class="form-group">
                     <label for="email">Email</label>
-                    <input type="email" name="email" id="email" class="form-control" ngModel required email [readOnly]="is2FAMode">
+                    <input type="email" name="email" id="email" class="form-control" formControlName="email">
                 </div>
             </div>
             <div class="row">
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" name="password" id="password" class="form-control" ngModel required minlength="6" [readOnly]="is2FAMode">
+                    <input type="password" name="password" id="password" class="form-control"
+                        formControlName="password">
+                    <span *ngIf="!authForm.get('password')?.valid && authForm.get('password')?.touched"
+                        class="help-block">
+                        <span *ngIf="authForm.get('password')?.hasError('required')"> This field is
+                            required! </span>
+                        <span *ngIf="authForm.get('password')?.errors?.['minlength'] || authForm.get('password')?.errors?.['maxLength']">Password must be minimum 4 character long! </span>
+                    </span>
                 </div>
             </div>
-            <div class="row" *ngIf="is2FAMode">
+            <!-- <div class="row" *ngIf="is2FAMode">
                 <div class="form-group">
                     <label for="code">2FA OTP</label>
                     <input type="password" name="code" id="code" class="form-control" ngModel required>
                 </div>
-            </div>
+            </div> -->
             <div class="row">
                 <div class="form-btn-group">
-                    <button class="btn btn-primary" type="submit" [disabled]="!authForm.valid">{{ isLoginMode? 'Login' :
+                    <button class="btn btn-primary" type="submit">{{ isLoginMode? 'Login' :
                         'Sign-Up' }}</button> |
                     <button class="btn btn-light" type="button" (click)="onSwitchMode()">Switch To {{ isLoginMode?
-                        'Sign-Up' : 'Login' }}</button> |
+                        'Sign-Up' : 'Login' }}</button>
                     <!-- <button class="btn btn-light" type="button" (click)="onForgotPass()">ForgotPassword</button> -->
                 </div>
             </div>

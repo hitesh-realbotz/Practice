@@ -4,18 +4,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { BooksComponent } from './books.component';
 import { BookListComponent } from './book-list/book-list.component';
 import { BookDetailComponent } from './book-detail/book-detail.component';
-import { booksResolverResolver } from './books-resolver.resolver';
+import { booksResolver } from '../_resolver/books.resolver';
 import { PaymentComponent } from '../_shared/payment/payment.component';
 import { cartResolver } from '../_resolver/cart.resolver';
+import { authGuard } from '../_guards/auth.guard';
 
 const routes: Routes = [
 
-  { path: 'payment', component: PaymentComponent, resolve: [cartResolver]},
+  { path: 'payment', component: PaymentComponent, canActivate: [authGuard], resolve: [cartResolver]},
   {
     path: '', component: BooksComponent,
     children: [
-      { path: '', component: BookListComponent, resolve: [booksResolverResolver] },
-      { path: ':id', component: BookDetailComponent, resolve: [booksResolverResolver] },
+      { path: '', component: BookListComponent, resolve: [booksResolver, cartResolver] },
+      { path: ':id', component: BookDetailComponent, resolve: [booksResolver, cartResolver] },
     ]
   },
 ]

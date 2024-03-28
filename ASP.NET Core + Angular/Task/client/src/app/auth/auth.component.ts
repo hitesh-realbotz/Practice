@@ -1,10 +1,12 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
 import { User } from '../_models/user';
 import { Observable } from 'rxjs';
+import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { OtpInputModalComponent } from '../_shared/otp-input-modal/otp-input-modal.component';
 
 @Component({
   selector: 'app-auth',
@@ -14,77 +16,91 @@ import { Observable } from 'rxjs';
 export class AuthComponent implements OnInit {
   @Output() cancelRegister = new EventEmitter();
   model: any = {};
-  registerForm: FormGroup = new FormGroup({});
-  maxDate: Date = new Date();
-  // validationErrors: string[] | undefined;
+  authForm: FormGroup = new FormGroup({});
   isLoginMode = true;
-  is2FAMode = false;
+
+  bsModalRef: BsModalRef<OtpInputModalComponent> = new BsModalRef<OtpInputModalComponent>();
   isLoading: boolean = false;
 
   constructor(private accountService: AccountService, private toastr: ToastrService,
-    private fb: FormBuilder, private router: Router) { }
+    private fb: FormBuilder, private router: Router, private modalService: BsModalService, private ngZone: NgZone) { }
 
   ngOnInit(): void {
     this.initializeForm();
-    this.maxDate.setFullYear(this.maxDate.getFullYear() - 18);
   }
 
   //Login & SignUp mode selection
   onSwitchMode() {
     this.isLoginMode = !this.isLoginMode;
-    this.toastr.info(this.isLoginMode ? `Switched To Login Mode` : `Switched To SignUp Mode`);
+    // this.toastr.info(this.isLoginMode ? `Switched To Login Mode` : `Switched To SignUp Mode`);
   }
 
   initializeForm() {
-    this.registerForm = this.fb.group({
+    this.authForm = this.fb.group({
       email: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(8)]],
+      password: ['', [Validators.required, Validators.minLength(4)]],
     });
   }
 
 
-  onSubmit(form: NgForm) {
-    let authObs: Observable<any>;
-
-    if (this.is2FAMode) authObs = this.accountService.verifyTwoFA(form.value);
-    else if (this.isLoginMode) authObs = this.accountService.login(form.value);
-    else authObs = authObs = this.accountService.register(form.value);
+  onSubmit(event: Event) {
+    if (this.authForm.valid) {
+      let authObs: Observable<any>;
+    if (this.isLoginMode) authObs = this.accountService.login(this.authForm.value);
+    else authObs = authObs = this.accountService.register(this.authForm.value);
 
     authObs.subscribe(
       {
         next: response => {
           console.log(response);
-          if (!this.isLoginMode || !response.isTwoFAEnabled || this.is2FAMode) {
+          // if (!this.isLoginMode || !response.twoFactorEnabled || this.is2FAMode) {
+          if (!this.isLoginMode || !response.twoFactorEnabled ) {
 
             if (!this.isLoginMode) {
-              this.toastr.success('SetUp 2FA Login Method', 'Account Created!');
-              this.router.navigate(['/user/profile']);
+              this.toastr.success('SetUp Two Factor Authentication.', 'Account Created!');
+              // this.router.navigate(['/user/profile']);
+              this.router.navigate(['auth','two-fa']);
             }
             else {
               this.toastr.success('Welcome to bookStore', 'Login Success!');
-              if (!response.twoFactorEnabled || response.name == null) {
-                this.router.navigate(['/user/profile']);
+              if (!response.twoFactorEnabled) {
+                this.router.navigate(['auth','two-fa']);
+                // this.router.navigate(['/user/profile']);
               } else {
                 this.router.navigateByUrl('/book');
               }
             }
           } else {
-            this.is2FAMode = true;
+            const config = {
+              class: 'modal-dialog-centered',
+              initialState: {
+                user: response,
+                isSubmitted: false
+              }
+            }
+            this.bsModalRef = this.modalService.show(OtpInputModalComponent, config);
             this.toastr.success('Verify 2FA OTP!');
           }
-        },
-        // error: error => {
-        //   console.log(error);
-        //   this.toastr.info(error.error.message, "Try again!");
-        //   this.validationErrors = error;
-        // }
+        }
       }
     )
-
+    } else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
   }
 
   cancel() {
     this.cancelRegister.emit(false);
   }
+
+    //To mark All form controls as Touched to display Validation messages on-submit button clicked
+    markAllAsTouched() {
+      this.ngZone.runOutsideAngular(() => {
+        Object.values(this.authForm.controls).forEach(control => {
+          control.markAsTouched();
+        });
+      });
+    }
 
 }
