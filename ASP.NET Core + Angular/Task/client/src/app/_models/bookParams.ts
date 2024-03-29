@@ -12,7 +12,7 @@ export class BookParams {
         this.minPrice = minPrice || Constants.minPrice;
         this.maxPrice = maxPrice || Constants.maxPrice;
         this.pageNumber = pageNumber || Constants.pageNumber;
-        this.pageSize = pageSize || Constants.pageSize;
+        this.pageSize = pageSize || Constants.pageSizeOptions[4];
         this.sortBy = sortBy || Constants.sortByTitle;
         this.sortOrder = sortOrder || Constants.sortOrderAsc;
     }

@@ -46,6 +46,12 @@ a{
     align-items: center;
     justify-content: center;
 }
+.d-flex-row-baseline-cnt{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+}
 .d-flex-col-cnt-cnt{
     display: flex;
     flex-direction: column;
@@ -53,3 +59,7 @@ a{
     justify-content: center;
 }
 
+.list-group-item-tag {
+    color: #4a4d4f;
+    font-weight: 600;
+}

@@ -83,7 +83,8 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   //Decrease CartItem quantity
-  decreaseQuantity( item: CartItem) {
+  decreaseQuantity(event: Event, item: CartItem) {
+    event.stopPropagation();
     this.cartService.decreaseQty(item).subscribe({
       next: response => {
         if (!!response) {
@@ -96,7 +97,8 @@ export class CartComponent implements OnInit, OnDestroy {
   }
 
   //Increases CartItem quantity
-  increaseQuantity(item: CartItem) {
+  increaseQuantity(event: Event, item: CartItem) {
+    event.stopPropagation();
     this.cartService.addToCart(item).subscribe({
       next: response => {
         this.toastr.info("CartItem's quantity incremented!");
@@ -106,8 +108,8 @@ export class CartComponent implements OnInit, OnDestroy {
 
 
   //Toggles checkbox for CartItem selection
-  toggleItemCheck(item: CartItem) {
-    
+  toggleItemCheck(event: Event, item: CartItem) {
+    event.stopPropagation();
     this.cartService.toggleCheckItem(item).subscribe({
       next: response => {
         this.toastr.info("CartItem Toggled!!");
@@ -124,6 +126,13 @@ export class CartComponent implements OnInit, OnDestroy {
 
   onHome(){
     this.router.navigate(['/book']);
+  }
+
+   //Navigates to ItemDetail onClick of particular Item
+   onItem(event: Event, item: CartItem) {
+    event.stopPropagation();
+    this.router.navigate([item.book.isbn], { relativeTo: this.route.parent })
+    // this.router.navigate(['order', orderEl.id, orderItem.orderBook?.isbn]);
   }
   //Unsubscribe to all subscriptions
   ngOnDestroy() {

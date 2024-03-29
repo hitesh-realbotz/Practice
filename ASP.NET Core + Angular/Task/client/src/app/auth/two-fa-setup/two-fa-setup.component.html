@@ -5,8 +5,7 @@
             <h5>Your Two-Factor Authentication Status : {{user.twoFactorEnabled ? 'Set' : 'Not-Set! We recommend to set
                 for enhanced security.'}} </h5>
 
-            <button class="btn btn-primary" (click)="OnGetQR()">{{user.twoFactorEnabled? 'Reset 2FA' : 'Set-up 2FA' }}
-            </button>
+            <button class="btn btn-primary" (click)="OnGetQR()" *ngIf="user.twoFactorEnabled">Reset 2FA</button>
             <ng-container *ngIf="!!qrData.authenticatorUri">
                 <div>
                     <qrcode [qrdata]="qrData.authenticatorUri" [width]="256" [allowEmptyString]="true"

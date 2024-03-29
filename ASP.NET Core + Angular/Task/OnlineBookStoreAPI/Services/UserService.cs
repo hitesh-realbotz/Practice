@@ -27,11 +27,8 @@ namespace OnlineBookStoreAPI.Services
         public async Task<UserProfileDto> AddPhotoAsync(IFormFile file)
         {
             AppUser? user = await UserExists();
-
             var result = await photoService.AddPhotoAsync(file);
-
             if (result.Error != null) throw new BadHttpRequestException(result.Error.Message);
-
             var photo = new Photo
             {
                 Url = result.SecureUrl.AbsoluteUri,
@@ -39,9 +36,7 @@ namespace OnlineBookStoreAPI.Services
             };
 
             if (user.Photos.Count == 0) photo.IsMain = true;
-
             user.Photos.Add(photo);
-
             if (await uow.SaveChangesAsync())
                 return mapper.Map<UserProfileDto>(user);
 
@@ -52,17 +47,12 @@ namespace OnlineBookStoreAPI.Services
         {
             uow.BeginTransaction();
             AppUser? user = await UserExists();
-
             var photo = user.Photos.FirstOrDefault(x => x.PublicId == publicId);
-
             if (photo == null) throw new BadHttpRequestException("Photo not found!");
-
             if (photo.IsMain) throw new BadHttpRequestException("This is already your main photo");
-
             var currentMain = user.Photos.FirstOrDefault(x => x.IsMain);
             if (currentMain != null) currentMain.IsMain = false;
             photo.IsMain = true;
-
             if (await uow.Commit()) return mapper.Map<UserProfileDto>(user);
 
             throw new BadHttpRequestException("Problem setting main photo");
@@ -73,24 +63,16 @@ namespace OnlineBookStoreAPI.Services
         {
             uow.BeginTransaction();
             AppUser? user = await UserExists();
-
             var photo = user.Photos.FirstOrDefault(x => x.PublicId == publicId);
-
             if (photo == null) throw new BadHttpRequestException("Photo not found!");
-
             if (photo.IsMain) throw new BadHttpRequestException("You cannot delete your main photo.");
-
-            
             if (photo.PublicId != null)
             {
                 var result = await photoService.DeletePhotoAsync(photo.PublicId);
                 if (result.Error != null) throw new BadHttpRequestException(result.Error.Message);
             }
-
             user.Photos.Remove(photo);
-
             if (await uow.Commit()) return mapper.Map<UserProfileDto>(user);
-
             throw new BadHttpRequestException("Problem deleting photo");
         }
 

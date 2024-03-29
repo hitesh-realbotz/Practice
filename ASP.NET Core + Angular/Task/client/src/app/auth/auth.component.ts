@@ -7,6 +7,7 @@ import { User } from '../_models/user';
 import { Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { OtpInputModalComponent } from '../_shared/otp-input-modal/otp-input-modal.component';
+import { Constants } from '../_models/constants';
 
 @Component({
   selector: 'app-auth',
@@ -37,53 +38,55 @@ export class AuthComponent implements OnInit {
 
   initializeForm() {
     this.authForm = this.fb.group({
-      email: ['', Validators.required],
-      password: ['', [Validators.required, Validators.minLength(4)]],
+      email: ['', [Validators.required, Validators.email, Validators.pattern(Constants.emailRegex)]],
+      password: ['', [Validators.required, Validators.pattern(Constants.passwordRegex)]],
     });
   }
+
 
 
   onSubmit(event: Event) {
     if (this.authForm.valid) {
       let authObs: Observable<any>;
-    if (this.isLoginMode) authObs = this.accountService.login(this.authForm.value);
-    else authObs = authObs = this.accountService.register(this.authForm.value);
+      if (this.isLoginMode) authObs = this.accountService.login(this.authForm.value);
+      else authObs = authObs = this.accountService.register(this.authForm.value);
 
-    authObs.subscribe(
-      {
-        next: response => {
-          console.log(response);
-          // if (!this.isLoginMode || !response.twoFactorEnabled || this.is2FAMode) {
-          if (!this.isLoginMode || !response.twoFactorEnabled ) {
+      authObs.subscribe(
+        {
+          next: response => {
+            console.log(response);
+            // if (!this.isLoginMode || !response.twoFactorEnabled || this.is2FAMode) {
+            if (!this.isLoginMode || !response.twoFactorEnabled) {
 
-            if (!this.isLoginMode) {
-              this.toastr.success('SetUp Two Factor Authentication.', 'Account Created!');
-              // this.router.navigate(['/user/profile']);
-              this.router.navigate(['auth','two-fa']);
-            }
-            else {
-              this.toastr.success('Welcome to bookStore', 'Login Success!');
-              if (!response.twoFactorEnabled) {
-                this.router.navigate(['auth','two-fa']);
+              if (!this.isLoginMode) {
+                this.toastr.success('SetUp Two Factor Authentication.', 'Account Created!');
                 // this.router.navigate(['/user/profile']);
-              } else {
-                this.router.navigateByUrl('/book');
+                this.router.navigate(['auth', 'two-fa']);
               }
-            }
-          } else {
-            const config = {
-              class: 'modal-dialog-centered',
-              initialState: {
-                user: response,
-                isSubmitted: false
+              else {
+                if (!response.twoFactorEnabled) {
+                  this.router.navigate(['auth', 'two-fa']);
+                  // this.router.navigate(['/user/profile']);
+                  this.toastr.success('SetUp Two Factor Authentication!');
+                } else {
+                  this.toastr.success('Welcome to bookStore', 'Login Success!');
+                  this.router.navigateByUrl('/book');
+                }
               }
+            } else {
+              const config = {
+                class: 'modal-dialog-centered',
+                initialState: {
+                  user: response,
+                  isSubmitted: false
+                }
+              }
+              this.bsModalRef = this.modalService.show(OtpInputModalComponent, config);
+              this.toastr.success('Verify 2FA OTP!');
             }
-            this.bsModalRef = this.modalService.show(OtpInputModalComponent, config);
-            this.toastr.success('Verify 2FA OTP!');
           }
         }
-      }
-    )
+      )
     } else {
       event.stopPropagation();
       this.markAllAsTouched();
@@ -94,13 +97,13 @@ export class AuthComponent implements OnInit {
     this.cancelRegister.emit(false);
   }
 
-    //To mark All form controls as Touched to display Validation messages on-submit button clicked
-    markAllAsTouched() {
-      this.ngZone.runOutsideAngular(() => {
-        Object.values(this.authForm.controls).forEach(control => {
-          control.markAsTouched();
-        });
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.authForm.controls).forEach(control => {
+        control.markAsTouched();
       });
-    }
+    });
+  }
 
 }

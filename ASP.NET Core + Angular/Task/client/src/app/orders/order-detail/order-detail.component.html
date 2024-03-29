@@ -9,7 +9,7 @@
                     <div><strong>Billing Name</strong> : {{order.billingName}}</div>
                     <div><strong>Address</strong> : {{order.address}}</div>
                     <div><strong>Contact No.</strong> : {{order.contactNo}}</div>
-                    <div><strong>Total Price</strong> : {{order.totalPrice}}</div>
+                    <div><strong>Total Price</strong> : <i class="fa fa-inr " aria-hidden="true"></i> {{order.totalPrice}}/-</div>
                     <div><strong>Date</strong> : {{order.date | date: 'dd/MM/yyyy'}}</div>
                     <div><strong>Shipping Method</strong> : {{order.shippingMethod}}</div>
                 </div>
@@ -26,7 +26,7 @@
                                 <h5 class="list-group-item-heading">{{orderItem.orderBook?.title}}</h5>
                             </div>
                             <div class="item-description">
-                                <p class="list-group-item-text">{{orderItem.quantity}} * {{orderItem.unitPrice}} = {{orderItem.totalPrice}}/-</p>
+                                <p class="list-group-item-text">{{orderItem.quantity}} nos. x  <i class="fa fa-inr " aria-hidden="true"></i> {{orderItem.unitPrice}} = <i class="fa fa-inr " aria-hidden="true"></i> {{orderItem.totalPrice}}/-</p>
                             </div>
                         </div>
 

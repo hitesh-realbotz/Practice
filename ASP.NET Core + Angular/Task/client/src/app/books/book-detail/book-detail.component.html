@@ -4,24 +4,27 @@
     </div>
     <div class="item-details col-8 col-md-8 col-lg-8">
         <div class="item-title">
-            <h1 class="list-group-item-heading" >{{book.title}}</h1>
+            <h1 class="list-group-item-heading">{{book.title}}</h1>
         </div>
-        
+
         <div class="item-description float-end">
-            
+
             <div>
                 <p class="list-group-item-text">{{book.description}}</p>
             </div>
             <div>
-                <p class="list-group-item-text">Unit Price : {{book.unitPrice}} </p>
+                <p class="list-group-item-text"><span class="list-group-item-tag">Unit Price : </span><i
+                        class="fa fa-inr " aria-hidden="true"></i> {{book.unitPrice}}/-</p>
             </div>
             <div>
-                <p class="list-group-item-text">Available Quantity : {{book.availableQuantity}}</p>
+                <p class="list-group-item-text"><span class="list-group-item-tag">Available Quantity :
+                    </span>{{book.availableQuantity}} <span class="out-of-stock" *ngIf="!book.availableQuantity">(Out Of Stock!)</span></p>
             </div>
         </div>
         <div class="item-actions">
             <div class="item-action">
-                <button class="btn btn-primary" (click)="onAddToCart($event, book)">Add to Cart</button>
+                <button class="btn btn-primary" (click)="onAddToCart($event, book)" *ngIf="book.availableQuantity">Add
+                    to Cart</button>
             </div>
 
         </div>

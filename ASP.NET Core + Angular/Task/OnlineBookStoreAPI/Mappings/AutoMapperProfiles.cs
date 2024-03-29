@@ -43,9 +43,6 @@ namespace OnlineBookStoreAPI.Mappings
       
             CreateMap<PhotoDto, Photo>().ReverseMap();
 
-            CreateMap<UserProfileDto, SignUpResponseDto>();
-            CreateMap<SignUpResponseDto, UserProfileDto>();
-
             CreateMap<CartItem, CartItemDto>()
                 .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.Quantity * c.Book.UnitPrice)));
 

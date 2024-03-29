@@ -25,7 +25,9 @@ export class OrderListComponent implements OnInit, OnDestroy {
     Constants.sortByPrice,
     Constants.sortById
   ];
-  sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  // sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  sortOrderOptions: string[] = Constants.sortOrderOptions;
+  pageSizeOptions: number[] = Constants.pageSizeOptions;
   componentSubscriptions = new Subscription();
 
   constructor(
@@ -44,6 +46,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.sortForm = this.fb.group({
       sortBy: [this.orderParams?.sortBy, [Validators.required]],
       sortOrder: [this.orderParams?.sortOrder, [Validators.required]],
+      pageSize: [this.orderParams?.pageSize, [Validators.required]],
     });
 
     this.componentSubscriptions.add(
@@ -91,6 +94,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.orderService.setOrderParams(bP);
       this.orderParams = this.orderService.getOrderParams();
       this.loadOrders();
+      !!this.pagination ? this.pagination.currentPage = Constants.pageNumber : '';
     } else {
       event.stopPropagation();
       this.markAllAsTouched();

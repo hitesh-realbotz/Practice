@@ -1,9 +1,10 @@
 <div *ngIf="!!cart; else noCartItems">
     <div class="row cart">
-        <div class="col-md-12 col-sm-12" *ngIf="!!cart">
+        <div class="" *ngIf="!!cart">
             <table class="table table-primary">
                 <thead>
                     <tr>
+                        <th></th>
                         <th>Item Name</th>
                         <th>Price</th>
                         <th></th>
@@ -12,17 +13,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of cart.cartItems">
-                        <td class="cart-item-name">
-                            <label class="checkbox">
-                                <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(item)">
-                            </label>
-                            <!-- <input type="checkbox" [checked]="item.checked" (change)="toggleItemCheck(item)"> -->
-                            <span>{{ item.book.title }}</span>
+                    <tr *ngFor="let item of cart.cartItems" >
+                        <td><input class="ptr-cursor"  type="checkbox" [checked]="item.checked" (change)="toggleItemCheck($event, item)"></td>
+                        <td>
+                            <span class="ptr-cursor" (click)="onItem($event, item)">{{ item.book.title }}</span>
                         </td>
                         <td class="cart-item-price"> {{ item.totalPrice }} </td>
                         <td class="cart-item-qty-action">
-                            <a (click)="decreaseQuantity(item)">-</a>
+                            <i (click)="decreaseQuantity($event, item)" class="fa fa-minus-circle" aria-hidden="true"></i>
                         </td>
                         <td class="cart-item-qty">
                             <span>
@@ -30,25 +28,28 @@
                             </span>
                         </td>
                         <td class="cart-item-qty-action">
-                            <a (click)="increaseQuantity(item)">+</a>
+                            <i (click)="increaseQuantity($event, item)" class="fa fa-plus-circle" aria-hidden="true"></i>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <div>
-                Total Price for Cart Items: {{ cart.totalPrice }}
+                <p class="list-group-item-text"><span class="list-group-item-tag">Total Price for Cart Items: </span><i
+                        class="fa fa-inr " aria-hidden="true"></i> {{cart.totalPrice}}/-</p>
             </div>
             <div>
-                Total Price for Checked Items: {{ cart.totalCheckedPrice }}
+                <p class="list-group-item-text"><span class="list-group-item-tag">Total Price for Checked Items:
+                    </span><i class="fa fa-inr " aria-hidden="true"></i> {{cart.totalCheckedPrice}}/-</p>
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12 col-lg-12 col-12 form-btn-group">
+            <div class="form-btn-group">
                 <button class="btn btn-primary form-btn" (click)="onCheckout()"
-                    [disabled]="cart != undefined && cart.totalCheckedPrice <= 0">Checkout</button>
+                    [disabled]="cart != undefined && cart.totalCheckedPrice <= 0">Checkout <i class="fa fa-shopping-bag"
+                        aria-hidden="true"></i></button>
 
-                <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="cart == undefined">Clear
-                    Cart</button>
+                <button class="btn btn-danger form-btn" (click)="onClearCart()" [disabled]="cart == undefined">Clear <i
+                        class="fa fa-trash" aria-hidden="true"></i></button>
             </div>
         </div>
     </div>
