@@ -20,6 +20,7 @@ namespace OnlineBookStoreAPI.Controllers
             this.bookService = bookService;
         }
 
+        //PagedList of books
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BookDto>>> GetBooks([FromQuery] BookParams bookParams)
         {
@@ -29,6 +30,7 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(books);
         }
 
+        //Gets book by title
         [HttpGet("byTitle/{title}")]
         public async Task<ActionResult<BookDto>> GetBookByTitle(string title)
         {
@@ -40,6 +42,7 @@ namespace OnlineBookStoreAPI.Controllers
         }
 
 
+        //Gets book by ISBNCode
         [HttpGet("{isbn}")]
         public async Task<ActionResult<BookDto>> GetBook(string isbn)
         {
@@ -50,8 +53,10 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(book);    
         }
 
+
+        //Upload photo for books
         [HttpPost("add-photo")]
-        public async Task<ActionResult<BookDto>> AddPhoto([FromForm] List<IFormFile> files)
+        public async Task<ActionResult<List<BookDto>>> AddPhoto([FromForm] List<IFormFile> files)
         {
             var bookDto = new List<BookDto?>();
             bookDto = await bookService.AddPhotoAsync(files);

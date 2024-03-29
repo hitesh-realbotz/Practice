@@ -14,6 +14,7 @@ namespace OnlineBookStoreAPI.Repositories
             this.dbContext = dbContext;
         }
 
+        //Gets ordered book by bookId
         public async Task<List<OrderBook?>> GetOrderBookByBookId(int bookId)
         {
            return await dbContext.OrderBooks.Where(ob => ob.BookId ==  bookId).ToListAsync();

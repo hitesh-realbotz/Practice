@@ -1,6 +1,6 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FileUploader } from 'ng2-file-upload';
-import { Subscription, take } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { Photo } from 'src/app/_models/photo';
 import { User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
@@ -21,9 +21,7 @@ export class PhotoEditorComponent implements OnInit, OnDestroy {
   componentSubscriptions = new Subscription();
 
 
-  constructor(private accountService: AccountService, private userService: UserService,  private subService: SubscriptionsService) {
-
-  }
+  constructor(private accountService: AccountService, private userService: UserService,  private subService: SubscriptionsService) { }
   ngOnInit(): void {
     this.componentSubscriptions.add(this.subService.getLoggedUserChanges().subscribe({
       next: user => {
@@ -64,6 +62,7 @@ export class PhotoEditorComponent implements OnInit, OnDestroy {
     this.hasBaseDropzoneOver = e;
   }
 
+  //Sets main photo
   setMainPhoto(photo: Photo) {
     this.userService.setMainPhoto(photo.publicId).subscribe({
       next: user => {
@@ -80,6 +79,7 @@ export class PhotoEditorComponent implements OnInit, OnDestroy {
     })
   }
 
+  //Deletes photo
   deletePhoto(photo: Photo) {
     this.userService.deletePhoto(photo.publicId).subscribe({
       next: user => {

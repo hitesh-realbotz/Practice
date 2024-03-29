@@ -18,6 +18,7 @@ namespace OnlineBookStoreAPI.Helpers
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
 
+        //Creates PagedList
         public static async Task<PagedList<T>> CreateAsync(IQueryable<T> source, int pageNumber, int pageSize)
         {
             var count = await source.CountAsync();

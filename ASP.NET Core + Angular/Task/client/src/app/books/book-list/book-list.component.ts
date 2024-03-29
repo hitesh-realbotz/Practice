@@ -18,12 +18,8 @@ export class BookListComponent implements OnInit, OnDestroy {
   bookParms: BookParams | undefined;
   pagination: Pagination | undefined;
   sortForm: FormGroup = new FormGroup({});
-  sortByOptions: string[] = [
-    Constants.sortByTitle,
-    Constants.sortByPrice,
-    Constants.sortByAuthor,
-  ];
-  // sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  sortByOptions: string[] = [Constants.sortByTitle, Constants.sortByPrice, Constants.sortByAuthor];
+
   sortOrderOptions: string[] = Constants.sortOrderOptions;
   pageSizeOptions: number[] = Constants.pageSizeOptions;
   componentSubscriptions = new Subscription();
@@ -57,21 +53,6 @@ export class BookListComponent implements OnInit, OnDestroy {
     );
   }
 
-  loadBooks() {
-    if (this.bookParms) {
-      this.bookService.setBookParams(this.bookParms);
-      this.bookService.getBooks(this.bookParms).subscribe({
-        next: (response) => {
-          if (response.result && response.pagination) {
-            this.bookService.setBooks(response.result);
-            this.pagination = response.pagination;
-            this.getPagedData();
-          }
-        },
-      });
-    }
-  }
-
   //To mark All form controls as Touched to display Validation messages on-submit button clicked
   markAllAsTouched() {
     this.ngZone.runOutsideAngular(() => {
@@ -80,6 +61,8 @@ export class BookListComponent implements OnInit, OnDestroy {
       });
     });
   }
+
+  //Get books as per filters onSubmit
   onSubmit(event: Event) {
     if (this.sortForm.valid) {
       let value = this.sortForm.value;
@@ -101,11 +84,31 @@ export class BookListComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Gets books as per bookparams
+  loadBooks() {
+    if (this.bookParms) {
+      this.bookService.setBookParams(this.bookParms);
+      this.bookService.getBooks(this.bookParms).subscribe({
+        next: (response) => {
+          if (response.result && response.pagination) {
+            this.bookService.setBooks(response.result);
+            this.pagination = response.pagination;
+            this.getPagedData();
+          }
+        },
+      });
+    }
+  }
+
+
+  //Resets filter properties
   resetFilters() {
     this.bookParms = new BookParams();
     this.ngOnInit();
   }
 
+
+  //Gets items on page change
   pageChanged(event: any) {
     if (this.bookParms && this.bookParms?.pageNumber !== event.page) {
       this.bookParms.pageNumber = event.page;
@@ -115,6 +118,7 @@ export class BookListComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Gets items as per required page
   getPagedData() {
     if (this.pagination) {
       const startIndex =
@@ -124,6 +128,8 @@ export class BookListComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  //Unsubscribe to subscriptions
   ngOnDestroy(): void {
     this.componentSubscriptions.unsubscribe();
   }

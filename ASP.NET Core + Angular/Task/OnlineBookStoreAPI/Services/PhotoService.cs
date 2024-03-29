@@ -23,6 +23,8 @@ namespace OnlineBookStoreAPI.Services
             this.cloudinary = new Cloudinary(acc);
             this.config = config;
         }
+
+        //Upload photo to cloudinary
         public async Task<ImageUploadResult> AddPhotoAsync(IFormFile file)
         {
             var uploadResult = new ImageUploadResult();
@@ -46,6 +48,7 @@ namespace OnlineBookStoreAPI.Services
             return uploadResult;
         }
 
+        //Delete photo from cloudinary
         public async Task<DeletionResult> DeletePhotoAsync(string publicId)
         {
             var deleteParams = new DeletionParams(publicId);

@@ -19,6 +19,7 @@ namespace OnlineBookStoreAPI.Mappings
         {
             this.config = config;
             var tokenConfig = new TokenService(config);
+
             CreateMap<RegisterDto, AppUser>().ReverseMap();
             CreateMap<LoginDto, AppUser>().ReverseMap();
 
@@ -28,7 +29,7 @@ namespace OnlineBookStoreAPI.Mappings
                 .ForMember(up => up.Cart, opt => opt.MapFrom(u => u.Cart != null ? u.Cart : null));
 
             CreateMap<UserProfileDto, AppUser>();
-            
+
             CreateMap<AppUser, UserDashboardStatisticDto>()
                 .ForMember(uds => uds.CartItemsCount, opt => opt.MapFrom(u => u.Cart.CartItems.Count))
                 .ForMember(uds => uds.OrdersCount, opt => opt.MapFrom(u => u.Orders.Count));
@@ -37,22 +38,22 @@ namespace OnlineBookStoreAPI.Mappings
             CreateMap<BookDto, Book>();
             CreateMap<Book, BookDto>()
                 .ForMember(bd => bd.PhotoUrl, opt => opt.MapFrom(b => b.Photos.FirstOrDefault(p => p.IsMain).Url));
-            CreateMap<OrderDto, Order>();
 
+            CreateMap<OrderDto, Order>();
             CreateMap<OrderBook, OrderBookDto>().ReverseMap();
-      
             CreateMap<PhotoDto, Photo>().ReverseMap();
 
-            CreateMap<CartItem, CartItemDto>()
-                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.Quantity * c.Book.UnitPrice)));
 
             CreateMap<Cart, CartDto>()
                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => (ci.Quantity * ci.Book.UnitPrice)))))
                .ForMember(cd => cd.TotalCheckedPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.CartItems.Sum(ci => ci.Checked ? (ci.Quantity * ci.Book.UnitPrice) : 0))));
-
-
             CreateMap<CartDto, Cart>();
+
+            CreateMap<CartItem, CartItemDto>()
+                .ForMember(cd => cd.TotalPrice, opt => opt.MapFrom(c => Convert.ToDouble(c.Quantity * c.Book.UnitPrice)));
             CreateMap<CartItemDto, CartItem>();
+
+
 
             CreateMap<OrderItem, OrderItemDto>().ReverseMap();
             CreateMap<Order, OrderDto>().ReverseMap();
@@ -61,17 +62,14 @@ namespace OnlineBookStoreAPI.Mappings
 
             CreateMap<CartItem, OrderItem>()
                 .ForMember(oi => oi.Id, opt => opt.MapFrom(c => (int?)null))
-                .ForMember(oi => oi.OrderBook, opt=> opt.MapFrom(ci => ci.Book))
+                .ForMember(oi => oi.OrderBook, opt => opt.MapFrom(ci => ci.Book))
                 .ForMember(oi => oi.PhotoUrl, opt => opt.MapFrom(ci => ci.Book.Photos.FirstOrDefault(p => p.IsMain).Url))
                 .ForMember(oi => oi.UnitPrice, opt => opt.MapFrom(ci => ci.Book.UnitPrice))
-                .ForMember(oi => oi.TotalPrice, opt => opt.MapFrom(ci => Convert.ToDouble(ci.Checked ? (ci.Quantity * ci.Book.UnitPrice) : 0)))
-                //.ForMember(oi => oi.OrderBook.BookId, opt => opt.MapFrom(ci => ci.BookId) )
-                ;
+                .ForMember(oi => oi.TotalPrice, opt => opt.MapFrom(ci => Convert.ToDouble(ci.Checked ? (ci.Quantity * ci.Book.UnitPrice) : 0)));
+
             CreateMap<Book, OrderBook>()
                 .ForMember(ob => ob.Id, opt => opt.MapFrom(b => (int?)null))
-                .ForMember(ob => ob.BookId, opt => opt.MapFrom(b => b.Id))
-                ;
-
+                .ForMember(ob => ob.BookId, opt => opt.MapFrom(b => b.Id));
         }
     }
 }

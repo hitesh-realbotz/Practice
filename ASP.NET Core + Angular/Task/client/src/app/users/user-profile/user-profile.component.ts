@@ -1,14 +1,8 @@
-import { Component, NgZone, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { TabDirective, TabsetComponent } from 'ngx-bootstrap/tabs';
-import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { QRData } from 'src/app/_models/qrdata';
 import { User } from 'src/app/_models/user';
-import { AccountService } from 'src/app/_services/account.service';
 import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
-import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -23,7 +17,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private subService: SubscriptionsService, private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder, private router: Router, private ngZone: NgZone, private userService: UserService) { }
+  constructor(private subService: SubscriptionsService) { }
   
   ngOnInit(): void {
     this.componentSubscriptions.add(this.subService.getLoggedUserChanges().subscribe({
@@ -39,6 +33,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   }
 
 
+  //Selects tab
   selectTab(heading: string) {
     if (this.userTabs != undefined) {
       // this.userTabs.tabs.find(x => x.heading === heading)!.active = true;

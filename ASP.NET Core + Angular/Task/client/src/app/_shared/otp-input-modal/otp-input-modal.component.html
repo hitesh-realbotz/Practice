@@ -2,12 +2,12 @@
     <div class="row">
         <div class="form-group">
             <label for="code">Two-Factor Authentication OTP</label>
-            <ngx-otp-input [config]="otpInputConfig" (fill)="enteredOTP()" #otpCode></ngx-otp-input>
+            <ngx-otp-input [config]="otpInputConfig" (otpChange)="onOtpChange()" #otpCode></ngx-otp-input>
         </div>
     </div>
     <div class="row">
         <div class="form-btn-group">
-            <button class="btn btn-primary" type="submit">Login</button>
+            <button class="btn btn-primary" type="submit"> {{!!user ? ( user.twoFactorEnabled ? 'Login' : 'Set' ) : 'Reset'}}</button>
              <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
         </div>
     </div>

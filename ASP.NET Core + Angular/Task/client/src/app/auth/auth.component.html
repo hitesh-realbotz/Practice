@@ -12,8 +12,7 @@
                     <input type="email" name="email" id="email" class="form-control" formControlName="email">
                     <span *ngIf="!authForm.get('email')?.valid && authForm.get('email')?.touched" class="help-block">
                         <span *ngIf="authForm.get('email')?.hasError('required')"> This field is required! </span>
-                        <span *ngIf="authForm.get('email')?.errors?.['email']">Enter valid email! </span>
-                        <span *ngIf="authForm.get('email')?.errors?.['pattern']">Enter valid email id! </span>
+                        <span *ngIf="authForm.get('email')?.hasError('pattern')">Enter valid email id! </span>
 
                     </span>
                 </div>
@@ -27,8 +26,7 @@
                         class="help-block">
                         <span *ngIf="authForm.get('password')?.hasError('required')"> This field is
                             required! </span>
-                        <span *ngIf="authForm.get('password')?.errors?.['pattern']">Password must contain minimum one
-                            small, capital, special char and digit! </span>
+                        <span *ngIf="authForm.get('password')?.errors?.['pattern']">Password must have at least 8 characters, one uppercase letter, one lowercase letter, one digit and one special character.</span>
                     </span>
                 </div>
             </div>

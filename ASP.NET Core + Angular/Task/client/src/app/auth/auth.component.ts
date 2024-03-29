@@ -1,9 +1,8 @@
 import { Component, EventEmitter, NgZone, OnInit, Output } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, NgForm, ValidatorFn, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AccountService } from '../_services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
-import { User } from '../_models/user';
 import { Observable } from 'rxjs';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { OtpInputModalComponent } from '../_shared/otp-input-modal/otp-input-modal.component';
@@ -37,12 +36,12 @@ export class AuthComponent implements OnInit {
   }
 
   initializeForm() {
+
     this.authForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email, Validators.pattern(Constants.emailRegex)]],
+      email: ['', [Validators.required, Validators.pattern(Constants.emailRegex)]],
       password: ['', [Validators.required, Validators.pattern(Constants.passwordRegex)]],
     });
   }
-
 
 
   onSubmit(event: Event) {
@@ -60,13 +59,11 @@ export class AuthComponent implements OnInit {
 
               if (!this.isLoginMode) {
                 this.toastr.success('SetUp Two Factor Authentication.', 'Account Created!');
-                // this.router.navigate(['/user/profile']);
                 this.router.navigate(['auth', 'two-fa']);
               }
               else {
                 if (!response.twoFactorEnabled) {
                   this.router.navigate(['auth', 'two-fa']);
-                  // this.router.navigate(['/user/profile']);
                   this.toastr.success('SetUp Two Factor Authentication!');
                 } else {
                   this.toastr.success('Welcome to bookStore', 'Login Success!');

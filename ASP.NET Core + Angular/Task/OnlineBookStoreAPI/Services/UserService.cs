@@ -24,6 +24,7 @@ namespace OnlineBookStoreAPI.Services
             this.photoService = photoService;
         }
 
+        //Upload user photo
         public async Task<UserProfileDto> AddPhotoAsync(IFormFile file)
         {
             AppUser? user = await UserExists();
@@ -43,6 +44,8 @@ namespace OnlineBookStoreAPI.Services
             throw new BadHttpRequestException("Problem adding photo");
         }
 
+
+        //Set main photo
         public async Task<UserProfileDto> SetMainPhotoAsync(string publicId)
         {
             uow.BeginTransaction();
@@ -58,7 +61,7 @@ namespace OnlineBookStoreAPI.Services
             throw new BadHttpRequestException("Problem setting main photo");
         }
 
-
+        //Deletes photo if not marked as main
         public async Task<UserProfileDto> DeletePhotoAsync(string publicId)
         {
             uow.BeginTransaction();
@@ -76,11 +79,8 @@ namespace OnlineBookStoreAPI.Services
             throw new BadHttpRequestException("Problem deleting photo");
         }
 
-        public async Task<UserProfileDto> GetUserAsync(string email)
-        {
-            return mapper.Map<UserProfileDto>(await uow.UserRepository.GetUserByEmailAsync(email));
-        }
 
+        //Updates user profile
         public async Task<UserProfileDto> UpdateAsync(UserProfileUpdateDto updateDto)
         {
             AppUser? existingUser = await UserExists();
@@ -97,20 +97,28 @@ namespace OnlineBookStoreAPI.Services
             throw new BadHttpRequestException("Failed to update user details.");
         }
 
-        private async Task<AppUser?> UserExists()
-        {
-            var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value.ToString();
-            var existingUser = await uow.UserRepository.GetUserByEmailAsync(email);
-            if (existingUser == null) throw new BadHttpRequestException($"User with {email} not found!");
-            return existingUser;
-        }
-
+        //Gets cartItemCount & OrderCount
         public async Task<UserDashboardStatisticDto?> GetUserDashStatAsync()
         {
             var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value.ToString();
             var user = await uow.UserRepository.GetUserCartAndOrdersAsync(email);
             if (user == null) throw new BadHttpRequestException($"User with {email} not found!");
             return mapper.Map<UserDashboardStatisticDto>(user);
+        }
+
+        //Get user by emailId
+        public async Task<UserProfileDto> GetUserAsync(string email)
+        {
+            return mapper.Map<UserProfileDto>(await uow.UserRepository.GetUserByEmailAsync(email));
+        }
+
+        //Gets user
+        private async Task<AppUser?> UserExists()
+        {
+            var email = httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Email).Value.ToString();
+            var existingUser = await uow.UserRepository.GetUserByEmailAsync(email);
+            if (existingUser == null) throw new BadHttpRequestException($"User with {email} not found!");
+            return existingUser;
         }
     }
 }

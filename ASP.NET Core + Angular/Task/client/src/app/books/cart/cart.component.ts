@@ -2,7 +2,6 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs';
-import { Book } from 'src/app/_models/book';
 import { Cart } from 'src/app/_models/cart';
 import { CartItem } from 'src/app/_models/cartItem';
 import { User } from 'src/app/_models/user';
@@ -23,13 +22,12 @@ export class CartComponent implements OnInit, OnDestroy {
   componentSubscriptions = new Subscription();
 
 
-  constructor(private bookService: BookService,
-    private accountService: AccountService,
+  constructor(
     private cartService: CartService,
     private router: Router,
     private route: ActivatedRoute,
     private toastr: ToastrService,
-    private subService: SubscriptionsService, private cdr: ChangeDetectorRef) { }
+    private subService: SubscriptionsService) { }
 
   ngOnInit() {
 
@@ -63,7 +61,6 @@ export class CartComponent implements OnInit, OnDestroy {
         next: (cart: Cart | null) => {
           if (cart != null) {
             this.cart = cart;
-            // this.cdr.detectChanges();
           }else{
             this.cart = null;
           }

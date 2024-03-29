@@ -11,8 +11,9 @@ import { CartService } from './_services/cart.service';
 export class AppComponent implements OnInit {
   title = 'BookStore';
   users: any;
-  constructor(private accountService: AccountService, private cartService: CartService) {}
+  constructor(private accountService: AccountService, private cartService: CartService) { }
 
+  //AutoLogin on page refresh
   ngOnInit(): void {
     this.accountService.autoLogin();
   }

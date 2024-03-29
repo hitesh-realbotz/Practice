@@ -22,6 +22,8 @@ namespace OnlineBookStoreAPI.Repositories
             this.mapper = mapper;
         }
 
+
+        //Creates new book
         public async Task<Book> CreateAsync(Book book)
         {
             await dbContext.AddAsync(book);
@@ -29,6 +31,7 @@ namespace OnlineBookStoreAPI.Repositories
             return book;
         }
 
+        //PagedList of books
         public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
         {
             var query = dbContext.Books.Include(b => b.Photos).AsQueryable();
@@ -53,10 +56,13 @@ namespace OnlineBookStoreAPI.Repositories
 
         }
 
+        //Gets book by title
         public async Task<Book?> GetByTitleAsync(string title)
         {
             return await dbContext.Books.Include(b => b.Photos).FirstOrDefaultAsync(b => b.Title == title);
         }
+
+        //Gets book by ISBNCode
         public async Task<Book?> GetByISBNAsync(string isbn)
         {
             return await dbContext.Books.Include(b => b.Photos).SingleOrDefaultAsync(book => book.ISBN == isbn);

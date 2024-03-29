@@ -9,6 +9,8 @@ import { User } from '../_models/user';
 })
 export class AuthInterceptorService implements HttpInterceptor {
   constructor(private accountService: AccountService) { }
+  
+  //Modifies request with token
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     console.log(req.params.toString());
     return this.accountService.currentUser$.pipe(take(1), exhaustMap(user => {
@@ -23,6 +25,7 @@ export class AuthInterceptorService implements HttpInterceptor {
     }))
   }
 
+  //get modified request with token
   getModifiedRequest(req: HttpRequest<any>, user: User) {
     const modifiedReq = req.clone({
       setHeaders: {

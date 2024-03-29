@@ -6,6 +6,7 @@ using OnlineBookStoreAPI.Repositories.Interfaces;
 using OnlineBookStoreAPI.Repositories;
 using OnlineBookStoreAPI.Helpers;
 using OnlineBookStoreAPI.Mappings;
+using OnlineBookStoreAPI.Constants;
 
 namespace OnlineBookStoreAPI.Extensions
 {
@@ -13,7 +14,6 @@ namespace OnlineBookStoreAPI.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
         {
-
             services.AddDbContext<BookStoreDbContext>(options => options.UseSqlServer(config.GetConnectionString("DbConnection")));
             services.AddCors();
             services.AddScoped<ITokenService, TokenService>();

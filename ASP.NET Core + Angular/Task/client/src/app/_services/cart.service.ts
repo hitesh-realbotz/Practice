@@ -22,6 +22,7 @@ export class CartService {
 
   constructor(private http: HttpClient, private toastr: ToastrService, private bookService: BookService, private accountService: AccountService) { }
 
+  //Gets user cart
   getCart() {
     return this.http.get<Cart>(this.baseUrl + 'cart/')
       .pipe(
@@ -32,6 +33,8 @@ export class CartService {
         })
       );
   }
+
+  //Gets total price for all cart items which marked as checked
   getCheckedCartItemsPrice() {
     return this.http.get<Cart>(this.baseUrl + 'cart/checked-item-price')
       .pipe(
@@ -43,6 +46,7 @@ export class CartService {
       );
   }
 
+  //Adds book to cart or increases quantity
   addToCart(cartItem: CartItem) {
     return this.http.post<Cart>(this.baseUrl + 'cart', cartItem)
       .pipe(
@@ -53,19 +57,28 @@ export class CartService {
         })
       );
   }
+
+  //Adds book to cart or increases quantity from BookList or BookDetails page
+  addToCartFromItem(book: Book) {
+    const cartItem = new CartItem(book, 1, book.unitPrice, true);
+    return this.addToCart(cartItem);
+  }
+
+  //Removes item from cart or Decreases quantity
   decreaseQty(cartItem: CartItem) {
     return this.http.post<Cart>(this.baseUrl + 'cart/decrease-qty', cartItem)
       .pipe(
         tap(response => {
           // if (response) {
-            this.cart = response;
-            this.cartChanged.next(this.cart);
+          this.cart = response;
+          this.cartChanged.next(this.cart);
           // }
         })
       );
   }
 
-  toggleCheckItem(cartItem: CartItem){
+  //Toggles cart item's checked status
+  toggleCheckItem(cartItem: CartItem) {
     return this.http.post<Cart>(this.baseUrl + 'cart/toggle-check', cartItem)
       .pipe(
         tap(response => {
@@ -76,6 +89,7 @@ export class CartService {
       );
   }
 
+  //Clears cart
   clearCart() {
     return this.http.delete<boolean>(this.baseUrl + 'cart')
       .pipe(
@@ -88,11 +102,8 @@ export class CartService {
       );
   }
 
-  addToCartFromItem(book: Book) {
-    const cartItem = new CartItem(book, 1, book.unitPrice, true);
-    return this.addToCart(cartItem);
-  }
 
+  //Set local cart
   setCartItems(cart: Cart | null) {
     this.cart = cart;
     this.cartChanged.next(this.cart);

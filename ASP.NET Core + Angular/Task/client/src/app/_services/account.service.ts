@@ -18,13 +18,17 @@ export class AccountService {
   constructor(private http: HttpClient, private injector: Injector) { }
 
 
+  //Register & Navigate to set 2FA
   register(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/register', model).pipe(
       tap(response => {
-        this.user = response ;
+        this.user = response;
       })
     )
   }
+
+
+  //Check login credentials & Navigate to enter 2FA code if 2FA enabled else ask to setup of 2FA
   login(model: any) {
     return this.http.post<User>(this.baseUrl + 'account/login', model).pipe(
       tap(response => {
@@ -32,20 +36,23 @@ export class AccountService {
           // this.setCurrentUser(response);
           // this.getCartServiceInstance();
           // this.cartService?.setCartItems(response.cart);
-        }else{
-          this.user = response ;
+        } else {
+          this.user = response;
         }
 
       })
     )
   }
-  autoLogin(){
+
+  //AutoLogin incase of page refresh
+  autoLogin() {
     const userString = localStorage.getItem('user');
     if (!userString) return;
     const user: User = JSON.parse(userString);
-        this.setCurrentUser(user);
-        
+    this.setCurrentUser(user);
   }
+
+  //Verify 2FA code & allow login
   verifyTwoFA(model: any) {
     // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
     return this.http.post<User>(this.baseUrl + 'account/two-fa-login', model).pipe(
@@ -58,10 +65,10 @@ export class AccountService {
       })
     )
   }
-  setTwoFA(code: string) {
-    // return this.http.post<User>(this.baseUrl + 'twoFactorAuthenticator/2fa-login', model).pipe(
-    // return this.http.post<User>(this.baseUrl + 'account/setTwoFA?code='+code, {}).pipe(
-    return this.http.post<User>(this.baseUrl + 'account/setTwoFA?code='+code, {}).pipe(
+
+  //Sets 2FA
+  setTwoFA(model: any) {
+    return this.http.post<User>(this.baseUrl + 'account/setTwoFA', model).pipe(
       tap(response => {
         console.log("Serv set = " + response.twoFactorEnabled);
         const user = response;
@@ -71,48 +78,51 @@ export class AccountService {
       })
     )
   }
-  // updateProfile(model: any) {
-  //   return this.http.post<User>(this.baseUrl + 'account/update', model).pipe(
-  //     tap(response => {
-  //       console.log("Serv update = " + response.twoFactorEnabled);
-  //       console.log("Serv update = " + response);
-  //       const user = response;
-  //       if (user) {
-  //         this.setCurrentUser(user);
-  //       }
-  //     })
-  //   );
-  // }
 
-  getQR() {
-    return this.http.post<QRData>(this.baseUrl + 'account/getqr', {
-      headers: new HttpHeaders({
-        Authorization : 'Bearer '+this.user?.token
-      })
-    }).pipe(
+  //Resets 2FA
+  resetTwoFA(code: string) {
+    return this.http.post<User>(this.baseUrl + 'account/resetTwoFA?code=' + code, {}).pipe(
       tap(response => {
-        console.log("Serv GetQR = " + response.authenticatorUri);
-
+        console.log("Serv set = " + response.twoFactorEnabled);
+        const user = response;
+        if (user) {
+          this.setCurrentUser(user);
+        }
       })
     )
   }
 
+  //Resets AuthenticatorKey & gets QRCode data
+  getQR() {
+    return this.http.post<QRData>(this.baseUrl + 'account/getqr', {
+      headers: new HttpHeaders({
+        Authorization: 'Bearer ' + this.user?.token
+      })
+    }).pipe(
+      tap(response => {
+        console.log("Serv GetQR = " + response.authenticatorUri);
+      })
+    )
+  }
+
+  //Sets currentUser
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
     this.currentUserSource.next(user);
   }
+
+  //LogOut
   logout() {
     localStorage.removeItem('user');
     this.currentUserSource.next(null);
 
   }
 
+  //gets cartService instance
   getCartServiceInstance(): CartService {
     if (!this.cartService) {
-        this.cartService = this.injector.get(CartService);
+      this.cartService = this.injector.get(CartService);
     }
     return this.cartService;
-}
-
-
+  }
 }

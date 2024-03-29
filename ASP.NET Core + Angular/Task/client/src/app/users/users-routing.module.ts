@@ -12,12 +12,11 @@ import { authGuard } from '../_guards/auth.guard';
 
 const routes: Routes = [
   {
-      path: '', component: UsersComponent,            // With LazyLoading
-      children: [
-          // { path: '', component: UsersComponent},
-          { path: '', component: DashboardComponent, resolve: {userDashStats: dashboardStatsResolver} },
-          { path: 'cart', component: CartComponent, resolve: [cartResolver]},          
-      ]
+    path: '', component: UsersComponent,            // With LazyLoading
+    children: [
+      { path: '', component: DashboardComponent, resolve: { userDashStats: dashboardStatsResolver } },
+      { path: 'cart', component: CartComponent, resolve: [cartResolver] },
+    ]
   },
   { path: 'profile', component: UserProfileComponent },
 ]

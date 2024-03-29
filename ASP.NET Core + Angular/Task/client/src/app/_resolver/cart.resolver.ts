@@ -3,7 +3,6 @@ import { ResolveFn } from '@angular/router';
 import { CartService } from '../_services/cart.service';
 import { Cart } from '../_models/cart';
 import { Observable, catchError, of, tap } from 'rxjs';
-import { AccountService } from '../_services/account.service';
 import { SubscriptionsService } from '../_services/subscriptions.service';
 import { User } from '../_models/user';
 
@@ -12,7 +11,6 @@ export const cartResolver: ResolveFn<
 > = (route, state) => {
   const cartService = inject(CartService);
   const subService = inject(SubscriptionsService);
-  const accountService = inject(AccountService);
   let isAuthenticated: boolean = false;
   subService.getLoggedUserChanges().subscribe({
     next: (user: User | null) => {
@@ -22,14 +20,6 @@ export const cartResolver: ResolveFn<
       return true;
     },
   });
-
-  // accountService.currentUser$.subscribe({
-  //   next: (response) => {
-  //     if (response != null || response != undefined) {
-  //       isAuthenticated = true;
-  //     }
-  //   },
-  // });
 
   if (isAuthenticated) {
     return cartService.getCart().pipe(

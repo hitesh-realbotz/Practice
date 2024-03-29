@@ -20,12 +20,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
   orderParams: OrderParams | undefined;
   pagination: Pagination | undefined;
   sortForm: FormGroup = new FormGroup({});
-  sortByOptions: string[] = [
-    Constants.sortByDate,
-    Constants.sortByPrice,
-    Constants.sortById
-  ];
-  // sortOrderOptions: string[] = [Constants.sortOrderAsc, Constants.sortOrderDsc];
+  sortByOptions: string[] = [Constants.sortByDate, Constants.sortByPrice, Constants.sortById];
   sortOrderOptions: string[] = Constants.sortOrderOptions;
   pageSizeOptions: number[] = Constants.pageSizeOptions;
   componentSubscriptions = new Subscription();
@@ -59,6 +54,37 @@ export class OrderListComponent implements OnInit, OnDestroy {
     );
   }
 
+
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
+  markAllAsTouched() {
+    this.ngZone.runOutsideAngular(() => {
+      Object.values(this.sortForm.controls).forEach((control) => {
+        control.markAsTouched();
+      });
+    });
+  }
+
+  //Get orders as per filters onSubmit
+  onSubmit(event: Event) {
+    if (this.sortForm.valid) {
+      let value = this.sortForm.value;
+      const orderParams = new OrderParams(
+        value.sortBy,
+        value.sortOrder,
+        value.pageNumber,
+        value.pageSize
+      );
+      this.orderService.setOrderParams(orderParams);
+      this.orderParams = this.orderService.getOrderParams();
+      this.loadOrders();
+      !!this.pagination ? this.pagination.currentPage = Constants.pageNumber : '';
+    } else {
+      event.stopPropagation();
+      this.markAllAsTouched();
+    }
+  }
+
+  //Gets orders as per orderParams
   loadOrders() {
     if (this.orderParams) {
       this.orderService.setOrderParams(this.orderParams);
@@ -74,33 +100,6 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
-  //To mark All form controls as Touched to display Validation messages on-submit button clicked
-  markAllAsTouched() {
-    this.ngZone.runOutsideAngular(() => {
-      Object.values(this.sortForm.controls).forEach((control) => {
-        control.markAsTouched();
-      });
-    });
-  }
-  onSubmit(event: Event) {
-    if (this.sortForm.valid) {
-      let value = this.sortForm.value;
-      const bP = new BookParams(
-        value.sortBy,
-        value.sortOrder,
-        value.pageNumber,
-        value.pageSize
-      );
-      this.orderService.setOrderParams(bP);
-      this.orderParams = this.orderService.getOrderParams();
-      this.loadOrders();
-      !!this.pagination ? this.pagination.currentPage = Constants.pageNumber : '';
-    } else {
-      event.stopPropagation();
-      this.markAllAsTouched();
-    }
-  }
-
   //Navigates to OrderDetails onClick Order
   onOrder(id: number) {
     this.router.navigate([id], { relativeTo: this.route });
@@ -112,11 +111,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
     this.router.navigate(['order', orderEl.id, orderItem.orderBook?.isbn]);
   }
 
+  //Resets filter properties
   resetFilters() {
     this.orderParams = new OrderParams();
     this.ngOnInit();
   }
 
+  //Gets items on page change
   pageChanged(event: any) {
     if (this.orderParams && this.orderParams?.pageNumber !== event.page) {
       this.orderParams.pageNumber = event.page;
@@ -126,6 +127,7 @@ export class OrderListComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Gets items as per required page
   getPagedData() {
     if (this.pagination) {
       const startIndex =
@@ -134,10 +136,13 @@ export class OrderListComponent implements OnInit, OnDestroy {
       this.orders = this.orderService.orders.slice(startIndex, endIndex);
     }
   }
-  
-  onHome(){
+
+  //Navigates to BookList
+  onHome() {
     this.router.navigate(['/book']);
   }
+
+  //Unsubscribe to subscriptions
   ngOnDestroy(): void {
     this.componentSubscriptions.unsubscribe();
   }

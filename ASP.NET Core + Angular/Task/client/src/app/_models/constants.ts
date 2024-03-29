@@ -16,8 +16,8 @@ export class Constants {
     static defaultGender = "male";
     static otpLength = 6;
     
-    static emailRegex = "/^[^\s@]+@[^\s@]+\.[^\s@]+$/";
-    static passwordRegex = "/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{4,}$/";
+    static emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
+    static passwordRegex = /^(?=[^A-Z]*[A-Z])(?=[^a-z]*[a-z])(?=\D*\d)(?=.*[!@#$%^&*]).{8,}$/;
 
 
     static pageSizeOptions: number[] = [ 1, 2, 4, 5, 10];
