@@ -15,11 +15,16 @@ namespace OnlineBookStoreAPI.Repositories
             this.dbContext = dbContext;
         }
 
+
+        //Get user by emailId
         public async Task<AppUser?> GetUserByEmailAsync(string email)
         {
 
             return await dbContext.Users.Include(u => u.Photos).Include(u => u.Cart).FirstOrDefaultAsync(u => u.Email == email);
         }
+
+
+        //Gets cartItemCount & OrderCount
         public async Task<AppUser?> GetUserCartAndOrdersAsync(string email)
         {
 

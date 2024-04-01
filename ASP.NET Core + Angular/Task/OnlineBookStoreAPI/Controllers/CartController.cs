@@ -19,12 +19,15 @@ namespace OnlineBookStoreAPI.Controllers
 
         }
 
+        //Add item to cart &/ increases cart item quantity
         [HttpPost]
         [Authorize]
         public async Task<ActionResult<CartDto>> AddToCart(CartItemDto cartItemDto)
         {
             return Ok(await cartService.AddToCartAsync(cartItemDto));
         }
+
+        //Remove item from cart &/ decreases cart item quantity
         [HttpPost("decrease-qty")]
         [Authorize]
         public async Task<ActionResult<CartDto>> DecreaseCartItemQty(CartItemDto cartItemDto)
@@ -32,6 +35,7 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(await cartService.DecreaseCartItemQtyAsync(cartItemDto));
         }
 
+        //Toggles cart item checked status
         [HttpPost("toggle-check")]
         [Authorize]
         public async Task<ActionResult<CartDto>> ToggleCheckCartItem(CartItemDto cartItemDto)
@@ -39,6 +43,8 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(await cartService.ToggleCheckCartItemAsync(cartItemDto));
         }
 
+
+        //Gets user cart
         [HttpGet]
         [Authorize]
         public async Task<ActionResult<CartDto?>> GetUserCart()
@@ -46,6 +52,8 @@ namespace OnlineBookStoreAPI.Controllers
             return Ok(await cartService.GetUserCartAsync());
         }
 
+
+        //Clears cart
         [HttpDelete]
         [Authorize]
         public async Task<ActionResult<bool>> ClearCart()

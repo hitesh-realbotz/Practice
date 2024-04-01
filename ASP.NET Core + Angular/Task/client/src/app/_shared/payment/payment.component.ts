@@ -119,10 +119,11 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (control.value <= 0) {
       return { invalidAmount: true };
     }
-    // this.itemForm.get('availableQty').patchValue(this.itemForm.get('qty'));
     return null;
   }
 
+
+  //To mark All form controls as Touched to display Validation messages on-submit button clicked
   markAllAsTouched() {
     this.ngZone.runOutsideAngular(() => {
       Object.values(this.paymentForm.controls).forEach((control) => {
@@ -135,10 +136,8 @@ export class PaymentComponent implements OnInit, OnDestroy {
     if (this.paymentForm.valid && !!this.cart) {
       this.orderService.placeOrder(this.paymentForm.value).subscribe({
         next: (order) => {
-          // this.router.navigate(['/order/' + order.id]);
           console.log(order.id);
           this.router.navigate(['/order', order.id, 'success']);
-          // this.router.navigate(['/book']);
         },
       });
     } else {

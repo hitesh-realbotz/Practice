@@ -29,7 +29,6 @@ export class BookDetailComponent implements OnInit, OnDestroy {
       (params: Params) => {
         this.index = params['id'];
 
-        // if (this.index >= 0) {
         this.bookService.getBook(this.index)?.subscribe({
           next: book => {
             this.book = book;
@@ -55,6 +54,7 @@ export class BookDetailComponent implements OnInit, OnDestroy {
     }
   }
 
+  //Unsubscribe to subscriptions
   ngOnDestroy(): void {
     this.componentSubscriptions.unsubscribe();
   }

@@ -2,11 +2,10 @@
     <div class="row" *ngIf="!!user">
         <div class="col-xs-12 col-sm-12 col-md-12 d-flex-col-cnt-cnt">
 
-            <h5>Your Two-Factor Authentication Status : {{user.twoFactorEnabled ? 'Set' : 'Not-Set! We recommend to set
+            <h5>Your Two-Factor Authentication Status : {{user.twoFactorEnabled && !qrData.authenticatorUri ? 'Set' : 'Not-Set! We recommend to set
                 for enhanced security.'}} </h5>
 
-            <button class="btn btn-primary" (click)="OnGetQR()">{{user.twoFactorEnabled? 'Reset 2FA' : 'Set-up 2FA' }}
-            </button>
+            <button class="btn btn-primary" (click)="OnGetQR()" *ngIf="!qrData.authenticatorUri">Reset 2-Factor Authentication</button>
             <ng-container *ngIf="!!qrData.authenticatorUri">
                 <div>
                     <qrcode [qrdata]="qrData.authenticatorUri" [width]="256" [allowEmptyString]="true"
@@ -16,21 +15,8 @@
                     <h6>Code : <span style="color: red;">{{qrData.sharedKey}}</span></h6>
                 </div>
                 <p>Either scan QR code or enter Code manually to authenticxator app!</p>
-                <form class="form" [formGroup]="twoFAForm" (ngSubmit)="onSubmit($event)">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="code">2FA OTP</label>
-                            <ngx-otp-input [config]="otpInputConfig" (fill)="enteredOTP()" #otpCode></ngx-otp-input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-btn-group">
-                            <button class="btn btn-primary" type="submit">{{user.twoFactorEnabled ? 'RESET' :
-                                'SET'}}</button>
-                             <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
-                        </div>
-                    </div>
-                </form>
+                <app-otp-input-modal></app-otp-input-modal>
+                
             </ng-container>
 
         </div>

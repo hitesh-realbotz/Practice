@@ -22,6 +22,7 @@ namespace OnlineBookStoreAPI.Services
             this.photoService = photoService;
         }
 
+        //Creates new book
         public async Task<BookDto> CreateAsync(BookDto bookDto)
         {
             var book = mapper.Map<Book>(bookDto);
@@ -29,6 +30,7 @@ namespace OnlineBookStoreAPI.Services
             return mapper.Map<BookDto>(book);
         }
 
+        //Upload photo for books
         public async Task<List<BookDto?>> AddPhotoAsync(List<IFormFile> files)
         {
             List<BookDto> bookDtoList = new List<BookDto>();
@@ -60,17 +62,23 @@ namespace OnlineBookStoreAPI.Services
 
         }
 
+        //PagedList of books
         public async Task<PagedList<BookDto?>> GetBooksAsync(BookParams bookParams)
         {
             return await uow.BookRepository.GetBooksAsync(bookParams);
         }
 
+
+        //Gets book by title
         public async Task<BookDto?> GetBookByTitleAsync(string title)
         {
             var book = await uow.BookRepository.GetByTitleAsync(title);
             if (book == null) return null;
             return mapper.Map<BookDto?>(book);
         }
+
+
+        //Gets book by ISBNCode
         public async Task<BookDto?> GetBookByISBNAsync(string isbn)
         {
             var book = await uow.BookRepository.GetByISBNAsync(isbn);

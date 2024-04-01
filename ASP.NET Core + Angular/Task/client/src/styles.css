@@ -1,10 +1,16 @@
 /* You can add global styles to this file, and also import other style files */
-html, body { height: 100%; }
+html,
+body {
+    height: 100%;
+}
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 
-.form{
+.form {
     padding: 10px;
     background-color: #d7e2dc;
     margin: auto;
@@ -13,46 +19,48 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     border: 1px solid #ac9f9f;
 }
 
-.form-btn-group{
+.form-btn-group {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: auto;
 }
 
-.btn{
-    margin: 0px 0px;
-}
+.form-btn-group .btn {
 
-.row{
     margin: 5px;
 }
 
-.form label{
+.row {
+    margin: 5px;
+}
+
+.form label {
     font-weight: bolder;
 }
 
-.help-block{
+.help-block {
     color: red;
 }
 
-a{
+a {
     cursor: pointer;
 }
 
-.d-flex-row-cnt-cnt{
+.d-flex-row-cnt-cnt {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
 }
-.d-flex-row-baseline-cnt{
+
+.d-flex-row-baseline-cnt {
     display: flex;
     flex-direction: row;
     align-items: baseline;
     justify-content: center;
 }
-.d-flex-col-cnt-cnt{
+
+.d-flex-col-cnt-cnt {
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -15,6 +15,7 @@ export class UserService {
   
   constructor(private http: HttpClient, private accountService: AccountService) { }
 
+  //Updates profile
   updateProfile(model: any) {
     return this.http.post<User>(this.baseUrl + 'users/update', model).pipe(
       tap(response => {
@@ -28,15 +29,18 @@ export class UserService {
     );
   }
 
+  //Set main photo
   setMainPhoto(publicId: string) {
     // return this.http.put<User>(this.baseUrl + 'users/setmainphoto/'+ '?PublicId='+, { PublicId : publicId });
     return this.http.put<User>(this.baseUrl + 'users/set-main-photo/'+ '?publicId='+publicId, {});
   }
 
+  //Delete photo
   deletePhoto(publicId: string) {
     return this.http.delete<User>(this.baseUrl + 'users/delete-photo'+ '?publicId='+publicId);
   }
 
+  //Get cartItemCount & OrderCount
   getUserDashboardStat() {
     return this.http.get<UserDashboardStat>(this.baseUrl + 'users');
   }

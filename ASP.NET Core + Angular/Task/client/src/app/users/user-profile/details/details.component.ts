@@ -1,11 +1,8 @@
 import { Component, Input, NgZone, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { count } from 'rxjs';
 import { Constants } from 'src/app/_models/constants';
 import { User } from 'src/app/_models/user';
-import { AccountService } from 'src/app/_services/account.service';
 import { UserService } from 'src/app/_services/user.service';
 
 @Component({
@@ -18,8 +15,7 @@ export class DetailsComponent implements OnInit {
 
   userForm: FormGroup = new FormGroup({});
 
-  constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder,
-    private router: Router, private ngZone: NgZone, private userService: UserService) { }
+  constructor( private toastr: ToastrService, private fb: FormBuilder, private ngZone: NgZone, private userService: UserService) { }
 
   ngOnInit(): void {
     this.initializeForm();
@@ -65,6 +61,7 @@ export class DetailsComponent implements OnInit {
     });
   }
 
+  //Profile update on Submit
   onSubmitProfile(event: Event) {
     if (this.userForm.valid) {
       this.userService.updateProfile(this.userForm.value).subscribe({

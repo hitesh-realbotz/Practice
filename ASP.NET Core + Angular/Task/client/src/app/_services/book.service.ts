@@ -22,28 +22,34 @@ export class BookService {
 
   constructor(private http: HttpClient) { }
 
-
+  //Gets BookParams
   getBookParams() {
     return this.bookParams;
   }
 
+  //Sets BookParams
   setBookParams(bookParams: BookParams) {
     this.bookParams = bookParams;
   }
 
+  //Get bookIndex by ISBNCode from local books
   public getBookIndexByISBN(isbn: string) {
     return this.books.findIndex(book => book.isbn === isbn);
   }
+
+  //Get book by ISBNCode from local books
   public getBookByISBN(isbn: string) {
     return this.books.find(b => b.isbn === isbn);
   }
 
+  //Resets BookParams
   resetBookParams() {
     this.bookParams = new BookParams();
     return true;
   }
 
 
+  //Gets books as per bookparams
   getBooks(bookParamas: BookParams) {
     let params = getPaginationHeaders(this.bookParams.pageNumber, this.bookParams.pageSize);
     params = params.append('MinPrice', this.bookParams.minPrice);
@@ -54,20 +60,22 @@ export class BookService {
     return getPaginatedResult<Book[]>(this.baseUrl + 'books', params, this.http);
   }
 
+  //Get book by ISBNCode
   getBook(isbn: string) {
-    
-      return this.http.get<Book>(this.baseUrl + 'books/' + isbn)
-        .pipe(
-          tap(response => {
-            if (response) {   
-                let index = this.getBookIndexByISBN(isbn);
-                this.books[index] = response;
-                this.setBooks(this.books);       
-            }
-          })
-        );
+
+    return this.http.get<Book>(this.baseUrl + 'books/' + isbn)
+      .pipe(
+        tap(response => {
+          if (response) {
+            let index = this.getBookIndexByISBN(isbn);
+            this.books[index] = response;
+            this.setBooks(this.books);
+          }
+        })
+      );
   }
 
+  //Set local books
   setBooks(books: Book[]) {
     this.books = books;
     this.bookChanged.next(this.books);

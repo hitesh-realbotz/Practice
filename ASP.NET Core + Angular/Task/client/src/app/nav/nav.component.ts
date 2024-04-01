@@ -20,13 +20,9 @@ export class NavComponent implements OnInit, OnDestroy {
   componentSubscriptions = new Subscription();
 
   constructor(public accountService: AccountService, public userService: UserService, private subService: SubscriptionsService) { }
+  
   ngOnInit(): void {
-    // this.componentSubscriptions.add(this.userService.getUserDashboardStat().subscribe({
-    //   next: data => {
-    //     this.cartItemCount = data.cartItemsCount;
-    //     this.ordersCount = data.ordersCount;
-    //   }
-    // }));
+    
     this.componentSubscriptions.add(this.subService.getLoggedUserChanges().subscribe({
       next: data => {
         this.user = !!data ? data : {} as User;
@@ -46,10 +42,6 @@ export class NavComponent implements OnInit, OnDestroy {
         this.cartItemCount = !!cart?.cartItems.length ? cart.cartItems.length : 0;
       }
     }));
-
-  }
-
-  getUserStats() {
 
   }
 

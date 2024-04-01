@@ -44,7 +44,8 @@ import { OtpInputModalComponent } from './otp-input-modal/otp-input-modal.compon
     PaginationModule,
     FormsModule,
     NgxOtpInputModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    OtpInputModalComponent
     
   ]
 })

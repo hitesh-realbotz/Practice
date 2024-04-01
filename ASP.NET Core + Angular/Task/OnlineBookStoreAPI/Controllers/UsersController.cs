@@ -22,6 +22,16 @@ namespace OnlineBookStoreAPI.Controllers
             this.mapper = mapper;
         }
 
+
+        //Gets cartItemCount & OrderCount
+        [HttpGet]
+        public async Task<ActionResult<UserDashboardStatisticDto>> GetUser()
+        {
+            return await userService.GetUserDashStatAsync();
+        }
+
+
+        //Updates user profile
         [HttpPost("update")]
         [Authorize]
         public async Task<ActionResult<UserProfileDto>> UpdateProfile(UserProfileUpdateDto userProfileUpdateDto)
@@ -29,18 +39,8 @@ namespace OnlineBookStoreAPI.Controllers
             return await userService.UpdateAsync(userProfileUpdateDto);
         }
 
-        //[HttpGet("{email}")]
-        //public async Task<ActionResult<UserProfileDto>> GetUser(string email)
-        //{
-        //    return await userService.GetUserAsync(email);
-        //} 
-       
-        [HttpGet]
-        public async Task<ActionResult<UserDashboardStatisticDto>> GetUser()
-        {
-            return await userService.GetUserDashStatAsync();
-        }
 
+        //Upload user photo
         [HttpPost("addphoto")]
         public async Task<ActionResult<PhotoDto>> AddPhoto(IFormFile file)
         {
@@ -49,18 +49,22 @@ namespace OnlineBookStoreAPI.Controllers
                 mapper.Map<PhotoDto>(user.Photos.Last()));
         }
 
+
+        //Set main photo
         [HttpPut("set-main-photo")]
         public async Task<ActionResult<UserProfileDto>> SetMainPhoto([FromQuery] string publicId)
         {
-           return await userService.SetMainPhotoAsync(publicId);
-            
+            return await userService.SetMainPhotoAsync(publicId);
+
         }
 
+
+        //Deletes photo
         [HttpDelete("delete-photo")]
         public async Task<ActionResult<UserProfileDto>> DeletePhoto([FromQuery] string publicId)
         {
             return await userService.DeletePhotoAsync(publicId);
-            
+
         }
     }
 }

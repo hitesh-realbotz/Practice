@@ -15,22 +15,10 @@
                     <h6>Code : <span style="color: red;">{{qrData.sharedKey}}</span></h6>
                 </div>
                 <p>Either scan QR code or enter Code manually to authenticxator app!</p>
-                <form class="form" [formGroup]="twoFAForm" (ngSubmit)="onSubmit($event)">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="code">2FA OTP</label>
-                            <ngx-otp-input [config]="otpInputConfig" (fill)="enteredOTP()" #otpCode></ngx-otp-input>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-btn-group">
-                            <button class="btn btn-primary" type="submit">{{user.twoFactorEnabled ? 'RESET' :
-                                'SET'}}</button>
-                             <button class="btn btn-secondary" type="button" (click)="onClear()">Clear</button>
-                        </div>
-                    </div>
-                </form>
-            </ng-container>
+                
+                <app-otp-input-modal></app-otp-input-modal>
+                </ng-container>
+                
 
         </div>
     </div>

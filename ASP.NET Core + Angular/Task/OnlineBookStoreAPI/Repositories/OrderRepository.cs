@@ -21,6 +21,8 @@ namespace OnlineBookStoreAPI.Repositories
             this.mapper = mapper;
         }
 
+
+        //Creates new order
         public async Task<Order> CreateAsync(Order order)
         {
             await dbContext.Orders.AddAsync(order);
@@ -28,11 +30,14 @@ namespace OnlineBookStoreAPI.Repositories
             return order;
         }
 
+        //Gets order by orderId
         public async Task<Order?> GetOrderByIdAsync(int id, string userId)
         {
             return await dbContext.Orders.Where(o => o.AppUserId == userId).Include(o => o.OrderItems).ThenInclude(oi => oi.OrderBook).FirstOrDefaultAsync(o => o.Id == id);
         }
 
+
+        //Gets PagedList of orders
         public async Task<PagedList<OrderDto?>> GetOrdersAsync(OrderParams orderParams, string userId)
         {
             var query = dbContext.Orders.Where(o => o.AppUserId == userId).Include(o => o.OrderItems).ThenInclude(oi => oi.OrderBook).AsQueryable();

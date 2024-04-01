@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { OrderBook, OrderItem } from 'src/app/_models/order';
-import { OrderService } from 'src/app/_services/order.service';
-import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
+import {  OrderItem } from 'src/app/_models/order';
+
 
 @Component({
   selector: 'app-order-book-detail',
@@ -13,15 +12,10 @@ import { SubscriptionsService } from 'src/app/_services/subscriptions.service';
 export class OrderBookDetailComponent implements OnInit, OnDestroy {
   orderItem!: OrderItem | null;
   componentSubscriptions = new Subscription();
-  
-  constructor(
-    private orderService: OrderService,
-    private router: Router,
-    private route: ActivatedRoute,
-    private subService: SubscriptionsService) { }
+
+  constructor(private router: Router, private route: ActivatedRoute) { }
 
   ngOnInit() {
-    console.log("Orderdetail component");
     this.route.data.subscribe({
       next: data => this.orderItem = data['orderItem']
     });

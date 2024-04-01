@@ -2,7 +2,7 @@ import { HttpClient, HttpParams } from "@angular/common/http";
 import { PaginatedResult } from "./pagination";
 import { map } from "rxjs";
 
-
+//Gets paginated result
 export function getPaginatedResult<T>(url: string, params: HttpParams, http: HttpClient) {
   console.log("get Paginated = " + params.toString());
   const paginatedResult: PaginatedResult<T> = new PaginatedResult<T>;
@@ -20,6 +20,7 @@ export function getPaginatedResult<T>(url: string, params: HttpParams, http: Htt
   );
 }
 
+//Adds pageNumber & pageSize params
 export function getPaginationHeaders(pageNumber: number, pageSize: number) {
   let params = new HttpParams();
 

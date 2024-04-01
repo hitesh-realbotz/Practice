@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 export class NotFoundComponent {
   constructor(private router: Router) { }
   
+  //Navigates to BookList
   onHome(){
     this.router.navigate(['/book']);
   }

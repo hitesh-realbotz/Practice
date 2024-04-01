@@ -8,24 +8,16 @@ namespace OnlineBookStoreAPI.Data
 {
     public class Seed
     {
-
+        //Seeds initial books data if not present
         public static async Task SeedBooks(BookStoreDbContext dbContext)
         {
-
             if (await dbContext.Books.AnyAsync()) return;
             var booksData = await File.ReadAllTextAsync("Data/bookSeedData.json");
             var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
             var books = JsonSerializer.Deserialize<List<Book>>(booksData, options);
 
-
-            foreach (var book in books)
-            {
-                await dbContext.Books.AddAsync(book);
-                await dbContext.SaveChangesAsync();
-
-            }
-
-
+            await dbContext.Books.AddRangeAsync(books);
+            await dbContext.SaveChangesAsync();
         }
     }
 }

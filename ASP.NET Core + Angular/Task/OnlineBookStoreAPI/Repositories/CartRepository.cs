@@ -14,12 +14,14 @@ namespace OnlineBookStoreAPI.Repositories
             this.dbContext = dbContext;
         }
 
+        //Clears entire cart
         public async Task<bool> ClearCartAsync(Cart cart)
         {
             dbContext.Carts.Remove(cart);  
             return await dbContext.SaveChangesAsync() > 0;           
         }
 
+        //Creates cart
         public async Task<Cart> CreateAsync(Cart cart)
         {
             await dbContext.Carts.AddAsync(cart);
@@ -27,6 +29,7 @@ namespace OnlineBookStoreAPI.Repositories
             return cart;
         }
 
+        //Gets cart by userId
         public async Task<Cart> GetByUserId(string userId)
         {
             return await dbContext.Carts.Include(c => c.CartItems).ThenInclude(ci => ci.Book).ThenInclude(cb => cb.Photos).FirstOrDefaultAsync(c => c.AppUserId == userId);

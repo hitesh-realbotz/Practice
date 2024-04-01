@@ -1,13 +1,9 @@
-import { HttpParams } from '@angular/common/http';
-import { Component, Input, NgZone, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { FormGroup } from '@angular/forms';
 import { NgxOtpInputComponent, NgxOtpInputConfig } from 'ngx-otp-input';
-import { ToastrService } from 'ngx-toastr';
 import { Constants } from 'src/app/_models/constants';
 import { QRData, User } from 'src/app/_models/user';
 import { AccountService } from 'src/app/_services/account.service';
-import { UserService } from 'src/app/_services/user.service';
 
 @Component({
   selector: 'app-security',
@@ -26,8 +22,7 @@ export class SecurityComponent implements OnInit {
     autofocus: true
   };
   
-  constructor(private accountService: AccountService, private toastr: ToastrService, private fb: FormBuilder,
-    private router: Router, private ngZone: NgZone, private userService: UserService) { }
+  constructor(private accountService: AccountService) { }
 
 
   ngOnInit(): void {
@@ -36,46 +31,7 @@ export class SecurityComponent implements OnInit {
     } 
   }
 
-  enteredOTP(){
-    for (const ele of this.otpCode?.ngxOtpArray.value) {
-      this.code += ele;
-    }
-  }
-
-  //To mark All form controls as Touched to display Validation messages on-submit button clicked
-  markAllAsTouched() {
-    this.ngZone.runOutsideAngular(() => {
-      Object.values(this.twoFAForm.controls).forEach(control => {
-        control.markAsTouched();
-      });
-    });
-  }
-
-  onSubmit(event: Event) {
-    console.log(this.code);
-    if (this.code.length == this.otpInputConfig.otpLength) {   
-      this.accountService.setTwoFA(this.code).subscribe({
-        next: response => {
-          console.log("Two Factor Authentication Set!" + response.twoFactorEnabled);
-          this.qrData = {} as QRData;          
-          this.toastr.success("Two FA Set!");
-          this.router.navigate(['/user/profile']);
-        }        
-      });
-    }
-    else {
-      event.stopPropagation();
-      this.markAllAsTouched();
-      this.toastr.info("Enter OTP!!");
-    }
-    this.code = '';
-    this.onClear();
-  }
-  //Exit from Form
-  onClear() {
-    this.otpCode?.clear();
-  }
-
+  //Gets QRData
   OnGetQR() {
     this.accountService.getQR().subscribe({
       next: response => {

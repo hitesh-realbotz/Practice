@@ -13,7 +13,7 @@ export class BooksComponent implements OnInit, OnDestroy {
   isAuthenticated: boolean = false;
   componentSubscriptions = new Subscription();
 
-  constructor(private accountService: AccountService, private subService: SubscriptionsService) { }
+  constructor(private subService: SubscriptionsService) { }
 
   ngOnInit(): void {
 
@@ -25,6 +25,8 @@ export class BooksComponent implements OnInit, OnDestroy {
       }));
   }
 
+
+  //Unsubscribe to subscriptions
   ngOnDestroy(): void {
     this.componentSubscriptions.unsubscribe();
   }

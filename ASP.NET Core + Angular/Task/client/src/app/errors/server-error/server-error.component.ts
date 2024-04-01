@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 })
 export class ServerErrorComponent {
   constructor(private router: Router) { }
+
+  //Navigates to BookList
   onHome(){
     this.router.navigate(['/book']);
   }
