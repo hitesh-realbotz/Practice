@@ -5,29 +5,29 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter } from 'react-router-dom'
 
-// import { UserProvider } from './contexts/user.context';
-import { CartProvider } from './contexts/cart.context';
-// import { ProductsProvider } from './contexts/products.context';
-import { CategoriesProvider } from './contexts/categories.context';
+// // import { UserProvider } from './contexts/user.context';
+// import { CartProvider } from './contexts/cart.context';
+// // import { ProductsProvider } from './contexts/products.context';
+// import { CategoriesProvider } from './contexts/categories.context';
 
 import { Provider } from 'react-redux';
-import { store } from './store/store';
+import { store, persistor } from './store/store';
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter>
-        <UserProvider>
-          <CategoriesProvider>
-            <CartProvider>
-              <App />
-            </CartProvider>
-          </CategoriesProvider>
-        </UserProvider>
-      </BrowserRouter>
+      <PersistGate loading={null} persistor={persistor}>
+        <BrowserRouter>
+          <App />
+        </BrowserRouter>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
+
   // <React.StrictMode>
   //   <BrowserRouter>
   //     <UserProvider>
@@ -39,7 +39,7 @@ root.render(
   //     </UserProvider>
   //   </BrowserRouter>
   // </React.StrictMode>
-  
+
 );
 
 // If you want to start measuring performance in your app, pass a function
