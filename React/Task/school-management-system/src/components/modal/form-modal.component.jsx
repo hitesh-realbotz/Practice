@@ -20,7 +20,7 @@ const FormModal = (props) => {
           
         <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
-            <Modal.Title>{form}</Modal.Title>
+            <Modal.Title>{form} - {action} form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             { form === CONSTANTS.FOR_STUDENT ? <StudentForm /> : <SignUpForm /> }

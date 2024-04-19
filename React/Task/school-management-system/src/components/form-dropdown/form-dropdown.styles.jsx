@@ -4,20 +4,18 @@ const subColor = 'grey';
 const mainColor = 'black';
 
 const shrinkLabelStyles = css`
-  top: ${({ isDOB }) => (isDOB ? '-20px' : '-10px')};
+  top: -25px;
   font-size: 12px;
   color: ${mainColor};
 `;
 
-export const FormInputLabel = styled.label`
+export const FormDropdownInputLabel = styled.label`
   color: ${subColor};
   font-size: 16px;
   font-weight: normal;
   position: absolute;
   pointer-events: none;
-  left: 5px;
-  top: ${({ isDOB }) => (isDOB ? '-10px' : '20px')};
-
+  top: -20px;
   transition: 300ms ease all;
   ${({ shrink }) => shrink && shrinkLabelStyles};
 `;
@@ -33,23 +31,27 @@ export const Input = styled.input`
   border: none;
   border-radius: 0;
   border-bottom: 1px solid ${subColor};
- 
+  
+  
 
   &:focus {
     outline: none;
   }
 
-  &:focus ~ ${FormInputLabel} {
+  &:focus ~ ${FormDropdownInputLabel} {
     ${shrinkLabelStyles};
   }
 `;
 
 export const Group = styled.div`
   position: relative;
-  padding-right: 10px;
-  margin-bottom: 20px;
   width: 100%;
+  margin: 20px;
   input[type='password'] {
     letter-spacing: 0.3em;
   }
+`;
+export const Select = styled.select`
+  position: relative;
+  width: 100%;
 `;
