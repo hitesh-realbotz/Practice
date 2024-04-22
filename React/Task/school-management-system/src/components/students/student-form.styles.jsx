@@ -14,8 +14,11 @@ export const ButtonsContainer = styled.div`
   justify-content: space-evenly;
 `;
 export const FormFieldContainer = styled.div`
+  // display: flex;
+  // justify-content: space-evenly;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  margin-bottom: 20px;
 `;
 export const FormField = styled.div`
   display: flex;
@@ -27,6 +30,7 @@ export const FormField = styled.div`
 export const RowContainer = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-bottom: 30px;
 `;
 
 export const FormInputContainer = styled.div`

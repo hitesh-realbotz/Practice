@@ -11,6 +11,7 @@ import SignUpForm from './components/sign-up-form/sign-up-form.component';
 import Authentication from './routes/authentication/authentication.component';
 import Students from './components/students/students.component';
 import Projects from './components/projects/projects.component';
+import { fetchStudentsStart } from './store/students/student.action';
 
 
 function App() {
@@ -19,6 +20,12 @@ function App() {
  
   useEffect(() => {
     dispatch(checkUserSession());
+  }, []);
+
+
+  useEffect(() => {
+    console.log('*********************');
+    dispatch(fetchStudentsStart());
   }, []);
 
 

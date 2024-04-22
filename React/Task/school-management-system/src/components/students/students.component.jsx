@@ -1,16 +1,30 @@
 import Button from "../button/button.component";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
+import { addCollectionAndDocuments, getStudentsAndDocuments } from '../../utils/firebase/firebase.utils';
+import STUDENT_DATA from '../../assets/students-data';
+import STUDENT_DATA2 from '../../assets/students-data2';
+import { useSelector } from 'react-redux';
+import { selectStudents } from "../../store/students/student.selector";
 
 const Students = () => {
 
     const [modalShow, setModalShow] = useState(false);
+    
+    const students = useSelector(selectStudents);
+    console.log(students);
 
     const handleStudentShowModal = () => {
         setModalShow(true);
+        addCollectionAndDocuments('students', STUDENT_DATA2);
     }
 
+
+    useEffect(() => {
+        addCollectionAndDocuments('students', STUDENT_DATA);
+        
+      }, []);
     return (
         <>   
             <Button type='button' onClick={(handleStudentShowModal)} >Add Student</Button>           

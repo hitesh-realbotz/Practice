@@ -8,6 +8,7 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
+
   } from 'firebase/auth';
   import {
     getFirestore,
@@ -18,6 +19,7 @@ import {
     writeBatch,
     query,
     getDocs,
+    where
   } from 'firebase/firestore';
 
   const firebaseConfig = {
@@ -36,6 +38,39 @@ import {
 export const auth = getAuth();
 
 export const db = getFirestore();
+
+export const addCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  field
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+  console.log(objectsToAdd);
+  if (!Array.isArray(objectsToAdd)) {
+    // If not, return students unchanged
+    console.error('Students must be an array');
+    return objectsToAdd;
+  }
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, `Standard-${object.standard}`);
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log('done');
+};
+
+export const getStudentsAndDocuments = async () => {
+  const collectionRef = collection(db, 'students');
+  const q = query(collectionRef);
+  // const q = query(collectionRef, where("standard", "==", 2));
+
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+};
+
 
 export const createUserDocumentFromAuth = async (
   userAuth,
