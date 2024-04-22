@@ -13,3 +13,23 @@ export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
 `;
+export const FormFieldContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+export const FormField = styled.div`
+  display: flex;
+  width: 50%;
+  padding-right: 15px;
+ 
+`;  
+
+export const RowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+export const FormInputContainer = styled.div`
+  flex: 1;
+  margin-right: 10px;
+`;

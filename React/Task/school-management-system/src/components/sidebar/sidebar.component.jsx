@@ -1,5 +1,4 @@
-import { Link } from "react-router-dom";
-import { SideBarContent, SideBarLink } from "./sidebar.styles";
+import { NavLink, SideBarContent, SideBarLink } from "./sidebar.styles";
 import React, { useState } from 'react';
 import FormModal from "../modal/form-modal.component";
 
@@ -21,11 +20,11 @@ const SideBar = () => {
         <>
             <SideBarContent>
                 <SideBarLink>
-                    <Link to='/students' >Students</Link>
+                    <NavLink to='/students' >Students</NavLink>
                     {/* <Link onClick={(handleStudentShowModal)}>Students</Link> */}
                 </SideBarLink>
                 <SideBarLink>
-                    <Link to='/projects'>Projects</Link>
+                    <NavLink to='/projects'>Projects</NavLink>
                     {/* <Link onClick={(handleProjectShowModal)}>Projects</Link> */}
                 </SideBarLink>
 

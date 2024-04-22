@@ -6,13 +6,13 @@ export const NavigationContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 25px;
+  background-color: rgb(193 116 237);
 `;
 
 export const LogoContainer = styled(Link)`
   height: 100%;
   width: 70px;
-  padding: 25px;
+  padding: 10px 15px;
 `;
 
 export const NavLinks = styled.div`
@@ -26,6 +26,9 @@ export const NavLinks = styled.div`
 export const NavLink = styled(Link)`
   padding: 10px 15px;
   cursor: pointer;
+  color: black;
+  text-decoration: none;
+  font-weight: 500;
 `;
 
 
@@ -33,10 +36,8 @@ export const HomeContainer = styled.div`
   width: 100%;
   height: 100vh;
   display: flex;
-  border: 2px solid red;
 `;
 export const SideBarContainer = styled.div`
   width: 10vw;
   display: flex;
-  border: 2px solid black;
 `;

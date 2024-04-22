@@ -6,7 +6,8 @@ import { Route, Routes } from 'react-router-dom';
 import { selectCurrentUser } from '../../store/user/user.selector';
 import { signOutStart } from '../../store/user/user.action';
 
-import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
+// import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
+import { ReactComponent as CrwnLogo } from '../../assets/school-building-icon.svg';
 
 import {
     NavigationContainer,
@@ -31,7 +32,7 @@ const Navigation = () => {
                     <CrwnLogo className='logo' />
                 </LogoContainer>
                 <NavLinks>
-                    <NavLink to='/shop'>SHOP</NavLink>
+                    {/* <NavLink to='/shop'>SHOP</NavLink> */}
 
                     {currentUser ? (
                         <NavLink to='/' onClick={signOutUser}>
