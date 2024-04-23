@@ -22,6 +22,7 @@ import SideBar from '../../components/sidebar/sidebar.component';
 const Navigation = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector(selectCurrentUser);
+    console.log(currentUser);
 
     const signOutUser = () => dispatch(signOutStart());
 

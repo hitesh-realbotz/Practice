@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
@@ -9,21 +9,30 @@ import { ButtonsContainer, FormField, FormFieldContainer, StudentFormContainer, 
 import { signUpStart } from '../../store/user/user.action';
 import DropdownInput from '../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../constants/constants';
+import { fetchStudentsStart, updateStudentStart } from '../../store/students/student.action';
+import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
+
+
 
 
 const defaultFormFields = {
-    displayName: '',
+    name: '',
     email: '',
     dob: '',
     standard: '',
     subject: '',
+    division: '',
+    rollNo: '',
 
 };
 
 const StudentForm = () => {
+
+
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const { displayName, email, password, subject, standard, dob } = formFields;
+    const { name, email, password, subject, standard, division, rollNo, dob } = formFields;
     const dispatch = useDispatch();
+    const students = useSelector(selectStudents);
 
     const resetFormFields = () => {
         setFormFields(defaultFormFields);
@@ -33,14 +42,19 @@ const StudentForm = () => {
         event.preventDefault();
 
         try {
-            dispatch(signUpStart(email, password, displayName));
+            dispatch(updateStudentStart(students,
+                {
+                    standard: standard,
+                    division: division,
+                    rollNo: rollNo,
+                    name: name,
+                    email: email,
+                }
+            ));
             resetFormFields();
         } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                alert('Cannot create user, email already in use');
-            } else {
+            
                 console.log('user creation encountered an error', error);
-            }
         }
     };
 
@@ -58,6 +72,15 @@ const StudentForm = () => {
         value: `${index + 1}`,
         label: `${index + 1}`,
     }));
+    const rollNoOptions = Array.from({ length: CONSTANTS.MAX_ROLLNO }, (_, index) => ({
+        value: `${index + 1}`,
+        label: `${index + 1}`,
+    }));
+    const divisionOptions = Array.from({ length: CONSTANTS.MAX_DIVISION }, (_, index) => ({
+        value: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
+        label: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
+    }));
+    console.log(divisionOptions);
 
 
 
@@ -65,76 +88,69 @@ const StudentForm = () => {
         <StudentFormContainer>
 
             <form onSubmit={handleSubmit}>
-                <FormInput
-                    label='Name'
-                    type='text'
-                    required
-                    onChange={handleChange}
-                    name='displayName'
-                    value={displayName}
-                />
-
-                <FormInput
-                    label='Email'
-                    type='email'
-                    required
-                    onChange={handleChange}
-                    name='email'
-                    value={email}
-                />
-
                 <RowContainer>
-                    <FormInputContainer>
-                        <FormInput
-                            label='Name'
-                            type='text'
-                            required
-                            onChange={handleChange}
-                            name='displayName'
-                            value={displayName}
-                        />
-                    </FormInputContainer>
-                    <FormInputContainer>
-                        <FormInput
-                            label='Email'
-                            type='email'
-                            required
-                            onChange={handleChange}
-                            name='email'
-                            value={email}
-                        />
-                    </FormInputContainer>
+                    <FormInput
+                        label='Name'
+                        type='text'
+                        required
+                        onChange={handleChange}
+                        name='name'
+                        value={name}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <FormInput
+                        label='Email'
+                        type='email'
+                        required
+                        onChange={handleChange}
+                        name='email'
+                        value={email}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <FormInput
+                        label='Date of Birth'
+                        type='date'
+                        onChange={handleChange}
+                        name='dob'
+                        value={dob}
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <DropdownInput
+                        label='Standard'
+                        options={standardOptions}
+                        handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
+                        selectedOption={standard}
+                        name='standard'
+                    />
+                    <DropdownInput
+                        label='Division'
+                        options={divisionOptions}
+                        handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
+                        selectedOption={division}
+                        name='division'
+                    />
                 </RowContainer>
 
-                <FormFieldContainer>
-                    <FormField>
-                        <DropdownInput
-                            label='Favourite Subject'
-                            options={subjectOptions}
-                            handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
-                            selectedOption={subject}
-                            name='dropdown'
-                        />
-                    </FormField>
-                    <FormField>
-                        <DropdownInput
-                            label='Standard'
-                            options={standardOptions}
-                            handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
-                            selectedOption={standard}
-                            name='dropdown'
-                        />
-                    </FormField>
-                </FormFieldContainer>
+                <RowContainer>
+                    <DropdownInput
+                        label='Roll No.'
+                        options={rollNoOptions}
+                        handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
+                        selectedOption={rollNo}
+                        name='rollNo'
+                    />
+                    <DropdownInput
+                        label='Favourite Subject'
+                        options={subjectOptions}
+                        handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
+                        selectedOption={subject}
+                        name='subject'
+                    />
+                </RowContainer>
 
-
-                <FormInput
-                    label='Date of Birth'
-                    type='date'
-                    onChange={handleChange}
-                    name='dob'
-                    value={dob}
-                />
                 <ButtonsContainer>
                     <Button type='submit'>Submit</Button>
                     <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >Reset</Button>

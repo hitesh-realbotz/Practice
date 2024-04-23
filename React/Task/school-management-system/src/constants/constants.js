@@ -10,6 +10,8 @@ export const CONSTANTS = {
   
   MIN_STANDARDS: 1,
   MAX_STANDARD: 10,
+  MAX_DIVISION: 4,
+  MAX_ROLLNO: 30,
 
   
 };

@@ -1,7 +1,10 @@
 import Button from "../button/button.component";
-import React, { useState } from 'react';
+import React, { useState , useEffect} from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
+import { useSelector } from 'react-redux';
+import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
+
 
 const Projects = () => {
 
@@ -10,6 +13,13 @@ const Projects = () => {
     const handleStudentShowModal = () => {
         setModalShow(true);
     }
+
+    // const studentsMap = useSelector(selectStudentsMap);
+    // console.log(studentsMap);
+ 
+    const student = useSelector(selectStudents);
+    console.log(student);
+
     return (
         <>   
             <Button type='button' onClick={(handleStudentShowModal)} >Add Project</Button>           

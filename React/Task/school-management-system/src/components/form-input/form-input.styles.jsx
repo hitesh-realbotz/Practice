@@ -4,7 +4,7 @@ const subColor = 'grey';
 const mainColor = 'black';
 
 const shrinkLabelStyles = css`
-  top: ${({ isDOB }) => (isDOB ? '-20px' : '-10px')};
+  top: ${({ isDOB }) => (isDOB ? '-15px' : '-15px')};
   font-size: 12px;
   color: ${mainColor};
 `;
@@ -16,7 +16,7 @@ export const FormInputLabel = styled.label`
   position: absolute;
   pointer-events: none;
   left: 5px;
-  top: ${({ isDOB }) => (isDOB ? '-10px' : '20px')};
+  top: ${({ isDOB }) => (isDOB ? '-15px' : '3px')};
 
   transition: 300ms ease all;
   ${({ shrink }) => shrink && shrinkLabelStyles};
@@ -27,7 +27,7 @@ export const Input = styled.input`
   background-color: white;
   color: ${subColor};
   font-size: 18px;
-  padding: 10px 10px 10px 5px;
+  // padding: 10px 10px 10px 5px;
   display: block;
   width: 100%;
   border: none;
@@ -47,7 +47,6 @@ export const Input = styled.input`
 export const Group = styled.div`
   position: relative;
   padding-right: 10px;
-  margin-bottom: 20px;
   width: 100%;
   input[type='password'] {
     letter-spacing: 0.3em;
