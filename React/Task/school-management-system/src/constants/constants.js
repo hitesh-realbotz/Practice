@@ -12,6 +12,8 @@ export const CONSTANTS = {
   MAX_STANDARD: 10,
   MAX_DIVISION: 4,
   MAX_ROLLNO: 30,
+  REGEX_EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  REGEX_DOB: /^\d{4}-\d{2}-\d{2}$/,
 
   
 };

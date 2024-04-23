@@ -25,38 +25,58 @@ export const updateStudentsFailed = (error) =>
 
 export const updateStudentStart = (students, studentToAdd) => {
   const newStudents = addStudent(students, studentToAdd);
-  console.log('newStudents Array.isArray(newStudents)',Array.isArray(newStudents));
-  return createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, newStudents);
+console.log(newStudents);
+  return newStudents != null ? createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, newStudents) : null;
 }
 
 const addStudent = (students, studentToAdd) => {
-  if (!Array.isArray(students)) {
-    // If not, return students unchanged
-    console.error('Students must be an array');
+
+  // Check if studentToAdd has required properties
+  if (!studentToAdd || !studentToAdd.standard || !studentToAdd.division || !studentToAdd.rollNo || !studentToAdd.name || !studentToAdd.email) {
+    console.error('Invalid studentToAdd object');
     return students;
   }
-  // Iterate over each standard
-  students.forEach((student) => {
-    console.log('Student available', student);
-    if (student.standard === studentToAdd.standard) {
-      student.standard.divisions.forEach((division) => {
 
-        if (division === studentToAdd.division) {
-          division.students.forEach((student) => {
-            if (student.email === studentToAdd.email || student.rollNo === studentToAdd.rollNo) {
-              return;
-            }
-          });
+  // Find the student with the matching standard
+  const matchingStandard = students.find(student => student.standard === studentToAdd.standard);
 
-          division.students.push({
+  if (matchingStandard) {
+    // Find the division within the matching student
+    const matchingDivision = matchingStandard.divisions.find(division => division.division === studentToAdd.division);
+
+    if (matchingDivision) {
+      // Check if the student already exists in the division
+      const existingStudent = matchingDivision.students.find(student => student.email === studentToAdd.email || student.rollNo === studentToAdd.rollNo);
+
+      if (!existingStudent) {
+        // If the student doesn't exist, add them to the division
+        matchingDivision.students.push({
+          rollNo: studentToAdd.rollNo,
+          name: studentToAdd.name,
+          email: studentToAdd.email,
+        });
+      }else{
+        console.log('email &/ rollNo conflict');
+        return null;
+      }
+    } else {
+      // If the division doesn't exist, create it and add the student
+      matchingStandard.divisions.push({
+        division: studentToAdd.division,
+        students: [
+          {
             rollNo: studentToAdd.rollNo,
             name: studentToAdd.name,
             email: studentToAdd.email,
-          });
-        }
+          }
+        ],
       });
-
-      student.standard.divisions.push(
+    }
+  } else {
+    // If the standard doesn't exist, create it along with division and student
+    students.push({
+      standard: studentToAdd.standard,
+      divisions: [
         {
           division: studentToAdd.division,
           students: [
@@ -66,28 +86,70 @@ const addStudent = (students, studentToAdd) => {
               email: studentToAdd.email,
             }
           ],
-        });
+        }
+      ]
+    });
+  }
 
-    }
-  });
-  students.push({
-    standard: studentToAdd.standard,
-    divisions: [
-      {
-        division: studentToAdd.division,
-        students: [
-          {
-            rollNo: studentToAdd.rollNo,
-            name: studentToAdd.name,
-            email: studentToAdd.email,
-          }
-        ],
-      }
-    ]
-  })
   console.log(students);
-
   return students;
-
 };
+
+
+// const addStudent = (students, studentToAdd) => {
+//   // Iterate over each standard
+//   students.forEach((student) => {
+//     console.log('Student available', student);
+//     if (student.standard === studentToAdd.standard) {
+//       student.divisions.forEach((division) => {
+
+//         if (division === studentToAdd.division) {
+//           division.students.forEach((student) => {
+//             if (student.email === studentToAdd.email || student.rollNo === studentToAdd.rollNo) {
+//               return;
+//             }
+//           });
+
+//           division.students.push({
+//             rollNo: studentToAdd.rollNo,
+//             name: studentToAdd.name,
+//             email: studentToAdd.email,
+//           });
+//         }
+//       });
+
+//       student.divisions.push(
+//         {
+//           division: studentToAdd.division,
+//           students: [
+//             {
+//               rollNo: studentToAdd.rollNo,
+//               name: studentToAdd.name,
+//               email: studentToAdd.email,
+//             }
+//           ],
+//         });
+
+//     }
+//   });
+//   students.push({
+//     standard: studentToAdd.standard,
+//     divisions: [
+//       {
+//         division: studentToAdd.division,
+//         students: [
+//           {
+//             rollNo: studentToAdd.rollNo,
+//             name: studentToAdd.name,
+//             email: studentToAdd.email,
+//           }
+//         ],
+//       }
+//     ]
+//   })
+//   console.log(students);
+
+//   return students;
+
+// };
 

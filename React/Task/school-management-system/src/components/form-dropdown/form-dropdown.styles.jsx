@@ -56,3 +56,7 @@ export const Select = styled.select`
   position: relative;
   width: 100%;
 `;
+
+export const ErrorMessage = styled.span`
+  color: red
+`;

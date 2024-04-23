@@ -8,7 +8,7 @@ import { CONSTANTS } from '../../constants/constants';
 import StudentForm from '../students/student-form.component';
 
 const FormModal = (props) => {
-  const { show, form, action } = props;
+  const { show, form, action, onHide } = props;
 
     const [modalShow, setShow] = useState(show);
 
@@ -23,17 +23,17 @@ const FormModal = (props) => {
             <Modal.Title>{form} - {action} form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            { form === CONSTANTS.FOR_STUDENT ? <StudentForm /> : <SignUpForm /> }
+            { form === CONSTANTS.FOR_STUDENT ? <StudentForm onHide={onHide} /> : <SignUpForm /> }
             
           </Modal.Body>
-          {/* <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={onHide}>
               Close
             </Button>
             <Button variant="primary" onClick={handleClose}>
               Save Changes
             </Button>
-          </Modal.Footer> */}
+          </Modal.Footer>
         </Modal>
       </>
     );

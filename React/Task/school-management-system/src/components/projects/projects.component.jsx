@@ -13,9 +13,6 @@ const Projects = () => {
     const handleStudentShowModal = () => {
         setModalShow(true);
     }
-
-    // const studentsMap = useSelector(selectStudentsMap);
-    // console.log(studentsMap);
  
     const student = useSelector(selectStudents);
     console.log(student);
