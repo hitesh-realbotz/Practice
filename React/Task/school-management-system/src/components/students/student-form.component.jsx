@@ -11,9 +11,7 @@ import DropdownInput from '../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../constants/constants';
 import { fetchStudentsStart, updateStudentStart } from '../../store/students/student.action';
 import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
-
-
-
+import { validateForm } from '../../utils/error-messages/error-messages.utils';
 
 const defaultFormFields = {
     name: '',
@@ -25,24 +23,46 @@ const defaultFormFields = {
     rollNo: '',
 
 };
+const defaultErrorMessages = {
+    name: '',
+    email: '',
+    dob: '',
+    standard: '',
+    subject: '',
+    division: '',
+    rollNo: '',
 
-const StudentForm = () => {
+};
 
-
+const StudentForm = (props) => {
+    const { onHide } = props;
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const { name, email, password, subject, standard, division, rollNo, dob } = formFields;
+    const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
+
+    console.log('DEF ERRORMESSAGE ', defaultErrorMessages);
+    console.log('setDEF ERRORMESSAGE ', errorMessages);
+    const { name, email, subject, standard, division, rollNo, dob } = formFields;
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
 
     const resetFormFields = () => {
-        setFormFields(defaultFormFields);
+        // setFormFields(defaultFormFields);
     };
+
+    // useEffect(() => {
+    //     setFormFields(formFields);
+    //   }, [errorMessages]);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        const errorMessages = validateForm(Object.keys(formFields), Object.values(formFields), defaultErrorMessages);
+        console.log('ERRORMESSAGE ', errorMessages);
+        console.log('ERRORMESSAGE ', errorMessages.name);
+        setErrorMessages(errorMessages);
+        setFormFields(formFields);
 
         try {
-            dispatch(updateStudentStart(students,
+            const action = updateStudentStart(students,
                 {
                     standard: standard,
                     division: division,
@@ -50,11 +70,17 @@ const StudentForm = () => {
                     name: name,
                     email: email,
                 }
-            ));
-            resetFormFields();
+            );
+            if (action != null) {
+                dispatch(action);
+                resetFormFields();
+            } else {
+                console.log('null returned!');
+            }
+
+
         } catch (error) {
-            
-                console.log('user creation encountered an error', error);
+            console.log('user creation encountered an error', error);
         }
     };
 
@@ -92,17 +118,17 @@ const StudentForm = () => {
                     <FormInput
                         label='Name'
                         type='text'
-                        required
                         onChange={handleChange}
                         name='name'
                         value={name}
+                        error={errorMessages.name}
                     />
+
                 </RowContainer>
                 <RowContainer>
                     <FormInput
                         label='Email'
                         type='email'
-                        required
                         onChange={handleChange}
                         name='email'
                         value={email}

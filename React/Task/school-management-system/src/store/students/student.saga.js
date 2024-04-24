@@ -20,13 +20,14 @@ export function* fetchStudentsAsync() {
     yield put(fetchStudentsFailed(error));
   }
 }
-export function* updateStudentsAsync(newStudents) {
+export function* updateStudentsAsync(action) {
+  const newStudents = action.payload;
   try {
     console.log('SAGA  newStudents Array.isArray(newStudents)',Array.isArray(newStudents));
+    console.log('SAGA ', newStudents);
     if (!Array.isArray(newStudents)) {
       // If not, return students unchanged
       console.error('Students must be an array');
-      console.log(newStudents);
     return newStudents;
   }
     const studentsArray = yield call(addCollectionAndDocuments, 'students', newStudents);
