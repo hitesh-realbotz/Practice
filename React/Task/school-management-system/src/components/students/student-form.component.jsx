@@ -11,7 +11,7 @@ import DropdownInput from '../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../constants/constants';
 import { fetchStudentsStart, updateStudentStart } from '../../store/students/student.action';
 import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
-import { validateForm } from '../../utils/error-messages/error-messages.utils';
+import { validateForm, validate } from '../../utils/error-messages/error-messages.utils';
 
 const defaultFormFields = {
     name: '',
@@ -23,43 +23,55 @@ const defaultFormFields = {
     rollNo: '',
 
 };
+// const defaultErrorMessages = {
+//     name: '',
+//     email: '',
+//     dob: '',
+//     standard: '',
+//     subject: '',
+//     division: '',
+//     rollNo: '',
+// };
 const defaultErrorMessages = {
-    name: '',
-    email: '',
-    dob: '',
-    standard: '',
-    subject: '',
-    division: '',
-    rollNo: '',
-
+    nameError: '',
+    emailError: '',
+    dobError: '',
+    standardError: '',
+    subjectError: '',
+    divisionError: '',
+    rollNoError: '',
 };
 
 const StudentForm = (props) => {
-    const { onHide } = props;
-    const [formFields, setFormFields] = useState(defaultFormFields);
-    const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
 
-    console.log('DEF ERRORMESSAGE ', defaultErrorMessages);
-    console.log('setDEF ERRORMESSAGE ', errorMessages);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [isReset, setIsReset] = useState(false);
+    const [formFields, setFormFields] = useState(defaultFormFields);
     const { name, email, subject, standard, division, rollNo, dob } = formFields;
+
+    // const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
+    // const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
+
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
-
+    console.log(students);
     const resetFormFields = () => {
-        // setFormFields(defaultFormFields);
-    };
+        setFormFields(defaultFormFields);
+        // setErrorMessages(defaultErrorMessages);
 
-    // useEffect(() => {
-    //     setFormFields(formFields);
-    //   }, [errorMessages]);
+        setIsReset(!isReset);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const errorMessages = validateForm(Object.keys(formFields), Object.values(formFields), defaultErrorMessages);
-        console.log('ERRORMESSAGE ', errorMessages);
-        console.log('ERRORMESSAGE ', errorMessages.name);
-        setErrorMessages(errorMessages);
-        setFormFields(formFields);
+        setIsSubmitted(!isSubmitted);
+        
+        console.log('SetResponse ', setIsSubmitted(!isSubmitted));
+        //Updating Error messages from FormComponent on FormSubmission
+        const errors = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
+        console.log('OUTPUT ',errors);
+        // setErrorMessages(errors);
+
 
         try {
             const action = updateStudentStart(students,
@@ -69,6 +81,9 @@ const StudentForm = (props) => {
                     rollNo: rollNo,
                     name: name,
                     email: email,
+                    dob: dob,
+                    subject: subject,
+
                 }
             );
             if (action != null) {
@@ -84,10 +99,39 @@ const StudentForm = (props) => {
         }
     };
 
+    ////Updating Error messages from FormComponent
+    // const onHandleBlur = (event, errorTag) => {
+    //     const { name, value } = event.target;
+    //     const errors = getUpdatedErrorMsg(defaultErrorMessages, errorTag, name, value);
+    //     setErrorMessages(errors);
+    // };
+
+    // const getUpdatedErrorMsg = (defaultErrorMessages, errorTag, fieldname, value) => {
+    //     const updatedErrorMessages = { ...defaultErrorMessages };
+    //     const errorMessagesKeys = Object.keys(defaultErrorMessages);
+    //     const errorMessagesValues = Object.values(errorMessages);
+    //     errorMessagesKeys.forEach((name, index) => {
+    //         if (name == errorTag) {
+    //             updatedErrorMessages[name] = validate(fieldname, value);
+    //         } else {
+    //             updatedErrorMessages[name] = errorMessagesValues[index];
+    //         }
+    //     });
+    //     return updatedErrorMessages;
+    // }
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormFields({ ...formFields, [name]: value });
     };
+
+    const handleFormAction = (msg) => {
+        console.log('handle ',msg);
+        setIsReset(false);
+        setIsSubmitted(false);
+    };
+
+
 
     const subjectOptions = [
         { value: CONSTANTS.FAV_SUBJECT1, label: CONSTANTS.FAV_SUBJECT1 },
@@ -98,6 +142,7 @@ const StudentForm = (props) => {
         value: `${index + 1}`,
         label: `${index + 1}`,
     }));
+
     const rollNoOptions = Array.from({ length: CONSTANTS.MAX_ROLLNO }, (_, index) => ({
         value: `${index + 1}`,
         label: `${index + 1}`,
@@ -106,8 +151,6 @@ const StudentForm = (props) => {
         value: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
         label: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
     }));
-    console.log(divisionOptions);
-
 
 
     return (
@@ -119,9 +162,13 @@ const StudentForm = (props) => {
                         label='Name'
                         type='text'
                         onChange={handleChange}
+                        onHandleFormAction={handleFormAction}
+                        // handleBlur={(event) => onHandleBlur(event, 'nameError')}
+                        // errorM={nameError}
                         name='name'
                         value={name}
-                        error={errorMessages.name}
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
                     />
 
                 </RowContainer>
@@ -130,8 +177,13 @@ const StudentForm = (props) => {
                         label='Email'
                         type='email'
                         onChange={handleChange}
+                        onHandleFormAction={handleFormAction}
+                        // handleBlur={(event) => onHandleBlur(event, 'emailError')}
+                        // errorM={emailError}
                         name='email'
                         value={email}
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
                     />
                 </RowContainer>
                 <RowContainer>
@@ -139,8 +191,13 @@ const StudentForm = (props) => {
                         label='Date of Birth'
                         type='date'
                         onChange={handleChange}
+                        onHandleFormAction={handleFormAction}
+                        // handleBlur={(event) => onHandleBlur(event, 'dobError')}
+                        // errorM={dobError}
                         name='dob'
                         value={dob}
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
                     />
                 </RowContainer>
                 <RowContainer>
@@ -148,15 +205,22 @@ const StudentForm = (props) => {
                         label='Standard'
                         options={standardOptions}
                         handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
+                        // errorM={standardError}
                         selectedOption={standard}
                         name='standard'
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
+
                     />
                     <DropdownInput
                         label='Division'
                         options={divisionOptions}
                         handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
+                        // errorM={divisionError}
                         selectedOption={division}
                         name='division'
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
                     />
                 </RowContainer>
 
@@ -165,15 +229,23 @@ const StudentForm = (props) => {
                         label='Roll No.'
                         options={rollNoOptions}
                         handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
+                        // errorM={rollNoError}
                         selectedOption={rollNo}
                         name='rollNo'
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
+
                     />
                     <DropdownInput
                         label='Favourite Subject'
                         options={subjectOptions}
                         handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
+                        // errorM={subjectError}
                         selectedOption={subject}
                         name='subject'
+                        isSubmitted={isSubmitted}
+                        isReset={!isReset}
+
                     />
                 </RowContainer>
 

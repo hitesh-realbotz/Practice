@@ -1,16 +1,29 @@
 // Import necessary dependencies
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FormDropdownInputLabel, Input, Group, Select, ErrorMessage } from './form-dropdown.styles';
 import { validate } from '../../utils/error-messages/error-messages.utils'
 
-// Define a new component for the dropdown field
-const DropdownInput = ({ name, label, options, handleChange, selectedOption }) => {
-
+const DropdownInput = React.memo(({ isReset, isSubmitted, errorM, name, label, options, handleChange, selectedOption }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
+
+  ////Updating Error messages from FormComponent on onBlur
+  // useEffect(() => {
+  //   setErrorMessage(errorM); // Update errorMessage when errorMessages prop changes
+  // }, [errorM]);
+
+  useEffect(() => {
+    const isSub = isSubmitted ? setErrorMessage(validate(name, selectedOption)) : '';
+  }, [isSubmitted]);
+
+  useEffect(() => {
+    const isRes = isReset ? setErrorMessage('') : '';
+  }, [isReset]);
+
+
   const handleBlur = (event) => {
     setErrorMessage(validate(name, selectedOption));
-};
+  };
 
   return (
     <Group  >
@@ -19,9 +32,8 @@ const DropdownInput = ({ name, label, options, handleChange, selectedOption }) =
           {label}
         </FormDropdownInputLabel>
       )}
-      
+
       <Select onChange={handleChange} value={selectedOption} onBlur={handleBlur} >
-      {/* <select onChange={handleChange} value={selectedOption}> */}
         <option value="" selected disabled hidden>
           Select
         </option>
@@ -34,6 +46,6 @@ const DropdownInput = ({ name, label, options, handleChange, selectedOption }) =
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
     </Group>
   );
-};
+});
 
 export default DropdownInput;

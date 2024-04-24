@@ -25,17 +25,17 @@ export const updateStudentsFailed = (error) =>
 
 export const updateStudentStart = (students, studentToAdd) => {
   const newStudents = addStudent(students, studentToAdd);
-console.log(newStudents);
+  console.log(newStudents);
   return newStudents != null ? createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, newStudents) : null;
 }
 
 const addStudent = (students, studentToAdd) => {
 
-  // Check if studentToAdd has required properties
-  if (!studentToAdd || !studentToAdd.standard || !studentToAdd.division || !studentToAdd.rollNo || !studentToAdd.name || !studentToAdd.email) {
-    console.error('Invalid studentToAdd object');
-    return students;
-  }
+  // // Check if studentToAdd has required properties
+  // if (!studentToAdd || !studentToAdd.standard || !studentToAdd.division || !studentToAdd.rollNo || !studentToAdd.name || !studentToAdd.email) {
+  //   console.error('Invalid studentToAdd object');
+  //   return students;
+  // }
 
   // Find the student with the matching standard
   const matchingStandard = students.find(student => student.standard === studentToAdd.standard);
@@ -54,8 +54,11 @@ const addStudent = (students, studentToAdd) => {
           rollNo: studentToAdd.rollNo,
           name: studentToAdd.name,
           email: studentToAdd.email,
+          dob: studentToAdd.dob,
+          subject: studentToAdd.subject,
+
         });
-      }else{
+      } else {
         console.log('email &/ rollNo conflict');
         return null;
       }
@@ -68,6 +71,8 @@ const addStudent = (students, studentToAdd) => {
             rollNo: studentToAdd.rollNo,
             name: studentToAdd.name,
             email: studentToAdd.email,
+            dob: studentToAdd.dob,
+            subject: studentToAdd.subject,
           }
         ],
       });
@@ -84,6 +89,8 @@ const addStudent = (students, studentToAdd) => {
               rollNo: studentToAdd.rollNo,
               name: studentToAdd.name,
               email: studentToAdd.email,
+              dob: studentToAdd.dob,
+              subject: studentToAdd.subject,
             }
           ],
         }

@@ -6,10 +6,12 @@ export const validate = (name, value) => {
     switch (name) {
         case 'email':
             return !value.trim() ? 'Email is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
+        case 'password':
+            return !value.trim() ? 'Password is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
         case 'name':
             return !value.trim() ? 'Name is Required' : '';
         case 'standard':
-            return !value ? 'Standard must be selected' : 'Check';
+            return !value ? 'Standard must be selected' : '';
         case 'division':
             return !value ? 'Division must be selected' : '';
         case 'rollNo':
@@ -39,11 +41,18 @@ const validateEmail = (email) => {
 };
 
 export const validateForm = (names, values, errorMessages) => {
+    let isValid = true;
+    errorMessages.forEach((name, index) => { 
+        if (!isValid) {
+            return ;
+        }
+        if (!!validate(names[index], values[index])) {
+             isValid = false;
+             return false;
+        }
 
-    names.forEach((name, index) => {
-        console.log(validate(name, values[index]));    
-        errorMessages[name] = validate(name, values[index]);
+        // errorMessages[name] = validate(names[index], values[index]);
     });
-    console.log(errorMessages)
-    return errorMessages;
+    // return errorMessages;
+    return isValid;
 }
