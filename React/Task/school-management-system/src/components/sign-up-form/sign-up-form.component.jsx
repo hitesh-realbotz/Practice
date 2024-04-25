@@ -69,7 +69,7 @@ const SignUpForm = () => {
           type='text'
           required
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
+          // onHandleFormAction={handleFormAction}
           name='displayName'
           value={displayName}
         />
@@ -79,7 +79,7 @@ const SignUpForm = () => {
           type='email'
           required
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
+          // onHandleFormAction={handleFormAction}
           name='email'
           value={email}
         />
@@ -89,7 +89,7 @@ const SignUpForm = () => {
           type='password'
           required
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
+          // onHandleFormAction={handleFormAction}
           name='password'
           value={password}
         />
@@ -99,7 +99,7 @@ const SignUpForm = () => {
           type='password'
           required
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
+          // onHandleFormAction={handleFormAction}
           name='confirmPassword'
           value={confirmPassword}
         />

@@ -8,7 +8,9 @@ import { CONSTANTS } from '../../constants/constants';
 import StudentForm from '../students/student-form.component';
 
 const FormModal = (props) => {
-  const { show, form, action, onHide } = props;
+  const { show, form, action, data , onHide} = props;
+  
+  console.log(props);
 
     const [modalShow, setShow] = useState(show);
 
@@ -18,12 +20,13 @@ const FormModal = (props) => {
     return (
       <>
           
-        <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered>
+        {/* <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered> */}
+        <Modal  {...props} aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
             <Modal.Title>{form} - {action} form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            { form === CONSTANTS.FOR_STUDENT ? <StudentForm onHide={onHide} /> : <SignUpForm /> }
+            { form === CONSTANTS.FOR_STUDENT ? <StudentForm onHide={onHide} data={data} action={action} /> : <SignUpForm /> }
             
           </Modal.Body>
           {/* <Modal.Footer>

@@ -1,7 +1,7 @@
 import { STUDENTS_ACTION_TYPES } from './student.types';
 
 export const STUDENTS_INITIAL_STATE = {
-  students: [],
+  students: [  ],
   isLoading: false,
   error: null,
 };

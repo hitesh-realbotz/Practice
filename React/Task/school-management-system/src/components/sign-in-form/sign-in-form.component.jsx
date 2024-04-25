@@ -20,13 +20,13 @@ const defaultFormFields = {
 const SignInForm = () => {
   const dispatch = useDispatch();
   const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isReset, setIsReset] = useState(false);
+  const [isReset, setIsReset] = useState(false);
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
 
   const resetFormFields = () => {
     setFormFields(defaultFormFields);
-    setIsReset(!isReset);
+    // setIsReset(!isReset);
   };
 
   const signInWithGoogle = async () => {
@@ -35,7 +35,7 @@ const SignInForm = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setIsSubmitted(!isSubmitted);
+    // setIsSubmitted(!isSubmitted);
 
     try {
       dispatch(emailSignInStart(email, password));
@@ -51,10 +51,7 @@ const SignInForm = () => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const handleFormAction = () => {
-    setIsReset(false);
-    setIsSubmitted(false);
-};
+
 
   return (
     <SignInContainer>
@@ -65,22 +62,22 @@ const SignInForm = () => {
           label='Email'
           type='email'
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
           name='email'
           value={email}
-          isSubmitted={isSubmitted}
-          isReset={!isReset}
+        // onHandleFormAction={handleFormAction}
+        // isSubmitted={isSubmitted}
+        // isReset={!isReset}
         />
 
         <FormInput
           label='Password'
           type='password'
           onChange={handleChange}
-          onHandleFormAction={handleFormAction}
           name='password'
           value={password}
-          isSubmitted={isSubmitted}
-          isReset={!isReset}
+        // onHandleFormAction={handleFormAction}
+        // isSubmitted={isSubmitted}
+        // isReset={!isReset}
         />
         <div className='sign-up-hint'>No account yet? <NavLink to='/sign-up'>SIGN-UP</NavLink> </div>
         <ButtonsContainer>

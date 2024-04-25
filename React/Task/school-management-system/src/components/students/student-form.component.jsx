@@ -5,24 +5,23 @@ import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
 
 
-import { ButtonsContainer, FormField, FormFieldContainer, StudentFormContainer, RowContainer, FormInputContainer } from './student-form.styles';
+import { ButtonsContainer, StudentFormContainer, RowContainer, FormInputContainer } from './student-form.styles';
 import { signUpStart } from '../../store/user/user.action';
 import DropdownInput from '../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../constants/constants';
-import { fetchStudentsStart, updateStudentStart } from '../../store/students/student.action';
+import { updateStudentStart, addStudentStart } from '../../store/students/student.action';
 import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
 import { validateForm, validate } from '../../utils/error-messages/error-messages.utils';
 
-const defaultFormFields = {
-    name: '',
-    email: '',
-    dob: '',
-    standard: '',
-    subject: '',
-    division: '',
-    rollNo: '',
-
-};
+// const defaultFormFields = {
+//     name: '',
+//     email: '',
+//     dob: '',
+//     standard: '',
+//     subject: '',
+//     division: '',
+//     rollNo: '',
+// };
 // const defaultErrorMessages = {
 //     name: '',
 //     email: '',
@@ -44,81 +43,122 @@ const defaultErrorMessages = {
 
 const StudentForm = (props) => {
 
-    const [isSubmitted, setIsSubmitted] = useState(false);
-    const [isReset, setIsReset] = useState(false);
+    let defaultFormFields = {
+        name: '',
+        email: '',
+        dob: '',
+        standard: '',
+        subject: '',
+        division: '',
+        rollNo: '',
+    };
+
+    const { data, action } = props;
+    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
+
+    // const [isSubmitted, setIsSubmitted] = useState(false);
+    // const [isReset, setIsReset] = useState(false);
+
+    // const [formFields, setFormFields] = useState(!!data.standard ? data : defaultFormFields);
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { name, email, subject, standard, division, rollNo, dob } = formFields;
 
-    // const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
-    // const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
+    //
+    const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
+    const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
 
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
-    console.log(students);
+    // console.log(students);
     const resetFormFields = () => {
+        setErrorMessages(defaultErrorMessages);
         setFormFields(defaultFormFields);
-        // setErrorMessages(defaultErrorMessages);
 
-        setIsReset(!isReset);
+        // setIsReset(!isReset);
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        setIsSubmitted(!isSubmitted);
-        
-        console.log('SetResponse ', setIsSubmitted(!isSubmitted));
-        //Updating Error messages from FormComponent on FormSubmission
-        const errors = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
-        console.log('OUTPUT ',errors);
-        // setErrorMessages(errors);
+        // setIsSubmitted(!isSubmitted);
 
+        //Updating Error messages from FormComponent on FormSubmission
+        const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
+
+        if (!validationResult.isValid) {
+            console.log('post validation ', validationResult.errors);
+            setErrorMessages(validationResult.errors);
+            return;
+        }
 
         try {
-            const action = updateStudentStart(students,
-                {
-                    standard: standard,
-                    division: division,
-                    rollNo: rollNo,
-                    name: name,
-                    email: email,
-                    dob: dob,
-                    subject: subject,
-
-                }
-            );
-            if (action != null) {
-                dispatch(action);
+            const actionToBe = action == CONSTANTS.ADD_ACTION ? addStudentStart(students, getFormData() ) : updateStudentStart(students, getFormData(), data );
+            if (!actionToBe.conflicts) {
+                dispatch(actionToBe);
                 resetFormFields();
             } else {
-                console.log('null returned!');
+                const updatedErrorMessages = { ...errorMessages };
+                console.log('in conflict ', updatedErrorMessages);
+                actionToBe.conflicts.forEach(error => {
+                    console.log('in conflict ', error);
+                    updatedErrorMessages[error.field] = error.message;
+                });
+                console.log('in conflict ', updatedErrorMessages);
+
+                setErrorMessages(updatedErrorMessages);
             }
 
-
         } catch (error) {
-            console.log('user creation encountered an error', error);
+            console.log('Student Registration encountered an error', error);
         }
     };
 
-    ////Updating Error messages from FormComponent
-    // const onHandleBlur = (event, errorTag) => {
-    //     const { name, value } = event.target;
-    //     const errors = getUpdatedErrorMsg(defaultErrorMessages, errorTag, name, value);
-    //     setErrorMessages(errors);
-    // };
+    const getFormData = () => {
+        return {
+            standard: standard,
+            division: division,
+            rollNo: rollNo,
+            name: name,
+            email: email,
+            dob: dob,
+            subject: subject,
+        };
+    }
 
-    // const getUpdatedErrorMsg = (defaultErrorMessages, errorTag, fieldname, value) => {
-    //     const updatedErrorMessages = { ...defaultErrorMessages };
-    //     const errorMessagesKeys = Object.keys(defaultErrorMessages);
-    //     const errorMessagesValues = Object.values(errorMessages);
-    //     errorMessagesKeys.forEach((name, index) => {
-    //         if (name == errorTag) {
-    //             updatedErrorMessages[name] = validate(fieldname, value);
-    //         } else {
-    //             updatedErrorMessages[name] = errorMessagesValues[index];
-    //         }
-    //     });
-    //     return updatedErrorMessages;
-    // }
+    //Updating Error messages from FormComponent
+    const onHandleBlur = (event, errorTag) => {
+        const { name, value } = event.target;
+        const errors = getUpdatedErrorMsg(errorTag, name, value);
+        setErrorMessages(errors);
+    };
+
+    const handleChangeSelect = (event, name, errorTag) => {
+        const { value } = event.target;
+        setFormFields({ ...formFields, [name]: value });
+        const errors = getUpdatedErrorMsg(errorTag, name, value);
+        setErrorMessages(errors);
+    };
+
+    const onHandleBlurSelect = (event, name, errorTag) => {
+        const { value } = event.target;
+        if (value.length) {
+            return;
+        }
+        handleChangeSelect(event, name, errorTag);
+    };
+
+    const getUpdatedErrorMsg = (errorTag, fieldname, value) => {
+        const updatedErrorMessages = { ...errorMessages };
+        const errorMessagesKeys = Object.keys(updatedErrorMessages);
+        const errorMessagesValues = Object.values(updatedErrorMessages);
+        errorMessagesKeys.forEach((name, index) => {
+            if (name == errorTag) {
+                updatedErrorMessages[name] = validate(fieldname, value);
+            } else {
+                updatedErrorMessages[name] = errorMessagesValues[index];
+            }
+        });
+        return updatedErrorMessages;
+    }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -126,9 +166,8 @@ const StudentForm = (props) => {
     };
 
     const handleFormAction = (msg) => {
-        console.log('handle ',msg);
-        setIsReset(false);
-        setIsSubmitted(false);
+        // setIsReset(false);
+        // setIsSubmitted(false);
     };
 
 
@@ -162,13 +201,13 @@ const StudentForm = (props) => {
                         label='Name'
                         type='text'
                         onChange={handleChange}
-                        onHandleFormAction={handleFormAction}
-                        // handleBlur={(event) => onHandleBlur(event, 'nameError')}
-                        // errorM={nameError}
+                        handleBlur={(event) => onHandleBlur(event, 'nameError')}
+                        errorM={nameError}
                         name='name'
                         value={name}
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // onHandleFormAction={handleFormAction}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
                     />
 
                 </RowContainer>
@@ -177,13 +216,13 @@ const StudentForm = (props) => {
                         label='Email'
                         type='email'
                         onChange={handleChange}
-                        onHandleFormAction={handleFormAction}
-                        // handleBlur={(event) => onHandleBlur(event, 'emailError')}
-                        // errorM={emailError}
+                        handleBlur={(event) => onHandleBlur(event, 'emailError')}
+                        errorM={emailError}
                         name='email'
                         value={email}
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // onHandleFormAction={handleFormAction}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
                     />
                 </RowContainer>
                 <RowContainer>
@@ -191,36 +230,42 @@ const StudentForm = (props) => {
                         label='Date of Birth'
                         type='date'
                         onChange={handleChange}
-                        onHandleFormAction={handleFormAction}
-                        // handleBlur={(event) => onHandleBlur(event, 'dobError')}
-                        // errorM={dobError}
+                        handleBlur={(event) => onHandleBlur(event, 'dobError')}
+                        errorM={dobError}
                         name='dob'
                         value={dob}
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // onHandleFormAction={handleFormAction}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
                     />
                 </RowContainer>
                 <RowContainer>
                     <DropdownInput
                         label='Standard'
                         options={standardOptions}
-                        handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
-                        // errorM={standardError}
-                        selectedOption={standard}
+                        // handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
+                        handleChange={(event, name) => handleChangeSelect(event, name, 'standardError')}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'standardError')}
+                        errorM={standardError}
+                        // selectedOption={standard}
+                        value={standard}
                         name='standard'
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
 
                     />
                     <DropdownInput
                         label='Division'
                         options={divisionOptions}
-                        handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
-                        // errorM={divisionError}
-                        selectedOption={division}
+                        // handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
+                        handleChange={(event, name) => handleChangeSelect(event, name, 'divisionError')}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'divisionError')}
+                        errorM={divisionError}
+                        // selectedOption={division}
+                        value={division}
                         name='division'
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
                     />
                 </RowContainer>
 
@@ -228,30 +273,36 @@ const StudentForm = (props) => {
                     <DropdownInput
                         label='Roll No.'
                         options={rollNoOptions}
-                        handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
-                        // errorM={rollNoError}
-                        selectedOption={rollNo}
+                        // handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
+                        handleChange={(event, name) => handleChangeSelect(event, name, 'rollNoError')}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'rollNoError')}
+                        errorM={rollNoError}
+                        // selectedOption={rollNo}
+                        value={rollNo}
                         name='rollNo'
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
 
                     />
                     <DropdownInput
                         label='Favourite Subject'
                         options={subjectOptions}
-                        handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
-                        // errorM={subjectError}
-                        selectedOption={subject}
+                        // handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
+                        handleChange={(event, name) => handleChangeSelect(event, name, 'subjectError')}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'subjectError')}
+                        errorM={subjectError}
+                        // selectedOption={subject}
+                        value={subject}
                         name='subject'
-                        isSubmitted={isSubmitted}
-                        isReset={!isReset}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
 
                     />
                 </RowContainer>
 
                 <ButtonsContainer>
-                    <Button type='submit'>Submit</Button>
-                    <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >Reset</Button>
+                    <Button type='submit'>{action == CONSTANTS.ADD_ACTION ? CONSTANTS.SUBMIT_BUTTON_TEXT : CONSTANTS.UPDATE_BUTTON_TEXT}</Button>
+                    <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >{CONSTANTS.RESET_BUTTON_TEXT}</Button>
                 </ButtonsContainer>
             </form>
         </StudentFormContainer >
