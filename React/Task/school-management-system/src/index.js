@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 import { store } from './store/store';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ToastEle from './components/toast/toast.component';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -15,6 +16,8 @@ root.render(
       <BrowserRouter>
 
         <App />
+
+        <ToastEle />
       </BrowserRouter>
     </Provider>
   </React.StrictMode>
