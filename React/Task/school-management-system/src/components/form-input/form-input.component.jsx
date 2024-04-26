@@ -1,29 +1,18 @@
 import { FormInputLabel, Input, Group, ErrorMessage } from './form-input.styles';
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { validate } from '../../utils/error-messages/error-messages.utils'
 
-const FormInput = ({ isReset, isSubmitted, onHandleFormAction, errorM, label, ...otherProps }) => {
+const FormInput = (({ handleBlur, errorM, label, ...otherProps }) => {
+// const FormInput = ({ isReset, isSubmitted, onHandleFormAction, errorM, label, ...otherProps }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
   const isDOB = otherProps.name.toLowerCase() === 'dob';
 
-  ////Updating Error messages from FormComponent on onBlur
-  // useEffect(() => {
-  //   setErrorMessage(errorM); // Update errorMessage when errorMessages prop changes
-  // }, [errorM]);
-
+  //Updating Error messages from FormComponent on Form submission
   useEffect(() => {
-    const isSub = isSubmitted ? setErrorMessage(validate(otherProps.name, otherProps.value)) : '';
-    onHandleFormAction(errorMessage);
-
-  }, [isSubmitted]);
-
-  useEffect(() => {
-    const isRes = isReset ? setErrorMessage('') : '';
-    onHandleFormAction();
-  }, [isReset]);
-
+    setErrorMessage(errorM); // Update errorMessage when errorMessages prop changes
+  }, [errorM]);
 
   const onHandleBlur = (event) => {
     const { name, value } = event.target;
@@ -31,10 +20,22 @@ const FormInput = ({ isReset, isSubmitted, onHandleFormAction, errorM, label, ..
   };
 
 
+  //
+  // useEffect(() => {
+  //   const isSub = isSubmitted ? setErrorMessage(validate(otherProps.name, otherProps.value)) : '';
+  //   onHandleFormAction(errorMessage);
+  // }, [isSubmitted]);
+
+  // useEffect(() => {
+  //   const isRes = isReset ? setErrorMessage('') : '';
+  //   onHandleFormAction();
+  // }, [isReset]);
+
+
   return (
     < Group >
-      {/* <Input {...otherProps} onBlur={handleBlur} /> */}
-      <Input {...otherProps} onBlur={onHandleBlur} />
+      <Input {...otherProps} onBlur={handleBlur} />
+      {/* <Input {...otherProps} onBlur={onHandleBlur} /> */}
       {
         label && (
           <FormInputLabel shrink={otherProps.value.length} isDOB={isDOB}>
@@ -46,6 +47,6 @@ const FormInput = ({ isReset, isSubmitted, onHandleFormAction, errorM, label, ..
 
     </Group >
   );
-};
+});
 
 export default FormInput;

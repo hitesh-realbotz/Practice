@@ -41,18 +41,18 @@ const validateEmail = (email) => {
 };
 
 export const validateForm = (names, values, errorMessages) => {
+    console.log('In Validat errorMessages ', errorMessages);
+
     let isValid = true;
     errorMessages.forEach((name, index) => { 
-        if (!isValid) {
-            return ;
-        }
         if (!!validate(names[index], values[index])) {
              isValid = false;
-             return false;
         }
 
-        // errorMessages[name] = validate(names[index], values[index]);
+        console.log('In Validat errorMess ', errorMessages[name], names[index], values[index]);
+        errorMessages[`${names[index]}Error`] = validate(names[index], values[index]);
+        console.log('In Validat errorMess POST ', errorMessages[name], names[index], values[index]);
     });
-    // return errorMessages;
-    return isValid;
+    return {errors: errorMessages, isValid: isValid};
+    // return isValid;
 }
