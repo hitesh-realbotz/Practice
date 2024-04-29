@@ -53,7 +53,7 @@ const StudentForm = (props) => {
         rollNo: '',
     };
 
-    const { data, action } = props;
+    const { data, action, onHide } = props;
     defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
 
     // const [isSubmitted, setIsSubmitted] = useState(false);
@@ -95,6 +95,7 @@ const StudentForm = (props) => {
             if (!actionToBe.conflicts) {
                 dispatch(actionToBe);
                 resetFormFields();
+                onHide();
             } else {
                 const updatedErrorMessages = { ...errorMessages };
                 console.log('in conflict ', updatedErrorMessages);
@@ -102,8 +103,6 @@ const StudentForm = (props) => {
                     console.log('in conflict ', error);
                     updatedErrorMessages[error.field] = error.message;
                 });
-                console.log('in conflict ', updatedErrorMessages);
-
                 setErrorMessages(updatedErrorMessages);
             }
 

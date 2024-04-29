@@ -8,6 +8,7 @@ import {
   updateStudentsFailed,
   updateStudentsSuccess
 } from './student.action';
+import {showToast} from '../toasts/toast.action';
 
 import { STUDENTS_ACTION_TYPES } from './student.types';
 
@@ -25,14 +26,11 @@ export function* updateStudentsAsync(action) {
   try {
     console.log('SAGA  newStudents Array.isArray(newStudents)',Array.isArray(newStudents));
     console.log('SAGA ', newStudents);
-    if (!Array.isArray(newStudents)) {
-      // If not, return students unchanged
-      console.error('Students must be an array');
-    return newStudents;
-  }
+
     const studentsArray = yield call(addCollectionAndDocuments, 'students', newStudents);
     console.log('saga updated students ', studentsArray);
     yield put(updateStudentsSuccess(newStudents));
+    yield put(showToast('From STUDENTS'));
 
   } catch (error) {
     yield put(updateStudentsFailed(error));

@@ -11,6 +11,13 @@ export const CONSTANTS = {
   SUBMIT_BUTTON_TEXT: 'SUBMIT',
   RESET_BUTTON_TEXT: 'RESET',
   UPDATE_BUTTON_TEXT: 'UPDATE',
+  DELET_BUTTON_TEXT: 'DELETE',
+
+  EMAIL_ERROR_TAG: 'emailError',
+  ROLL_NO_ERROR_TAG: 'rollNoError',
+
+  EMAIL_ASSIGNED: 'Email is already assigned!',
+  ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
   
   MIN_STANDARDS: 1,
   MAX_STANDARD: 10,

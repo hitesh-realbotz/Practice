@@ -2,7 +2,7 @@ import { CONSTANTS } from "../../constants/constants";
 
 export const validate = (name, value) => {
 
-    
+
     switch (name) {
         case 'email':
             return !value.trim() ? 'Email is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
@@ -26,7 +26,7 @@ export const validate = (name, value) => {
             const dobPattern = CONSTANTS.REGEX_DOB;
             if (!dobPattern.test(value)) {
                 return 'Invalid Date of Birth format. Please use YYYY-MM-DD';
-            } 
+            }
             return '';
 
         default:
@@ -44,15 +44,22 @@ export const validateForm = (names, values, errorMessages) => {
     console.log('In Validat errorMessages ', errorMessages);
 
     let isValid = true;
-    errorMessages.forEach((name, index) => { 
+    errorMessages.forEach((name, index) => {
         if (!!validate(names[index], values[index])) {
-             isValid = false;
+            isValid = false;
         }
 
         console.log('In Validat errorMess ', errorMessages[name], names[index], values[index]);
         errorMessages[`${names[index]}Error`] = validate(names[index], values[index]);
         console.log('In Validat errorMess POST ', errorMessages[name], names[index], values[index]);
     });
-    return {errors: errorMessages, isValid: isValid};
+    return { errors: errorMessages, isValid: isValid };
     // return isValid;
+}
+
+export const getConflictMessages = (conflicts, errorTag, errorMessage) => {
+    conflicts.conflicts.push({
+        field: errorTag, message: errorMessage
+    });
+    return conflicts;
 }

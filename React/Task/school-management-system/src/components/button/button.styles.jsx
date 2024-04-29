@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const BaseButton = styled.button`
-  min-width: 165px;
+  // min-width: 165px;
   width: auto;
   height: 50px;
   letter-spacing: 0.5px;
@@ -19,9 +19,10 @@ export const BaseButton = styled.button`
   justify-content: center;
   align-items: center;
   margin: 0px 10px;
+  border-radius: 5px;
 
   &:hover {
-    background-color: white;
+    background-color: #04b004;
     color: black;
     border: 1px solid black;
   }
@@ -39,11 +40,20 @@ export const GoogleSignInButton = styled(BaseButton)`
 
 export const InvertedButton = styled(BaseButton)`
   background-color: grey;
-  color: black;
+  color: white;
   border: 1px solid black;
 
   &:hover {
     background-color: #b8b4b4;
+    color: black;
+  }
+`;
+export const DeleteButton = styled(BaseButton)`
+  background-color: #e40c0c;
+  color: white;
+
+  &:hover {
+    background-color: #f41616;
     color: black;
   }
 `;
