@@ -19,6 +19,7 @@ import {
   createAuthUserWithEmailAndPassword,
   signOutUser,
 } from '../../utils/firebase/firebase.utils';
+import { useNavigate } from 'react-router-dom';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
   try {
@@ -28,6 +29,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
       additionalDetails
     );
     yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
+    
   } catch (error) {
     yield put(signInFailed(error));
   }

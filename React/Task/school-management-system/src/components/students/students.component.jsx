@@ -1,4 +1,4 @@
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import React, { useState, useEffect } from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
@@ -6,13 +6,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectStudents } from "../../store/students/student.selector";
 import ConfirmModal from "../modal/confirm-modal.component";
 import { deleteStudentStart } from "../../store/students/student.action";
-import ToastEle from "../toast/toast.component";
+import { Actions, StudentsTab, Table } from "./students.styles";
+import TableComponent from "../table/table.component";
+import { selectCurrentUser } from "../../store/user/user.selector";
 
+import { Audio } from 'react-loader-spinner';
+// import 'react-toastify/dist/ReactToastify.css';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { selectToastReducer } from "../../store/toasts/toast.selector";
-import { showToast } from "../../store/toasts/toast.action";
 
 const defaultModalProps = {
     action: CONSTANTS.ADD_ACTION,
@@ -23,12 +23,9 @@ const defaultModalProps = {
 const Students = () => {
 
     const dispatch = useDispatch();
+    const currentUser = useSelector(selectCurrentUser);
     const [modalProps, setModalProps] = useState(defaultModalProps);
-
-
-
     const students = useSelector(selectStudents);
-
 
     const handleStudentShowModal = () => {
         const updatedModelProps = { ...modalProps };
@@ -48,19 +45,14 @@ const Students = () => {
     }
 
     const handleHideModal = () => {
-        // toast("Model Hide!");
-        dispatch(showToast('FROM COMPONENT'));
         setModalProps(defaultModalProps);
     }
     const handleConfirm = () => {
-        console.log('HANDLE ', modalProps.data);
         try {
             dispatch(deleteStudentStart(students, modalProps.data));
-            toast("Student Deleted Successfully");
         } catch (error) {
             console.log('Student Deletion encountered an error', error);
         }
-
         setModalProps(defaultModalProps);
     }
 
@@ -72,28 +64,6 @@ const Students = () => {
         setModalProps(updatedModelProps);
     }
 
-
-    // useEffect(() => {
-    //     addCollectionAndDocuments('students', STUDENT_DATA);
-
-    //   }, []);
-    // Flatten the nested structure of students data
-    // Check if students is defined and has length greater than 0
-    if (!students || students.length === 0) {
-        // return <p>No students data available.</p>;
-    }
-
-    // Flatten the nested structure of students data
-    // const flattenedStudents = students.flatMap(standard => {
-    //     if (!standard.divisions || standard.divisions.length === 0) {
-    //         return [];
-    //     }
-    //     return standard.divisions.map(division => ({
-    //         standard: standard.standard,
-    //         division: division.division,
-    //         ...division.students[0]
-    //     }));
-    // });
     const flattenedStudents = students.flatMap(({ standard, divisions }) => {
         return divisions.flatMap(({ division, students }) => {
             return students.map(({ dob, email, name, rollNo, subject }) => {
@@ -101,11 +71,10 @@ const Students = () => {
             });
         });
     });
-    console.log('FLAT ', flattenedStudents);
 
+    
     return (
-        <>
-            {/* <ToastEle /> */}
+        <StudentsTab>
             <Button type='button' onClick={handleStudentShowModal}>Add Student</Button>
             {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
             {
@@ -115,46 +84,54 @@ const Students = () => {
             <div>
                 {
                     !!flattenedStudents && !!flattenedStudents.length ?
+                        <TableComponent
+                            tableFor={CONSTANTS.FOR_STUDENT}
+                            tableData={flattenedStudents}
+                            handleEdit={(student) => handleEditStudent(student)}
+                            handleDelete={(student) => handleDeleteStudent(student)} />
+                        // <Table>
+                        //     <thead >
+                        //            <tr>
+                        //                 <th>Sr.No.</th>
+                        //                 <th>Standard</th>
+                        //                 <th>Division</th>
+                        //                 <th>Roll No</th>
+                        //                 <th>Name</th>
+                        //                 <th>Email</th>
+                        //                 <th>Date of Birth</th>
+                        //                 <th>Subject</th>
+                        //                 <th>Action</th>
+                        //             </tr>
+                        //     </thead>
+                        //     <tbody>
+                        //         {flattenedStudents.map((student, index) => (
+                        //           console.log(student[`${div}`]),
+                        //             <tr key={index}>
+                        //                 <td>{index+1}</td>
+                        //                 <td>{student.standard}</td>
+                        //                 <td>{student.division}</td>
+                        //                 <td>{student.rollNo}</td>
+                        //                 <td>{student.name}</td>
+                        //                 <td>{student.email}</td>
+                        //                 <td>{student.dob}</td>
+                        //                 <td>{student.subject}</td>
+                        //                 <td>                                            
+                        //                         <Actions>
+                        //                             <Button onClick={() => handleEditStudent(student)}>Edit</Button>
+                        //                             <Button onClick={() => handleDeleteStudent(student)} buttonType={BUTTON_TYPE_CLASSES.delete}>Delete</Button>
+                        //                         </Actions>
 
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Standard</th>
-                                    <th>Division</th>
-                                    <th>Roll No</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Date of Birth</th>
-                                    <th>Subject</th>
-                                    <th>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {flattenedStudents.map((student, index) => (
-                                    <tr key={index}>
-                                        <td>{student.standard}</td>
-                                        <td>{student.division}</td>
-                                        <td>{student.rollNo}</td>
-                                        <td>{student.name}</td>
-                                        <td>{student.email}</td>
-                                        <td>{student.dob}</td>
-                                        <td>{student.subject}</td>
-                                        <td>
-                                            <td>
-                                                <Button onClick={() => handleEditStudent(student)}>Edit</Button>
-                                                <Button onClick={() => handleDeleteStudent(student)}>Delete</Button>
-                                            </td>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        //                 </td>
+                        //             </tr>
 
+                        //         ))}
+                        //     </tbody>
+                        // </Table>
                         : <p>No students data available.</p>
                 }
 
             </div>
-        </>
+        </StudentsTab>
     );
 }
 

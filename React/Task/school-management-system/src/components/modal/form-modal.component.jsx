@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import SignInForm from '../sign-in-form/sign-in-form.component';
 import SignUpForm from '../sign-up-form/sign-up-form.component';
 import { CONSTANTS } from '../../constants/constants';
-import StudentForm from '../students/student-form.component';
+import StudentForm from '../students/student-form/student-form.component';
 
 const FormModal = (props) => {
   const { show, form, action, data , onHide} = props;

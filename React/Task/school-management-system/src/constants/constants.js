@@ -12,10 +12,10 @@ export const CONSTANTS = {
   RESET_BUTTON_TEXT: 'RESET',
   UPDATE_BUTTON_TEXT: 'UPDATE',
   DELET_BUTTON_TEXT: 'DELETE',
-
+  
   EMAIL_ERROR_TAG: 'emailError',
   ROLL_NO_ERROR_TAG: 'rollNoError',
-
+  
   EMAIL_ASSIGNED: 'Email is already assigned!',
   ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
   
@@ -25,6 +25,7 @@ export const CONSTANTS = {
   MAX_ROLLNO: 30,
   REGEX_EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   REGEX_DOB: /^\d{4}-\d{2}-\d{2}$/,
-
+  
+  STUDENT_REMOTE_FOLDER: 'students',
   
 };

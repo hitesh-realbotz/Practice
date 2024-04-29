@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
-import { ButtonsContainer } from '../students/student-form.styles';
+import { ButtonsContainer } from '../students/student-form/student-form.styles';
 
 const ConfirmModal = (props) => {
   const { show, action, data , form, onHide, onConfirm} = props;

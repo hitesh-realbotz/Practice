@@ -7,7 +7,7 @@ export const validate = (name, value) => {
         case 'email':
             return !value.trim() ? 'Email is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
         case 'password':
-            return !value.trim() ? 'Password is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
+            return !value.trim() ? 'Password is Required.' : (value.length < 6 ? 'Password must be min. 6 character!' : '');
         case 'name':
             return !value.trim() ? 'Name is Required' : '';
         case 'standard':
@@ -62,4 +62,18 @@ export const getConflictMessages = (conflicts, errorTag, errorMessage) => {
         field: errorTag, message: errorMessage
     });
     return conflicts;
+}
+
+export const getUpdatedErrorMsg = (errorTag, fieldname, value, errorMessages) => {
+    const updatedErrorMessages = { ...errorMessages };
+    const errorMessagesKeys = Object.keys(updatedErrorMessages);
+    const errorMessagesValues = Object.values(updatedErrorMessages);
+    errorMessagesKeys.forEach((name, index) => {
+        if (name == errorTag) {
+            updatedErrorMessages[name] = validate(fieldname, value);
+        } else {
+            // updatedErrorMessages[name] = errorMessagesValues[name];
+        }
+    });
+    return updatedErrorMessages;
 }

@@ -1,27 +1,17 @@
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import FormInput from '../form-input/form-input.component';
-import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
+import FormInput from '../../form-input/form-input.component';
+import Button, { BUTTON_TYPE_CLASSES } from '../../button/button.component';
 
 
-import { ButtonsContainer, StudentFormContainer, RowContainer, FormInputContainer } from './student-form.styles';
-import { signUpStart } from '../../store/user/user.action';
-import DropdownInput from '../form-dropdown/form-dropdown.component';
-import { CONSTANTS } from '../../constants/constants';
-import { updateStudentStart, addStudentStart } from '../../store/students/student.action';
-import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
-import { validateForm, validate } from '../../utils/error-messages/error-messages.utils';
+import { ButtonsContainer, StudentFormContainer, RowContainer } from './student-form.styles';
+import DropdownInput from '../../form-dropdown/form-dropdown.component';
+import { CONSTANTS } from '../../../constants/constants';
+import { updateStudentStart, addStudentStart } from '../../../store/students/student.action';
+import { selectStudents } from "../../../store/students/student.selector";
+import { validateForm, getUpdatedErrorMsg } from '../../../utils/error-messages/error-messages.utils';
 
-// const defaultFormFields = {
-//     name: '',
-//     email: '',
-//     dob: '',
-//     standard: '',
-//     subject: '',
-//     division: '',
-//     rollNo: '',
-// };
 // const defaultErrorMessages = {
 //     name: '',
 //     email: '',
@@ -53,6 +43,9 @@ const StudentForm = (props) => {
         rollNo: '',
     };
 
+    const dispatch = useDispatch();
+    const students = useSelector(selectStudents);
+
     const { data, action, onHide } = props;
     defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
 
@@ -67,8 +60,6 @@ const StudentForm = (props) => {
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
     const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
 
-    const dispatch = useDispatch();
-    const students = useSelector(selectStudents);
     // console.log(students);
     const resetFormFields = () => {
         setErrorMessages(defaultErrorMessages);
@@ -126,14 +117,14 @@ const StudentForm = (props) => {
     //Updating Error messages from FormComponent
     const onHandleBlur = (event, errorTag) => {
         const { name, value } = event.target;
-        const errors = getUpdatedErrorMsg(errorTag, name, value);
+        const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
     };
 
     const handleChangeSelect = (event, name, errorTag) => {
         const { value } = event.target;
         setFormFields({ ...formFields, [name]: value });
-        const errors = getUpdatedErrorMsg(errorTag, name, value);
+        const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
     };
 
@@ -145,19 +136,19 @@ const StudentForm = (props) => {
         handleChangeSelect(event, name, errorTag);
     };
 
-    const getUpdatedErrorMsg = (errorTag, fieldname, value) => {
-        const updatedErrorMessages = { ...errorMessages };
-        const errorMessagesKeys = Object.keys(updatedErrorMessages);
-        const errorMessagesValues = Object.values(updatedErrorMessages);
-        errorMessagesKeys.forEach((name, index) => {
-            if (name == errorTag) {
-                updatedErrorMessages[name] = validate(fieldname, value);
-            } else {
-                updatedErrorMessages[name] = errorMessagesValues[index];
-            }
-        });
-        return updatedErrorMessages;
-    }
+    // const getUpdatedErrorMsg = (errorTag, fieldname, value) => {
+    //     const updatedErrorMessages = { ...errorMessages };
+    //     const errorMessagesKeys = Object.keys(updatedErrorMessages);
+    //     const errorMessagesValues = Object.values(updatedErrorMessages);
+    //     errorMessagesKeys.forEach((name, index) => {
+    //         if (name == errorTag) {
+    //             updatedErrorMessages[name] = validate(fieldname, value);
+    //         } else {
+    //             updatedErrorMessages[name] = errorMessagesValues[index];
+    //         }
+    //     });
+    //     return updatedErrorMessages;
+    // }
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -193,7 +184,6 @@ const StudentForm = (props) => {
 
     return (
         <StudentFormContainer>
-
             <form onSubmit={handleSubmit}>
                 <RowContainer>
                     <FormInput
