@@ -12,6 +12,7 @@ export const SideBarLink = styled.div`
   text-decoration: none;
   color: black;
   font-weight: 500;
+  background-color: ${(props) => (props.isActive ? '#dee2e6' : 'inherit')};
   &:hover {
     cursor: pointer;
     background-color: #dee2e6;

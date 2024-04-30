@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { selectCurrentUser } from '../../store/user/user.selector';
+import { selectCurrentUser, selectIsUserLoading } from '../../store/user/user.selector';
 import { signOutStart } from '../../store/user/user.action';
 
 // import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
@@ -18,10 +18,12 @@ import {
     SideBarContainer
 } from './navigation.styles';
 import SideBar from '../../components/sidebar/sidebar.component';
+import Spinner from '../../components/spinner/spinner.component';
 
 const Navigation = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector(selectCurrentUser);
+    const isLoading = useSelector(selectIsUserLoading);
     console.log(currentUser);
 
     const signOutUser = () => dispatch(signOutStart());
@@ -47,15 +49,25 @@ const Navigation = () => {
                     )}
                 </NavLinks>
             </NavigationContainer>
-            {currentUser
-                ? (<HomeContainer>
-                    <SideBarContainer> <Routes>
-                        <Route path='/*' element={<SideBar />} />
-                    </Routes></SideBarContainer>
-                    <Outlet />
-                </HomeContainer>
-                )
-                : (<><Outlet /></>)}
+
+            {
+                isLoading ? <Spinner /> :
+
+                (currentUser
+                    ? (<HomeContainer>
+                        <SideBarContainer> <Routes>
+                            <Route path='/*' element={<SideBar />} />
+                        </Routes></SideBarContainer>
+                        <Outlet />
+                    </HomeContainer>
+                    )
+                    :
+                    (<><Outlet /></>))
+
+            }
+
+            {
+            }
 
 
 

@@ -4,31 +4,25 @@ import FormModal from "../modal/form-modal.component";
 
 const SideBar = () => {
     const [show, setModalShow] = useState(false);
-    const [form, setForm] = useState('Student');
+    const [tab, setTab] = useState('Students');
 
-    const handleStudentShowModal = () => {
-        setForm('Student');
-        setModalShow(true);
+    const handleTabSelection = (tab) => {
+        setTab(tab);
 
     }
-    const handleProjectShowModal = () => {
-        setForm('Project');
-        setModalShow(true);
-    }
+
 
     return (
         <>
             <SideBarContent>
-                <SideBarLink>
-                    <NavLink to='/students' >Students</NavLink>
+                <SideBarLink isActive={tab === 'Students'}>
+                    <NavLink to='/students' onClick={() => handleTabSelection('Students')} >Students</NavLink>
                     {/* <Link onClick={(handleStudentShowModal)}>Students</Link> */}
                 </SideBarLink>
-                <SideBarLink>
-                    <NavLink to='/projects'>Projects</NavLink>
+                <SideBarLink isActive={tab === 'Projects'}>
+                    <NavLink to='/projects' onClick={() => handleTabSelection('Projects')}>Projects</NavLink>
                     {/* <Link onClick={(handleProjectShowModal)}>Projects</Link> */}
                 </SideBarLink>
-
-                <FormModal show={show} form={form} onHide={() => setModalShow(false)} />
             </SideBarContent>
         </>
     );

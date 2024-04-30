@@ -61,6 +61,36 @@ export const addCollectionAndDocuments = async (
   await batch.commit();
   console.log('done');
 };
+export const updateCollectionAndDocuments = async (
+  collectionKey,
+  objectsToAdd,
+  field
+) => {
+  const collectionRef = collection(db, collectionKey);
+  const batch = writeBatch(db);
+
+   // Delete existing documents before adding new ones
+   const querySnapshot = await getDocs(collectionRef);
+   querySnapshot.forEach((doc) => {
+     batch.delete(doc.ref);
+   });
+
+  console.log(objectsToAdd);
+  if (!Array.isArray(objectsToAdd)) {
+    // If not, return students unchanged
+    console.error('Students must be an array');
+    return objectsToAdd;
+  }
+  objectsToAdd.forEach((object) => {
+    const docRef = doc(collectionRef, `Standard-${object.standard}`);
+    batch.set(docRef, object);
+  });
+
+  await batch.commit();
+  console.log('done');
+};
+
+
 
 export const getStudentsAndDocuments = async () => {
   const collectionRef = collection(db, 'students');

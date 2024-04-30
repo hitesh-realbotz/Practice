@@ -19,6 +19,12 @@ export const ButtonsContainer = styled.div`
 export const NavLink = styled(Link)`
   cursor: pointer;
   text-decoration: none;
-  color: rgb(173, 110, 233);
+  color: #dc3545;
   margin: 10px 0px;
+`;
+
+export const RowContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
 `;

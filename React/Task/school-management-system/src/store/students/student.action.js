@@ -12,9 +12,21 @@ export const fetchStudentsSuccess = (studentsArray) =>
     STUDENTS_ACTION_TYPES.FETCH_STUDENTS_SUCCESS,
     studentsArray
   );
+
 export const updateStudentsSuccess = (studentsArray) =>
   createAction(
     STUDENTS_ACTION_TYPES.UPDATE_STUDENT_SUCCESS,
+    studentsArray
+  );
+
+export const addStudentsSuccess = (studentsArray) =>
+  createAction(
+    STUDENTS_ACTION_TYPES.ADD_STUDENT_SUCCESS,
+    studentsArray
+  );
+export const deleteStudentsSuccess = (studentsArray) =>
+  createAction(
+    STUDENTS_ACTION_TYPES.DELETE_STUDENT_SUCCESS,
     studentsArray
   );
 
@@ -23,6 +35,12 @@ export const fetchStudentsFailed = (error) =>
 
 export const updateStudentsFailed = (error) =>
   createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_FAILED, error);
+
+export const addStudentsFailed = (error) =>
+  createAction(STUDENTS_ACTION_TYPES.ADD_STUDENT_FAILED, error);
+
+export const deleteStudentsFailed = (error) =>
+  createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_FAILED, error);
 
 
 export const deleteStudentStart = (students, studentToDelete) => {
@@ -39,7 +57,7 @@ export const deleteStudentStart = (students, studentToDelete) => {
       }
     }
   }
-  return createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, students);
+  return createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_START, students);
 }
 export const updateStudentStart = (students, studentToAdd, existingStudentData) => {
   const newStudentsTobe = updateStudent(students, studentToAdd, existingStudentData);
@@ -48,7 +66,7 @@ export const updateStudentStart = (students, studentToAdd, existingStudentData) 
 
 export const addStudentStart = (students, studentToAdd) => {
   const newStudentsTobe = addStudent(students, studentToAdd);
-  return !newStudentsTobe.conflicts ? createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, newStudentsTobe) : newStudentsTobe;
+  return !newStudentsTobe.conflicts ? createAction(STUDENTS_ACTION_TYPES.ADD_STUDENT_START, newStudentsTobe) : newStudentsTobe;
 }
 
 const isStandardMatched = (studentToAdd, existingStudentData) => {
@@ -158,9 +176,10 @@ const updateStudent = (students, studentToAdd, existingStudentData) => {
 
   } else {
     console.log('Standard not matched');
-    const divisionIndex = getDivisionIndex(students, standardIndex, division);
     const existingDivisionIndex = getDivisionIndex(students, existingStandardIndex, existingStudentData.division);
     if (standardIndex === -1) {
+      
+
       console.log('Standard not found');
       students.push(
         {
@@ -177,6 +196,7 @@ const updateStudent = (students, studentToAdd, existingStudentData) => {
 
     } else {
       console.log('Standard found');
+      const divisionIndex = getDivisionIndex(students, standardIndex, division);
 
       if (divisionIndex === -1) {
         console.log('Division not found');
@@ -194,9 +214,6 @@ const updateStudent = (students, studentToAdd, existingStudentData) => {
           conflicts = getConflictMessages(conflicts, CONSTANTS.ROLL_NO_ERROR_TAG, CONSTANTS.ROLL_NO_ASSIGNED);
         }
         if (isEmailTaken(students, standardIndex, divisionIndex, email)) {
-          // conflicts.conflicts.push({
-          //   field: 'emailError', message: 'Email is already assigned!'
-          // });
           conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.EMAIL_ASSIGNED);
         }
         if (!!conflicts.conflicts.length) {
@@ -238,6 +255,8 @@ const removeExistingStudentDetails = (students, existingStandardIndex, existingD
 const addStudent = (students, studentToAdd) => {
 
   const { standard, division, rollNo, name, email, dob, subject } = studentToAdd;
+  let conflicts = { conflicts: [] };
+
   // Find the student with the matching standard
   const standardIndex = students.findIndex(s => s.standard === standard);
 
@@ -256,19 +275,12 @@ const addStudent = (students, studentToAdd) => {
         students[standardIndex].divisions[divisionIndex].students.push({ rollNo, name, email, dob, subject });
       }
       else {
-        //Email &/ RollNo conflict
-        const conflicts = { conflicts: [] };
-        // const isEmail = matchingDivision.students.find(student => student.email === studentToAdd.email);
+        //Email &/ RollNo conflict    
         if (students[standardIndex].divisions[divisionIndex].students[existingStudentIndex].email === email) {
-          conflicts.conflicts.push({
-            field: 'emailError', message: 'Email is already assigned!'
-          });
-        }
-        // const isRollNo = matchingDivision.students.find(student => student.rollNo === studentToAdd.rollNo);
+          conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.EMAIL_ASSIGNED);
+        }        
         if (students[standardIndex].divisions[divisionIndex].students[existingStudentIndex].rollNo === rollNo) {
-          conflicts.conflicts.push({
-            field: 'rollNoError', message: 'Roll No. is already assigned!'
-          });
+          conflicts = getConflictMessages(conflicts, CONSTANTS.ROLL_NO_ERROR_TAG, CONSTANTS.ROLL_NO_ASSIGNED);
         }
         return conflicts;
 
@@ -300,125 +312,3 @@ const addStudent = (students, studentToAdd) => {
   console.log(students);
   return students;
 };
-// const addStudent = (students, studentToAdd) => {
-
-//   const { standard, division, rollNo, name, email, dob, subject } = studentToAdd;
-
-//   // Find the student with the matching standard
-//   const matchingStandard = students.find(student => student.standard === studentToAdd.standard);
-
-//   if (matchingStandard) {
-//     // Find the division within the matching student
-//     const matchingDivision = matchingStandard.divisions.find(division => division.division === studentToAdd.division);
-
-//     if (matchingDivision) {
-//       // Check if the student already exists in the division
-//       const existingStudent = matchingDivision.students.find(student => student.email === studentToAdd.email || student.rollNo === studentToAdd.rollNo);
-
-//       if (!existingStudent) {
-//         // If the student doesn't exist, add them to the division
-//         matchingDivision.students.push({ rollNo, name, email, dob, subject });
-//       }
-//       else {
-//         //Email &/ RollNo conflict
-//         const conflicts = { conflicts: [] };
-//         const isEmail = matchingDivision.students.find(student => student.email === studentToAdd.email);
-//         if (!!isEmail) {
-//           conflicts.conflicts.push({
-//             field: 'emailError', message: 'Email is already assigned!'
-//           });
-//         }
-//         const isRollNo = matchingDivision.students.find(student => student.rollNo === studentToAdd.rollNo);
-//         if (!!isRollNo) {
-//           conflicts.conflicts.push({
-//             field: 'rollNoError', message: 'Roll No. is already assigned!'
-//           });
-//         }
-//         return conflicts;
-
-//       }
-//     } else {
-//       // If the division doesn't exist, create it and add the student
-//       matchingStandard.divisions.push(
-//         {
-//           division,
-//           students: [{ rollNo, name, email, dob, subject }]
-//         });
-//     }
-//   } else {
-//     // If the standard doesn't exist, create it along with division and student
-//     students.push(
-//       {
-//         standard,
-//         divisions: [
-//           {
-//             division,
-//             students: [
-//               { rollNo, name, email, dob, subject }
-//             ]
-//           }
-//         ]
-//       });
-//   }
-//   console.log(students);
-//   return students;
-// };
-
-
-// const addStudent = (students, studentToAdd) => {
-//   // Iterate over each standard
-//   students.forEach((student) => {
-//     console.log('Student available', student);
-//     if (student.standard === studentToAdd.standard) {
-//       student.divisions.forEach((division) => {
-
-//         if (division === studentToAdd.division) {
-//           division.students.forEach((student) => {
-//             if (student.email === studentToAdd.email || student.rollNo === studentToAdd.rollNo) {
-//               return;
-//             }
-//           });
-
-//           division.students.push({
-//             rollNo: studentToAdd.rollNo,
-//             name: studentToAdd.name,
-//             email: studentToAdd.email,
-//           });
-//         }
-//       });
-
-//       student.divisions.push(
-//         {
-//           division: studentToAdd.division,
-//           students: [
-//             {
-//               rollNo: studentToAdd.rollNo,
-//               name: studentToAdd.name,
-//               email: studentToAdd.email,
-//             }
-//           ],
-//         });
-
-//     }
-//   });
-//   students.push({
-//     standard: studentToAdd.standard,
-//     divisions: [
-//       {
-//         division: studentToAdd.division,
-//         students: [
-//           {
-//             rollNo: studentToAdd.rollNo,
-//             name: studentToAdd.name,
-//             email: studentToAdd.email,
-//           }
-//         ],
-//       }
-//     ]
-//   })
-//   console.log(students);
-
-//   return students;
-
-// };
-

@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const BaseButton = styled.button`
-  // min-width: 165px;
-  width: auto;
-  height: 50px;
+  min-width: 100px;
+  width: fit-content;
+  height: fit-content;
   letter-spacing: 0.5px;
-  line-height: 50px;
-  padding: 0 35px 0 35px;
+  // line-height: 50px;
+  padding: 5px;
   font-size: 15px;
   background-color: Green;
   color: white;
@@ -18,7 +18,7 @@ export const BaseButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0px 10px;
+  margin: 0px 5px;
   border-radius: 5px;
 
   &:hover {
