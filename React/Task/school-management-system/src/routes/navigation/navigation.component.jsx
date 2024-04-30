@@ -18,12 +18,11 @@ import {
     SideBarContainer
 } from './navigation.styles';
 import SideBar from '../../components/sidebar/sidebar.component';
-import Spinner from '../../components/spinner/spinner.component';
+
 
 const Navigation = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector(selectCurrentUser);
-    const isLoading = useSelector(selectIsUserLoading);
     console.log(currentUser);
 
     const signOutUser = () => dispatch(signOutStart());
@@ -51,22 +50,20 @@ const Navigation = () => {
             </NavigationContainer>
 
             {
-                isLoading ? <Spinner /> :
-
                 (currentUser
                     ? (<HomeContainer>
-                        <SideBarContainer> <Routes>
-                            <Route path='/*' element={<SideBar />} />
-                        </Routes></SideBarContainer>
+                        <SideBarContainer>
+                            <Routes>
+                                <Route path='/*' element={<SideBar />} />
+                            </Routes>
+                        </SideBarContainer>
                         <Outlet />
                     </HomeContainer>
                     )
                     :
-                    (<><Outlet /></>))
-
-            }
-
-            {
+                    (<HomeContainer>
+                        <Outlet />
+                    </HomeContainer>))
             }
 
 

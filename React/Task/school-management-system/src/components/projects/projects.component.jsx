@@ -2,26 +2,98 @@ import Button from "../button/button.component";
 import React, { useState , useEffect} from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
-import { useSelector } from 'react-redux';
-import { selectStudents, selectStudentsMap } from "../../store/students/student.selector";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectStudents } from "../../store/students/student.selector";
+import { selectProjects } from "../../store/projects/project.selector";
+import { ProjectsTab } from "./projects.styles";
+import { selectCurrentUser } from "../../store/user/user.selector";
+import { deleteStudentStart } from "../../store/students/student.action";
+import ConfirmModal from "../modal/confirm-modal.component";
+import TableComponent from "../table/table.component";
 
+const defaultModalProps = {
+    action: CONSTANTS.ADD_ACTION,
+    show: false,
+    form: CONSTANTS.FOR_PROJECT,
+    data: {}
+}
 
 const Projects = () => {
 
-    const [modalShow, setModalShow] = useState(false);
+    const dispatch = useDispatch();
+    const currentUser = useSelector(selectCurrentUser);
+    const [modalProps, setModalProps] = useState(defaultModalProps);
+    const students = useSelector(selectStudents);
+    const projects = useSelector(selectProjects);
 
     const handleStudentShowModal = () => {
-        setModalShow(true);
+        const updatedModelProps = { ...modalProps };
+        updatedModelProps.action = CONSTANTS.ADD_ACTION;
+        updatedModelProps.show = true;
+        setModalProps(updatedModelProps);
     }
- 
-    const student = useSelector(selectStudents);
-    console.log(student);
 
+    const handleEditProject = (project) => {
+        const updatedModelProps = { ...modalProps };
+        updatedModelProps.action = CONSTANTS.EDIT_ACTION;
+        updatedModelProps.data = project;
+        updatedModelProps.show = true;
+        setModalProps(updatedModelProps);
+        // setSelectedStudent(student);
+        // setModalShow(true);
+    }
+
+    const handleHideModal = () => {
+        setModalProps(defaultModalProps);
+    }
+    const handleConfirm = () => {
+        try {
+            dispatch(deleteStudentStart(students, modalProps.data));
+        } catch (error) {
+            console.log('Student Deletion encountered an error', error);
+        }
+        setModalProps(defaultModalProps);
+    }
+
+    const handleDeleteProject = (project) => {
+        const updatedModelProps = { ...modalProps };
+        updatedModelProps.action = CONSTANTS.DELETE_ACTION;
+        updatedModelProps.data = project;
+        updatedModelProps.show = true;
+        setModalProps(updatedModelProps);
+    }
+
+    const flattenedStudents = students.flatMap(({ standard, divisions }) => {
+        return divisions.flatMap(({ division, students }) => {
+            return students.map(({ dob, email, name, rollNo, subject }) => {
+                return { dob, email, name, rollNo, subject, standard, division };
+            });
+        });
+    });
+
+    
     return (
-        <>   
-            <Button type='button' onClick={(handleStudentShowModal)} >Add Project</Button>           
-            <FormModal action={CONSTANTS.ADD_ACTION}  show={modalShow} form={CONSTANTS.FOR_PROJECT} onHide={() => setModalShow(false)} />
-        </>
+        <ProjectsTab>
+            <Button type='button' onClick={handleStudentShowModal}>Add Student</Button>
+            {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
+            {
+                modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
+            }
+
+            <div>
+                {
+                    !!flattenedStudents && !!flattenedStudents.length ?
+                        <TableComponent
+                            tableFor={CONSTANTS.FOR_STUDENT}
+                            tableData={flattenedStudents}
+                            handleEdit={(student) => handleEditProject(student)}
+                            handleDelete={(student) => handleDeleteProject(student)} />
+                        
+                        : <p>No students data available.</p>
+                }
+
+            </div>
+        </ProjectsTab>
     );
 }
 

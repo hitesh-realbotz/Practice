@@ -15,9 +15,12 @@ export const CONSTANTS = {
   
   EMAIL_ERROR_TAG: 'emailError',
   ROLL_NO_ERROR_TAG: 'rollNoError',
+  NAME_ERROR_TAG: 'nameError',
   
   EMAIL_ASSIGNED: 'Email is already assigned!',
   ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
+  INVALID_STUDENT_EMAIL: 'Invalid Student email-id!',
+  INVALID_STUDENT_NAME: 'Invalid Student name!',
   
   MIN_STANDARDS: 1,
   MAX_STANDARD: 10,
@@ -27,5 +30,6 @@ export const CONSTANTS = {
   REGEX_DOB: /^\d{4}-\d{2}-\d{2}$/,
   
   STUDENT_REMOTE_FOLDER: 'students',
+  PROJECT_REMOTE_FOLDER: 'projects',
   
 };
