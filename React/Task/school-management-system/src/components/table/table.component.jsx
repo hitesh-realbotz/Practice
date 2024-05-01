@@ -5,11 +5,7 @@ import { Actions, Table } from "./table.styles";
 const TableComponent = (props) => {
 
     const { tableData, handleEdit, handleDelete, tableFor } = props;
-    console.log(props);
-    console.log(props.tableData);
-    console.log(tableData);
-    console.log(Object.keys(tableData[0]));
-
+    
     const onHandleEditStudent = (student) => {
         handleEdit(student);
     }
@@ -35,11 +31,14 @@ const TableComponent = (props) => {
                                 <th>Subject</th>
                             </>
                             : <>
-                                <th>ProjectName</th>
-                                <th>Division</th>
+                                <th>Title</th>
+                                <th>Discription</th>
+                                <th>Status</th>
 
-                                <th>Date of Birth</th>
-                                <th>Subject</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Student Name</th>
+                                
                             </>
 
                     }
@@ -70,7 +69,24 @@ const TableComponent = (props) => {
                             </tr>
                         ))
 
-                        : ''
+                        : 
+                        tableData.map((project, index) => (
+                            <tr key={index}>
+                                <td>{index + 1}</td>
+                                <td>{project.title}</td>
+                                <td>{project.description}</td>
+                                <td>{project.status}</td>
+                                <td>{project.startDate}</td>
+                                <td>{project.endDate}</td>
+                                <td>{project.name}</td>                                
+                                <td>
+                                    <Actions>
+                                        <Button onClick={() => onHandleEditStudent(project)}>Edit</Button>
+                                        <Button onClick={() => onHandleDeleteStudent(project)} buttonType={BUTTON_TYPE_CLASSES.delete}>Delete</Button>
+                                    </Actions>
+                                </td>
+                            </tr>
+                        ))
 
                 }
                 { }

@@ -7,19 +7,19 @@ const FormInput = (({ handleBlur, errorM, label, ...otherProps }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
 
-  const isDOB = otherProps.name.toLowerCase() === 'dob';
-
+  const isDate = otherProps.type.toLowerCase() === 'date';
+  
   //Updating Error messages from FormComponent on Form submission
   useEffect(() => {
     setErrorMessage(errorM); // Update errorMessage when errorMessages prop changes
   }, [errorM]);
 
-  const onHandleBlur = (event) => {
-    const { name, value } = event.target;
-    setErrorMessage(validate(name, value));
-  };
-
-
+  
+  
+  // const onHandleBlur = (event) => {
+  //   const { name, value } = event.target;
+  //   setErrorMessage(validate(name, value));
+  // };
   //
   // useEffect(() => {
   //   const isSub = isSubmitted ? setErrorMessage(validate(otherProps.name, otherProps.value)) : '';
@@ -38,7 +38,7 @@ const FormInput = (({ handleBlur, errorM, label, ...otherProps }) => {
       {/* <Input {...otherProps} onBlur={onHandleBlur} /> */}
       {
         label && (
-          <FormInputLabel shrink={otherProps.value.length} isDOB={isDOB}>
+          <FormInputLabel shrink={otherProps.value.length} isDate={isDate}>
             {label}
           </FormInputLabel>
         )

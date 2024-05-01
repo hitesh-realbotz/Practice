@@ -26,7 +26,7 @@ const Students = () => {
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
 
-    const handleStudentShowModal = () => {
+    const handleAddStudentFormModal = () => {
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.ADD_ACTION;
         updatedModelProps.show = true;
@@ -74,7 +74,7 @@ const Students = () => {
     
     return (
         <StudentsTab>
-            <Button type='button' onClick={handleStudentShowModal}>Add Student</Button>
+            <Button type='button' onClick={handleAddStudentFormModal}>Add Student</Button>
             {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
             {
                 modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />

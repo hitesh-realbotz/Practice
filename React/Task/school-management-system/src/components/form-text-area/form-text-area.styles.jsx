@@ -4,7 +4,7 @@ const subColor = 'grey';
 const mainColor = 'black';
 
 const shrinkLabelStyles = css`
-  top: ${({ isDate }) => (isDate ? '-15px' : '-15px')};
+  top: ${('-15px')};
   font-size: 12px;
   color: ${mainColor};
 `;
@@ -16,13 +16,13 @@ export const FormInputLabel = styled.label`
   position: absolute;
   pointer-events: none;
   left: 5px;
-  top: ${({ isDate }) => (isDate ? '-15px' : '3px')};
+  top: ${('3px')};
 
   transition: 300ms ease all;
   ${({ shrink }) => shrink && shrinkLabelStyles};
 `;
 
-export const Input = styled.input`
+export const Input = styled.textarea`
   background: none;
   background-color: white;
   color: ${subColor};

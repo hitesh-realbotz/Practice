@@ -21,6 +21,7 @@ import {
     getDocs,
     where
   } from 'firebase/firestore';
+import { CONSTANTS } from "../../constants/constants";
 
   const firebaseConfig = {
     apiKey: "AIzaSyDnsJOrRraDRxWozW2JtW9yERTLQVK0VLo",
@@ -44,17 +45,14 @@ export const addCollectionAndDocuments = async (
   objectsToAdd,
   field
 ) => {
+
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
 
-  console.log(objectsToAdd);
-  if (!Array.isArray(objectsToAdd)) {
-    // If not, return students unchanged
-    console.error('Students must be an array');
-    return objectsToAdd;
-  }
+  console.log('FireBaseADD' ,collectionKey, objectsToAdd);
+
   objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, `Standard-${object.standard}`);
+    const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER )? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : CONSTANTS.PROJECT_REMOTE_FOLDER);
     batch.set(docRef, object);
   });
 
@@ -66,6 +64,7 @@ export const updateCollectionAndDocuments = async (
   objectsToAdd,
   field
 ) => {
+  // const collectionRef = collection(db, collectionKey);
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
 
@@ -75,14 +74,10 @@ export const updateCollectionAndDocuments = async (
      batch.delete(doc.ref);
    });
 
-  console.log(objectsToAdd);
-  if (!Array.isArray(objectsToAdd)) {
-    // If not, return students unchanged
-    console.error('Students must be an array');
-    return objectsToAdd;
-  }
+   console.log('FireBaseUP' ,collectionKey, objectsToAdd);
+
   objectsToAdd.forEach((object) => {
-    const docRef = doc(collectionRef, `Standard-${object.standard}`);
+    const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER ) ? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : CONSTANTS.PROJECT_REMOTE_FOLDER);
     batch.set(docRef, object);
   });
 
@@ -100,7 +95,7 @@ export const getStudentsAndDocuments = async () => {
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
 export const getProjectsAndDocuments = async () => {
-  const collectionRef = collection(db, 'projects');
+  const collectionRef = collection(db, CONSTANTS.PROJECT_REMOTE_FOLDER);
   const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());

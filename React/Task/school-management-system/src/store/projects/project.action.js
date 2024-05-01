@@ -9,7 +9,7 @@ export const fetchProjectsStart = (newProjects) =>
 
 export const fetchProjectsSuccess = (projectsArray) =>
   createAction(
-    PROJECTS_ACTION_TYPES.FETCH_PROJECTS_SUCCESSS,
+    PROJECTS_ACTION_TYPES.FETCH_PROJECTS_SUCCESS,
     projectsArray
   );
 
@@ -44,98 +44,108 @@ export const deleteProjectsFailed = (error) =>
 
 
 export const deleteProjectStart = (projects, projectToDelete) => {
-  const { standard, division, rollNo, name, email, dob, subject } = studentToDelete;
-  let conflicts = { conflicts: [] };
-  const standardIndex = getStandardIndex(students, standard);
-  // const existingStandardIndex = students.findIndex(s => s.standard === existingStudentData.standard);
-  if (standardIndex !== -1) {
-    const divisionIndex = getDivisionIndex(students, standardIndex, division);
-    if (divisionIndex !== -1) {
-      const studentIndex = getStudentIndexByEmail(students, standardIndex, divisionIndex, email);
-      if (studentIndex !== -1) {
-        students = removeExistingStudentDetails(students, standardIndex, divisionIndex, studentIndex);
-      }
-    }
+  const { title } = projectToDelete;
+  const existingProjectIndex = getProjectIndexByTitle(projects, title);
+  if (existingProjectIndex !== -1) {
+    projects.splice(existingProjectIndex, 1);
+    return createAction(PROJECTS_ACTION_TYPES.DELETE_PROJECT_START, projects);
+  }else{
+    return null;
   }
-  return createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_START, students);
+  
 }
-export const updateProjectStart = (projects, projectToAdd, existingProjectData, students) => {
-  const newProjectsTobe = updateProject(projects, projectToAdd, existingProjectData, students);
+
+export const updateProjectStart = (projects, projectToUpdate, existingProjectData, students) => {
+  const newProjectsTobe = updateProject(projects, projectToUpdate, existingProjectData, students);
   return !newProjectsTobe.conflicts ? createAction(PROJECTS_ACTION_TYPES.UPDATE_PROJECT_START, newProjectsTobe) : newProjectsTobe;
 }
 
 export const addProjectStart = (projects, projectToAdd, students) => {
   const newProjectsTobe = addProject(projects, projectToAdd, students);
-  return !newProjectsTobe.conflicts ? createAction(PROJECTS_ACTION_TYPES.ADD_PROJECT_START, newStudentsTobe) : newProjectsTobe;
+  return !newProjectsTobe.conflicts ? createAction(PROJECTS_ACTION_TYPES.ADD_PROJECT_START, newProjectsTobe) : newProjectsTobe;
 }
 
 
 
-const isStudentWithEmailAndName = (students, email, name) => {
+export const isStudentWithEmailAndName = (students, email, name) => {
   return students.some(s => (s.email === email && s.name === name));
 }
 const isStudentWithEmail = (students, email) => {
   return students.some(s => (s.email === email));
+}
+const isProjectTitleTaken = (projects, title) => {
+  return projects.some(p => (p.title === title));
 }
 const getProjectIndexByTitle = (projects, title) => {
   return projects.findIndex(p => p.title === title);
 }
 
 
-const removeExistingStudentDetails = (students, existingStandardIndex, existingDivisionIndex, existingStudentData) => {
+const updateProject = (projects, projectToUpdate, existingProjectData, students) => {
 
-  if (getStudentCount(students, existingStandardIndex, existingDivisionIndex) === 1) {
-    if (getDivisionCount(students, existingStandardIndex) === 1) {
-      students.splice(existingStandardIndex, 1);
-    } else {
-      students[existingStandardIndex].divisions.splice(existingDivisionIndex, 1);
-    }
-  } else {
-    const existingStudentIndex = getStudentIndexByEmail(students, existingStandardIndex, existingDivisionIndex, existingStudentData.email);
-    students[existingStandardIndex].divisions[existingDivisionIndex].students.splice(existingStudentIndex, 1);
+  const { title, name, email } = projectToUpdate;
+  const existingProjectIndex = getProjectIndexByTitle(projects, existingProjectData.title);
+
+  let conflicts = { conflicts: [] };
+  if (title !== existingProjectData.title && isProjectTitleTaken(projects, title))
+    conflicts = getConflictMessages(conflicts, CONSTANTS.PROJECT_TITLE_ERROR_TAG, CONSTANTS.PROJECT_TITLE_ASSIGNED);
+
+  if (name !== existingProjectData.name || email !== existingProjectData.email) {   
+    const conflictsTobe = isStudentAvailable(conflicts, students, email, name);
+    if (!!conflictsTobe)
+      conflicts = conflictsTobe;
   }
 
-  console.log('Updated ', students);
-  return students;
+  if (!!conflicts.conflicts.length)
+    return conflicts;
+
+  projects[existingProjectIndex] = projectToUpdate;
+  return projects;
 
 }
 
-const updateProject = (projects, projectToAdd, existingProjectData, students) => {
-
-  const existingProjectIndex = getProjectIndexByTitle(projects, existingProjectData.title);
-  if (!isStudentWithEmailAndName(students, existingProjectData.email, existingProjectData.name)) {
+const isStudentAvailable = (conflicts, students, email, name) => {
+  if (isStudentWithEmailAndName(students, email, name)) {
+    return null;
+  } else {
     if (isStudentWithEmail(students, email)) {
       conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
-      return conflicts;
+    } else {
+      conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.INVALID_STUDENT_EMAIL);
+      conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
     }
-    conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.INVALID_STUDENT_EMAIL);
-    conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
     return conflicts;
   }
-  projects[existingProjectIndex] = projectToAdd;
-
-  return projects;
-
 }
 
 const addProject = (projects, projectToAdd, students) => {
 
-  const { title, description, startDate, endDate, status, name, email } = projectToAdd;
-  let conflicts = { conflicts: [] };
+  const { title, name, email } = projectToAdd;
+  let conflicts = { conflict: [] };
+  if (isProjectTitleTaken(projects, title))
+    conflicts = getConflictMessages(conflicts, CONSTANTS.PROJECT_TITLE_ERROR_TAG, CONSTANTS.PROJECT_TITLE_ASSIGNED);
 
-  if (isStudentWithEmailAndName(students, email, name)) {
-    projects.push({ title, description, startDate, endDate, status, name, email });
-  } else {
+  const conflictsTobe = isStudentAvailable(conflicts, students, email, name);
+  if (!!conflictsTobe)
+    conflicts = conflictsTobe;
 
-    if (isStudentWithEmail(students, email)) {
-      conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
-      return conflicts;
-    }
-    conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.INVALID_STUDENT_EMAIL);
-    conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
+  if (!!conflicts.conflict.length)
     return conflicts;
-  }
 
-  console.log(projects);
+  projects.push(projectToAdd);
   return projects;
+
+  // if (isStudentWithEmailAndName(students, email, name)) {
+  //   projects.push(projectToAdd);
+  // } else {
+  //   if (isStudentWithEmail(students, email)) {
+  //     conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
+  //   } else {
+  //     conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.INVALID_STUDENT_EMAIL);
+  //     conflicts = getConflictMessages(conflicts, CONSTANTS.NAME_ERROR_TAG, CONSTANTS.INVALID_STUDENT_NAME);
+  //   }
+  //   return conflicts;
+  // }
+  // console.log(projects);
+  // return projects;
 };
