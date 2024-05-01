@@ -8,18 +8,9 @@ import { ButtonsContainer } from '../students/student-form/student-form.styles';
 
 const ConfirmModal = (props) => {
   const { show, action, data , form, onHide, onConfirm} = props;
-  
-  console.log(props);
-
-    const [modalShow, setShow] = useState(show);
-
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     return (
-      <>
-          
-        {/* <Modal {...props} aria-labelledby="contained-modal-title-vcenter" centered> */}
+      <>        
         <Modal  {...props} aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
             <Modal.Title>Are you sure to {action} {form} ?</Modal.Title>

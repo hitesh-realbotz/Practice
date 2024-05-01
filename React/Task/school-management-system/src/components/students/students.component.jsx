@@ -6,11 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectStudents } from "../../store/students/student.selector";
 import ConfirmModal from "../modal/confirm-modal.component";
 import { deleteStudentStart } from "../../store/students/student.action";
-import { Actions, StudentsTab, Table } from "./students.styles";
+import { StudentsTab } from "./students.styles";
 import TableComponent from "../table/table.component";
 import { selectCurrentUser } from "../../store/user/user.selector";
 
-import { Audio } from 'react-loader-spinner';
 // import 'react-toastify/dist/ReactToastify.css';
 
 

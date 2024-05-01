@@ -20,6 +20,7 @@ import {
   signOutUser,
 } from '../../utils/firebase/firebase.utils';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
   try {
@@ -28,8 +29,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
       userAuth,
       additionalDetails
     );
-    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
-    
+    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));    
   } catch (error) {
     yield put(signInFailed(error));
   }
@@ -54,6 +54,7 @@ export function* signInWithEmail({ payload: { email, password } }) {
     yield call(getSnapshotFromUserAuth, user);
   } catch (error) {
     yield put(signInFailed(error));
+    toast.error('Invalid Credentials!!');
   }
 }
 
@@ -75,8 +76,10 @@ export function* signUp({ payload: { email, password, displayName } }) {
       password
     );
     yield put(signUpSuccess(user, { displayName }));
+    toast.success('Account created successfully!');
   } catch (error) {
     yield put(signUpFailed(error));
+    toast.error('Account not created!');
   }
 }
 

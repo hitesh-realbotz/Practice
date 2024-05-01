@@ -96,7 +96,12 @@ export const getStudentsAndDocuments = async () => {
   const collectionRef = collection(db, 'students');
   const q = query(collectionRef);
   // const q = query(collectionRef, where("standard", "==", 2));
-
+  const querySnapshot = await getDocs(q);
+  return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
+};
+export const getProjectsAndDocuments = async () => {
+  const collectionRef = collection(db, 'projects');
+  const q = query(collectionRef);
   const querySnapshot = await getDocs(q);
   return querySnapshot.docs.map((docSnapshot) => docSnapshot.data());
 };
@@ -127,7 +132,6 @@ export const createUserDocumentFromAuth = async (
       console.log('error creating the user', error.message);
     }
   }
-
   return userSnapshot;
 };
 

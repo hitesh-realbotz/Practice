@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../button/button.component';
@@ -12,6 +12,9 @@ import {
 import { ButtonsContainer, NavLink, RowContainer, SignUpContainer } from './sign-up-form.styles';
 import { signUpStart } from '../../store/user/user.action';
 import { validateForm, getUpdatedErrorMsg } from '../../utils/error-messages/error-messages.utils';
+import { selectIsLoading, selectIsValidUser } from '../../store/user/user.selector';
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../spinner/spinner.component';
 
 
 const defaultErrorMessages = {
@@ -27,6 +30,15 @@ const SignUpForm = () => {
   };
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isValidUser = useSelector(selectIsValidUser);
+  const isLoading = useSelector(selectIsLoading);
+
+  useEffect(() => {
+    if (isValidUser) {
+      navigate('/students');
+    }
+  }, [isValidUser]);
 
   const [formFields, setFormFields] = useState(defaultFormFields);
   const { email, password } = formFields;
@@ -42,7 +54,6 @@ const SignUpForm = () => {
     event.preventDefault();
 
     const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
-
     if (!validationResult.isValid) {
       console.log('post validation ', validationResult.errors);
       setErrorMessages(validationResult.errors);
@@ -52,7 +63,6 @@ const SignUpForm = () => {
 
     try {
       dispatch(signUpStart(email, password));
-      resetFormFields();
     } catch (error) {
       if (error.code === 'auth/email-already-in-use') {
         alert('Cannot create user, email already in use');
@@ -80,42 +90,52 @@ const SignUpForm = () => {
   };
 
   return (
-    <SignUpContainer>
-      <h2>Don't have an account?</h2>
-      <span>Sign up with your email and password</span>
-      <form onSubmit={handleSubmit}>
 
-        <RowContainer>
-          <FormInput
-            label='Email'
-            type='email'
-            name='email'
-            value={email}
-            onChange={handleChange}
-            handleBlur={(event) => onHandleBlur(event, 'emailError')}
-            errorM={emailError}
-          />
-        </RowContainer>
-        <RowContainer>
-          <FormInput
-            label='Password'
-            type='password'
-            name='password'
-            value={password}
-            onChange={handleChange}
-            handleBlur={(event) => onHandleBlur(event, 'passwordError')}
-            errorM={passwordError}
-          />
-        </RowContainer>
-        <ButtonsContainer>
-          <Button type='submit'>Sign Up</Button>
-          <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >Reset</Button>
-        </ButtonsContainer>
-        <RowContainer>
-          <div className='sign-up-hint'>Already have account? <NavLink to='/'>SIGN-IN</NavLink> </div>
-        </RowContainer>
-      </form>
-    </SignUpContainer>
+    <>
+      {
+        isLoading ?
+          <>
+            <Spinner />
+          </>
+          :
+          <SignUpContainer>
+            <h2>Don't have an account?</h2>
+            <span>Sign up with your email and password</span>
+            <form onSubmit={handleSubmit}>
+
+              <RowContainer>
+                <FormInput
+                  label='Email'
+                  type='email'
+                  name='email'
+                  value={email}
+                  onChange={handleChange}
+                  handleBlur={(event) => onHandleBlur(event, 'emailError')}
+                  errorM={emailError}
+                />
+              </RowContainer>
+              <RowContainer>
+                <FormInput
+                  label='Password'
+                  type='password'
+                  name='password'
+                  value={password}
+                  onChange={handleChange}
+                  handleBlur={(event) => onHandleBlur(event, 'passwordError')}
+                  errorM={passwordError}
+                />
+              </RowContainer>
+              <ButtonsContainer>
+                <Button type='submit'>Sign Up</Button>
+                <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >Reset</Button>
+              </ButtonsContainer>
+              <RowContainer>
+                <div className='sign-up-hint'>Already have account? <NavLink to='/'>SIGN-IN</NavLink> </div>
+              </RowContainer>
+            </form>
+          </SignUpContainer>
+      }
+    </>
   );
 };
 
