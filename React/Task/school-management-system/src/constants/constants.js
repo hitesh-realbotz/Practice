@@ -13,6 +13,8 @@ export const CONSTANTS = {
   STUDENT_REMOTE_FOLDER: 'students',
   PROJECT_REMOTE_FOLDER: 'projects',
   STANDARD_REMOTE_FOLDER: 'standard',
+  
+  STORED_ROUTE_KEY_NAME: 'CurrentRoute',
 
   //Button
   SUBMIT_BUTTON_TEXT: 'SUBMIT',
@@ -42,6 +44,8 @@ export const CONSTANTS = {
   ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
   INVALID_STUDENT_EMAIL: 'Invalid Student email-id!',
   INVALID_STUDENT_NAME: 'Invalid Student name!',
+  INVALID_START_DATE_RELATION: 'Start date should not be greater than end date!',
+  INVALID_END_DATE_RELATION: 'End date should not be less than start date!',
 
   //Range
   MIN_STANDARDS: 1,

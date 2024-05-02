@@ -1,6 +1,6 @@
 import { takeLatest, all, call, put } from 'redux-saga/effects';
 
-import { getStudentsAndDocuments, addCollectionAndDocuments, updateCollectionAndDocuments, getProjectsAndDocuments  } from '../../utils/firebase/firebase.utils';
+import { addCollectionAndDocuments, updateCollectionAndDocuments, getProjectsAndDocuments  } from '../../utils/firebase/firebase.utils';
 
 import { CONSTANTS } from '../../constants/constants';
 

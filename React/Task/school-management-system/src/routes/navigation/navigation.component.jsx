@@ -3,7 +3,7 @@ import { Outlet } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
-import { selectCurrentUser, selectIsUserLoading } from '../../store/user/user.selector';
+import { selectCurrentUser, selectIsLoading } from '../../store/user/user.selector';
 import { signOutStart } from '../../store/user/user.action';
 
 // import { ReactComponent as CrwnLogo } from '../../assets/crown.svg';
@@ -22,10 +22,14 @@ import SideBar from '../../components/sidebar/sidebar.component';
 
 const Navigation = () => {
     const dispatch = useDispatch();
-    const currentUser = useSelector(selectCurrentUser);
-    console.log(currentUser);
 
-    const signOutUser = () => dispatch(signOutStart());
+    let isLoading = useSelector(selectIsLoading)
+    
+    const currentUser = useSelector(selectCurrentUser);
+
+    const signOutUser = () => {
+        dispatch(signOutStart());
+    }
 
     return (
         <Fragment>
@@ -36,14 +40,14 @@ const Navigation = () => {
                 <NavLinks>
                     {/* <NavLink to='/shop'>SHOP</NavLink> */}
 
-                    {currentUser ? (
+                    {(currentUser || isLoading ) ? (
                         <NavLink to='/' onClick={signOutUser}>
                             SIGN OUT
                         </NavLink>
                     ) : (
                         <>
                             <NavLink to='/'>SIGN IN</NavLink>
-                            <NavLink to='/sign-up'>SIGN Up</NavLink>
+                            <NavLink to='/sign-up'>SIGN UP</NavLink>
                         </>
                     )}
                 </NavLinks>

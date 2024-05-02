@@ -7,7 +7,7 @@ import Button, { BUTTON_TYPE_CLASSES } from '../../button/button.component';
 import DropdownInput from '../../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../../constants/constants';
 import { selectStudents } from "../../../store/students/student.selector";
-import { validateForm, getUpdatedErrorMsg } from '../../../utils/error-messages/error-messages.utils';
+import { validateForm, getUpdatedErrorMsg } from '../../../utils/validation/validation.utils';
 import { addProjectStart, isStudentWithEmailAndName, updateProjectStart } from '../../../store/projects/project.action';
 import { selectProjects } from '../../../store/projects/project.selector';
 import { ButtonsContainer, ProjectFormContainer, RowContainer } from './project-form.styles';
@@ -28,7 +28,6 @@ const defaultErrorMessages = {
 const ProjectForm = (props) => {
 
     const { data, action, onHide } = props;
-    console.log('FORM Data ', data);
 
     let defaultFormFields = {
         title: '',
@@ -38,6 +37,8 @@ const ProjectForm = (props) => {
         status: '',
         name: '',
         email: '',
+        emailOptions: [],
+        nameOptions: []
     };
 
     const dispatch = useDispatch();
@@ -52,13 +53,10 @@ const ProjectForm = (props) => {
         });
     });
     const getEmails = (studentEmail) => {
-        console.log('FORM studentEmail ', studentEmail);
-        console.log('FORM studentEmail ', studentEmail);
-        return [ ...studentEmail, ...[...new Set(flattenedStudents.map(student => student.email))].map(email => (getSelectValueAndLabel(email)))];
+        return [...studentEmail, ...[...new Set(flattenedStudents.map(student => student.email))].map(email => (getSelectValueAndLabel(email)))];
     }
     const getNames = (studentName) => {
-        console.log('FORM studentName ', studentName);
-        return [ ...studentName, ...[...new Set(flattenedStudents.map(student => student.name))].map(name => (getSelectValueAndLabel(name)))];
+        return [...studentName, ...[...new Set(flattenedStudents.map(student => student.name))].map(name => (getSelectValueAndLabel(name)))];
     }
     const getSelectValueAndLabel = (field) => {
         return {
@@ -66,27 +64,38 @@ const ProjectForm = (props) => {
             label: field
         }
     }
-    const isStudent = isStudentWithEmailAndName(flattenedStudents, data.email, data.name);
-   
-    console.log('FORM isStudent ', isStudent);
-    const [emailOptions, setEmailOptions] = useState(getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]));
-    const [nameOptions, setNameOptions] = useState(getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]));
+    const isStudent = action === CONSTANTS.ADD_ACTION ? true : isStudentWithEmailAndName(flattenedStudents, data.email, data.name);
 
+    let emailOpt = getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]);
+    let nameOpt = getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]);
 
-    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
+    const getFormFieldsWithEmailAndNameOptions = (fields) => {
+        return { ...fields, emailOptions: emailOpt, nameOptions: nameOpt };
+    }
+
+    defaultFormFields = action === CONSTANTS.ADD_ACTION ? getFormFieldsWithEmailAndNameOptions(defaultFormFields) : getFormFieldsWithEmailAndNameOptions(data);
 
     const [formFields, setFormFields] = useState(defaultFormFields);
 
 
-    const { title, description, startDate, endDate, status, name, email } = formFields;
+    const { title, description, startDate, endDate, status, name, email, emailOptions, nameOptions } = formFields;
 
-    //
-    const [errorMessages, setErrorMessages] = useState( isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: 'Studentnot found!', nameError: 'Student not found!' });
+    const getValidEmailMessage = (emailToBeChecked) => {
+        if (emailToBeChecked === data.email)
+            return 'Student not found!';
+        else return '';
+    }
+    const getValidNameMessage = (nameToBeChecked) => {
+        if (nameToBeChecked === data.name)
+            return 'Student not found!';
+        else return '';
+
+    }
+
+    const [errorMessages, setErrorMessages] = useState(isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(email), nameError: getValidNameMessage(name) });
+
     const { titleError, descriptionError, startDateError, endDateError, statusError, nameError, emailError } = errorMessages;
 
-
-    console.log('PROJECT ', flattenedStudents);
-    
     const statusOptions = [
         { value: CONSTANTS.PROJECT_ONGOING_STATUS, label: CONSTANTS.PROJECT_ONGOING_STATUS },
         { value: CONSTANTS.PROJECT_HOLD_STATUS, label: CONSTANTS.PROJECT_HOLD_STATUS },
@@ -96,10 +105,8 @@ const ProjectForm = (props) => {
 
 
     const resetFormFields = () => {
-        setErrorMessages(defaultErrorMessages);
+        setErrorMessages(isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(data.email), nameError: getValidNameMessage(data.name) });
         setFormFields(defaultFormFields);
-        setEmailOptions(getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]));
-        setNameOptions(getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]));
     };
 
 
@@ -110,7 +117,6 @@ const ProjectForm = (props) => {
         const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
 
         if (!validationResult.isValid) {
-            console.log('post validation ', validationResult.errors);
             setErrorMessages(validationResult.errors);
             return;
         }
@@ -125,16 +131,14 @@ const ProjectForm = (props) => {
                 onHide();
             } else {
                 const updatedErrorMessages = { ...errorMessages };
-                console.log('in conflict ', updatedErrorMessages);
                 actionToBe.conflicts.forEach(error => {
-                    console.log('in conflict ', error);
                     updatedErrorMessages[error.field] = error.message;
                 });
                 setErrorMessages(updatedErrorMessages);
             }
 
         } catch (error) {
-            console.log('Project Registration encountered an error', error);
+            console.log(`Project ${action === CONSTANTS.ADD_ACTION ? 'Registration' : 'Updation'} encountered an error`, error);
         }
     };
 
@@ -154,82 +158,54 @@ const ProjectForm = (props) => {
     const onHandleBlur = (event, errorTag) => {
         const { name, value } = event.target;
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
+        if ((errorTag === CONSTANTS.START_DATE_ERROR_TAG) && !errors[errorTag] && isValidStartDateEndDateRelation(value, endDate))
+            errors[errorTag] = CONSTANTS.INVALID_START_DATE_RELATION;
+
+        if ((errorTag === CONSTANTS.END_DATE_ERROR_TAG) && !errors[errorTag] && isValidStartDateEndDateRelation(startDate, value))
+            errors[errorTag] = CONSTANTS.INVALID_END_DATE_RELATION;
+
         setErrorMessages(errors);
-        if ((errorTag === 'startDateError') && !errors[errorTag] && isValidStartEndDateRelation(value, endDate)) {
-            errors[errorTag] = "Start date should not be greater than end date";
-        }
-        if ((errorTag === 'endDateError') && !errors[errorTag] && isValidStartEndDateRelation(startDate, value)) {
-            errors[errorTag] = "End date should not be less than start date";
-        }
     };
 
-    const isValidStartEndDateRelation = (isValue, compareValue) => {
-        console.log(isValue, compareValue);
-        console.log(new Date(isValue) > new Date(compareValue));
+    const isValidStartDateEndDateRelation = (isValue, compareValue) => {
         return new Date(isValue) > new Date(compareValue);
+    }
+
+    const getNamesForSelectedEmail = (value) => {
+        let studentName = [];
+        if (!isStudent && value === data.email) {
+            return studentName = [getSelectValueAndLabel(data.name)];
+        }
+        return [...studentName, ...[...new Set(flattenedStudents.map(student => { return student.email === value ? student.name : '' }))].map(name => {
+            if (!!name) {
+                return getSelectValueAndLabel(name);
+            }
+            return null;
+        }).filter(option => option !== null)];
     }
 
     const handleChangeSelect = (event, name, errorTag) => {
         const { value } = event.target;
         if (name === 'email') {
-            let nameOp = [...new Set(flattenedStudents.map(student => { return student.email === value ? student.name : '' }))].map(name => {
-                if (!!name) {
-                    return {
-                        value: name,
-                        label: name
-                    }
-                }
-                return null;
-            }).filter(option => option !== null);
-
-            console.log('FORM nameOp before ', nameOp);
-            nameOp = [...(isStudent ? nameOp : nameOptions) ];
-            console.log('FORM nameOp after ', nameOp);
-
-            setFormFields({ ...formFields, [name]: value, 'name': nameOp[0].value });
-            setNameOptions(nameOp);
-        } else {
-            setFormFields({ ...formFields, [name]: value});
+            nameOpt = getNamesForSelectedEmail(value);
+            setFormFields({ ...formFields, [name]: value, 'name': nameOpt[0].value, 'nameOptions': nameOpt });
+            const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
+            setErrorMessages({ ...errors, emailError: getValidEmailMessage(value), nameError: getValidNameMessage(nameOpt[0].value) });
+        } else if (name === 'name') {
+            setFormFields({ ...formFields, [name]: value });
+            const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
+            setErrorMessages({ ...errors, nameError: getValidNameMessage(value) });
         }
-        const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
-       
-        console.log('SELECT ', name, errorTag);
-        setErrorMessages(errors);
-        // if (name === 'email' && !errors[errorTag]) {
-        //     console.log('SELECT ', emailOptions, nameOptions);
-        //     setNameOptions([...new Set(flattenedStudents.map(student => { return student.email === value ? student.name : '' }))].map(name => {
-        //         console.log(!!name);
-        //         if (!!name) {
-        //             return {
-        //                 value: name,
-        //                 label: name
-        //             }
-        //         }
-        //         return null;
-        //     }).filter(option => option !== null));
-
-        //     setFormFields({ ...formFields, 'name': nameOptions[0].value });
-        //     console.log('SELECT  in condition', nameOptions,  nameOptions[0].value);
-        // }
-
-        // if (name === 'name' && !errors[errorTag]) {
-        //     setEmailOptions([...new Set(flattenedStudents.map(student => { return student.name === value ? student.email : '' }))].map(email => {
-        //         console.log(!!email);
-        //         if (!!email) {
-        //             return {
-        //                 value: email,
-        //                 label: email
-        //             }
-        //         }
-        //         return null;
-        //     }).filter(option => option !== null))
-        //     console.log('SELECT  in condition', emailOptions);
-        // }
+        else {
+            setFormFields({ ...formFields, [name]: value });
+            const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
+            setErrorMessages(errors);
+        }
     };
 
     const onHandleBlurSelect = (event, name, errorTag) => {
         const { value } = event.target;
-        if (value.length) {
+        if (!value.length || (name === 'email' && value === data.email)) {
             return;
         }
         handleChangeSelect(event, name, errorTag);
@@ -239,10 +215,6 @@ const ProjectForm = (props) => {
         const { name, value } = event.target;
         setFormFields({ ...formFields, [name]: value });
     };
-
-    const getUpdatedDropDownValues = () => {
-
-    }
 
 
     return (

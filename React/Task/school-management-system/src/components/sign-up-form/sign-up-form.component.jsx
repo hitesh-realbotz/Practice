@@ -11,7 +11,7 @@ import {
 
 import { ButtonsContainer, NavLink, RowContainer, SignUpContainer } from './sign-up-form.styles';
 import { signUpStart } from '../../store/user/user.action';
-import { validateForm, getUpdatedErrorMsg } from '../../utils/error-messages/error-messages.utils';
+import { validateForm, getUpdatedErrorMsg } from '../../utils/validation/validation.utils';
 import { selectIsLoading, selectIsValidUser } from '../../store/user/user.selector';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../spinner/spinner.component';

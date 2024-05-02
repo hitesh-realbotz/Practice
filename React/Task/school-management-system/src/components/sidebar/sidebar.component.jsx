@@ -4,7 +4,7 @@ import FormModal from "../modal/form-modal.component";
 
 const SideBar = () => {
     const [show, setModalShow] = useState(false);
-    const [tab, setTab] = useState('Students');
+    const [tab, setTab] = useState('');
 
     const handleTabSelection = (tab) => {
         setTab(tab);

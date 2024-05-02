@@ -1,7 +1,7 @@
 // Import necessary dependencies
 import { useState, useEffect, memo } from 'react';
 import { FormDropdownInputLabel, Input, Group, Select, ErrorMessage } from './form-dropdown.styles';
-import { validate } from '../../utils/error-messages/error-messages.utils'
+import { validate } from '../../utils/validation/validation.utils'
 
 // const DropdownInput = memo(({ errorM, name, label, options, handleChange, handleBlur, selectedOption }) => {
 const DropdownInput = memo(({ errorM, label, options, handleChange, handleBlur, ...otherProps }) => {

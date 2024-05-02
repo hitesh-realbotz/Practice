@@ -3,12 +3,12 @@ import React, { useState, useEffect } from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectStudents } from "../../store/students/student.selector";
+import { selectIsLoading, selectStudents } from "../../store/students/student.selector";
 import ConfirmModal from "../modal/confirm-modal.component";
-import { deleteStudentStart } from "../../store/students/student.action";
+import { deleteStudentStart, fetchStudentsStart } from "../../store/students/student.action";
 import { StudentsTab } from "./students.styles";
 import TableComponent from "../table/table.component";
-import { selectCurrentUser } from "../../store/user/user.selector";
+import Spinner from "../spinner/spinner.component";
 
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -22,9 +22,13 @@ const defaultModalProps = {
 const Students = () => {
 
     const dispatch = useDispatch();
-    const currentUser = useSelector(selectCurrentUser);
+    const isLoading = useSelector(selectIsLoading);
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
+
+    useEffect(() => {
+        dispatch(fetchStudentsStart());
+    }, []);
 
     const handleAddStudentFormModal = () => {
         const updatedModelProps = { ...modalProps };
@@ -71,66 +75,74 @@ const Students = () => {
         });
     });
 
-    
+
     return (
-        <StudentsTab>
-            <Button type='button' onClick={handleAddStudentFormModal}>Add Student</Button>
-            {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
-            {
-                modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
-            }
+        <> {
+            isLoading ?
+                <>
+                    < Spinner />
+                </>
+                :
+                <StudentsTab>
+                    <Button type='button' onClick={handleAddStudentFormModal}>Add Student</Button>
+                    {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
+                    {
+                        modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
+                    }
 
-            <div>
-                {
-                    !!flattenedStudents && !!flattenedStudents.length ?
-                        <TableComponent
-                            tableFor={CONSTANTS.FOR_STUDENT}
-                            tableData={flattenedStudents}
-                            handleEdit={(student) => handleEditStudent(student)}
-                            handleDelete={(student) => handleDeleteStudent(student)} />
-                        // <Table>
-                        //     <thead >
-                        //            <tr>
-                        //                 <th>Sr.No.</th>
-                        //                 <th>Standard</th>
-                        //                 <th>Division</th>
-                        //                 <th>Roll No</th>
-                        //                 <th>Name</th>
-                        //                 <th>Email</th>
-                        //                 <th>Date of Birth</th>
-                        //                 <th>Subject</th>
-                        //                 <th>Action</th>
-                        //             </tr>
-                        //     </thead>
-                        //     <tbody>
-                        //         {flattenedStudents.map((student, index) => (
-                        //           console.log(student[`${div}`]),
-                        //             <tr key={index}>
-                        //                 <td>{index+1}</td>
-                        //                 <td>{student.standard}</td>
-                        //                 <td>{student.division}</td>
-                        //                 <td>{student.rollNo}</td>
-                        //                 <td>{student.name}</td>
-                        //                 <td>{student.email}</td>
-                        //                 <td>{student.dob}</td>
-                        //                 <td>{student.subject}</td>
-                        //                 <td>                                            
-                        //                         <Actions>
-                        //                             <Button onClick={() => handleEditStudent(student)}>Edit</Button>
-                        //                             <Button onClick={() => handleDeleteStudent(student)} buttonType={BUTTON_TYPE_CLASSES.delete}>Delete</Button>
-                        //                         </Actions>
+                    <div>
+                        {
+                            !!flattenedStudents && !!flattenedStudents.length ?
+                                <TableComponent
+                                    tableFor={CONSTANTS.FOR_STUDENT}
+                                    tableData={flattenedStudents}
+                                    handleEdit={(student) => handleEditStudent(student)}
+                                    handleDelete={(student) => handleDeleteStudent(student)} />
+                                // <Table>
+                                //     <thead >
+                                //            <tr>
+                                //                 <th>Sr.No.</th>
+                                //                 <th>Standard</th>
+                                //                 <th>Division</th>
+                                //                 <th>Roll No</th>
+                                //                 <th>Name</th>
+                                //                 <th>Email</th>
+                                //                 <th>Date of Birth</th>
+                                //                 <th>Subject</th>
+                                //                 <th>Action</th>
+                                //             </tr>
+                                //     </thead>
+                                //     <tbody>
+                                //         {flattenedStudents.map((student, index) => (
+                                //           console.log(student[`${div}`]),
+                                //             <tr key={index}>
+                                //                 <td>{index+1}</td>
+                                //                 <td>{student.standard}</td>
+                                //                 <td>{student.division}</td>
+                                //                 <td>{student.rollNo}</td>
+                                //                 <td>{student.name}</td>
+                                //                 <td>{student.email}</td>
+                                //                 <td>{student.dob}</td>
+                                //                 <td>{student.subject}</td>
+                                //                 <td>                                            
+                                //                         <Actions>
+                                //                             <Button onClick={() => handleEditStudent(student)}>Edit</Button>
+                                //                             <Button onClick={() => handleDeleteStudent(student)} buttonType={BUTTON_TYPE_CLASSES.delete}>Delete</Button>
+                                //                         </Actions>
 
-                        //                 </td>
-                        //             </tr>
+                                //                 </td>
+                                //             </tr>
 
-                        //         ))}
-                        //     </tbody>
-                        // </Table>
-                        : <p>No students data available.</p>
-                }
+                                //         ))}
+                                //     </tbody>
+                                // </Table>
+                                : <p>No students data available.</p>
+                        }
 
-            </div>
-        </StudentsTab>
+                    </div>
+                </StudentsTab>
+        }
+        </>
     );
 }
 

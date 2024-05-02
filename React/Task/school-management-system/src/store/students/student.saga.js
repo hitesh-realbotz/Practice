@@ -44,7 +44,6 @@ export function* addStudentsAsync(action) {
 export function* updateStudentsAsync(action) {
   const newStudents = action.payload;
   try {  
-    // const studentsArray = yield call(addCollectionAndDocuments, 'students', newStudents);
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
     yield put(updateStudentsSuccess(newStudents));
     // yield put(showToast('Student updated successfully!'));
@@ -64,7 +63,6 @@ export function* deleteStudentsAsync(action) {
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
     yield put(deleteStudentsSuccess(newStudents));
     toast.warn('Student deleted successfully');
-
   } catch (error) {
     yield put(deleteStudentsFailed(error));
     toast.error('Error occured while deletion of Student!');
