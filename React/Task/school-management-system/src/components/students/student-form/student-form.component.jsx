@@ -190,7 +190,7 @@ const StudentForm = (props) => {
                         label='Name'
                         type='text'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'nameError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.NAME_ERROR_TAG)}
                         errorM={nameError}
                         name='name'
                         value={name}
@@ -205,7 +205,7 @@ const StudentForm = (props) => {
                         label='Email'
                         type='email'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'emailError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.EMAIL_ERROR_TAG)}
                         errorM={emailError}
                         name='email'
                         value={email}
@@ -219,7 +219,7 @@ const StudentForm = (props) => {
                         label='Date of Birth'
                         type='date'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'dobError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.DOB_DATE_ERROR_TAG)}
                         errorM={dobError}
                         name='dob'
                         value={dob}
@@ -233,8 +233,8 @@ const StudentForm = (props) => {
                         label='Standard'
                         options={standardOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'standardError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'standardError')}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.STANDARD_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.STANDARD_ERROR_TAG)}
                         errorM={standardError}
                         // selectedOption={standard}
                         value={standard}
@@ -247,8 +247,8 @@ const StudentForm = (props) => {
                         label='Division'
                         options={divisionOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'divisionError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'divisionError')}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.DIVISION_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.DIVISION_ERROR_TAG)}
                         errorM={divisionError}
                         // selectedOption={division}
                         value={division}
@@ -263,8 +263,8 @@ const StudentForm = (props) => {
                         label='Roll No.'
                         options={rollNoOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'rollNoError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'rollNoError')}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
                         errorM={rollNoError}
                         // selectedOption={rollNo}
                         value={rollNo}
@@ -277,8 +277,8 @@ const StudentForm = (props) => {
                         label='Favourite Subject'
                         options={subjectOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'subjectError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'subjectError')}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.SUBJECT_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.SUBJECT_ERROR_TAG)}
                         errorM={subjectError}
                         // selectedOption={subject}
                         value={subject}

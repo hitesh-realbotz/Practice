@@ -10,6 +10,12 @@ export const validate = (name, value) => {
             return !value.trim() ? 'Password is Required.' : (value.length < 6 ? 'Password must be min. 6 character!' : '');
         case 'name':
             return !value.trim() ? 'Name is Required' : '';
+        case 'title':
+            return !value.trim() ? 'Title is Required' : '';
+        case 'description':
+            return !value.trim() ? 'Description is Required' : '';
+        case 'status':
+            return !value.trim() ? 'Status is Required' : '';
         case 'standard':
             return !value ? 'Standard must be selected' : '';
         case 'division':
@@ -19,15 +25,17 @@ export const validate = (name, value) => {
         case 'subject':
             return !value ? 'Favourite Subject must be selected' : '';
         case 'dob':
-            if (!value) {
+            if (!value)
                 return 'Date of Birth is Required';
-            }
-            // Assuming dob should be in the format YYYY-MM-DD
-            const dobPattern = CONSTANTS.REGEX_DOB;
-            if (!dobPattern.test(value)) {
-                return 'Invalid Date of Birth format. Please use YYYY-MM-DD';
-            }
-            return '';
+            return validateDateFormat(value);
+        case 'startDate':
+            if (!value)
+                return 'Start Date is Required';
+            return validateDateFormat(value);
+        case 'endDate':
+            if (!value)
+                return '';
+            return validateDateFormat(value);
 
         default:
             return '';
@@ -38,6 +46,13 @@ export const validate = (name, value) => {
 const validateEmail = (email) => {
     const emailPattern = CONSTANTS.REGEX_EMAIL;
     return emailPattern.test(email);
+};
+const validateDateFormat = (date) => {
+    const datePattern = CONSTANTS.REGEX_DATE;
+    if (datePattern.test(date)) {
+        return '';
+    }
+    return 'Invalid Date format. Please use MM-DD-YYYY';
 };
 
 export const validateForm = (names, values, errorMessages) => {

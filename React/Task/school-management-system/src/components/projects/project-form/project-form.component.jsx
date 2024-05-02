@@ -1,17 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../../button/button.component';
 
-
-import { ButtonsContainer, StudentFormContainer, RowContainer } from '../../students/student-form/student-form.styles';
 import DropdownInput from '../../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../../constants/constants';
-import { updateStudentStart, addStudentStart } from '../../../store/students/student.action';
 import { selectStudents } from "../../../store/students/student.selector";
 import { validateForm, getUpdatedErrorMsg } from '../../../utils/error-messages/error-messages.utils';
-import { addProjectStart } from '../../../store/projects/project.action';
+import { addProjectStart, isStudentWithEmailAndName, updateProjectStart } from '../../../store/projects/project.action';
+import { selectProjects } from '../../../store/projects/project.selector';
+import { ButtonsContainer, ProjectFormContainer, RowContainer } from './project-form.styles';
+import FormTextArea from '../../form-text-area/form-text-area.component';
 
 
 const defaultErrorMessages = {
@@ -27,6 +27,9 @@ const defaultErrorMessages = {
 
 const ProjectForm = (props) => {
 
+    const { data, action, onHide } = props;
+    console.log('FORM Data ', data);
+
     let defaultFormFields = {
         title: '',
         description: '',
@@ -39,17 +42,7 @@ const ProjectForm = (props) => {
 
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
-
-    const { data, action, onHide } = props;
-    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
-
-    const [formFields, setFormFields] = useState(defaultFormFields);
-
-    const { title, description, startDate, endDate, status, name, email } = formFields;
-
-    //
-    const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
-    const { titleError, descriptionError, startDateError, endDateError, statusError, nameError, emailError } = errorMessages;
+    const projects = useSelector(selectProjects);
 
     const flattenedStudents = students.flatMap(({ standard, divisions }) => {
         return divisions.flatMap(({ division, students }) => {
@@ -58,12 +51,57 @@ const ProjectForm = (props) => {
             });
         });
     });
+    const getEmails = (studentEmail) => {
+        console.log('FORM studentEmail ', studentEmail);
+        console.log('FORM studentEmail ', studentEmail);
+        return [ ...studentEmail, ...[...new Set(flattenedStudents.map(student => student.email))].map(email => (getSelectValueAndLabel(email)))];
+    }
+    const getNames = (studentName) => {
+        console.log('FORM studentName ', studentName);
+        return [ ...studentName, ...[...new Set(flattenedStudents.map(student => student.name))].map(name => (getSelectValueAndLabel(name)))];
+    }
+    const getSelectValueAndLabel = (field) => {
+        return {
+            value: field,
+            label: field
+        }
+    }
+    const isStudent = isStudentWithEmailAndName(flattenedStudents, data.email, data.name);
+   
+    console.log('FORM isStudent ', isStudent);
+    const [emailOptions, setEmailOptions] = useState(getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]));
+    const [nameOptions, setNameOptions] = useState(getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]));
+
+
+    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
+
+    const [formFields, setFormFields] = useState(defaultFormFields);
+
+
+    const { title, description, startDate, endDate, status, name, email } = formFields;
+
+    //
+    const [errorMessages, setErrorMessages] = useState( isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: 'Studentnot found!', nameError: 'Student not found!' });
+    const { titleError, descriptionError, startDateError, endDateError, statusError, nameError, emailError } = errorMessages;
+
+
+    console.log('PROJECT ', flattenedStudents);
+    
+    const statusOptions = [
+        { value: CONSTANTS.PROJECT_ONGOING_STATUS, label: CONSTANTS.PROJECT_ONGOING_STATUS },
+        { value: CONSTANTS.PROJECT_HOLD_STATUS, label: CONSTANTS.PROJECT_HOLD_STATUS },
+        { value: CONSTANTS.PROJECT_COMPLETE_STATUS, label: CONSTANTS.PROJECT_COMPLETE_STATUS }
+    ];
+    // const statusOptions = CONSTANTS.PROJECT_STATUS_OPTIONS;
+
 
     const resetFormFields = () => {
         setErrorMessages(defaultErrorMessages);
         setFormFields(defaultFormFields);
-
+        setEmailOptions(getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]));
+        setNameOptions(getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]));
     };
+
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -78,7 +116,9 @@ const ProjectForm = (props) => {
         }
 
         try {
-            const actionToBe = action == CONSTANTS.ADD_ACTION ? addProjectStart(students, getFormData(), flattenedStudents) : updateStudentStart(students, getFormData(), data, flattenedStudents);
+            const actionToBe = (action == CONSTANTS.ADD_ACTION)
+                ? addProjectStart(projects, getFormData(), flattenedStudents)
+                : updateProjectStart(projects, getFormData(), data, flattenedStudents);
             if (!actionToBe.conflicts) {
                 dispatch(actionToBe);
                 resetFormFields();
@@ -94,7 +134,7 @@ const ProjectForm = (props) => {
             }
 
         } catch (error) {
-            console.log('Student Registration encountered an error', error);
+            console.log('Project Registration encountered an error', error);
         }
     };
 
@@ -107,7 +147,6 @@ const ProjectForm = (props) => {
             status: status,
             name: name,
             email: email,
-            
         };
     }
 
@@ -116,13 +155,76 @@ const ProjectForm = (props) => {
         const { name, value } = event.target;
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
+        if ((errorTag === 'startDateError') && !errors[errorTag] && isValidStartEndDateRelation(value, endDate)) {
+            errors[errorTag] = "Start date should not be greater than end date";
+        }
+        if ((errorTag === 'endDateError') && !errors[errorTag] && isValidStartEndDateRelation(startDate, value)) {
+            errors[errorTag] = "End date should not be less than start date";
+        }
     };
+
+    const isValidStartEndDateRelation = (isValue, compareValue) => {
+        console.log(isValue, compareValue);
+        console.log(new Date(isValue) > new Date(compareValue));
+        return new Date(isValue) > new Date(compareValue);
+    }
 
     const handleChangeSelect = (event, name, errorTag) => {
         const { value } = event.target;
-        setFormFields({ ...formFields, [name]: value });
+        if (name === 'email') {
+            let nameOp = [...new Set(flattenedStudents.map(student => { return student.email === value ? student.name : '' }))].map(name => {
+                if (!!name) {
+                    return {
+                        value: name,
+                        label: name
+                    }
+                }
+                return null;
+            }).filter(option => option !== null);
+
+            console.log('FORM nameOp before ', nameOp);
+            nameOp = [...(isStudent ? nameOp : nameOptions) ];
+            console.log('FORM nameOp after ', nameOp);
+
+            setFormFields({ ...formFields, [name]: value, 'name': nameOp[0].value });
+            setNameOptions(nameOp);
+        } else {
+            setFormFields({ ...formFields, [name]: value});
+        }
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
+       
+        console.log('SELECT ', name, errorTag);
         setErrorMessages(errors);
+        // if (name === 'email' && !errors[errorTag]) {
+        //     console.log('SELECT ', emailOptions, nameOptions);
+        //     setNameOptions([...new Set(flattenedStudents.map(student => { return student.email === value ? student.name : '' }))].map(name => {
+        //         console.log(!!name);
+        //         if (!!name) {
+        //             return {
+        //                 value: name,
+        //                 label: name
+        //             }
+        //         }
+        //         return null;
+        //     }).filter(option => option !== null));
+
+        //     setFormFields({ ...formFields, 'name': nameOptions[0].value });
+        //     console.log('SELECT  in condition', nameOptions,  nameOptions[0].value);
+        // }
+
+        // if (name === 'name' && !errors[errorTag]) {
+        //     setEmailOptions([...new Set(flattenedStudents.map(student => { return student.name === value ? student.email : '' }))].map(email => {
+        //         console.log(!!email);
+        //         if (!!email) {
+        //             return {
+        //                 value: email,
+        //                 label: email
+        //             }
+        //         }
+        //         return null;
+        //     }).filter(option => option !== null))
+        //     console.log('SELECT  in condition', emailOptions);
+        // }
     };
 
     const onHandleBlurSelect = (event, name, errorTag) => {
@@ -138,31 +240,13 @@ const ProjectForm = (props) => {
         setFormFields({ ...formFields, [name]: value });
     };
 
-  
+    const getUpdatedDropDownValues = () => {
 
-    console.log('PROJECT ', flattenedStudents);
-    const subjectOptions = [
-        { value: CONSTANTS.FAV_SUBJECT1, label: CONSTANTS.FAV_SUBJECT1 },
-        { value: CONSTANTS.FAV_SUBJECT2, label: CONSTANTS.FAV_SUBJECT2 },
-        { value: CONSTANTS.FAV_SUBJECT3, label: CONSTANTS.FAV_SUBJECT3 },
-    ];
-    const standardOptions = Array.from({ length: CONSTANTS.MAX_STANDARD }, (_, index) => ({
-        value: `${index + 1}`,
-        label: `${index + 1}`,
-    }));
-
-    const rollNoOptions = Array.from({ length: CONSTANTS.MAX_ROLLNO }, (_, index) => ({
-        value: `${index + 1}`,
-        label: `${index + 1}`,
-    }));
-    const divisionOptions = Array.from({ length: CONSTANTS.MAX_DIVISION }, (_, index) => ({
-        value: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
-        label: String.fromCharCode(65 + index), // A: 65, B: 66, C: 67, D: 68
-    }));
+    }
 
 
     return (
-        <StudentFormContainer>
+        <ProjectFormContainer>
             <form onSubmit={handleSubmit}>
                 <RowContainer>
                     <FormInput
@@ -176,55 +260,23 @@ const ProjectForm = (props) => {
                     />
                 </RowContainer>
                 <RowContainer>
-                    <FormInput
-                        label='Status'
-                        type='text'
-                        onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'statusError')}
-                        errorM={statusError}
-                        name='status'
-                        value={status}
-                    />
-                </RowContainer>
-                <RowContainer>
-                    <FormInput
+                    <FormTextArea
                         label='Description'
                         type='text'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'descriptionError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.DESCRIPTION_ERROR_TAG)}
                         errorM={descriptionError}
                         name='description'
                         value={description}
                     />
                 </RowContainer>
-                <RowContainer>
-                    <FormInput
-                        label='Name'
-                        type='text'
-                        onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'nameError')}
-                        errorM={nameError}
-                        name='name'
-                        value={name}
-                    />
-                </RowContainer>
-                <RowContainer>
-                    <FormInput
-                        label='Email'
-                        type='email'
-                        onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'emailError')}
-                        errorM={emailError}
-                        name='email'
-                        value={email}
-                    />
-                </RowContainer>
+
                 <RowContainer>
                     <FormInput
                         label='Start Date'
                         type='date'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'startDateError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.START_DATE_ERROR_TAG)}
                         errorM={startDateError}
                         name='startDate'
                         value={startDate}
@@ -235,79 +287,57 @@ const ProjectForm = (props) => {
                         label='End Date'
                         type='date'
                         onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, 'endDateError')}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.END_DATE_ERROR_TAG)}
                         errorM={endDateError}
                         name='endDate'
                         value={endDate}
                     />
                 </RowContainer>
-                {/* <RowContainer>
+                <RowContainer>
                     <DropdownInput
-                        label='Standard'
-                        options={standardOptions}
+                        label='Status'
+                        options={statusOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'standardError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'standardError')}
-                        errorM={standardError}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.STATUS_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.STATUS_ERROR_TAG)}
+                        errorM={statusError}
                         // selectedOption={standard}
-                        value={standard}
-                        name='standard'
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
-
+                        value={status}
+                        name='status'
+                    />
+                </RowContainer>
+                <RowContainer>
+                    <DropdownInput
+                        label='Student Email'
+                        options={emailOptions}
+                        // handleChange={(event) => setFormFields({ ...formFields, standard: event.target.value })}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.EMAIL_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.EMAIL_ERROR_TAG)}
+                        errorM={emailError}
+                        // selectedOption={standard}
+                        value={email}
+                        name='email'
                     />
                     <DropdownInput
-                        label='Division'
-                        options={divisionOptions}
+                        label='Student Name'
+                        options={nameOptions}
                         // handleChange={(event) => setFormFields({ ...formFields, division: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'divisionError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'divisionError')}
-                        errorM={divisionError}
+                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.NAME_ERROR_TAG)}
+                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.NAME_ERROR_TAG)}
+                        errorM={nameError}
                         // selectedOption={division}
-                        value={division}
-                        name='division'
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
+                        value={name}
+                        name='name'
                     />
                 </RowContainer>
 
-                <RowContainer>
-                    <DropdownInput
-                        label='Roll No.'
-                        options={rollNoOptions}
-                        // handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'rollNoError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'rollNoError')}
-                        errorM={rollNoError}
-                        // selectedOption={rollNo}
-                        value={rollNo}
-                        name='rollNo'
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
-
-                    />
-                    <DropdownInput
-                        label='Favourite Subject'
-                        options={subjectOptions}
-                        // handleChange={(event) => setFormFields({ ...formFields, subject: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, 'subjectError')}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, 'subjectError')}
-                        errorM={subjectError}
-                        // selectedOption={subject}
-                        value={subject}
-                        name='subject'
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
-
-                    />
-                </RowContainer> */}
 
                 <ButtonsContainer>
                     <Button type='submit'>{action == CONSTANTS.ADD_ACTION ? CONSTANTS.SUBMIT_BUTTON_TEXT : CONSTANTS.UPDATE_BUTTON_TEXT}</Button>
                     <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >{CONSTANTS.RESET_BUTTON_TEXT}</Button>
                 </ButtonsContainer>
             </form>
-        </StudentFormContainer >
+        </ProjectFormContainer >
     );
 };
 

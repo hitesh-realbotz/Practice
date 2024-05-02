@@ -18,7 +18,11 @@ const FormModal = (props) => {
             <Modal.Title>{form} - {action} form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            { form === CONSTANTS.FOR_STUDENT ? <StudentForm onHide={onHide} data={data} action={action} /> : form === CONSTANTS.FOR_PROJECT ? <ProjectForm/> : <SignUpForm /> }
+            { (form === CONSTANTS.FOR_STUDENT) 
+                          ? <StudentForm onHide={onHide} data={data} action={action} /> 
+                          : (form === CONSTANTS.FOR_PROJECT) 
+                                        ? <ProjectForm onHide={onHide} data={data} action={action}  /> 
+                                        : <SignUpForm /> }
             
           </Modal.Body>
         </Modal>

@@ -10,6 +10,7 @@ import { selectCurrentUser } from "../../store/user/user.selector";
 import { deleteStudentStart } from "../../store/students/student.action";
 import ConfirmModal from "../modal/confirm-modal.component";
 import TableComponent from "../table/table.component";
+import { deleteProjectStart } from "../../store/projects/project.action";
 
 const defaultModalProps = {
     action: CONSTANTS.ADD_ACTION,
@@ -26,11 +27,25 @@ const Projects = () => {
     const students = useSelector(selectStudents);
     const projects = useSelector(selectProjects);
 
-    const handleStudentShowModal = () => {
+    const handleAddProjectFormModal = () => {
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.ADD_ACTION;
         updatedModelProps.show = true;
         setModalProps(updatedModelProps);
+    }
+
+    
+
+    const handleHideModal = () => {
+        setModalProps(defaultModalProps);
+    }
+    const handleConfirm = () => {
+        try {
+            dispatch(deleteProjectStart(projects, modalProps.data));
+        } catch (error) {
+            console.log('Project Deletion encountered an error', error);
+        }
+        setModalProps(defaultModalProps);
     }
 
     const handleEditProject = (project) => {
@@ -41,18 +56,6 @@ const Projects = () => {
         setModalProps(updatedModelProps);
         // setSelectedStudent(student);
         // setModalShow(true);
-    }
-
-    const handleHideModal = () => {
-        setModalProps(defaultModalProps);
-    }
-    const handleConfirm = () => {
-        try {
-            dispatch(deleteStudentStart(students, modalProps.data));
-        } catch (error) {
-            console.log('Student Deletion encountered an error', error);
-        }
-        setModalProps(defaultModalProps);
     }
 
     const handleDeleteProject = (project) => {
@@ -74,7 +77,7 @@ const Projects = () => {
     
     return (
         <ProjectsTab>
-            <Button type='button' onClick={handleStudentShowModal}>Add Student</Button>
+            <Button type='button' onClick={handleAddProjectFormModal}>Add Project</Button>
             {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
             {
                 modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
@@ -82,14 +85,14 @@ const Projects = () => {
 
             <div>
                 {
-                    !!flattenedStudents && !!flattenedStudents.length ?
+                    !!projects && !!projects.length ?
                         <TableComponent
-                            tableFor={CONSTANTS.FOR_STUDENT}
-                            tableData={flattenedStudents}
-                            handleEdit={(student) => handleEditProject(student)}
-                            handleDelete={(student) => handleDeleteProject(student)} />
+                            tableFor={CONSTANTS.FOR_PROJECT}
+                            tableData={projects}
+                            handleEdit={(project) => handleEditProject(project)}
+                            handleDelete={(project) => handleDeleteProject(project)} />
                         
-                        : <p>No students data available.</p>
+                        : <p>No projects data available.</p>
                 }
 
             </div>

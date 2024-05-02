@@ -14,6 +14,7 @@ import Projects from './components/projects/projects.component';
 import { fetchStudentsStart } from './store/students/student.action';
 import { selectCurrentUser } from './store/user/user.selector';
 import PrivateRoute from './routes/private-route/private-route.component';
+import { fetchProjectsStart } from './store/projects/project.action';
 
 
 function App() {
@@ -29,8 +30,8 @@ function App() {
 
 
   useEffect(() => {
-    console.log('*********************');
     dispatch(fetchStudentsStart());
+    dispatch(fetchProjectsStart());
   }, []);
 
 
