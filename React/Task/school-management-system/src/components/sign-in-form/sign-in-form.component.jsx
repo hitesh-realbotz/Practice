@@ -10,7 +10,7 @@ import {
   emailSignInStart,
 } from '../../store/user/user.action';
 import { NavLink } from './sign-in-form.styles';
-import { validateForm, getUpdatedErrorMsg } from '../../utils/error-messages/error-messages.utils';
+import { validateForm, getUpdatedErrorMsg } from '../../utils/validation/validation.utils';
 
 import { useNavigate } from 'react-router-dom';
 import { selectIsLoading, selectIsValidUser, } from '../../store/user/user.selector';

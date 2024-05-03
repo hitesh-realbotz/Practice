@@ -68,14 +68,14 @@ export function* isUserAuthenticated() {
   }
 }
 
-export function* signUp({ payload: { email, password, displayName } }) {
+export function* signUp({ payload: { email, password } }) {
   try {
     const { user } = yield call(
       createAuthUserWithEmailAndPassword,
       email,
       password
     );
-    yield put(signUpSuccess(user, { displayName }));
+    yield put(signUpSuccess(user));
     toast.success('Account created successfully!');
   } catch (error) {
     yield put(signUpFailed(error));

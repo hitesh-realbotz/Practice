@@ -1,8 +1,7 @@
 import { CONSTANTS } from "../../constants/constants";
 
+//Valiadates individual field
 export const validate = (name, value) => {
-
-
     switch (name) {
         case 'email':
             return !value.trim() ? 'Email is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
@@ -42,11 +41,13 @@ export const validate = (name, value) => {
     }
 }
 
-
+//Email validation
 const validateEmail = (email) => {
     const emailPattern = CONSTANTS.REGEX_EMAIL;
     return emailPattern.test(email);
 };
+
+//Date type validation
 const validateDateFormat = (date) => {
     const datePattern = CONSTANTS.REGEX_DATE;
     if (datePattern.test(date)) {
@@ -55,6 +56,8 @@ const validateDateFormat = (date) => {
     return 'Invalid Date format. Please use MM-DD-YYYY';
 };
 
+
+//Form Validation
 export const validateForm = (names, values, errorMessages) => {
     console.log('In Validat errorMessages ', errorMessages);
     const updatedErrorMessages = { ...errorMessages };
@@ -72,17 +75,12 @@ export const validateForm = (names, values, errorMessages) => {
     // return isValid;
 }
 
-export const getConflictMessages = (conflicts, errorTag, errorMessage) => {
-    conflicts.conflicts.push({
-        field: errorTag, message: errorMessage
-    });
-    return conflicts;
-}
 
+//Returns updated validation/error messages
 export const getUpdatedErrorMsg = (errorTag, fieldname, value, errorMessages) => {
     const updatedErrorMessages = { ...errorMessages };
     const errorMessagesKeys = Object.keys(updatedErrorMessages);
-    const errorMessagesValues = Object.values(updatedErrorMessages);
+    // const errorMessagesValues = Object.values(updatedErrorMessages);
     errorMessagesKeys.forEach((name, index) => {
         if (name == errorTag) {
             updatedErrorMessages[name] = validate(fieldname, value);
@@ -91,4 +89,12 @@ export const getUpdatedErrorMsg = (errorTag, fieldname, value, errorMessages) =>
         }
     });
     return updatedErrorMessages;
+}
+
+//Returns conflict error messages
+export const getConflictMessages = (conflicts, errorTag, errorMessage) => {
+    conflicts.conflicts.push({
+        field: errorTag, message: errorMessage
+    });
+    return conflicts;
 }

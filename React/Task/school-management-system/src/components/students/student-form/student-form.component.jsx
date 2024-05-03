@@ -10,7 +10,7 @@ import DropdownInput from '../../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../../constants/constants';
 import { updateStudentStart, addStudentStart } from '../../../store/students/student.action';
 import { selectStudents } from "../../../store/students/student.selector";
-import { validateForm, getUpdatedErrorMsg } from '../../../utils/error-messages/error-messages.utils';
+import { validateForm, getUpdatedErrorMsg } from '../../../utils/validation/validation.utils';
 
 // const defaultErrorMessages = {
 //     name: '',
@@ -76,7 +76,6 @@ const StudentForm = (props) => {
         const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
 
         if (!validationResult.isValid) {
-            console.log('post validation ', validationResult.errors);
             setErrorMessages(validationResult.errors);
             return;
         }
@@ -89,16 +88,14 @@ const StudentForm = (props) => {
                 onHide();
             } else {
                 const updatedErrorMessages = { ...errorMessages };
-                console.log('in conflict ', updatedErrorMessages);
                 actionToBe.conflicts.forEach(error => {
-                    console.log('in conflict ', error);
                     updatedErrorMessages[error.field] = error.message;
                 });
                 setErrorMessages(updatedErrorMessages);
             }
 
         } catch (error) {
-            console.log('Student Registration encountered an error', error);
+            console.log(`Student ${action === CONSTANTS.ADD_ACTION ? 'Registration' : 'Updation'} encountered an error`, error);
         }
     };
 
