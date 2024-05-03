@@ -15,6 +15,7 @@ import { validateForm, getUpdatedErrorMsg } from '../../utils/validation/validat
 import { useNavigate } from 'react-router-dom';
 import { selectIsLoading, selectIsValidUser, } from '../../store/user/user.selector';
 import Spinner from '../spinner/spinner.component';
+import { CONSTANTS } from '../../constants/constants';
 
 const defaultErrorMessages = {
   emailError: '',
@@ -31,10 +32,11 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const isValidUser = useSelector(selectIsValidUser);
   const isLoading = useSelector(selectIsLoading);
+  console.log('SIGNIN form LOADINg ', isLoading);
 
   useEffect(() => {
     if (isValidUser) {
-      navigate('/students');
+      navigate(CONSTANTS.STUDENTS_ROUTE_PATH);
     }
   }, [isValidUser]);
 

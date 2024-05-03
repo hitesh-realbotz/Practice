@@ -33,7 +33,24 @@ export const RowContainer = styled.div`
   margin-bottom: 30px;
 `;
 
+
+
 export const FormInputContainer = styled.div`
   flex: 1;
   margin-right: 10px;
+`;
+export const CustButton = styled.button.attrs(() => ({
+  className: 'btn btn-secondary'
+}))`
+
+`;
+export const CustSelect = styled.select.attrs(() => ({
+  className: 'form-select'
+}))`
+background-color: rgb(222, 187, 243);
+
+`;
+export const CustDrop = styled.div.attrs(() => ({
+  className: 'input-group mb-3'
+}))`
 `;

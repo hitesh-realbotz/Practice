@@ -52,7 +52,10 @@ export const Group = styled.div`
     letter-spacing: 0.3em;
   }
 `;
-export const Select = styled.select`
+export const Select = styled.select.attrs(() => ({
+  className: 'form-select'
+}))`
+  background-color: rgb(194 203 233);
   position: relative;
   width: 100%;
 `;

@@ -1,27 +1,33 @@
 import { NavLink, SideBarContent, SideBarLink } from "./sidebar.styles";
 import React, { useState } from 'react';
-import FormModal from "../modal/form-modal.component";
+import { getStoredRoute } from "../../utils/navigation/navigation.utils";
+import { CONSTANTS } from "../../constants/constants";
 
 const SideBar = () => {
-    const [show, setModalShow] = useState(false);
-    const [tab, setTab] = useState('');
+    
+    let currentTab = getStoredRoute();
+    const [tab, setTab] = useState((currentTab === CONSTANTS.HOME_ROUTE_PATH || currentTab === CONSTANTS.SIGN_UP_ROUTE_PATH) ? CONSTANTS.STUDENTS_ROUTE_PATH : currentTab);
+
+    // useEffect(() => {
+    //     console.log('SIDEBAR useEffect', getStoredRoute());
+    //     setTab(getStoredRoute());
+    // }, []);
 
     const handleTabSelection = (tab) => {
         setTab(tab);
-
     }
-
 
     return (
         <>
             <SideBarContent>
-                <SideBarLink isActive={tab === 'Students'}>
-                    <NavLink to='/students' onClick={() => handleTabSelection('Students')} >Students</NavLink>
-                    {/* <Link onClick={(handleStudentShowModal)}>Students</Link> */}
+                <SideBarLink isActive={tab === CONSTANTS.DASHBOARD_ROUTE_PATH}>
+                    <NavLink to={CONSTANTS.DASHBOARD_ROUTE_PATH} onClick={() => handleTabSelection(CONSTANTS.DASHBOARD_ROUTE_PATH)} >DashBoard</NavLink>
                 </SideBarLink>
-                <SideBarLink isActive={tab === 'Projects'}>
-                    <NavLink to='/projects' onClick={() => handleTabSelection('Projects')}>Projects</NavLink>
-                    {/* <Link onClick={(handleProjectShowModal)}>Projects</Link> */}
+                <SideBarLink isActive={tab === CONSTANTS.STUDENTS_ROUTE_PATH}>
+                    <NavLink to={CONSTANTS.STUDENTS_ROUTE_PATH} onClick={() => handleTabSelection(CONSTANTS.STUDENTS_ROUTE_PATH)} >Students</NavLink>
+                </SideBarLink>
+                <SideBarLink isActive={tab === CONSTANTS.PROJECTS_ROUTE_PATH}>
+                    <NavLink to={CONSTANTS.PROJECTS_ROUTE_PATH} onClick={() => handleTabSelection(CONSTANTS.PROJECTS_ROUTE_PATH)}>Projects</NavLink>
                 </SideBarLink>
             </SideBarContent>
         </>

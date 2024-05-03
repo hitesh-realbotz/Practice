@@ -10,3 +10,7 @@ export const selectProjects = createSelector(
   (projectsSlice) => projectsSlice.projects
 );
 
+
+export const selectTotalProjectsCount = (state) => {
+  return state.projects.projects.length;
+}

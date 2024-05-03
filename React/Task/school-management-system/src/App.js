@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkUserSession } from './store/user/user.action';
-import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
 
 import Navigation from './routes/navigation/navigation.component'
 import SignInForm from './components/sign-in-form/sign-in-form.component';
@@ -11,6 +11,8 @@ import Students from './components/students/students.component';
 import Projects from './components/projects/projects.component';
 import { selectCurrentUser } from './store/user/user.selector';
 import { getStoredRoute, setStoredRoute } from './utils/navigation/navigation.utils';
+import { CONSTANTS } from './constants/constants';
+import DashBoard from './components/dashboard/dashboard.component';
 // import { fetchStudentsStart } from './store/students/student.action';
 // import { fetchProjectsStart } from './store/projects/project.action';
 
@@ -19,21 +21,45 @@ function App() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const currentUser = useSelector(selectCurrentUser);
   const [initialRouteChecked, setInitialRouteChecked] = useState(false);
 
   useEffect(() => { dispatch(checkUserSession()) }, []);
 
+  const location = useLocation();
+  // const history = unstable_HistoryRouter();
 
-let initialRoute = getStoredRoute();
+
+  // useEffect(() => {
+  //   const storedRoute = getStoredRoute();
+
+  //   // Check if the stored route is different from the current route
+  //   if (storedRoute && window.location.pathname !== storedRoute && !initialRouteChecked) {
+  //     // Navigate to the stored route
+  //     history.replace(storedRoute);
+  //     setInitialRouteChecked(true);
+  //   } else {
+  //     // Store the current route
+  //     setStoredRoute(location.pathname);
+  //   }
+  // }, [window.location.pathname, initialRouteChecked]);
+
+  let initialRoute = getStoredRoute();
   useEffect(() => {
     // Check if the initial route has been set in browser storage
-    if (initialRoute && !initialRouteChecked) {
-      // Navigate to the stored initial route
-      navigate(initialRoute, { replace: true });
-      setInitialRouteChecked(true);
-    }else{
+    if (initialRoute) {
+      if ( initialRoute !== '/' && !initialRouteChecked) {
+        console.log('APPUSeEff ', window.location.pathname);
+        // Navigate to the stored initial route
+        setStoredRoute();
+        navigate(initialRoute, { replace: true });
+        setInitialRouteChecked(true);
+      }
+      else{
+        setStoredRoute();
+      }
+    } else {
       //set initial route in browser storage
       setStoredRoute();
     }
@@ -42,11 +68,12 @@ let initialRoute = getStoredRoute();
 
   return (
     <Routes>
-      <Route path='/' element={<Navigation />} >
+      <Route path={CONSTANTS.HOME_ROUTE_PATH} element={<Navigation />} >
         <Route index element={<SignInForm />} />
-        <Route path='/sign-up' element={<SignUpForm />} />
-        <Route path='/students'  element={!!currentUser ? <Students /> : <Navigate to="/" replace />}  />
-        <Route path='/projects'  element={!!currentUser ? <Projects /> : <Navigate to="/" replace />} />
+        <Route path={CONSTANTS.SIGN_UP_ROUTE_PATH} element={<SignUpForm />} />
+        <Route path={CONSTANTS.STUDENTS_ROUTE_PATH} element={!!currentUser ? <Students /> : <Navigate to="/" replace />} />
+        <Route path={CONSTANTS.PROJECTS_ROUTE_PATH} element={!!currentUser ? <Projects /> : <Navigate to="/" replace />} />
+        <Route path={CONSTANTS.DASHBOARD_ROUTE_PATH} element={!!currentUser ? <DashBoard /> : <Navigate to="/" replace />} />
       </Route>
     </Routes>
   );

@@ -5,16 +5,16 @@ import { validate } from '../../utils/validation/validation.utils'
 
 // const DropdownInput = memo(({ errorM, name, label, options, handleChange, handleBlur, selectedOption }) => {
 const DropdownInput = memo(({ errorM, label, options, handleChange, handleBlur, ...otherProps }) => {
-// const DropdownInput = React.memo(({ isReset, isSubmitted, errorM, name, label, options, handleChange, selectedOption }) => {
+  // const DropdownInput = React.memo(({ isReset, isSubmitted, errorM, name, label, options, handleChange, selectedOption }) => {
 
-const { name, value } = otherProps;
+  const { name, value } = otherProps;
   const [errorMessage, setErrorMessage] = useState('');
 
   //Updating Error messages from FormComponent on From submission
   useEffect(() => {
     setErrorMessage(errorM);
   }, [errorM]);
-  
+
   const onHandleBlur = (event) => {
     // console.log('DROP ', name, (event.target.value))
     handleBlur(event, name);

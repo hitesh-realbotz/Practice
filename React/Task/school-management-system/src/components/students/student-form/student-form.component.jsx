@@ -5,12 +5,13 @@ import FormInput from '../../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../../button/button.component';
 
 
-import { ButtonsContainer, StudentFormContainer, RowContainer } from './student-form.styles';
+import { ButtonsContainer, StudentFormContainer, RowContainer, CustButton, CustSelect, CustDrop } from './student-form.styles';
 import DropdownInput from '../../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../../constants/constants';
 import { updateStudentStart, addStudentStart } from '../../../store/students/student.action';
 import { selectStudents } from "../../../store/students/student.selector";
 import { validateForm, getUpdatedErrorMsg } from '../../../utils/validation/validation.utils';
+import FormInputDate from '../../form-input-date/form-input-date.component';
 
 // const defaultErrorMessages = {
 //     name: '',
@@ -25,6 +26,7 @@ const defaultErrorMessages = {
     nameError: '',
     emailError: '',
     dobError: '',
+    dobcError: '',
     standardError: '',
     subjectError: '',
     divisionError: '',
@@ -37,6 +39,7 @@ const StudentForm = (props) => {
         name: '',
         email: '',
         dob: '',
+        dobc: '',
         standard: '',
         subject: '',
         division: '',
@@ -45,7 +48,7 @@ const StudentForm = (props) => {
 
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
-
+    
     const { data, action, onHide } = props;
     defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
 
@@ -54,11 +57,11 @@ const StudentForm = (props) => {
 
     // const [formFields, setFormFields] = useState(!!data.standard ? data : defaultFormFields);
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const { name, email, subject, standard, division, rollNo, dob } = formFields;
+    const { name, email, subject, standard, division, rollNo, dob, dobc } = formFields;
 
     //
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
-    const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
+    const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError, dobcError } = errorMessages;
 
     // console.log(students);
     const resetFormFields = () => {
@@ -81,7 +84,7 @@ const StudentForm = (props) => {
         }
 
         try {
-            const actionToBe = action == CONSTANTS.ADD_ACTION ? addStudentStart(students, getFormData() ) : updateStudentStart(students, getFormData(), data );
+            const actionToBe = action == CONSTANTS.ADD_ACTION ? addStudentStart(students, getFormData()) : updateStudentStart(students, getFormData(), data);
             if (!actionToBe.conflicts) {
                 dispatch(actionToBe);
                 resetFormFields();
@@ -107,6 +110,7 @@ const StudentForm = (props) => {
             name: name,
             email: email,
             dob: dob,
+            dobc: dobc,
             subject: subject,
         };
     }
@@ -114,6 +118,7 @@ const StudentForm = (props) => {
     //Updating Error messages from FormComponent
     const onHandleBlur = (event, errorTag) => {
         const { name, value } = event.target;
+        console.log('BLUR ', event, name, value);
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
     };
@@ -197,6 +202,7 @@ const StudentForm = (props) => {
                     />
 
                 </RowContainer>
+
                 <RowContainer>
                     <FormInput
                         label='Email'
@@ -210,6 +216,22 @@ const StudentForm = (props) => {
                     // isSubmitted={isSubmitted}
                     // isReset={!isReset}
                     />
+                </RowContainer>
+                
+                <RowContainer>
+                    <FormInputDate
+                        label='Date of Birth Check'
+                        type={!!dobc.length ? 'date' : 'text'}
+                        handleChange={handleChange}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.DOBC_DATE_ERROR_TAG)}
+                        errorM={dobError}
+                        name='dobC'
+                        value={dobc}
+                    // onHandleFormAction={handleFormAction}
+                    // isSubmitted={isSubmitted}
+                    // isReset={!isReset}
+                    />
+                    
                 </RowContainer>
                 <RowContainer>
                     <FormInput
