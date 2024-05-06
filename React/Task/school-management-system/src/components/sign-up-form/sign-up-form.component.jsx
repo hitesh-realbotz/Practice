@@ -15,6 +15,7 @@ import { validateForm, getUpdatedErrorMsg } from '../../utils/validation/validat
 import { selectIsLoading, selectIsValidUser } from '../../store/user/user.selector';
 import { useNavigate } from 'react-router-dom';
 import Spinner from '../spinner/spinner.component';
+import { CONSTANTS } from '../../constants/constants';
 
 
 const defaultErrorMessages = {
@@ -36,7 +37,7 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (isValidUser) {
-      navigate('/students');
+      navigate(CONSTANTS.STUDENTS_ROUTE_PATH);
     }
   }, [isValidUser]);
 
@@ -55,7 +56,6 @@ const SignUpForm = () => {
 
     const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
     if (!validationResult.isValid) {
-      console.log('post validation ', validationResult.errors);
       setErrorMessages(validationResult.errors);
       return;
     }

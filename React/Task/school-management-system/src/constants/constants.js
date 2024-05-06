@@ -14,6 +14,15 @@ export const CONSTANTS = {
   PROJECT_REMOTE_FOLDER: 'projects',
   STANDARD_REMOTE_FOLDER: 'standard',
   
+  
+  //Route Path
+  HOME_ROUTE_PATH: '/',
+  SIGN_UP_ROUTE_PATH: '/sign-up',
+  STUDENTS_ROUTE_PATH: '/students',
+  PROJECTS_ROUTE_PATH: '/projects',
+  DASHBOARD_ROUTE_PATH: '/dashboard',
+  
+  //SessionStored Current Route Path Key
   STORED_ROUTE_KEY_NAME: 'CurrentRoute',
 
   //Button
@@ -29,6 +38,7 @@ export const CONSTANTS = {
   START_DATE_ERROR_TAG: 'startDateError',
   END_DATE_ERROR_TAG: 'endDateError',
 
+  DOBC_DATE_ERROR_TAG: 'dobcError',
   DOB_DATE_ERROR_TAG: 'dobError',
   NAME_ERROR_TAG: 'nameError',
   EMAIL_ERROR_TAG: 'emailError',

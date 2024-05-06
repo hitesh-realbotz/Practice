@@ -18,6 +18,8 @@ import {
     SideBarContainer
 } from './navigation.styles';
 import SideBar from '../../components/sidebar/sidebar.component';
+import { getStoredRoute } from '../../utils/navigation/navigation.utils';
+import { CONSTANTS } from '../../constants/constants';
 
 
 const Navigation = () => {
@@ -34,20 +36,18 @@ const Navigation = () => {
     return (
         <Fragment>
             <NavigationContainer>
-                <LogoContainer to='/'>
+                <LogoContainer to={CONSTANTS.HOME_ROUTE_PATH}>
                     <CrwnLogo className='logo' />
                 </LogoContainer>
                 <NavLinks>
-                    {/* <NavLink to='/shop'>SHOP</NavLink> */}
-
-                    {(currentUser || isLoading ) ? (
-                        <NavLink to='/' onClick={signOutUser}>
+                    {((currentUser || isLoading) ) ? (
+                        <NavLink to={CONSTANTS.HOME_ROUTE_PATH} onClick={signOutUser}>
                             SIGN OUT
                         </NavLink>
                     ) : (
                         <>
-                            <NavLink to='/'>SIGN IN</NavLink>
-                            <NavLink to='/sign-up'>SIGN UP</NavLink>
+                            <NavLink to={CONSTANTS.HOME_ROUTE_PATH}>SIGN IN</NavLink>
+                            <NavLink to={CONSTANTS.SIGN_UP_ROUTE_PATH}>SIGN UP</NavLink>
                         </>
                     )}
                 </NavLinks>

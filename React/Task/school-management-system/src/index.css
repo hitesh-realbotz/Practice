@@ -21,9 +21,10 @@ code {
   flex-direction: column;
   align-items: center;
   background-color: rgb(222, 187, 243);
+  border: 1px solid black;
+  border-radius: 5px;
   font-weight: 500;
   margin-right: 25px;
-  border-radius: 5px;
   z-index: 1;
 
 }

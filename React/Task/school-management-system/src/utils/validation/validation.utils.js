@@ -82,7 +82,7 @@ export const getUpdatedErrorMsg = (errorTag, fieldname, value, errorMessages) =>
     const errorMessagesKeys = Object.keys(updatedErrorMessages);
     // const errorMessagesValues = Object.values(updatedErrorMessages);
     errorMessagesKeys.forEach((name, index) => {
-        if (name == errorTag) {
+        if (name === errorTag) {
             updatedErrorMessages[name] = validate(fieldname, value);
         } else {
             // updatedErrorMessages[name] = errorMessagesValues[name];

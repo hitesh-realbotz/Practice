@@ -29,7 +29,7 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
       userAuth,
       additionalDetails
     );
-    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));    
+    yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
   } catch (error) {
     yield put(signInFailed(error));
   }
@@ -55,13 +55,17 @@ export function* signInWithEmail({ payload: { email, password } }) {
   } catch (error) {
     yield put(signInFailed(error));
     toast.error('Invalid Credentials!!');
+    // toast.error(error.code);
   }
 }
 
 export function* isUserAuthenticated() {
   try {
     const userAuth = yield call(getCurrentUser);
-    if (!userAuth) return;
+    if (!userAuth) {
+      yield put(signInFailed(null));
+      return;
+    }
     yield call(getSnapshotFromUserAuth, userAuth);
   } catch (error) {
     yield put(signInFailed(error));
@@ -79,7 +83,7 @@ export function* signUp({ payload: { email, password } }) {
     toast.success('Account created successfully!');
   } catch (error) {
     yield put(signUpFailed(error));
-    toast.error('Account not created!');
+    toast.error(error.code);
   }
 }
 
