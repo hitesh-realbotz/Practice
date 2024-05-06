@@ -12,6 +12,7 @@ import { addProjectStart, isStudentWithEmailAndName, updateProjectStart } from '
 import { selectProjects } from '../../../store/projects/project.selector';
 import { ButtonsContainer, ProjectFormContainer, RowContainer } from './project-form.styles';
 import FormTextArea from '../../form-text-area/form-text-area.component';
+import FormInputDate from '../../form-input-date/form-input-date.component';
 
 
 const defaultErrorMessages = {
@@ -89,7 +90,6 @@ const ProjectForm = (props) => {
         if (nameToBeChecked === data.name)
             return 'Student not found!';
         else return '';
-
     }
 
     const [errorMessages, setErrorMessages] = useState(isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(email), nameError: getValidNameMessage(name) });
@@ -244,9 +244,9 @@ const ProjectForm = (props) => {
                 </RowContainer>
 
                 <RowContainer>
-                    <FormInput
+                    <FormInputDate
                         label='Start Date'
-                        type='date'
+                        type='text'
                         onChange={handleChange}
                         handleBlur={(event) => onHandleBlur(event, CONSTANTS.START_DATE_ERROR_TAG)}
                         errorM={startDateError}
@@ -255,9 +255,9 @@ const ProjectForm = (props) => {
                     />
                 </RowContainer>
                 <RowContainer>
-                    <FormInput
+                    <FormInputDate
                         label='End Date'
-                        type='date'
+                        type='text'
                         onChange={handleChange}
                         handleBlur={(event) => onHandleBlur(event, CONSTANTS.END_DATE_ERROR_TAG)}
                         errorM={endDateError}

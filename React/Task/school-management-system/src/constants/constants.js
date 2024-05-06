@@ -52,6 +52,7 @@ export const CONSTANTS = {
   PROJECT_TITLE_ASSIGNED: 'Project Title is already assigned!',
   EMAIL_ASSIGNED: 'Email is already assigned!',
   ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
+  DIVISION_FULL: 'Division is full!',
   INVALID_STUDENT_EMAIL: 'Invalid Student email-id!',
   INVALID_STUDENT_NAME: 'Invalid Student name!',
   INVALID_START_DATE_RELATION: 'Start date should not be greater than end date!',

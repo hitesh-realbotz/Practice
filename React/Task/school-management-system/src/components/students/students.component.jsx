@@ -9,6 +9,8 @@ import { deleteStudentStart, fetchStudentsStart } from "../../store/students/stu
 import { StudentsTab } from "./students.styles";
 import TableComponent from "../table/table.component";
 import Spinner from "../spinner/spinner.component";
+import { selectProjects } from "../../store/projects/project.selector";
+import { deleteProjectStart } from "../../store/projects/project.action";
 
 // import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,9 +22,10 @@ const defaultModalProps = {
     data: {}
 }
 const Students = () => {
-
+    
     const dispatch = useDispatch();
     const isLoading = useSelector(selectIsLoading);
+    const projects = useSelector(selectProjects);
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
 
@@ -38,9 +41,11 @@ const Students = () => {
     }
 
     const handleEditStudent = (student) => {
+        const project = getProjectWithEmail(student.email);
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.EDIT_ACTION;
-        updatedModelProps.data = student;
+        // updatedModelProps.data = student;
+        updatedModelProps.data = {student: student, projects: projects};
         updatedModelProps.show = true;
         setModalProps(updatedModelProps);
         // setSelectedStudent(student);
@@ -50,24 +55,32 @@ const Students = () => {
     const handleHideModal = () => {
         setModalProps(defaultModalProps);
     }
+
+    const getProjectWithEmail = (email) => {
+        return projects.filter(p => p.email === email);
+    }
+    
+
+    const handleDeleteStudent = (student) => {
+        const project = getProjectWithEmail(student.email);
+        const updatedModelProps = { ...modalProps };
+        updatedModelProps.action = CONSTANTS.DELETE_ACTION;
+        updatedModelProps.data = {student: student, projects: projects, project: getProjectWithEmail(student.email)};
+        updatedModelProps.show = true;
+        setModalProps(updatedModelProps);
+    }
+
     const handleConfirm = () => {
         try {
             dispatch(deleteStudentStart(students, modalProps.data));
+            
         } catch (error) {
             console.log('Student Deletion encountered an error', error);
         }
         setModalProps(defaultModalProps);
     }
 
-    const handleDeleteStudent = (student) => {
-        const updatedModelProps = { ...modalProps };
-        updatedModelProps.action = CONSTANTS.DELETE_ACTION;
-        updatedModelProps.data = student;
-        updatedModelProps.show = true;
-        setModalProps(updatedModelProps);
-    }
-
-    const flattenedStudents = students.flatMap(({ standard, divisions }) => {
+    const flattenedStudents = students?.flatMap(({ standard, divisions }) => {
         return divisions.flatMap(({ division, students }) => {
             return students.map(({ dob, email, name, rollNo, subject }) => {
                 return { dob, email, name, rollNo, subject, standard, division };
