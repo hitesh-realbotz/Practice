@@ -16,12 +16,10 @@ const DropdownInput = memo(({ errorM, label, options, handleChange, handleBlur, 
   }, [errorM]);
 
   const onHandleBlur = (event) => {
-    // console.log('DROP ', name, (event.target.value))
     handleBlur(event, name);
     // setErrorMessage(validate(name, selectedOption));
   };
   const onHandleChange = (event) => {
-    // console.log('DROP Change ', name, event.target.value);
     handleChange(event, name);
     // setErrorMessage(validate(name, selectedOption));
   };
@@ -40,7 +38,7 @@ const DropdownInput = memo(({ errorM, label, options, handleChange, handleBlur, 
   return (
     <Group  >
       {label && (
-        <FormDropdownInputLabel shrink={otherProps.value !== ''}>
+        <FormDropdownInputLabel>
           {label}
         </FormDropdownInputLabel>
       )}

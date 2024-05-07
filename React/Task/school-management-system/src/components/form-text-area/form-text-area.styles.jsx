@@ -1,57 +1,33 @@
 import styled, { css } from 'styled-components';
 
+
 const subColor = 'grey';
 const mainColor = 'black';
 
-const shrinkLabelStyles = css`
-  top: ${('-15px')};
-  font-size: 12px;
-  color: ${mainColor};
+export const Group = styled.div`
+  position: relative;
+  margin: 0px 5px;
+  width: 100%;
 `;
 
 export const FormInputLabel = styled.label`
-  color: ${subColor};
+  color: ${mainColor};
   font-size: 16px;
-  font-weight: normal;
-  position: absolute;
+  font-weight: 500;
   pointer-events: none;
-  left: 5px;
-  top: ${('3px')};
-
-  transition: 300ms ease all;
-  ${({ shrink }) => shrink && shrinkLabelStyles};
 `;
 
-export const Input = styled.textarea`
-  background: none;
-  background-color: white;
-  color: ${subColor};
-  font-size: 18px;
-  // padding: 10px 10px 10px 5px;
+export const Input = styled.textarea.attrs(() => ({
+  className: 'form-control'
+}))`
+  font-size: 14px;
   display: block;
   width: 100%;
-  border: none;
-  border-radius: 0;
-  border-bottom: 1px solid ${subColor};
- 
-
-  &:focus {
-    outline: none;
-  }
-
-  &:focus ~ ${FormInputLabel} {
-    ${shrinkLabelStyles};
-  }
+  border-radius: 5px;
+  border: 1px solid ${subColor};
 `;
 
-export const Group = styled.div`
-  position: relative;
-  padding-right: 10px;
-  width: 100%;
-  input[type='password'] {
-    letter-spacing: 0.3em;
-  }
-`;
 export const ErrorMessage = styled.span`
   color: red
 `;
+

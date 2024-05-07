@@ -19,6 +19,7 @@ import { STUDENTS_ACTION_TYPES } from './student.types';
 import { CONSTANTS } from '../../constants/constants';
 
 import { toast } from 'react-toastify';
+import { deleteProjectsSuccess, updateProjectsSuccess } from '../projects/project.action';
 
 export function* fetchStudentsAsync() {
   try {
@@ -42,10 +43,15 @@ export function* addStudentsAsync(action) {
 }
 
 export function* updateStudentsAsync(action) {
-  const newStudents = action.payload;
+  const newStudents = action.payload.projects ? action.payload.student : action.payload;
+  const newProjects = action.payload.projects ? action.payload.projects : null ;
+  console.log('STUD SAGA',action.payload);
+  console.log('STUD SAGA',newProjects);
   try {  
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
+    const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(updateStudentsSuccess(newStudents));
+    yield put(updateProjectsSuccess(newProjects));
     // yield put(showToast('Student updated successfully!'));
     toast.success('Student updated successfully!');
     
@@ -58,10 +64,16 @@ export function* updateStudentsAsync(action) {
 
 
 export function* deleteStudentsAsync(action) {
-  const newStudents = action.payload;
+  // const newStudents = action.payload;
+  const newStudents = action.payload.projects ? action.payload.student : action.payload;
+  const newProjects = action.payload.projects ? action.payload.projects : null ;
+  console.log('STUD SAGA',action.payload);
+  console.log('STUD SAGA',newProjects);
   try {   
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
+    const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(deleteStudentsSuccess(newStudents));
+    yield put(deleteProjectsSuccess(newProjects));
     toast.warn('Student deleted successfully');
   } catch (error) {
     yield put(deleteStudentsFailed(error));

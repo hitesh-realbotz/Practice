@@ -14,14 +14,14 @@ const FormTextArea = (({ handleBlur, errorM, label, ...otherProps }) => {
 
   return (
     < Group >
-      <Input {...otherProps} onBlur={handleBlur} />
       {
         label && (
-          <FormInputLabel shrink={otherProps.value.length}>
+          <FormInputLabel >
             {label}
           </FormInputLabel>
         )
       }
+      <Input {...otherProps} onBlur={handleBlur} />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
     </Group >

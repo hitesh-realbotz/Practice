@@ -19,14 +19,14 @@ const FormInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
 
   return (
     < Group >
-      <Input {...otherProps} onBlur={handleBlur} />
       {
         label && (
-          <FormInputLabel shrink={otherProps.value.length} isDate={isDate}>
-            { otherProps.value.length ? label : `Enter ${label}`}
+          <FormInputLabel>
+            {label}
           </FormInputLabel>
         )
       }
+      <Input {...otherProps} onBlur={handleBlur} />
       {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
 
     </Group >

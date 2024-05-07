@@ -5,7 +5,7 @@ import FormInput from '../../form-input/form-input.component';
 import Button, { BUTTON_TYPE_CLASSES } from '../../button/button.component';
 
 
-import { ButtonsContainer, StudentFormContainer, RowContainer, CustButton, CustSelect, CustDrop } from './student-form.styles';
+import { ButtonsContainer, StudentFormContainer, RowContainer } from './student-form.styles';
 import DropdownInput from '../../form-dropdown/form-dropdown.component';
 import { CONSTANTS } from '../../../constants/constants';
 import { updateStudentStart, addStudentStart } from '../../../store/students/student.action';
@@ -13,20 +13,10 @@ import { selectStudents } from "../../../store/students/student.selector";
 import { validateForm, getUpdatedErrorMsg } from '../../../utils/validation/validation.utils';
 import FormInputDate from '../../form-input-date/form-input-date.component';
 
-// const defaultErrorMessages = {
-//     name: '',
-//     email: '',
-//     dob: '',
-//     standard: '',
-//     subject: '',
-//     division: '',
-//     rollNo: '',
-// };
 const defaultErrorMessages = {
     nameError: '',
     emailError: '',
     dobError: '',
-    dobcError: '',
     standardError: '',
     subjectError: '',
     divisionError: '',
@@ -39,7 +29,6 @@ const StudentForm = (props) => {
         name: '',
         email: '',
         dob: '',
-        dobc: '',
         standard: '',
         subject: '',
         division: '',
@@ -48,20 +37,19 @@ const StudentForm = (props) => {
 
     const dispatch = useDispatch();
     const students = useSelector(selectStudents);
-    
+
     const { data, action, onHide } = props;
-    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data;
+    defaultFormFields = action == CONSTANTS.ADD_ACTION ? defaultFormFields : data.student;
 
     // const [isSubmitted, setIsSubmitted] = useState(false);
     // const [isReset, setIsReset] = useState(false);
 
-    // const [formFields, setFormFields] = useState(!!data.standard ? data : defaultFormFields);
     const [formFields, setFormFields] = useState(defaultFormFields);
-    const { name, email, subject, standard, division, rollNo, dob, dobc } = formFields;
+    const { name, email, subject, standard, division, rollNo, dob } = formFields;
 
     //
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
-    const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError, dobcError } = errorMessages;
+    const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
 
     // console.log(students);
     const resetFormFields = () => {
@@ -76,7 +64,9 @@ const StudentForm = (props) => {
         // setIsSubmitted(!isSubmitted);
 
         //Updating Error messages from FormComponent on FormSubmission
-        const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
+        // const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
+        const validationResult = validateForm(Object.keys(getFormData()), Object.values(getFormData()), Object.keys(defaultErrorMessages));
+        console.log(validationResult);
 
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
@@ -106,11 +96,9 @@ const StudentForm = (props) => {
         return {
             standard: standard,
             division: division,
-            rollNo: rollNo,
             name: name,
             email: email,
             dob: dob,
-            dobc: dobc,
             subject: subject,
         };
     }
@@ -125,6 +113,9 @@ const StudentForm = (props) => {
 
     const handleChangeSelect = (event, name, errorTag) => {
         const { value } = event.target;
+        if (name === 'division') {
+
+        }
         setFormFields({ ...formFields, [name]: value });
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
@@ -217,26 +208,10 @@ const StudentForm = (props) => {
                     // isReset={!isReset}
                     />
                 </RowContainer>
-                
                 <RowContainer>
                     <FormInputDate
-                        label='Date of Birth Check'
-                        type={!!dobc.length ? 'date' : 'text'}
-                        handleChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.DOBC_DATE_ERROR_TAG)}
-                        errorM={dobError}
-                        name='dobC'
-                        value={dobc}
-                    // onHandleFormAction={handleFormAction}
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
-                    />
-                    
-                </RowContainer>
-                <RowContainer>
-                    <FormInput
                         label='Date of Birth'
-                        type='date'
+                        type='text'
                         onChange={handleChange}
                         handleBlur={(event) => onHandleBlur(event, CONSTANTS.DOB_DATE_ERROR_TAG)}
                         errorM={dobError}
@@ -277,21 +252,40 @@ const StudentForm = (props) => {
                     />
                 </RowContainer>
 
-                <RowContainer>
-                    <DropdownInput
-                        label='Roll No.'
-                        options={rollNoOptions}
-                        // handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
-                        handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
-                        handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
-                        errorM={rollNoError}
-                        // selectedOption={rollNo}
-                        value={rollNo}
-                        name='rollNo'
-                    // isSubmitted={isSubmitted}
-                    // isReset={!isReset}
 
-                    />
+                <RowContainer>
+                    {
+                        action === CONSTANTS.ADD_ACTION ? ''
+                            : <>
+                                {/* <DropdownInput 
+                                    label='Roll No.'
+                                    options={rollNoOptions}
+                                    // handleChange={(event) => setFormFields({ ...formFields, rollNo: event.target.value })}
+                                    handleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
+                                    handleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.ROLL_NO_ERROR_TAG)}
+                                    errorM={rollNoError}
+                                    // selectedOption={rollNo}
+                                    value={rollNo}
+                                    name='rollNo'
+                                // isSubmitted={isSubmitted}
+                                // isReset={!isReset}
+
+                                /> */}
+                                <FormInput
+                                    label='Roll No.'
+                                    type='text'
+                                    onChange={handleChange}
+                                    handleBlur={(event) => onHandleBlur(event, CONSTANTS.ROLL_NO_ERROR_TAG)}
+                                    errorM={rollNoError}
+                                    name='rollNo'
+                                    value={rollNo}
+                                // onHandleFormAction={handleFormAction}
+                                // isSubmitted={isSubmitted}
+                                // isReset={!isReset}
+                                readOnly />
+                            </>
+                    }
+
                     <DropdownInput
                         label='Favourite Subject'
                         options={subjectOptions}

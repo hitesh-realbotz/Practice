@@ -19,6 +19,7 @@ export function* fetchProjectsAsync() {
 
 export function* addProjectsAsync(action) {
   const newProjects = action.payload;
+  console.log('ProjSAGE ', newProjects);
   try {   
     const projectsArray = yield call(addCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(addProjectsSuccess(newProjects));
