@@ -37,7 +37,7 @@ const SignUpForm = () => {
 
   useEffect(() => {
     if (isValidUser) {
-      navigate(CONSTANTS.STUDENTS_ROUTE_PATH);
+      navigate(CONSTANTS.DASHBOARD_ROUTE_PATH);
     }
   }, [isValidUser]);
 
@@ -99,8 +99,7 @@ const SignUpForm = () => {
           </>
           :
           <SignUpContainer>
-            <h2>Don't have an account?</h2>
-            <span>Sign up with your email and password</span>
+            <h2>Sign-Up</h2>
             <form onSubmit={handleSubmit}>
 
               <RowContainer>

@@ -14,6 +14,7 @@ export const SignInContainer = styled.div`
 export const ButtonsContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
+  margin-bottom: 5px;
 `;
 
 export const NavLink = styled(Link)`

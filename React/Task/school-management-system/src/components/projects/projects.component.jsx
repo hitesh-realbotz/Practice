@@ -1,11 +1,11 @@
-import Button from "../button/button.component";
+import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import React, { useState, useEffect } from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
 import { useDispatch, useSelector } from 'react-redux';
 import { selectStudents } from "../../store/students/student.selector";
 import { selectIsLoading, selectProjects } from "../../store/projects/project.selector";
-import { ProjectsTab } from "./projects.styles";
+import { ButtonsContainer, ProjectsTab } from "./projects.styles";
 import { selectCurrentUser } from "../../store/user/user.selector";
 import ConfirmModal from "../modal/confirm-modal.component";
 import TableComponent from "../table/table.component";
@@ -24,9 +24,11 @@ const Projects = () => {
     const dispatch = useDispatch();
     const currentUser = useSelector(selectCurrentUser);
     const isLoading = useSelector(selectIsLoading);
-    useEffect(() => {
-        dispatch(fetchProjectsStart());
-    }, []);
+
+    // useEffect(() => {
+    //     dispatch(fetchProjectsStart());
+    // }, []);
+
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
     const projects = useSelector(selectProjects);
@@ -87,7 +89,9 @@ const Projects = () => {
                 </>
                 :
                 <ProjectsTab>
-                    <Button type='button' onClick={handleAddProjectFormModal}>Add Project</Button>
+                    <ButtonsContainer>
+                        <Button buttonType={BUTTON_TYPE_CLASSES.google} type='button' onClick={handleAddProjectFormModal}>Add Project</Button>
+                    </ButtonsContainer>
                     {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
                     {
                         modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />

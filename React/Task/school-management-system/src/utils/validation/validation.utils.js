@@ -24,16 +24,13 @@ export const validate = (name, value) => {
         case 'subject':
             return !value ? 'Favourite Subject must be selected' : '';
         case 'dob':
-            if (!value)
-                return 'Date of Birth is Required';
+            if (!value) return 'Date of Birth is Required';
             return validateDateFormat(value);
         case 'startDate':
-            if (!value)
-                return 'Start Date is Required';
+            if (!value) return 'Start Date is Required';
             return validateDateFormat(value);
         case 'endDate':
-            if (!value)
-                return '';
+            if (!value) return 'End Date is Required';
             return validateDateFormat(value);
 
         default:
@@ -51,15 +48,19 @@ const validateEmail = (email) => {
 const validateDateFormat = (date) => {
     const datePattern = CONSTANTS.REGEX_DATE;
     if (datePattern.test(date)) {
-        return '';
+        return validateIsFutureDate(date);
     }
     return 'Invalid Date format. Please use MM-DD-YYYY';
+};
+//FutureDate validation
+const validateIsFutureDate = (date) => {
+    if (new Date(date) > new Date()) return 'Future date not allowed!';
+    return '';
 };
 
 
 //Form Validation
 export const validateForm = (names, values, errorMessages) => {
-    console.log('In Validat errorMessages ', errorMessages);
     const updatedErrorMessages = { ...errorMessages };
     const errorMessagesKeys = Object.keys(updatedErrorMessages);
     let isValid = true;
@@ -69,7 +70,6 @@ export const validateForm = (names, values, errorMessages) => {
             isValid = false;
         }
         updatedErrorMessages[`${names[index]}Error`] = errorMessage;
-        console.log('In Validat errorMess POST ', updatedErrorMessages[name], names[index], values[index]);
     });
     return { errors: updatedErrorMessages, isValid: isValid };
     // return isValid;

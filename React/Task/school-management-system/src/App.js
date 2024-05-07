@@ -13,6 +13,8 @@ import { selectCurrentUser } from './store/user/user.selector';
 import { getStoredRoute, setStoredRoute } from './utils/navigation/navigation.utils';
 import { CONSTANTS } from './constants/constants';
 import DashBoard from './components/dashboard/dashboard.component';
+import { fetchStudentsStart } from './store/students/student.action';
+import { fetchProjectsStart } from './store/projects/project.action';
 // import { fetchStudentsStart } from './store/students/student.action';
 // import { fetchProjectsStart } from './store/projects/project.action';
 
@@ -25,25 +27,11 @@ function App() {
   const currentUser = useSelector(selectCurrentUser);
   const [initialRouteChecked, setInitialRouteChecked] = useState(false);
 
-  useEffect(() => { dispatch(checkUserSession()) }, []);
-
-  const location = useLocation();
-  // const history = unstable_HistoryRouter();
-
-
-  // useEffect(() => {
-  //   const storedRoute = getStoredRoute();
-
-  //   // Check if the stored route is different from the current route
-  //   if (storedRoute && window.location.pathname !== storedRoute && !initialRouteChecked) {
-  //     // Navigate to the stored route
-  //     history.replace(storedRoute);
-  //     setInitialRouteChecked(true);
-  //   } else {
-  //     // Store the current route
-  //     setStoredRoute(location.pathname);
-  //   }
-  // }, [window.location.pathname, initialRouteChecked]);
+  useEffect(() => { 
+    dispatch(checkUserSession());
+    dispatch(fetchStudentsStart());
+    dispatch(fetchProjectsStart());
+   }, []);
 
   let initialRoute = getStoredRoute();
   useEffect(() => {

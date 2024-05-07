@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useNavigation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { Route, Routes } from 'react-router-dom';
 
@@ -15,10 +15,12 @@ import {
     NavLink,
     LogoContainer,
     HomeContainer,
-    SideBarContainer
+    SideBarContainer,
+    AppComponent,
+    Title
 } from './navigation.styles';
 import SideBar from '../../components/sidebar/sidebar.component';
-import { getStoredRoute } from '../../utils/navigation/navigation.utils';
+import { getStoredRoute, setStoredRoute } from '../../utils/navigation/navigation.utils';
 import { CONSTANTS } from '../../constants/constants';
 
 
@@ -26,21 +28,38 @@ const Navigation = () => {
     const dispatch = useDispatch();
 
     let isLoading = useSelector(selectIsLoading)
-    
+
     const currentUser = useSelector(selectCurrentUser);
+    const navigate = useNavigate();
 
     const signOutUser = () => {
         dispatch(signOutStart());
     }
+    const handleOnTitle = () => {
+        console.log('ONTITLE');
+
+        if (currentUser) {
+            setStoredRoute(CONSTANTS.DASHBOARD_ROUTE_PATH);
+            navigate(CONSTANTS.DASHBOARD_ROUTE_PATH);
+            
+        } else {
+            setStoredRoute(CONSTANTS.HOME_ROUTE_PATH);
+            navigate(CONSTANTS.HOME_ROUTE_PATH);
+        }
+    }
 
     return (
         <Fragment>
+
             <NavigationContainer>
                 <LogoContainer to={CONSTANTS.HOME_ROUTE_PATH}>
                     <CrwnLogo className='logo' />
                 </LogoContainer>
+                <Title onClick={handleOnTitle}>SchoolManagementSystem                   
+                    {/* <NavLink to={CONSTANTS.DASHBOARD_ROUTE_PATH} >SchoolManagementSystem</NavLink>    */}
+                </Title>
                 <NavLinks>
-                    {((currentUser || isLoading) ) ? (
+                    {((currentUser || isLoading)) ? (
                         <NavLink to={CONSTANTS.HOME_ROUTE_PATH} onClick={signOutUser}>
                             SIGN OUT
                         </NavLink>

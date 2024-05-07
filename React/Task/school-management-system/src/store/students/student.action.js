@@ -110,18 +110,14 @@ const isProjectAvailable = (conflicts, projects, email, name) => {
 
 //Update Student Start processing
 export const updateStudentStart = (students, studentToAdd, data) => {
-  console.log('UPdate Stud', data)
-  
+
   const newStudentsTobe = updateStudent(students, studentToAdd, data.student);
   if (!newStudentsTobe.conflicts) {
-    
+
     const existingProjectIndex = getProjectIndex(data.projects, data.student.email);
-    console.log('UPdate Stud', data.student.email, existingProjectIndex);
-    if (existingProjectIndex !== -1) {
-      console.log('BEFORE ', data);
+    if (existingProjectIndex !== -1 && (studentToAdd.email !== data.student.email || studentToAdd.name !== data.student.name)) {
       data.projects[existingProjectIndex].email = studentToAdd.email;
       data.projects[existingProjectIndex].name = studentToAdd.name;
-      console.log('POST ', data);
       return createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, { ...data, student: newStudentsTobe });
     }
     return createAction(STUDENTS_ACTION_TYPES.UPDATE_STUDENT_START, newStudentsTobe);
@@ -203,7 +199,7 @@ const updateStudent = (students, studentToAdd, existingStudentData) => {
     }
 
   } else {
-    console.log('Standard not matched');
+    // console.log('Standard not matched');
     const existingDivisionIndex = getDivisionIndex(students, existingStandardIndex, existingStudentData.division);
     if (standardIndex === -1) {
       // console.log('Standard not found');
@@ -291,17 +287,12 @@ export const deleteStudentStart = (students, data) => {
     }
   }
 
-  
-    
-    const existingProjectIndex = getProjectIndex(data.projects, data.student.email);
-    console.log('UPdate Stud', data.student.email, existingProjectIndex);
-    if (existingProjectIndex !== -1) {
-      console.log('BEFORE ', data);
-      data.projects.splice(existingProjectIndex, 1);
-     
-      console.log('POST ', data);
-      return createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_START, { ...data, student: students });
-    }
+
+  const existingProjectIndex = getProjectIndex(data.projects, data.student.email);
+  if (existingProjectIndex !== -1) {
+    data.projects.splice(existingProjectIndex, 1);
+    return createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_START, { ...data, student: students });
+  }
 
   return createAction(STUDENTS_ACTION_TYPES.DELETE_STUDENT_START, students);
 }
@@ -356,7 +347,6 @@ const getStudentRollNo = (studentsByStandard, standardIndex, divisionIndex) => {
 
   if (studentRollNo <= CONSTANTS.MAX_ROLLNO) {
     studentsByStandard[standardIndex].divisions[divisionIndex].students.forEach((student, index) => {
-      console.log(index);
       if (student.rollNo !== (index + 1)) {
         studentRollNo = index + 1;
       }

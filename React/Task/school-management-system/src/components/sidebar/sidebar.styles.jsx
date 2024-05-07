@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { Link } from 'react-router-dom';
 
-export const SideBarContent = styled.div`
+export const SideBarContent = styled.div.attrs(() => ({
+  className: 'col-4 col-lg-3  col-xxl-4  col-xxl-4 col-md-4 col-sm-11 cpl-xs-3'
+}))`
   width: 100%;
   display: flex;
   flex-direction: column;

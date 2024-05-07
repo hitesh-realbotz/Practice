@@ -39,15 +39,18 @@ export const deleteProjectsFailed = (error) =>
 export const addProjectStart = (projects, projectToAdd, students) => {
 
   const { title, name, email } = projectToAdd;
-  let conflicts = { conflict: [] };
+  let conflicts = { conflicts: [] };
   if (isProjectTitleTaken(projects, title))
     conflicts = getConflictMessages(conflicts, CONSTANTS.PROJECT_TITLE_ERROR_TAG, CONSTANTS.PROJECT_TITLE_ASSIGNED);
+
+  if (isProjectAssigned(projects, email))
+    conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.PROJECT_ASSIGNED_TO_EMAIL);
 
   const conflictsTobe = isStudentAvailable(conflicts, students, email, name);
   if (!!conflictsTobe)
     conflicts = conflictsTobe;
 
-  if (!!conflicts.conflict.length)
+  if (!!conflicts.conflicts.length)
     return conflicts;
 
   projects.push(projectToAdd);
@@ -78,6 +81,12 @@ export const updateProject = (projects, projectToUpdate, existingProjectData, st
   if (title !== existingProjectData.title && isProjectTitleTaken(projects, title))
     conflicts = getConflictMessages(conflicts, CONSTANTS.PROJECT_TITLE_ERROR_TAG, CONSTANTS.PROJECT_TITLE_ASSIGNED);
 
+  if (email !== existingProjectData.email && isProjectAssigned(projects, email))
+    conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.PROJECT_ASSIGNED_TO_EMAIL);
+
+  // if (isProjectAssigned(projects, email))
+  //   conflicts = getConflictMessages(conflicts, CONSTANTS.EMAIL_ERROR_TAG, CONSTANTS.PROJECT_ASSIGNED_TO_EMAIL);
+
   if (name !== existingProjectData.name || email !== existingProjectData.email) {
     const conflictsTobe = isStudentAvailable(conflicts, students, email, name);
     if (!!conflictsTobe)
@@ -95,6 +104,7 @@ export const updateProject = (projects, projectToUpdate, existingProjectData, st
 export const updateProjectStudentDetails = (projects, projectToUpdate, existingProjectData, students) => {
 
   const { title, name, email } = projectToUpdate;
+
   const existingProjectIndex = getProjectIndexByTitle(projects, existingProjectData.title);
 
   let conflicts = { conflicts: [] };
@@ -133,7 +143,7 @@ export const deleteProjectStart = (projects, projectToDelete) => {
 // const addProject = (projects, projectToAdd, students) => {
 
 //   const { title, name, email } = projectToAdd;
-//   let conflicts = { conflict: [] };
+//   let conflicts = { conflicts: [] };
 //   if (isProjectTitleTaken(projects, title))
 //     conflicts = getConflictMessages(conflicts, CONSTANTS.PROJECT_TITLE_ERROR_TAG, CONSTANTS.PROJECT_TITLE_ASSIGNED);
 
@@ -162,6 +172,9 @@ const isProjectTitleTaken = (projects, title) => {
 }
 const getProjectIndexByTitle = (projects, title) => {
   return projects.findIndex(p => p.title === title);
+}
+const isProjectAssigned = (projects, email) => {
+  return projects.some(p => p.email === email);
 }
 
 //returns error messages if student not available
