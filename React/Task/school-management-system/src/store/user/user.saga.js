@@ -21,6 +21,9 @@ import {
 } from '../../utils/firebase/firebase.utils';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { fetchStudentsStart } from '../students/student.action';
+import { fetchStudentsAsync } from '../students/student.saga';
+import { fetchProjectsAsync } from '../projects/project.saga';
 
 export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
   try {
@@ -30,6 +33,8 @@ export function* getSnapshotFromUserAuth(userAuth, additionalDetails) {
       additionalDetails
     );
     yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
+    yield call(fetchStudentsAsync);
+    yield call(fetchProjectsAsync);
   } catch (error) {
     yield put(signInFailed(error));
   }

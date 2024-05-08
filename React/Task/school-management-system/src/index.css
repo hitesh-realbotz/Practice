@@ -28,3 +28,7 @@ code {
   z-index: 1;
 
 }
+
+form{
+  width: 40vw;
+}

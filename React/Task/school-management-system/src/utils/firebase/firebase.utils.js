@@ -136,9 +136,9 @@ export const updateCollectionAndDocuments = async (
   });
   
   if (objectsToUpdate.length) {
-    console.log('In Length FireBaseUP');
+    console.log('In Length FireBaseUP', objectsToUpdate);
     objectsToUpdate.forEach((object) => {
-      const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER) ? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : collectionKey);
+      const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER) ? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : `${CONSTANTS.PROJECT_REMOTE_FOLDER}-${object.email}`);
       batch.set(docRef, object);
     });
   }

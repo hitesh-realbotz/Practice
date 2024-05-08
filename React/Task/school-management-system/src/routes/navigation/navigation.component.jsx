@@ -16,12 +16,12 @@ import {
     LogoContainer,
     HomeContainer,
     SideBarContainer,
-    AppComponent,
     Title
 } from './navigation.styles';
 import SideBar from '../../components/sidebar/sidebar.component';
-import { getStoredRoute, setStoredRoute } from '../../utils/navigation/navigation.utils';
+import { setStoredRoute } from '../../utils/navigation/navigation.utils';
 import { CONSTANTS } from '../../constants/constants';
+import Spinner from '../../components/spinner/spinner.component';
 
 
 const Navigation = () => {
@@ -73,6 +73,7 @@ const Navigation = () => {
             </NavigationContainer>
 
             {
+                isLoading ? <Spinner /> : 
                 (currentUser
                     ? (<HomeContainer>
                         <SideBarContainer>

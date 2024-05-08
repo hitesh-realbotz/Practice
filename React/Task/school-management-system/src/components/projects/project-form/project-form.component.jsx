@@ -129,8 +129,8 @@ const ProjectForm = (props) => {
 
         try {
             const actionToBe = (action == CONSTANTS.ADD_ACTION)
-                ? addProjectStart(projects, formFields, flattenedStudents)
-                : updateProjectStart(projects, formFields, data, flattenedStudents);
+                ? addProjectStart(projects, getFormDataWithoutoptions(), flattenedStudents)
+                : updateProjectStart(projects, getFormDataWithoutoptions(), data, flattenedStudents);
             if (!actionToBe.conflicts) {
                 dispatch(actionToBe);
                 resetFormFields();
@@ -159,12 +159,12 @@ const ProjectForm = (props) => {
             email: email,
         };
         return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? formFieldsWithoutEndDate : formFields ;
-        // if(status !== CONSTANTS.PROJECT_COMPLETE_STATUS ){
-        //     const { endDate, ...formFieldsWithoutEndDate } = formFields;
-        //     return formFieldsWithoutEndDate;
-        // }
-        //  return formFields;
     }
+    const getFormDataWithoutoptions = () => {
+            const { emailOptions, nameOptions, ...formFieldsWithoutOptions } = formFields;
+            return formFieldsWithoutOptions;  
+    }
+
     const getDefaultErrorMessages = () => {
 
         console.log(status);

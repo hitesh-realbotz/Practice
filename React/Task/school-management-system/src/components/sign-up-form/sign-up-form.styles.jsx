@@ -1,7 +1,9 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 
-export const SignUpContainer = styled.div`
+export const SignUpContainer = styled.div.attrs(() => ({
+  className: 'col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12 col-xs-12'
+}))`
   display: flex;
   flex-direction: column;
   width: 100vw;
@@ -11,10 +13,13 @@ export const SignUpContainer = styled.div`
   align-items: center;
 `;
 
-export const ButtonsContainer = styled.div`
+export const ButtonsContainer = styled.div.attrs(() => ({
+  className: 'col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12 col-xs-12'
+}))`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   margin-bottom: 5px;
+
 `;
 
 export const NavLink = styled(Link)`
@@ -24,8 +29,11 @@ export const NavLink = styled(Link)`
   margin: 10px 0px;
 `;
 
-export const RowContainer = styled.div`
+export const RowContainer = styled.div.attrs(() => ({
+  className: 'col-12 col-lg-12 col-xl-12 col-md-12 col-sm-12 col-xs-12'
+}))`
   display: flex;
-  justify-content: space-between;
-  margin: 20px;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0px;
 `;

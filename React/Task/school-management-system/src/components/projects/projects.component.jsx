@@ -11,6 +11,7 @@ import ConfirmModal from "../modal/confirm-modal.component";
 import TableComponent from "../table/table.component";
 import { deleteProjectStart, fetchProjectsStart } from "../../store/projects/project.action";
 import Spinner from "../spinner/spinner.component";
+import Sort from "../sort/sort.component";
 
 const defaultModalProps = {
     action: CONSTANTS.ADD_ACTION,
@@ -25,9 +26,9 @@ const Projects = () => {
     const currentUser = useSelector(selectCurrentUser);
     const isLoading = useSelector(selectIsLoading);
 
-    // useEffect(() => {
-    //     dispatch(fetchProjectsStart());
-    // }, []);
+    useEffect(() => {
+        let a = currentUser ? dispatch(fetchProjectsStart()) : '';
+    }, []);
 
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
@@ -60,8 +61,6 @@ const Projects = () => {
         updatedModelProps.data = project;
         updatedModelProps.show = true;
         setModalProps(updatedModelProps);
-        // setSelectedStudent(student);
-        // setModalShow(true);
     }
 
     const handleDeleteProject = (project) => {
@@ -72,13 +71,37 @@ const Projects = () => {
         setModalProps(updatedModelProps);
     }
 
-    const flattenedStudents = students.flatMap(({ standard, divisions }) => {
-        return divisions.flatMap(({ division, students }) => {
-            return students.map(({ dob, email, name, rollNo, subject }) => {
-                return { dob, email, name, rollNo, subject, standard, division };
-            });
-        });
-    });
+    const defaultSortFields = {
+        sortBy: CONSTANTS.SORT_BY_TITLE,
+        sortOrder: CONSTANTS.SORT_ORDER_ASC,
+        sortOptions: [
+            { value: CONSTANTS.SORT_BY_TITLE, label: CONSTANTS.SORT_BY_TITLE_LABEL },
+            { value: CONSTANTS.SORT_BY_STATUS, label: CONSTANTS.SORT_BY_STATUS_LABEL },
+            { value: CONSTANTS.SORT_BY_NAME, label: CONSTANTS.SORT_BY_NAME_LABEL },
+            { value: CONSTANTS.SORT_BY_START_DATE, label: CONSTANTS.SORT_BY_START_DATE_LABEL },
+            { value: CONSTANTS.SORT_BY_END_DATE, label: CONSTANTS.SORT_BY_END_DATE_LABEL },
+        ],
+        sortOrderOptions: [
+            { value: CONSTANTS.SORT_ORDER_ASC, label: CONSTANTS.SORT_ORDER_ASC },
+            { value: CONSTANTS.SORT_ORDER_DESC, label: CONSTANTS.SORT_ORDER_DESC },
+        ]
+    }
+    const [sortFields, setSortFields] = useState(defaultSortFields);
+    const { sortBy, sortOrder, sortOptions, sortOrderOptions } = sortFields;
+
+    const handleChangeSelect = (event, name) => {
+        const { value } = event.target;
+        console.log('CHANGE ', name, value);
+        setSortFields({ ...sortFields, [name]: value });
+    };
+    const onHandleBlurSelect = (event, name) => {
+        const { value } = event.target;
+        if (value.length && value !== sortFields[name]) {
+            handleChangeSelect(event, name);
+            return;
+        }
+        return;
+    };
 
 
     return (
@@ -89,27 +112,53 @@ const Projects = () => {
                 </>
                 :
                 <ProjectsTab>
-                    <ButtonsContainer>
-                        <Button buttonType={BUTTON_TYPE_CLASSES.google} type='button' onClick={handleAddProjectFormModal}>Add Project</Button>
-                    </ButtonsContainer>
-                    {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
-                    {
-                        modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
-                    }
-
-                    <div>
+                    <>
                         {
-                            !!projects && !!projects.length ?
-                                <TableComponent
-                                    tableFor={CONSTANTS.FOR_PROJECT}
-                                    tableData={projects}
-                                    handleEdit={(project) => handleEditProject(project)}
-                                    handleDelete={(project) => handleDeleteProject(project)} />
-
-                                : <p>No projects data available.</p>
+                            modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />
                         }
 
-                    </div>
+                        {
+                            !!projects && !!projects.length
+                                ?
+                                <>
+                                    <Sort
+                                        sortOptions={sortOptions}
+                                        sortOrderOptions={sortOrderOptions}
+                                        sortBy={sortBy}
+                                        sortOrder={sortOrder}
+                                        onhandleChange={(event, name) => handleChangeSelect(event, name, CONSTANTS.STANDARD_ERROR_TAG)}
+                                        onhandleBlur={(event, name) => onHandleBlurSelect(event, name, CONSTANTS.STANDARD_ERROR_TAG)}
+                                        handleAdd={handleAddProjectFormModal}
+                                        handleReset={() => setSortFields(defaultSortFields)}
+                                        sortFor={CONSTANTS.FOR_PROJECT}>
+
+                                    </Sort>
+                                    {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
+
+                                    <div>
+                                        {
+                                            !!projects && !!projects.length ?
+                                                <TableComponent
+                                                    tableFor={CONSTANTS.FOR_PROJECT}
+                                                    tableData={projects}
+                                                    handleEdit={(project) => handleEditProject(project)}
+                                                    handleDelete={(project) => handleDeleteProject(project)}
+                                                    sortByProp={sortBy}
+                                                    sortOrderProp={sortOrder} />
+
+                                                : <p>No projects data available.</p>
+                                        }
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    <ButtonsContainer>
+                                        <p>No projects data available.</p>
+                                        <Button buttonType={BUTTON_TYPE_CLASSES.google} type='button' onClick={handleAddProjectFormModal}>Add Project</Button>
+                                    </ButtonsContainer>
+                                </>
+                        }
+                    </>
                 </ProjectsTab>
         }
         </>
