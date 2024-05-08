@@ -19,7 +19,6 @@ export function* fetchProjectsAsync() {
 
 export function* addProjectsAsync(action) {
   const newProjects = action.payload;
-  console.log('ProjSAGE ', newProjects);
   try {   
     const projectsArray = yield call(addCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(addProjectsSuccess(newProjects));
@@ -50,8 +49,7 @@ export function* deleteProjectsAsync(action) {
   try {   
     const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(deleteProjectsSuccess(newProjects));
-    toast.warn('Project deleted successfully');
-
+    toast.success('Project deleted successfully');
   } catch (error) {
     yield put(deleteProjectsFailed(error));
     toast.error('Error occured while deletion of Project!');

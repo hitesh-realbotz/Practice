@@ -1,17 +1,16 @@
 import { NavLink, SideBarContent, SideBarLink } from "./sidebar.styles";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getStoredRoute } from "../../utils/navigation/navigation.utils";
 import { CONSTANTS } from "../../constants/constants";
 
 const SideBar = () => {
     
     let currentTab = getStoredRoute();
-    const [tab, setTab] = useState((currentTab === CONSTANTS.HOME_ROUTE_PATH || currentTab === CONSTANTS.SIGN_UP_ROUTE_PATH) ? CONSTANTS.STUDENTS_ROUTE_PATH : currentTab);
-
-    // useEffect(() => {
-    //     console.log('SIDEBAR useEffect', getStoredRoute());
-    //     setTab(getStoredRoute());
-    // }, []);
+    const [tab, setTab] = useState((currentTab === CONSTANTS.HOME_ROUTE_PATH || currentTab === CONSTANTS.SIGN_UP_ROUTE_PATH) ? CONSTANTS.DASHBOARD_ROUTE_PATH : currentTab);
+   
+    useEffect(() => {
+        setTab(window.location.pathname);
+    }, [window.location.pathname]);
 
     const handleTabSelection = (tab) => {
         setTab(tab);

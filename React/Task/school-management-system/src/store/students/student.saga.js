@@ -1,6 +1,6 @@
 import { takeLatest, all, call, put } from 'redux-saga/effects';
 
-import { getStudentsAndDocuments, addCollectionAndDocuments, updateCollectionAndDocuments  } from '../../utils/firebase/firebase.utils';
+import { getStudentsAndDocuments, addCollectionAndDocuments, updateCollectionAndDocuments } from '../../utils/firebase/firebase.utils';
 
 import {
   fetchStudentsSuccess,
@@ -11,7 +11,7 @@ import {
   addStudentsFailed,
   deleteStudentsSuccess,
   deleteStudentsFailed
-  
+
 } from './student.action';
 // import {showToast} from '../toasts/toast.action';
 
@@ -32,7 +32,7 @@ export function* fetchStudentsAsync() {
 
 export function* addStudentsAsync(action) {
   const newStudents = action.payload;
-  try {   
+  try {
     const studentsArray = yield call(addCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
     yield put(addStudentsSuccess(newStudents));
     toast.success('Student added successfully!');
@@ -43,18 +43,19 @@ export function* addStudentsAsync(action) {
 }
 
 export function* updateStudentsAsync(action) {
-  const newStudents = action.payload.projects ? action.payload.student : action.payload;
-  const newProjects = action.payload.projects ? action.payload.projects : null ;
-  console.log('STUD SAGA',action.payload);
-  console.log('STUD SAGA',newProjects);
-  try {  
+  const isStudentWithProject = !!action.payload.projects;
+  const newStudents = isStudentWithProject ? action.payload.student : action.payload;
+  const newProjects = isStudentWithProject ? action.payload.projects : null;
+  try {
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
-    const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(updateStudentsSuccess(newStudents));
-    yield put(updateProjectsSuccess(newProjects));
+    if (isStudentWithProject) {
+      const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
+      yield put(updateProjectsSuccess(newProjects));
+    }
     // yield put(showToast('Student updated successfully!'));
-    toast.success('Student updated successfully!');
-    
+    toast.success(isStudentWithProject ? 'Student & Project updated successfully!' : 'Student updated successfully!');
+
   } catch (error) {
     yield put(updateStudentsFailed(error));
     toast.error('Error occured while updating Student!');
@@ -65,20 +66,21 @@ export function* updateStudentsAsync(action) {
 
 export function* deleteStudentsAsync(action) {
   // const newStudents = action.payload;
-  const newStudents = action.payload.projects ? action.payload.student : action.payload;
-  const newProjects = action.payload.projects ? action.payload.projects : null ;
-  console.log('STUD SAGA',action.payload);
-  console.log('STUD SAGA',newProjects);
-  try {   
+  const isStudentWithProject = !!action.payload.projects;
+  const newStudents = isStudentWithProject ? action.payload.student : action.payload;
+  const newProjects = isStudentWithProject ? action.payload.projects : null;
+  try {
     const studentsArray = yield call(updateCollectionAndDocuments, CONSTANTS.STUDENT_REMOTE_FOLDER, newStudents);
-    const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
     yield put(deleteStudentsSuccess(newStudents));
-    yield put(deleteProjectsSuccess(newProjects));
-    toast.warn('Student deleted successfully');
+    if (isStudentWithProject) {
+      const projectsArray = yield call(updateCollectionAndDocuments, CONSTANTS.PROJECT_REMOTE_FOLDER, newProjects);
+      yield put(deleteProjectsSuccess(newProjects));
+    }
+    toast.success(isStudentWithProject ? 'Student & Project deleted successfully' : 'Student deleted successfully');
   } catch (error) {
     yield put(deleteStudentsFailed(error));
     toast.error('Error occured while deletion of Student!');
-    }
+  }
 }
 
 export function* onFetchStudents() {

@@ -36,7 +36,7 @@ const SignInForm = () => {
 
   useEffect(() => {
     if (isValidUser) {
-      navigate(CONSTANTS.STUDENTS_ROUTE_PATH);
+      navigate(CONSTANTS.DASHBOARD_ROUTE_PATH);
     }
   }, [isValidUser]);
 
@@ -101,8 +101,7 @@ const SignInForm = () => {
           </>
           :
           <SignInContainer>
-            <h2>Already have an account?</h2>
-            <span>Sign in with your email and password</span>
+            <h2>Sign-In</h2>
             <form onSubmit={handleSubmit}>
               <RowContainer>
                 <FormInput

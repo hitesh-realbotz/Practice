@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { CONSTANTS } from "../../constants/constants";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import { Actions, Table } from "./table.styles";
@@ -5,7 +6,31 @@ import { Actions, Table } from "./table.styles";
 const TableComponent = (props) => {
 
     const { tableData, handleEdit, handleDelete, tableFor } = props;
-    
+    const [sortedData, setSortedData] = useState([]);
+
+    const getSortedData = (sortBy) => tableData.slice().sort((a, b) => {
+        // Convert field values to lowercase for case-insensitive sorting
+        const fieldA = a[sortBy].toLowerCase();
+        const fieldB = b[sortBy].toLowerCase();
+        // Compare field values
+        if (fieldA > fieldB) return -1;
+        if (fieldA < fieldB) return 1;
+        return 0;
+    });
+
+    useEffect(() => {
+        setSortedData(getSortedData('division')); 
+    }, [tableData]);
+
+
+
+    console.log(sortedData);
+
+    const handleSort = (field) => {
+        const sort = getSortedData(field);
+        setSortedData(sort);
+    }
+
     const onHandleEditStudent = (student) => {
         handleEdit(student);
     }
@@ -22,27 +47,23 @@ const TableComponent = (props) => {
                     {
                         tableFor === CONSTANTS.FOR_STUDENT
                             ? <>
-                                <th>Standard</th>
-                                <th>Division</th>
+                                <th onClick={() => handleSort('standard')}>Standard</th>
+                                <th onClick={() => handleSort('division')}>Division</th>
                                 <th>Roll No</th>
                                 <th>Name</th>
                                 <th>Email</th>
-                                <th>Date of Birth</th>
+                                <th onClick={() => handleSort('dob')}>Date of Birth</th>
                                 <th>Subject</th>
                             </>
                             : <>
                                 <th>Title</th>
                                 <th>Discription</th>
                                 <th>Status</th>
-
                                 <th>Start Date</th>
                                 <th>End Date</th>
                                 <th>Student Name</th>
-                                
                             </>
-
                     }
-
                     <th>Action</th>
                 </tr>
             </thead>
@@ -50,8 +71,8 @@ const TableComponent = (props) => {
                 {
                     tableFor === CONSTANTS.FOR_STUDENT
                         ?
-                        tableData.map((student, index) => (
-                            <tr key={index}>
+                        sortedData.map((student, index) => (
+                            <tr key={index} >
                                 <td>{index + 1}</td>
                                 <td>{student.standard}</td>
                                 <td>{student.division}</td>
@@ -69,7 +90,7 @@ const TableComponent = (props) => {
                             </tr>
                         ))
 
-                        : 
+                        :
                         tableData.map((project, index) => (
                             <tr key={index}>
                                 <td>{index + 1}</td>
@@ -78,7 +99,7 @@ const TableComponent = (props) => {
                                 <td>{project.status}</td>
                                 <td>{project.startDate}</td>
                                 <td>{project.endDate}</td>
-                                <td>{project.name}</td>                                
+                                <td>{project.name}</td>
                                 <td>
                                     <Actions>
                                         <Button onClick={() => onHandleEditStudent(project)}>Edit</Button>

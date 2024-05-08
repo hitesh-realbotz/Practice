@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectIsLoading, selectStudents } from "../../store/students/student.selector";
 import ConfirmModal from "../modal/confirm-modal.component";
 import { deleteStudentStart, fetchStudentsStart } from "../../store/students/student.action";
-import { StudentsTab } from "./students.styles";
+import { ButtonsContainer, StudentsTab } from "./students.styles";
 import TableComponent from "../table/table.component";
 import Spinner from "../spinner/spinner.component";
 import { selectProjects } from "../../store/projects/project.selector";
@@ -22,16 +22,16 @@ const defaultModalProps = {
     data: {}
 }
 const Students = () => {
-    
+
     const dispatch = useDispatch();
     const isLoading = useSelector(selectIsLoading);
     const projects = useSelector(selectProjects);
     const [modalProps, setModalProps] = useState(defaultModalProps);
     const students = useSelector(selectStudents);
 
-    useEffect(() => {
-        dispatch(fetchStudentsStart());
-    }, []);
+    // useEffect(() => {
+    //     dispatch(fetchStudentsStart());
+    // }, []);
 
     const handleAddStudentFormModal = () => {
         const updatedModelProps = { ...modalProps };
@@ -45,7 +45,7 @@ const Students = () => {
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.EDIT_ACTION;
         // updatedModelProps.data = student;
-        updatedModelProps.data = {student: student, projects: projects};
+        updatedModelProps.data = { student: student, projects: projects };
         updatedModelProps.show = true;
         setModalProps(updatedModelProps);
         // setSelectedStudent(student);
@@ -59,13 +59,13 @@ const Students = () => {
     const getProjectWithEmail = (email) => {
         return projects.filter(p => p.email === email);
     }
-    
+
 
     const handleDeleteStudent = (student) => {
         const project = getProjectWithEmail(student.email);
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.DELETE_ACTION;
-        updatedModelProps.data = {student: student, projects: projects, project: getProjectWithEmail(student.email)};
+        updatedModelProps.data = { student: student, projects: projects, project: getProjectWithEmail(student.email) };
         updatedModelProps.show = true;
         setModalProps(updatedModelProps);
     }
@@ -73,7 +73,7 @@ const Students = () => {
     const handleConfirm = () => {
         try {
             dispatch(deleteStudentStart(students, modalProps.data));
-            
+
         } catch (error) {
             console.log('Student Deletion encountered an error', error);
         }
@@ -97,7 +97,10 @@ const Students = () => {
                 </>
                 :
                 <StudentsTab>
-                    <Button type='button' onClick={handleAddStudentFormModal}>Add Student</Button>
+                    <ButtonsContainer>
+                        <Button buttonType={BUTTON_TYPE_CLASSES.google} type='button' onClick={handleAddStudentFormModal}>Add Student</Button>
+                    </ButtonsContainer>
+
                     {/* <FormModal action={CONSTANTS.ADD_ACTION} show={modalShow} form={CONSTANTS.FOR_STUDENT} onHide={() => setModalShow(false)} /> */}
                     {
                         modalProps.action === CONSTANTS.DELETE_ACTION ? <ConfirmModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} onConfirm={handleConfirm} /> : <FormModal action={modalProps.action} show={modalProps.show} form={modalProps.form} data={modalProps.data} onHide={handleHideModal} />

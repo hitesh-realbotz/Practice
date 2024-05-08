@@ -25,6 +25,7 @@ export const Input = styled.textarea.attrs(() => ({
   width: 100%;
   border-radius: 5px;
   border: 1px solid ${subColor};
+  background-color: rgb(225 230 246);
 `;
 
 export const ErrorMessage = styled.span`

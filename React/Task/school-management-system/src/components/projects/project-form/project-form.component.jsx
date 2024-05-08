@@ -53,6 +53,8 @@ const ProjectForm = (props) => {
             });
         });
     });
+
+
     const getEmails = (studentEmail) => {
         return [...studentEmail, ...[...new Set(flattenedStudents.map(student => student.email))].map(email => (getSelectValueAndLabel(email)))];
     }
@@ -66,7 +68,6 @@ const ProjectForm = (props) => {
         }
     }
     const isStudent = action === CONSTANTS.ADD_ACTION ? true : isStudentWithEmailAndName(flattenedStudents, data.email, data.name);
-
     let emailOpt = getEmails(isStudent ? [] : [getSelectValueAndLabel(data.email)]);
     let nameOpt = getNames(isStudent ? [] : [getSelectValueAndLabel(data.name)]);
 
@@ -82,17 +83,19 @@ const ProjectForm = (props) => {
     const { title, description, startDate, endDate, status, name, email, emailOptions, nameOptions } = formFields;
 
     const getValidEmailMessage = (emailToBeChecked) => {
-        if (emailToBeChecked === data.email)
+        if (emailToBeChecked === data.email || !!emailToBeChecked)
             return 'Student not found!';
         else return '';
     }
     const getValidNameMessage = (nameToBeChecked) => {
-        if (nameToBeChecked === data.name)
+        if (nameToBeChecked === data.name || !!nameToBeChecked)
             return 'Student not found!';
         else return '';
     }
 
-    const [errorMessages, setErrorMessages] = useState(isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(email), nameError: getValidNameMessage(name) });
+    const [errorMessages, setErrorMessages] = useState(isStudent
+        ? (flattenedStudents.length ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(), nameError: getValidNameMessage() })
+        : ({ ...defaultErrorMessages, emailError: getValidEmailMessage(email), nameError: getValidNameMessage(name) }));
 
     const { titleError, descriptionError, startDateError, endDateError, statusError, nameError, emailError } = errorMessages;
 
@@ -105,7 +108,9 @@ const ProjectForm = (props) => {
 
 
     const resetFormFields = () => {
-        setErrorMessages(isStudent ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(data.email), nameError: getValidNameMessage(data.name) });
+        setErrorMessages(isStudent
+            ? (!!flattenedStudents.length ? defaultErrorMessages : { ...defaultErrorMessages, emailError: getValidEmailMessage(), nameError: getValidNameMessage() })
+            : { ...defaultErrorMessages, emailError: getValidEmailMessage(data.email), nameError: getValidNameMessage(data.name) });
         setFormFields(defaultFormFields);
     };
 
@@ -114,8 +119,9 @@ const ProjectForm = (props) => {
         event.preventDefault();
 
         //Updating Error messages from FormComponent on FormSubmission
-        const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
+        const validationResult = validateForm(Object.keys(getFormData()), Object.values(getFormData()), Object.keys(getDefaultErrorMessages()));
 
+        console.log(validationResult, action);
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
             return;
@@ -123,8 +129,8 @@ const ProjectForm = (props) => {
 
         try {
             const actionToBe = (action == CONSTANTS.ADD_ACTION)
-                ? addProjectStart(projects, getFormData(), flattenedStudents)
-                : updateProjectStart(projects, getFormData(), data, flattenedStudents);
+                ? addProjectStart(projects, formFields, flattenedStudents)
+                : updateProjectStart(projects, formFields, data, flattenedStudents);
             if (!actionToBe.conflicts) {
                 dispatch(actionToBe);
                 resetFormFields();
@@ -143,15 +149,39 @@ const ProjectForm = (props) => {
     };
 
     const getFormData = () => {
-        return {
+
+        const formFieldsWithoutEndDate =  {
             title: title,
             description: description,
             startDate: startDate,
-            endDate: endDate,
             status: status,
             name: name,
             email: email,
         };
+        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? formFieldsWithoutEndDate : formFields ;
+        // if(status !== CONSTANTS.PROJECT_COMPLETE_STATUS ){
+        //     const { endDate, ...formFieldsWithoutEndDate } = formFields;
+        //     return formFieldsWithoutEndDate;
+        // }
+        //  return formFields;
+    }
+    const getDefaultErrorMessages = () => {
+
+        console.log(status);
+        const errorMessagesWithoutEndDate = {
+            titleError: titleError,
+            descriptionError: descriptionError,
+            startDateError: startDateError,
+            statusError: statusError,
+            nameError: nameError,
+            emailError: emailError,
+        };
+        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? errorMessagesWithoutEndDate : defaultErrorMessages ;
+    //    if(status !== CONSTANTS.PROJECT_COMPLETE_STATUS ){
+    //        const { endDateError, ...errorMessagesWithoutEndDate } = defaultErrorMessages;
+    //        return errorMessagesWithoutEndDate;
+    //    }
+    //     return defaultErrorMessages;
     }
 
     //Updating Error messages from FormComponent
@@ -190,11 +220,11 @@ const ProjectForm = (props) => {
             nameOpt = getNamesForSelectedEmail(value);
             setFormFields({ ...formFields, [name]: value, 'name': nameOpt[0].value, 'nameOptions': nameOpt });
             const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
-            setErrorMessages({ ...errors, emailError: getValidEmailMessage(value), nameError: getValidNameMessage(nameOpt[0].value) });
+            setErrorMessages(isStudent ? errors : { ...errors, emailError: getValidEmailMessage(value), nameError: getValidNameMessage(nameOpt[0].value) });
         } else if (name === 'name') {
             setFormFields({ ...formFields, [name]: value });
             const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
-            setErrorMessages({ ...errors, nameError: getValidNameMessage(value) });
+            setErrorMessages(isStudent ? errors : { ...errors, nameError: getValidNameMessage(value) });
         }
         else {
             setFormFields({ ...formFields, [name]: value });
@@ -242,29 +272,6 @@ const ProjectForm = (props) => {
                         value={description}
                     />
                 </RowContainer>
-
-                <RowContainer>
-                    <FormInputDate
-                        label='Start Date'
-                        type='text'
-                        onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.START_DATE_ERROR_TAG)}
-                        errorM={startDateError}
-                        name='startDate'
-                        value={startDate}
-                    />
-                </RowContainer>
-                <RowContainer>
-                    <FormInputDate
-                        label='End Date'
-                        type='text'
-                        onChange={handleChange}
-                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.END_DATE_ERROR_TAG)}
-                        errorM={endDateError}
-                        name='endDate'
-                        value={endDate}
-                    />
-                </RowContainer>
                 <RowContainer>
                     <DropdownInput
                         label='Status'
@@ -278,6 +285,34 @@ const ProjectForm = (props) => {
                         name='status'
                     />
                 </RowContainer>
+                <RowContainer>
+                    <FormInputDate
+                        label='Start Date'
+                        type='text'
+                        onChange={handleChange}
+                        handleBlur={(event) => onHandleBlur(event, CONSTANTS.START_DATE_ERROR_TAG)}
+                        errorM={startDateError}
+                        name='startDate'
+                        value={startDate}
+                    />
+                </RowContainer>
+                {
+                    status === CONSTANTS.PROJECT_COMPLETE_STATUS
+                        ? <RowContainer>
+                            <FormInputDate
+                                label='End Date'
+                                type='text'
+                                onChange={handleChange}
+                                handleBlur={(event) => onHandleBlur(event, CONSTANTS.END_DATE_ERROR_TAG)}
+                                errorM={endDateError}
+                                name='endDate'
+                                value={endDate}
+                            />
+                        </RowContainer>
+                        : <></>
+                }
+
+
                 <RowContainer>
                     <DropdownInput
                         label='Student Email'

@@ -49,6 +49,7 @@ export const CONSTANTS = {
 
 
   //ErrorMessage
+  PROJECT_ASSIGNED_TO_EMAIL: 'Project is already assigned!',
   PROJECT_TITLE_ASSIGNED: 'Project Title is already assigned!',
   EMAIL_ASSIGNED: 'Email is already assigned!',
   ROLL_NO_ASSIGNED: 'Roll No. is already assigned!',
