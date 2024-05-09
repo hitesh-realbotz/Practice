@@ -318,6 +318,7 @@ const getStandardIndex = (students, standard) => {
   return students.findIndex(s => s.standard === standard);
 }
 const getDivisionIndex = (students, standardIndex, division) => {
+  console.log("DIV Index ", students, standardIndex, division);
   return students[standardIndex].divisions.findIndex(d => d.division === division);
 }
 const getStudentIndexByEmail = (students, standardIndex, divisionIndex, email) => {

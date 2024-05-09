@@ -13,11 +13,11 @@ const FormModal = (props) => {
 
     return (
       <>          
-        <Modal  {...props} aria-labelledby="contained-modal-title-vcenter" centered>
+        <Modal  {...props} size="lg" aria-labelledby="contained-modal-title-vcenter" centered>
           <Modal.Header closeButton>
             <Modal.Title>{form} - {action} form</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
+          <Modal.Body className='form-body'>
             { (form === CONSTANTS.FOR_STUDENT) 
                           ? <StudentForm onHide={onHide} data={data} action={action} /> 
                           : (form === CONSTANTS.FOR_PROJECT) 

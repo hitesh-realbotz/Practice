@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 export const StudentFormContainer = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
   h2 {
     margin: 10px 0;

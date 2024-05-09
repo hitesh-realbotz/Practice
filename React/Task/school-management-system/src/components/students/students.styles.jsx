@@ -11,6 +11,7 @@ export const StudentsTab = styled.div.attrs(() => ({
 
 export const ButtonsContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  flex-direction: column;
+  align-items: center;
   margin-bottom: 5px;
 `;

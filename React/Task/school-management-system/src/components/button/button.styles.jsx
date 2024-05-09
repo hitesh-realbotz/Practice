@@ -2,59 +2,53 @@ import styled from "styled-components";
 
 export const BaseButton = styled.button`
   min-width: 100px;
-  width: fit-content;
+  width: max-content;
   height: fit-content;
   letter-spacing: 0.5px;
-  // line-height: 50px;
   padding: 5px;
   font-size: 15px;
-  background-color: Green;
-  color: white;
+  background-color: #04b004 ;
+  color: black;
   text-transform: uppercase;
   font-family: "Open Sans Condensed";
   font-weight: bolder;
-  border: none;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0px 5px;
+  border: none;
   border-radius: 5px;
 
   &:hover {
-    background-color: #04b004;
-    color: black;
+    background-color: Green;
+    color: white;
     border: 1px solid black;
   }
 `;
 
 export const GoogleSignInButton = styled(BaseButton)`
-  background-color: #4285f4;
-  color: white;
+  background-color: #357ae8;
 
   &:hover {
-    background-color: #357ae8;
+    background-color:  #4285f4;
     border: none;
   }
 `;
 
 export const InvertedButton = styled(BaseButton)`
-  background-color: grey;
-  color: white;
-  border: 1px solid black;
+  background-color:  #b8b4b4 ;
 
   &:hover {
-    background-color: #b8b4b4;
-    color: black;
+    background-color: grey;
   }
 `;
 export const DeleteButton = styled(BaseButton)`
-  background-color: #e40c0c;
-  color: white;
+  background-color: #f41616 ;
 
   &:hover {
-    background-color: #f41616;
-    color: black;
+    background-color: #e40c0c;
+    
   }
 `;
 

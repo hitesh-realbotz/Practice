@@ -15,6 +15,7 @@ import { CONSTANTS } from './constants/constants';
 import DashBoard from './components/dashboard/dashboard.component';
 import { fetchStudentsStart } from './store/students/student.action';
 import { fetchProjectsStart } from './store/projects/project.action';
+import NotFound from './components/not-found/not-found.component';
 // import { fetchStudentsStart } from './store/students/student.action';
 // import { fetchProjectsStart } from './store/projects/project.action';
 
@@ -29,8 +30,8 @@ function App() {
 
   useEffect(() => { 
     dispatch(checkUserSession());
-    dispatch(fetchStudentsStart());
-    dispatch(fetchProjectsStart());
+    // dispatch(fetchStudentsStart());
+    // dispatch(fetchProjectsStart());
    }, []);
 
   let initialRoute = getStoredRoute();
@@ -62,6 +63,7 @@ function App() {
         <Route path={CONSTANTS.STUDENTS_ROUTE_PATH} element={!!currentUser ? <Students /> : <Navigate to="/" replace />} />
         <Route path={CONSTANTS.PROJECTS_ROUTE_PATH} element={!!currentUser ? <Projects /> : <Navigate to="/" replace />} />
         <Route path={CONSTANTS.DASHBOARD_ROUTE_PATH} element={!!currentUser ? <DashBoard /> : <Navigate to="/" replace />} />
+        <Route path='/*' element={<NotFound />} />
       </Route>
     </Routes>
   );
