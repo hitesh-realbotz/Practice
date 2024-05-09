@@ -109,8 +109,6 @@ export const addCollectionAndDocuments = async (
   const collectionRef = collection(db, collectionKey);
   const batch = writeBatch(db);
 
-  console.log('FireBaseADD', collectionKey, objectsToAdd);
-
   objectsToAdd.forEach((object) => {
     const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER) ? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : `${CONSTANTS.PROJECT_REMOTE_FOLDER}-${object.email}`);
     batch.set(docRef, object);
@@ -136,7 +134,6 @@ export const updateCollectionAndDocuments = async (
   });
   
   if (objectsToUpdate.length) {
-    console.log('In Length FireBaseUP', objectsToUpdate);
     objectsToUpdate.forEach((object) => {
       const docRef = doc(collectionRef, (collectionKey === CONSTANTS.STUDENT_REMOTE_FOLDER) ? `${CONSTANTS.STANDARD_REMOTE_FOLDER}-${object.standard}` : `${CONSTANTS.PROJECT_REMOTE_FOLDER}-${object.email}`);
       batch.set(docRef, object);

@@ -1,9 +1,7 @@
 import { STUDENTS_ACTION_TYPES } from './student.types';
-
 import { createAction } from '../../utils/reducer/reducer.utils';
 import { getConflictMessages } from '../../utils/validation/validation.utils'
 import { CONSTANTS } from '../../constants/constants';
-import { isStudentAvailable, updateProject } from '../projects/project.action';
 
 //Actions
 export const fetchStudentsStart = (newStudents) =>
@@ -89,7 +87,6 @@ const addStudent = (students, studentToAdd) => {
     );
 
   }
-  console.log(students);
   return students;
 };
 
@@ -318,7 +315,6 @@ const getStandardIndex = (students, standard) => {
   return students.findIndex(s => s.standard === standard);
 }
 const getDivisionIndex = (students, standardIndex, division) => {
-  console.log("DIV Index ", students, standardIndex, division);
   return students[standardIndex].divisions.findIndex(d => d.division === division);
 }
 const getStudentIndexByEmail = (students, standardIndex, divisionIndex, email) => {

@@ -70,6 +70,9 @@ export const CONSTANTS = {
   FAV_SUBJECT2: 'Science',
   FAV_SUBJECT3: 'English',
 
+  ICON_COLOR_WHITE: 'white',
+  ICON_COLOR_BLACK: 'black',
+
   SORT_ORDER_ASC: 'Ascending',
   SORT_ORDER_DESC: 'Descending',
 

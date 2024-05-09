@@ -2,7 +2,7 @@ import './App.css';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkUserSession } from './store/user/user.action';
-import { Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 
 import Navigation from './routes/navigation/navigation.component'
 import SignInForm from './components/sign-in-form/sign-in-form.component';
@@ -13,8 +13,6 @@ import { selectCurrentUser } from './store/user/user.selector';
 import { getStoredRoute, setStoredRoute } from './utils/navigation/navigation.utils';
 import { CONSTANTS } from './constants/constants';
 import DashBoard from './components/dashboard/dashboard.component';
-import { fetchStudentsStart } from './store/students/student.action';
-import { fetchProjectsStart } from './store/projects/project.action';
 import NotFound from './components/not-found/not-found.component';
 // import { fetchStudentsStart } from './store/students/student.action';
 // import { fetchProjectsStart } from './store/projects/project.action';
@@ -39,10 +37,9 @@ function App() {
     // Check if the initial route has been set in browser storage
     if (initialRoute) {
       if ( initialRoute !== '/' && !initialRouteChecked) {
-        console.log('APPUSeEff ', window.location.pathname);
         // Navigate to the stored initial route
-        setStoredRoute();
-        navigate(initialRoute, { replace: true });
+        setStoredRoute(window.location.pathname);
+        navigate(getStoredRoute, { replace: true });
         setInitialRouteChecked(true);
       }
       else{

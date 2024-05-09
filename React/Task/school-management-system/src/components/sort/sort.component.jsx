@@ -1,11 +1,10 @@
 import { Button, ButtonsContainer, ResetButton, RowContainer, SortComponent } from "./sort.styles"
 import DropdownInput from '../form-dropdown/form-dropdown.component';
-import { CONSTANTS } from "../../constants/constants";
+import { memo } from "react";
 
-const Sort = (props) => {
+const Sort = memo((props) => {
 
     const { sortOptions, sortOrderOptions, sortBy, sortOrder, onhandleChange, onhandleBlur, handleAdd, handleReset, sortFor } = props;
-    console.log(sortOptions, sortBy);
     const onHandleChange = (event, name) => {
         onhandleChange(event, name);
     }
@@ -43,6 +42,5 @@ const Sort = (props) => {
             </SortComponent>
         </>
     )
-
-}
+});
 export default Sort;

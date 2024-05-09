@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { memo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../../form-input/form-input.component';
@@ -23,7 +23,7 @@ const defaultErrorMessages = {
     rollNoError: '',
 };
 
-const StudentForm = (props) => {
+const StudentForm = memo((props) => {
 
     let defaultFormFields = {
         name: '',
@@ -51,7 +51,6 @@ const StudentForm = (props) => {
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
     const { nameError, emailError, subjectError, standardError, divisionError, rollNoError, dobError } = errorMessages;
 
-    // console.log(students);
     const resetFormFields = () => {
         setErrorMessages(defaultErrorMessages);
         setFormFields(defaultFormFields);
@@ -66,7 +65,6 @@ const StudentForm = (props) => {
         //Updating Error messages from FormComponent on FormSubmission
         // const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
         const validationResult = validateForm(Object.keys(getFormData()), Object.values(getFormData()), Object.keys(defaultErrorMessages));
-        console.log(validationResult);
 
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
@@ -106,7 +104,6 @@ const StudentForm = (props) => {
     //Updating Error messages from FormComponent
     const onHandleBlur = (event, errorTag) => {
         const { name, value } = event.target;
-        console.log('BLUR ', event, name, value);
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
     };
@@ -279,10 +276,10 @@ const StudentForm = (props) => {
                                     errorM={rollNoError}
                                     name='rollNo'
                                     value={rollNo}
-                                // onHandleFormAction={handleFormAction}
-                                // isSubmitted={isSubmitted}
-                                // isReset={!isReset}
-                                readOnly />
+                                    // onHandleFormAction={handleFormAction}
+                                    // isSubmitted={isSubmitted}
+                                    // isReset={!isReset}
+                                    readOnly />
                             </>
                     }
 
@@ -309,6 +306,6 @@ const StudentForm = (props) => {
             </form>
         </StudentFormContainer >
     );
-};
+});
 
 export default StudentForm;

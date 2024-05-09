@@ -10,7 +10,6 @@ import { ButtonsContainer, StudentsTab } from "./students.styles";
 import TableComponent from "../table/table.component";
 import Spinner from "../spinner/spinner.component";
 import { selectProjects } from "../../store/projects/project.selector";
-import { deleteProjectStart } from "../../store/projects/project.action";
 import Sort from "../sort/sort.component";
 
 // import 'react-toastify/dist/ReactToastify.css';
@@ -43,7 +42,6 @@ const Students = () => {
     }
 
     const handleEditStudent = (student) => {
-        const project = getProjectWithEmail(student.email);
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.EDIT_ACTION;
         // updatedModelProps.data = student;
@@ -62,7 +60,6 @@ const Students = () => {
 
 
     const handleDeleteStudent = (student) => {
-        const project = getProjectWithEmail(student.email);
         const updatedModelProps = { ...modalProps };
         updatedModelProps.action = CONSTANTS.DELETE_ACTION;
         updatedModelProps.data = { student: student, projects: projects, project: getProjectWithEmail(student.email) };
@@ -102,7 +99,6 @@ const Students = () => {
 
     const handleChangeSelect = (event, name) => {
         const { value } = event.target;
-        console.log('CHANGE ', name, value);
         setSortFields({ ...sortFields, [name]: value });
     };
     const onHandleBlurSelect = (event, name) => {

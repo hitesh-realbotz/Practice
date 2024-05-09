@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import FormInput from '../../form-input/form-input.component';
@@ -26,7 +26,7 @@ const defaultErrorMessages = {
 
 };
 
-const ProjectForm = (props) => {
+const ProjectForm = memo((props) => {
 
     const { data, action, onHide } = props;
 
@@ -121,7 +121,6 @@ const ProjectForm = (props) => {
         //Updating Error messages from FormComponent on FormSubmission
         const validationResult = validateForm(Object.keys(getFormData()), Object.values(getFormData()), Object.keys(getDefaultErrorMessages()));
 
-        console.log(validationResult, action);
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
             return;
@@ -150,7 +149,7 @@ const ProjectForm = (props) => {
 
     const getFormData = () => {
 
-        const formFieldsWithoutEndDate =  {
+        const formFieldsWithoutEndDate = {
             title: title,
             description: description,
             startDate: startDate,
@@ -158,16 +157,14 @@ const ProjectForm = (props) => {
             name: name,
             email: email,
         };
-        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? formFieldsWithoutEndDate : formFields ;
+        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? formFieldsWithoutEndDate : formFields;
     }
     const getFormDataWithoutoptions = () => {
-            const { emailOptions, nameOptions, ...formFieldsWithoutOptions } = formFields;
-            return formFieldsWithoutOptions;  
+        const { emailOptions, nameOptions, ...formFieldsWithoutOptions } = formFields;
+        return formFieldsWithoutOptions;
     }
 
     const getDefaultErrorMessages = () => {
-
-        console.log(status);
         const errorMessagesWithoutEndDate = {
             titleError: titleError,
             descriptionError: descriptionError,
@@ -176,12 +173,12 @@ const ProjectForm = (props) => {
             nameError: nameError,
             emailError: emailError,
         };
-        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? errorMessagesWithoutEndDate : defaultErrorMessages ;
-    //    if(status !== CONSTANTS.PROJECT_COMPLETE_STATUS ){
-    //        const { endDateError, ...errorMessagesWithoutEndDate } = defaultErrorMessages;
-    //        return errorMessagesWithoutEndDate;
-    //    }
-    //     return defaultErrorMessages;
+        return status !== CONSTANTS.PROJECT_COMPLETE_STATUS ? errorMessagesWithoutEndDate : defaultErrorMessages;
+        //    if(status !== CONSTANTS.PROJECT_COMPLETE_STATUS ){
+        //        const { endDateError, ...errorMessagesWithoutEndDate } = defaultErrorMessages;
+        //        return errorMessagesWithoutEndDate;
+        //    }
+        //     return defaultErrorMessages;
     }
 
     //Updating Error messages from FormComponent
@@ -346,6 +343,6 @@ const ProjectForm = (props) => {
             </form>
         </ProjectFormContainer >
     );
-};
+});
 
 export default ProjectForm;

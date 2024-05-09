@@ -1,10 +1,8 @@
-
 import { createAction } from '../../utils/reducer/reducer.utils';
 import { getConflictMessages } from '../../utils/validation/validation.utils'
 import { CONSTANTS } from '../../constants/constants';
 import { PROJECTS_ACTION_TYPES } from './project.types';
-import { useSelector } from 'react-redux';
-import { selectProjects } from './project.selector';
+
 
 //Actions
 export const fetchProjectsStart = (newProjects) =>

@@ -1,14 +1,11 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
+import { memo } from 'react';
 import Modal from 'react-bootstrap/Modal';
-import SignInForm from '../sign-in-form/sign-in-form.component';
 import SignUpForm from '../sign-up-form/sign-up-form.component';
 import { CONSTANTS } from '../../constants/constants';
 import StudentForm from '../students/student-form/student-form.component';
 import ProjectForm from '../projects/project-form/project-form.component';
 
-const FormModal = (props) => {
+const FormModal = memo((props) => {
   const { show, form, action, data , onHide} = props;
 
     return (
@@ -29,6 +26,6 @@ const FormModal = (props) => {
       </>
     );
 
-}
+});
 
 export default FormModal;

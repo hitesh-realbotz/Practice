@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import { CONSTANTS } from "../../constants/constants";
 import Button, { BUTTON_TYPE_CLASSES } from "../button/button.component";
 import { Actions, Table } from "./table.styles";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowDownAZ, faArrowDownZA, faArrowDown19, faArrowDown91 } from '@fortawesome/free-solid-svg-icons';
-import SortIcon from "../sort-icon/sort-icon.component";
+import Icon from "../icon/icon.component";
 
-const TableComponent = (props) => {
+const TableComponent = memo((props) => {
 
     const sortByOrder = (value1, value2) => {
         const isNumeric = !isNaN(value1) && !isNaN(value2);
         if (isNumeric) {
             return value1 - value2;
         } else {
-
             //isDate
             if (!isNaN(Date.parse(value1)) && !isNaN(Date.parse(value2))) {
                 return Date.parse(value1) - Date.parse(value2);
@@ -38,27 +36,17 @@ const TableComponent = (props) => {
     });
 
     const { tableData, handleEdit, handleDelete, tableFor, sortByProp, sortOrderProp } = props;
-    console.log(sortByProp, sortOrderProp);
     // const [sortedData, setSortedData] = useState(getSortedData(sortByProp, sortOrderProp));
     const [sortedData, setSortedData] = useState([]);
 
 
-
-
-
     useEffect(() => {
-        console.log('USEEFFECT ', sortByProp, sortOrderProp);
         setSortedData(getSortedData(sortByProp, sortOrderProp));
     }, [tableData, sortByProp, sortOrderProp]);
 
 
-
-    console.log(sortedData);
-
     const handleSort = (field, sortOrder) => {
-        const sort = getSortedData(field, sortOrder);
-        console.log(sort);
-        setSortedData(sort);
+        setSortedData(getSortedData(field, sortOrder));
     }
 
     const onHandleEditStudent = (student) => {
@@ -70,15 +58,13 @@ const TableComponent = (props) => {
     }
     const isSortHeading = (heading) => {
         if (heading === sortByProp) {
-            return heading === CONSTANTS.SORT_BY_STANDARD || heading === CONSTANTS.SORT_BY_DOB
-                ? <SortIcon icon={sortOrderProp === CONSTANTS.SORT_ORDER_ASC ? faArrowDown19 : faArrowDown91} />
-                : <SortIcon icon={sortOrderProp === CONSTANTS.SORT_ORDER_ASC ? faArrowDownAZ : faArrowDownZA} />;
+            return (heading === CONSTANTS.SORT_BY_STANDARD || heading === CONSTANTS.SORT_BY_DOB 
+                    || heading === CONSTANTS.SORT_BY_START_DATE || heading === CONSTANTS.SORT_BY_END_DATE)
+                        ? <Icon icon={sortOrderProp === CONSTANTS.SORT_ORDER_ASC ? faArrowDown19 : faArrowDown91} fade={true}/>
+                        : <Icon icon={sortOrderProp === CONSTANTS.SORT_ORDER_ASC ? faArrowDownAZ : faArrowDownZA} fade={true}/>;
         }
-
         return '';
-
     }
-
 
     return (
         <>
@@ -157,5 +143,5 @@ const TableComponent = (props) => {
         </>
 
     );
-}
+});
 export default TableComponent;
