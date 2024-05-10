@@ -35,7 +35,7 @@ export const FieldBox = styled.div.attrs(() => ({
   className: 'col-3 col-lg-3 col-xl-3  col-xxl-3 col-md-5 col-sm-5 col-xs-6'
 }))`
   height: auto;
-  background-color: rgb(240 225 249);
+  background-color: rgb(225 230 246);
   border: 1px solid black;
   border-radius: 10px;
   display: flex;

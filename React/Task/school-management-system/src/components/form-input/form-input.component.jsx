@@ -1,6 +1,6 @@
 import { FormInputLabel, Input, Group, ErrorMessage } from './form-input.styles';
 import { useState, useEffect, memo } from 'react';
-import { validate } from '../../utils/validation/validation.utils'
+// import { validate } from '../../utils/validation/validation.utils'
 
 const FormInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
 // const FormInput = ({ isReset, isSubmitted, onHandleFormAction, errorM, label, ...otherProps }) => {

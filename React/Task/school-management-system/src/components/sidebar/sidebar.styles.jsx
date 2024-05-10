@@ -7,17 +7,18 @@ export const SideBarContent = styled.div.attrs(() => ({
   width: 100%;
   display: flex;
   flex-direction: column;
-  background-color: #adb5bd;
+  // background-color:  #a275e9;
+  background-color: #af8ee4;
 `;
 export const SideBarLink = styled.div`
   width: 100%;
   text-decoration: none;
   color: black;
   font-weight: 500;
-  background-color: ${(props) => (props.isActive ? '#dee2e6' : 'inherit')};
+  background-color: ${(props) => (props.isActive ? '#9458f2' : 'inherit')};
   &:hover {
     cursor: pointer;
-    background-color: #dee2e6;
+    background-color:  #a275e9;
   }
 `;
 
@@ -27,6 +28,7 @@ export const NavLink = styled(Link)`
   color: black;
   text-decoration: none;
   font-weight: 500;
+  font-size: 18px;
 
 
   

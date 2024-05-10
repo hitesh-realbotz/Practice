@@ -32,7 +32,6 @@ const SignInForm = () => {
   const navigate = useNavigate();
   const isValidUser = useSelector(selectIsValidUser);
   const isLoading = useSelector(selectIsLoading);
-  console.log('SIGNIN form LOADINg ', isLoading);
 
   useEffect(() => {
     if (isValidUser) {
@@ -67,7 +66,6 @@ const SignInForm = () => {
     const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
 
     if (!validationResult.isValid) {
-      console.log('post validation ', validationResult.errors);
       setErrorMessages(validationResult.errors);
       return;
     }

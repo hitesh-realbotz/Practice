@@ -9,7 +9,6 @@ const DashBoard = () => {
     const studentsCount = useSelector(selectTotalStudentsCount);
     const projectsState = useSelector(selectProjectsState);
     const isLoading = useSelector(selectIsLoading);
-    console.log('PROJ ', projectsState);
     return (
         <> {
             isLoading ?

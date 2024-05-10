@@ -1,9 +1,9 @@
 
 import { useState, useEffect, memo } from 'react';
-import { validate } from '../../utils/validation/validation.utils'
+// import { validate } from '../../utils/validation/validation.utils'
 import { ErrorMessage, FormInputLabel, Group, Input } from './form-text-area.styles';
 
-const FormTextArea = (({ handleBlur, errorM, label, ...otherProps }) => {
+const FormTextArea = memo(({ handleBlur, errorM, label, ...otherProps }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
   

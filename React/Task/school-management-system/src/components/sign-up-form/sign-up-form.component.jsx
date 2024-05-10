@@ -129,7 +129,7 @@ const SignUpForm = () => {
                 <Button buttonType={BUTTON_TYPE_CLASSES.inverted} type='button' onClick={resetFormFields} >Reset</Button>
               </ButtonsContainer>
               <RowContainer>
-                <div className='sign-up-hint'>Already have account? <NavLink to='/'>SIGN-IN</NavLink> </div>
+                <div className='sign-up-hint'>Already have account? <NavLink to={CONSTANTS.HOME_ROUTE_PATH}>SIGN-IN</NavLink> </div>
               </RowContainer>
             </form>
           </SignUpContainer>

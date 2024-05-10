@@ -3,7 +3,6 @@ import React, { useState, useEffect } from 'react';
 import FormModal from "../modal/form-modal.component";
 import { CONSTANTS } from "../../constants/constants.js";
 import { useDispatch, useSelector } from 'react-redux';
-import { selectStudents } from "../../store/students/student.selector";
 import { selectIsLoading, selectProjects } from "../../store/projects/project.selector";
 import { ButtonsContainer, ProjectsTab } from "./projects.styles";
 import { selectCurrentUser } from "../../store/user/user.selector";
@@ -31,7 +30,6 @@ const Projects = () => {
     }, []);
 
     const [modalProps, setModalProps] = useState(defaultModalProps);
-    const students = useSelector(selectStudents);
     const projects = useSelector(selectProjects);
 
     const handleAddProjectFormModal = () => {
@@ -91,7 +89,6 @@ const Projects = () => {
 
     const handleChangeSelect = (event, name) => {
         const { value } = event.target;
-        console.log('CHANGE ', name, value);
         setSortFields({ ...sortFields, [name]: value });
     };
     const onHandleBlurSelect = (event, name) => {
