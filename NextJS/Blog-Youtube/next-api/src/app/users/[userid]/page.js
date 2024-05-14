@@ -1,10 +1,7 @@
 async function getUser(id){
-    console.log('Fun ',id);
     let data = await fetch(`http://localhost:3000/api/users/${id}`);
     data = await data.json();
-    console.log('Fun ');
-    console.log(data.result);
-    return await data.result[0];
+    return await data.result;
 }
 
 
