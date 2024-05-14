@@ -7,7 +7,15 @@ import other from './other.module.css'
 import outside from '@/style/outside.module.css'
 import style from './style.module.css'
 import { useState } from 'react'
+import Image from 'next/image'
+import Profile from '../../public/vercel.svg'
 
+import { Roboto } from 'next/font/google'
+const roboto = Roboto({
+  weight: '100',
+  subsets: ['latin'],
+  display: 'swap',
+})
 
 export default function Home() {
   const router = useRouter();
@@ -16,7 +24,10 @@ export default function Home() {
   }
 
   const [color, setColor] = useState('red');
-  const {red} = style;
+  const { red } = style;
+  console.log(Profile);
+
+
   return (
     <main>
       <h1>Dynamic Routing</h1>
@@ -29,7 +40,7 @@ export default function Home() {
       <button onClick={() => navigate("/login")} >Go to Login Page</button>
       <button onClick={() => navigate("/about")} >Go to About Page</button>
 
-      <main>
+      {/* <main>
         <h4 className={custom.main} >CSS Modules with Next js</h4>
         <h4 className={other.main} >CSS Modules with Next js</h4>
         <h4 className={outside.main} >Outside css</h4>
@@ -43,8 +54,33 @@ export default function Home() {
         <h4 className={red}>Dummy text</h4>
         <h4 className={red}>Dummy text</h4>
         <button onClick={() => setColor("green")} >Update Color</button>
+      </main> */}
+
+      <main>
+        <h1>Image Optimization</h1>
+        {/* <Image src={Profile} />
+        <img  src={Profile.src}/> */}
+
+        <Image
+          src="https://images.unsplash.com/photo-1560707303-4e980ce876ad?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+          width={200}
+          height={200}
+          alt='image'
+        />
+
+        <img
+          height={200} width={200}  alt='image'
+          src="https://images.unsplash.com/photo-1560707303-4e980ce876ad?q=80&w=1932&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" />
+
       </main>
 
+      <main>
+        {/* <h1 style={{fontFamily:'Roboto', fontWeight: 100}}>Font optimization</h1> */}
+        <h1 className={roboto.className}> Font optimization usinh NextJs Font feature</h1>
+
+        <h1>Static Assets in Next</h1>
+        <img  height={200} width={200}  alt='image' src="/dummy.png" />
+      </main>
 
     </main>
   )
