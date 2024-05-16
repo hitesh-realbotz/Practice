@@ -66,11 +66,10 @@ export default async function BlogPage(props: BlogPageProps) {
 }
 
 ////Manual Handling Contentful API response
-// import { BlogFields } from "@/app/types";
+// import { BlogItem, BlogPageProps } from "@/app/types";
 // import { documentToReactComponents } from "@contentful/rich-text-react-renderer";
 // import { createClient } from "contentful";
-// import { BlogPageProps } from "@/app/types";
-// import { Document, BLOCKS, TopLevelBlock } from '@contentful/rich-text-types';
+// import { getBlogItem } from "@/utils/type-cast.utils";
 
 // if (!process.env.SPACE_ID || !process.env.ACCESS_TOKEN) {
 //     throw new Error('SPACE_ID or ACCESS_TOKEN is not provided');
@@ -92,7 +91,7 @@ export default async function BlogPage(props: BlogPageProps) {
 //     }));
 // }
 
-// const fetchBlogPost = async (slug: string): Promise<BlogFields> => {
+// const fetchBlogPost = async (slug: string): Promise<BlogItem> => {
 //     const queryOptions = {
 //         content_type: "blog",
 //         "fields.slug[match]": slug,
@@ -103,55 +102,16 @@ export default async function BlogPage(props: BlogPageProps) {
 //         throw new Error(`No blog post found with slug '${slug}'.`);
 //     }
 
-//     const blogFieldsString = JSON.stringify(queryResult.items[0].fields);
-//     const parsedblogFields = JSON.parse(blogFieldsString);
-//     const { date, title, content } = parsedblogFields;
-
-//     // Return BlogFields
-//     return {
-//         title: title,
-//         slug: slug,
-//         date: new Date(date),
-//         mainNodeType: content.nodeType,
-//         mainData: content.data,
-//         contents: content.content
-//     };
+//     // Return BlogItem
+//     return getBlogItem(queryResult.items[0].fields);
 // };
 
 // export default async function BlogPage(props: BlogPageProps) {
 //     const { params } = props;
 //     const { slug } = params;
 //     const article = await fetchBlogPost(slug);
-//     const { title, date, mainNodeType, mainData, contents } = article;
-
-//     const contentNodes: TopLevelBlock[] = [];
-
-//     contents.forEach((item: any) => {
-//         switch (item.nodeType) {
-//             case 'paragraph':
-//                 contentNodes.push({
-//                     nodeType: BLOCKS.PARAGRAPH,
-//                     content: item.content,
-//                     data: item.data
-//                 });
-//                 break;
-//             case 'heading-3':
-//                 contentNodes.push({
-//                     nodeType: BLOCKS.HEADING_3,
-//                     content: item.content,
-//                     data: item.data
-//                 });
-//                 break;
-//             // Add cases for other nodeTypes as needed
-//         }
-//     });
-
-//     // Create Document object
-//     const document: Document = {
-//         nodeType: BLOCKS.DOCUMENT,
-//         data: mainData,
-//         content: contentNodes
-//     };
+//     const { title, date, content, thumbnail } = article.fields;
+//     const imageUrl = thumbnail.fields.file.url;
 
 //     return (
 //         <main className="min-h-screen p-24 flex justify-center">
@@ -166,9 +126,15 @@ export default async function BlogPage(props: BlogPageProps) {
 //                         day: "numeric",
 //                     })}
 //                 </p>
+//                 <img
+//                     src={imageUrl}
+//                     alt={title}
+//                     style={{ width: "100%", height: "30%", maxHeight: "30vh" }}
+//                     className="rounded-lg w-full object-cover md:h-full md:w-48"
+//                 />
 //                 <div className="[&>p]:mb-8 [&>h2]:font-extrabold">
 
-//                     {documentToReactComponents(document)}
+//                     {documentToReactComponents(content)}
 //                 </div>
 //             </div>
 //         </main>

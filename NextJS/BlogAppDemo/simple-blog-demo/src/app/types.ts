@@ -9,67 +9,29 @@ export type BlogItem = {
     slug: string;
     date: Date;
     content: Document;
+    thumbnail: ImageData
+  }
+}
+
+
+export type ImageData = {
+  fields: {
+    file: {
+      url: string;
+    }
   }
 }
 
 export type BlogItems = ReadonlyArray<BlogItem>;
 
 export type BlogQueryResult = {
-    items: BlogItems;
+  items: BlogItems;
 }
 
 export type BlogPageProps = {
   params: {
     slug: string;
   };
-};
-
-
-
-//Manual Handling Contentful API response
-export type BlogItemApiResponse = {
-  metadata: {
-    tags: string[];
-  };
-  sys: {
-    space: {
-      sys: any;
-    };
-    id: string;
-    type: string;
-    createdAt: string;
-    updatedAt: string;
-    environment: {
-      sys: any;
-    };
-    revision: number;
-    contentType: {
-      sys: any;
-    };
-    locale: string;
-  };
-  fields: BlogFields
-}
-
-export type BlogFields = {
-  title: string;
-  slug: string;
-  date: Date;
-  mainData: any;
-  mainNodeType: string;
-  contents: ContentArray[];
-};
-
-export type ContentArray = {
-  nodeType: string;
-  data: any;
-  content: ContentField[];
-}
-
-export type ContentField = {
-  nodeType: string;
-  data: any;
-  content: ContentField | ContentField[];
 }
 
 
