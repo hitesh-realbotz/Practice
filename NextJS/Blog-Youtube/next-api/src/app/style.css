@@ -3,8 +3,9 @@
     margin: 10px;
     height: 30px;
     width: 300px;
-    }
-    .btn {
+}
+
+.btn {
     background-color: skyblue;
     color: white;
     border: 0;
@@ -13,8 +14,14 @@
     padding: 10px;
     border-radius: 5px;
     cursor: pointer;
-    }
-    .add-user{
-        margin-top: 100px;
-        text-align: -webkit-center;
-    }
+}
+
+.add-user {
+    margin-top: 100px;
+    text-align: -webkit-center;
+}
+
+.user-item span{
+    display: inline-block;
+    width: 100px;
+}
