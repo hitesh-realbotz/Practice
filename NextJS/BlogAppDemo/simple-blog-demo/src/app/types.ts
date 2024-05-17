@@ -13,7 +13,6 @@ export type BlogItem = {
   }
 }
 
-
 export type ImageData = {
   fields: {
     file: {
@@ -34,5 +33,10 @@ export type BlogPageProps = {
   };
 }
 
+export type AboutContent = {
+  fields: {
+    content: Document;
+  }
+}
 
 
