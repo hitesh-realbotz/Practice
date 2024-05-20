@@ -3,7 +3,8 @@ import '../style.css'
 import DeleteUser from "@/utils/deleteUser";
 
 async function getUsers() {
-    let data = await fetch("http://localhost:3000/api/users");
+    // let data = await fetch("http://localhost:3000/api/users");
+    let data = await fetch("http://localhost:3000/api/users",{cache: "no-cache"}); // To avoid cached data
     return await data.json();
 }
 
