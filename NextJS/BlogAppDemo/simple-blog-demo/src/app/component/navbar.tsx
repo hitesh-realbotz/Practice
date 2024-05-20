@@ -62,7 +62,7 @@ const Navbar = () => {
                         </li>
                         <li>
                             <a
-                                href="#"
+                                href="/about"
                                 className="block py-2 px-3 text-white bg-black hover:text-black hover:bg-blue-200 rounded md:bg-transparent md:text-white md:p-0 md:hover:text-black md:hover:bg-blue-200"
                             >
                                 About
