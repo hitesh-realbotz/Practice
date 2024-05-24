@@ -1,12 +1,12 @@
 "use client"
 import { useState } from "react";
 import { getUpdatedErrorMsg, validateForm } from "@/utils/validation/validation.utils";
-import { loginUser, registerUser } from "../store/userSlice";
+import { updateUser } from "../store/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
-import DropdownInput from "../component/form-input/form-input-dropdown";
-import { S_QUESTION_1, S_QUESTION_2, S_QUESTION_3, S_QUESTION_ERROR_TAG } from "@/config/constants";
-import FormInput from "../component/form-input/form-text-input";
+import DropdownInput from "../component/form-input/dropdown-input";
+import { ANSWER_ERROR_TAG, EMAIL_ERROR_TAG, S_QUESTION_1, S_QUESTION_2, S_QUESTION_3, S_QUESTION_ERROR_TAG } from "@/config/constants";
+import FormInput from "../component/form-input/text-input";
 
 const defaultErrorMessages = {
     emailError: '',
@@ -17,68 +17,58 @@ const defaultErrorMessages = {
 export default function Page() {
     const dispatch = useDispatch();
     const router = useRouter();
-    const userData= useSelector((data)=>data.usersData.userData);
-    // const navigate = () => {
-    //     router.push("/");
-    // }
+    let userData = useSelector((data) => data.usersData.userData);
 
     let defaultFormFields = {
-        email: userData.email,
-        securityQuestion: userData.securityQuestion,
-        answer: userData.answer,
+        email: userData.email || '',
+        securityQuestion: userData.securityQuestion || S_QUESTION_1,
+        answer: userData.answer || '',
     };
 
-    const securityQuestions = [
-        { value:S_QUESTION_1, label: S_QUESTION_1 },
-        { value:S_QUESTION_2, label: S_QUESTION_2 },
-        { value:S_QUESTION_3, label: S_QUESTION_3 },
-    ]
-
-    const [isLoginMode, setIsLoginMode] = useState(true);
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, securityQuestion, answer } = formFields;
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
     const { emailError, securityQuestionError, answerError } = errorMessages;
 
+    //Reset FormFields
     const resetFormFields = () => {
         setErrorMessages(defaultErrorMessages);
         setFormFields(defaultFormFields);
     };
 
+    //handle FormSubmit
     const handleSubmit = async (event) => {
 
-        console.log("Submit ", email, password);
         event.preventDefault();
-
         const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
             return;
         }
-
-
-        const response = isLoginMode
-            ? await dispatch(loginUser({ email, password }))
-            : await dispatch(registerUser({ email, password }));
+        userData = { ...userData, email, securityQuestion, answer };
+        const response = await dispatch(updateUser(userData));
         console.log("From Page ", response);
         if (!!response.payload) {
-            router.push("/profile");
+            router.push("/");
         }
     };
 
+    //handle Change for TextInput
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormFields({ ...formFields, [name]: value });
     };
 
 
-    //Updating Error messages from FormComponent
+    //handle Blur for TextInput
     const onHandleBlur = (event, errorTag) => {
         const { name, value } = event.target;
         const errors = getUpdatedErrorMsg(errorTag, name, value, errorMessages);
         setErrorMessages(errors);
     };
 
+
+    //handle Change for Select
     const handleChangeSelect = (event, name, errorTag) => {
         const { value } = event.target;
         setFormFields({ ...formFields, [name]: value });
@@ -86,13 +76,20 @@ export default function Page() {
         setErrorMessages(errors);
     };
 
+    //handle Blur for Select
     const onHandleBlurSelect = (event, name, errorTag) => {
         const { value } = event.target;
-        if (value.length) {
-            return;
-        }
+        if (value.length) return;
+
         handleChangeSelect(event, name, errorTag);
     };
+
+    //SecurityQuestion options
+    const securityQuestions = [
+        { value: S_QUESTION_1, label: S_QUESTION_1 },
+        { value: S_QUESTION_2, label: S_QUESTION_2 },
+        { value: S_QUESTION_3, label: S_QUESTION_3 },
+    ];
 
     return (
         <>
@@ -109,7 +106,7 @@ export default function Page() {
                                 name='email'
                                 value={email}
                                 onChange={handleChange}
-                                handleBlur={(event) => onHandleBlur(event, 'emailError')}
+                                handleBlur={(event) => onHandleBlur(event, EMAIL_ERROR_TAG)}
                                 errorM={emailError}
                             />
                         </div>
@@ -131,7 +128,7 @@ export default function Page() {
                                 name='answer'
                                 value={answer}
                                 onChange={handleChange}
-                                handleBlur={(event) => onHandleBlur(event, 'answerError')}
+                                handleBlur={(event) => onHandleBlur(event, ANSWER_ERROR_TAG)}
                                 errorM={answerError}
                             />
                         </div>
@@ -146,7 +143,6 @@ export default function Page() {
                     </form>
                 </div>
             </main>
-
         </>
     );
 }

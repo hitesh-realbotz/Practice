@@ -7,16 +7,11 @@ export const validate = (name, value) => {
             return !value.trim() ? 'Email is Required.' : (!validateEmail(value) ? 'Invalid email format' : '');
         case 'password':
             return !value.trim() ? 'Password is Required.' : (value.length < 6 ? 'Password must be min. 6 character!' : '');
-        case 'name':
+        case 'answer':
             return !value.trim() ? 'Name is Required' : '';
-        case 'title':
-            return !value.trim() ? 'Title is Required' : '';
-        case 'description':
-            return !value.trim() ? 'Description is Required' : '';
-        case 'status':
-            return !value.trim() ? 'Status is Required' : '';
-        case 'standard':
-            return !value ? 'Standard must be selected' : '';
+        
+        case 'securityQuestion':
+            return !value ? 'Security Question must be selected' : '';
         case 'division':
             return !value ? 'Division must be selected' : '';
         case 'rollNo':

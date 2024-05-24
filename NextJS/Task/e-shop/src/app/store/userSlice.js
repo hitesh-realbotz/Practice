@@ -1,5 +1,3 @@
-// const {  nanoid, current, createAsyncThunk, createSlice } = require("@reduxjs/toolkit");
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { encode, decode } from 'js-base64';
@@ -7,24 +5,25 @@ import { toast } from "react-toastify";
 
 const initialState = {
     userData: {},
+    isLoggedIn: false,
 }
 
-//call Sign up with email / password
+//Sign up with email & password
 export const registerUser = createAsyncThunk("registerUser", async ({ email, password }) => {
-    console.log("RegAction");
     try {
-        const regUserResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+        const regUserResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_ACCOUNT}:signUp?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
             email: email,
             password: password,
             returnSecureToken: true
         });
 
         const encodedEmail = encode(regUserResponse.data.email);
-        const addUserResponse = await axios.put(`https://e-shop-next-31253-default-rtdb.firebaseio.com/users/${encodedEmail}.json`, {
-            email: email,
+        const addUserResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`, {
+            email: regUserResponse.data.email,
+            password: encode(password),
             localId: regUserResponse.data.localId,
             securityQuestion: '',
-            Answer: ''
+            answer: ''
         });
         return addUserResponse.data;
     } catch (error) {
@@ -32,40 +31,93 @@ export const registerUser = createAsyncThunk("registerUser", async ({ email, pas
         // return error;
     }
 });
+
+//Login with email & password
 export const loginUser = createAsyncThunk("loginUser", async ({ email, password }) => {
-    console.log("LoginAction");
     try {
-        const loginUserResponse = await axios.post(`https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+        const loginUserResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_ACCOUNT}:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
             email: email,
             password: password,
             returnSecureToken: true
         });
 
         const encodedEmail = encode(loginUserResponse.data.email);
-
-        const getUserResponse = await axios.get(`https://e-shop-next-31253-default-rtdb.firebaseio.com/users/${encodedEmail}.json`);        
-        return getUserResponse.data;
+        const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
+        return userResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
-        // return error;
     }
 });
+
+//Update user details
+export const updateUser = createAsyncThunk("updateUser", async (userData) => {
+    try {
+        const encodedEmail = encode(userData.email);
+
+        const userResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`,{...userData});        
+        return userResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
+
+
+//Reset user password
+export const updateUserPassword = createAsyncThunk("updateUserPassword", async (userWithNewPassword) => {
+    try {
+        const {email, password} = userWithNewPassword;
+        const {newPassword, ...userDetails} = userWithNewPassword;
+
+        const loginUserResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_ACCOUNT}:signInWithPassword?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+            email: email,
+            password: decode(password),
+            returnSecureToken: true
+        });
+        const passwordUpdateResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_ACCOUNT}:update?key=${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`, {
+            idToken: loginUserResponse.data.idToken,
+            password: newPassword,
+            returnSecureToken: true,
+        });
+
+        const encodedEmail = encode(email);
+        userDetails.password = encode(newPassword);
+        const userResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`,{...userDetails});        
+        return userResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
+
+//Fetch user details
+export const getUserByEmailId = createAsyncThunk("getUserByEmailId", async ({email}) => {
+    try {
+        const encodedEmail = encode(email);
+        const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
+        return userResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
+
 
 const Slice = createSlice({
     name: "userSlice",
     initialState,
     reducers: {
         setUser: (state, action) => {
-            console.log("SetUser", action.payload);
             state.userData = action.payload;
         },
-
+        logoutUser: (state, action) => {    
+            state.userData = initialState.userData;
+            state.isLoggedIn = initialState.isLoggedIn;
+        },
     },
     extraReducers: (builder) => {
         builder.addCase(registerUser.fulfilled, (state, action) => {
             console.log("reducer", action);
             if (!!action.payload) {
                 state.userData = action.payload;
+                state.isLoggedIn = true;
                 toast.success("Account created successfully!");
             }
         }),
@@ -73,11 +125,21 @@ const Slice = createSlice({
                 console.log("reducer", action);
                 if (!!action.payload) {
                     state.userData = action.payload;
+                    state.isLoggedIn = true;
                     toast.success("Login success!");
                 }      
-            })
-    }
-});
+            }),
+            builder.addCase(updateUser.fulfilled, (state, action) => {
+                console.log("reducer", action);
+                if (!!action.payload) {
+                    state.userData = action.payload;
+                    state.isLoggedIn = true;
+                    toast.success("Profile updated successfully!");
+                }      
+            })            
+        }    
+    })
 
-export const { setUser } = Slice.actions;
+
+export const { setUser, logoutUser } = Slice.actions;
 export default Slice.reducer;
