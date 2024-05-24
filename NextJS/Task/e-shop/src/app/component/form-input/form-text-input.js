@@ -3,8 +3,6 @@ import { useState, useEffect, memo } from 'react';
 const FormInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
 
   const [errorMessage, setErrorMessage] = useState('');
-
-  const isDate = otherProps.type.toLowerCase() === 'date';
   
   //Updating Error messages from FormComponent on Form submission
   useEffect(() => {

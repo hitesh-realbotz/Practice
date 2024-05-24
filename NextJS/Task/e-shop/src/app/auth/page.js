@@ -2,6 +2,9 @@
 import { useState } from "react";
 import FormInput from "../component/form-input/form-text-input";
 import { getUpdatedErrorMsg, validateForm } from "@/utils/validation/validation.utils";
+import { loginUser, registerUser } from "../store/userSlice";
+import { useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
 
 const defaultErrorMessages = {
     emailError: '',
@@ -9,23 +12,18 @@ const defaultErrorMessages = {
 };
 
 export default function Page() {
+    const dispatch = useDispatch();
+    const router = useRouter();
+    // const navigate = () => {
+    //     router.push("/");
+    // }
 
     let defaultFormFields = {
         email: '',
         password: '',
     };
 
-    //   const dispatch = useDispatch();
-    //   const navigate = useNavigate();
-    //   const isValidUser = useSelector(selectIsValidUser);
-    //   const isLoading = useSelector(selectIsLoading);
-
-    //   useEffect(() => {
-    //     if (isValidUser) {
-    //       navigate(CONSTANTS.DASHBOARD_ROUTE_PATH);
-    //     }
-    //   }, [isValidUser]);
-
+    const [isLoginMode, setIsLoginMode] = useState(true);
     const [formFields, setFormFields] = useState(defaultFormFields);
     const { email, password } = formFields;
     const [errorMessages, setErrorMessages] = useState(defaultErrorMessages);
@@ -37,6 +35,7 @@ export default function Page() {
     };
 
     const handleSubmit = async (event) => {
+
         console.log("Submit ", email, password);
         event.preventDefault();
 
@@ -46,15 +45,15 @@ export default function Page() {
             return;
         }
 
-        try {
-            dispatch(signUpStart(email, password));
-        } catch (error) {
-            if (error.code === 'auth/email-already-in-use') {
-                alert('Cannot create user, email already in use');
-            } else {
-                console.log('user creation encountered an error', error);
-            }
+
+        const response = isLoginMode
+            ? await dispatch(loginUser({ email, password }))
+            : await dispatch(registerUser({ email, password }));
+        console.log("From Page ", response);
+        if (!!response.payload) {
+            router.push("/profile");
         }
+
     };
 
     const handleChange = (event) => {
@@ -73,9 +72,11 @@ export default function Page() {
     return (
         <>
             <main className="align-items-center pt-5" >
-                <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle ">
-                    <h1>Sign-Up</h1>
-                    <form onSubmit={handleSubmit}>
+                {/* <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle col-lg-4 col-xl-4 col-xxl-3 col-4 col-md-6 col-sm-12"  > */}
+                <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle" 
+                sx={{ flexGrow: 1, width: { xs: '100%', md: '40%' } }}  >
+                    <h1>{isLoginMode ? 'Login' : 'Sign-Up'}</h1>
+                    <form onSubmit={handleSubmit} >
                         <div className="row ">
                             <FormInput
                                 label='Email'
@@ -98,12 +99,27 @@ export default function Page() {
                                 errorM={passwordError}
                             />
                         </div>
-                        <div className="row d-flex justify-content-center ">
-                            <div className="col-auto">
-                                <button type='submit' class="btn btn-primary">Sign Up</button>
+                        <div className="row d-flex justify-content-center mb-3">
+                            <div className="col-6">
+                                <button type='submit' className="btn btn-primary col-12">{isLoginMode ? 'Login' : 'Sign-Up'}</button>
                             </div>
+                            <div className="col-6">
+                                <button type='button' className="btn btn-secondary col-12" onClick={resetFormFields}>Reset</button>
+                            </div>
+                        </div>
+                        <div className="row d-flex justify-content-center">
                             <div className="col-auto">
-                                <button type='button' class="btn btn-secondary" onClick={resetFormFields}>Reset</button>
+                                {
+                                    isLoginMode ?
+                                        <>
+                                            <strong>No account yet! </strong> <span className="span-as-link" onClick={() => setIsLoginMode(!isLoginMode)}>Sign-Up</span>
+                                        </>
+                                        :
+                                        <>
+                                            <strong>Already have account!</strong> <span className="span-as-link" onClick={() => setIsLoginMode(!isLoginMode)}>Login</span>
+                                        </>
+
+                                }
                             </div>
                         </div>
 

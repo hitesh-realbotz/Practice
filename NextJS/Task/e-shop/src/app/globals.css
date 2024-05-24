@@ -1,5 +1,9 @@
-main{
+main {
     display: flex;
     flex-direction: column;
-    
+
+}
+
+.span-as-link:hover {
+    cursor: pointer;
 }

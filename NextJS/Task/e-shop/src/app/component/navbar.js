@@ -12,17 +12,20 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import ShopIcon from '@mui/icons-material/Shop';
 import { useState } from 'react';
-import { CART, DASHBOARD, LOGIN, ORDERS, PRODUCTS, PROFILE } from '@/config/constants';
+import { CART, DASHBOARD, LOGIN, LOGOUT, ORDERS, PRODUCTS, PROFILE } from '@/config/constants';
 import Link from 'next/link';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../store/userSlice';
 
 const pages = [PRODUCTS, CART, DASHBOARD, LOGIN];
-const settings = [PROFILE, DASHBOARD, CART, ORDERS];
+const settings = [PROFILE, DASHBOARD, CART, ORDERS, LOGOUT];
 
 const Navbar = () => {
 
+    const dispatch = useDispatch();
+    const userData = useSelector((data) => data.usersData.userData);
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -39,6 +42,11 @@ const Navbar = () => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
+    };
+    const handleLogout = (route) => {
+        if (route === LOGOUT) {
+            dispatch(setUser(null));
+        }
     };
 
     return (
@@ -96,9 +104,10 @@ const Navbar = () => {
                             {pages.map((page) => (
                                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                                     <Typography textAlign="center">
-                                        <a href={page === LOGIN ? "/auth" : (page === PRODUCTS ? "/" : page.toLowerCase())}>
+                                        {/* <a href={page === LOGIN ? "/auth" : (page === PRODUCTS ? "/" : page.toLowerCase())}>
                                             {page}
-                                        </a>
+                                        </a> */}
+                                        <Link href={page === LOGIN ? "/auth" : (page === PRODUCTS ? "/" : page.toLowerCase())}>{page}</Link>
                                     </Typography>
                                 </MenuItem>
                             ))}
@@ -125,49 +134,52 @@ const Navbar = () => {
                     </Typography>
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         {pages.map((page) => (
-                            <Button
-                                key={page}
+                            <Link key={page}
+                                className='btn btn-outline-light border-0'
                                 onClick={handleCloseNavMenu}
-                                href={page === LOGIN ? "/auth" : (page === PRODUCTS ? "/" : page.toLowerCase())}
                                 sx={{ my: 2, color: 'white', display: 'block' }}
+                                href={page === LOGIN ? "/auth" : (page === PRODUCTS ? "/" : page.toLowerCase())}
                             >
                                 {page}
-                            </Button>
+                            </Link>
                         ))}
                     </Box>
+                    {
+                        !!userData &&
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title="Open settings">
+                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id="menu-appbar"
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                        <Typography textAlign="center" >
+                                            <Link href={setting === LOGOUT ? "/" : `/${setting.toLowerCase()}`} onClick={() => handleLogout(setting)} >{setting}</Link>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                            </IconButton>
-                        </Tooltip>
-                        <Menu
-                            sx={{ mt: '45px' }}
-                            id="menu-appbar"
-                            anchorEl={anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(anchorElUser)}
-                            onClose={handleCloseUserMenu}
-                        >
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center" >
-                                        <Link href={`/${setting.toLowerCase()}`} >{setting}</Link>
+                                        </Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>
+                    }
 
-                                    </Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
                 </Toolbar>
             </Container>
         </AppBar>
