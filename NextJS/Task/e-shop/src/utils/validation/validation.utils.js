@@ -1,4 +1,5 @@
 import { REGEX_EMAIL } from "@/config/constants";
+import { useSelector } from "react-redux";
 
 //Valiadates individual field
 export const validate = (name, value) => {
@@ -92,4 +93,10 @@ export const getConflictMessages = (conflicts, errorTag, errorMessage) => {
         field: errorTag, message: errorMessage
     });
     return conflicts;
+}
+
+
+export const isAuthenticated = () => {
+    const user = useSelector((data) => data?.usersData?.userData );
+    return true;
 }

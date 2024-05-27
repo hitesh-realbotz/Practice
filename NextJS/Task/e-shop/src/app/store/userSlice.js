@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { encode, decode } from 'js-base64';
+import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
 const initialState = {
@@ -42,12 +43,27 @@ export const loginUser = createAsyncThunk("loginUser", async ({ email, password 
         });
 
         const encodedEmail = encode(loginUserResponse.data.email);
-        const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
+        const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);
+        Cookies.set("authToken",loginUserResponse.data.idToken);
+        Cookies.set("userEmail",loginUserResponse.data.email)        
         return userResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
     }
 });
+// export const loginUserApi = createAsyncThunk("loginUserApi", async ({ email, password }) => {
+//     try {
+//         const loginUserResponse = await axios.post(`http://localhost:3000/api/login`, {
+//             email: email,
+//             password: password,
+//         });
+//         const encodedEmail = encode(loginUserResponse.data.email);
+//         const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
+//         return userResponse.data;
+//     } catch (error) {
+//         toast.error(error.response.data.error.message);
+//     }
+// });
 
 //Update user details
 export const updateUser = createAsyncThunk("updateUser", async (userData) => {
@@ -93,6 +109,7 @@ export const getUserByEmailId = createAsyncThunk("getUserByEmailId", async ({ema
     try {
         const encodedEmail = encode(email);
         const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
+        console.log("UserRes ", email, userResponse);
         return userResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
@@ -106,10 +123,17 @@ const Slice = createSlice({
     reducers: {
         setUser: (state, action) => {
             state.userData = action.payload;
+            if(!!action.payload){
+                state.isLoggedIn = true;
+            }
         },
         logoutUser: (state, action) => {    
             state.userData = initialState.userData;
             state.isLoggedIn = initialState.isLoggedIn;
+            const cookies = Cookies.get();
+            for (const cookie in cookies) {
+                Cookies.remove(cookie);
+            }
         },
     },
     extraReducers: (builder) => {
@@ -118,6 +142,7 @@ const Slice = createSlice({
             if (!!action.payload) {
                 state.userData = action.payload;
                 state.isLoggedIn = true;
+                // cookies().set("authToken", state.userData.email);
                 toast.success("Account created successfully!");
             }
         }),

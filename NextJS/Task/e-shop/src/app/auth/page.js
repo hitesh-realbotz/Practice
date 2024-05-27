@@ -2,7 +2,7 @@
 import { useState } from "react";
 import FormInput from "../component/form-input/text-input";
 import { getUpdatedErrorMsg, validateForm } from "@/utils/validation/validation.utils";
-import { loginUser, registerUser } from "../store/userSlice";
+import { loginUser, loginUserApi, registerUser } from "../store/userSlice";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
