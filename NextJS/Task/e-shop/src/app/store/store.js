@@ -4,6 +4,5 @@ import userReducer from "./userSlice";
 export const store = configureStore({
     reducer:{
         usersData:userReducer,
-        // todosData:todoReducer
     }
 })

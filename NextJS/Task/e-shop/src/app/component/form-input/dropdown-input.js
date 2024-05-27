@@ -27,8 +27,8 @@ const DropdownInput = memo(({ errorM, label, options, handleChange, handleBlur, 
         )
       }
 
-      <select className="form-select" {...otherProps} onChange={onHandleChange} onBlur={onHandleBlur} >
-        <option value="" selected disabled hidden>
+      <select className="form-select" {...otherProps} value={value} onChange={onHandleChange} onBlur={onHandleBlur} >
+        <option value=""  disabled hidden>
           Select
         </option>
         {options.map(option => (

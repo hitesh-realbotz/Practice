@@ -4,6 +4,12 @@ main {
 
 }
 
-.span-as-link:hover {
+.span-as-link {
     cursor: pointer;
+    color: rgb(138, 96, 153);
+}
+
+
+Input{
+    border: 1px solod black;
 }

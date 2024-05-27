@@ -9,7 +9,6 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import ShopIcon from '@mui/icons-material/Shop';
@@ -17,15 +16,19 @@ import { useState } from 'react';
 import { CART, DASHBOARD, LOGIN, LOGOUT, ORDERS, PRODUCTS, PROFILE } from '@/config/constants';
 import Link from 'next/link';
 import { useDispatch, useSelector } from 'react-redux';
-import { setUser } from '../store/userSlice';
+import { logoutUser, setUser } from '../store/userSlice';
+import { useRouter } from 'next/navigation';
 
-const pages = [PRODUCTS, CART, DASHBOARD, LOGIN];
-const settings = [PROFILE, DASHBOARD, CART, ORDERS, LOGOUT];
+
 
 const Navbar = () => {
 
     const dispatch = useDispatch();
-    const userData = useSelector((data) => data.usersData.userData);
+    const userState = useSelector((data) => data.usersData);
+
+    const pages = userState.isLoggedIn ? [PRODUCTS, CART, DASHBOARD] : [PRODUCTS];
+    const settings = [PROFILE, DASHBOARD, CART, ORDERS, LOGOUT];
+
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
 
@@ -43,11 +46,18 @@ const Navbar = () => {
     const handleCloseUserMenu = () => {
         setAnchorElUser(null);
     };
-    const handleLogout = (route) => {
-        if (route === LOGOUT) {
-            dispatch(setUser(null));
+    const handleUserMenuAction = (route) => {
+        console.log("click ", route);
+        if (route === "/") {
+            dispatch(logoutUser());
         }
+        navigate(route);
     };
+
+    const router = useRouter();
+    const navigate = (route) => {
+        router.push(route);
+    }
 
     return (
         <AppBar position="fixed" >
@@ -58,7 +68,7 @@ const Navbar = () => {
                         variant="h6"
                         noWrap
                         component="a"
-                        href="/"
+                        onClick={() => navigate("/")}
                         sx={{
                             mr: 2,
                             display: { xs: 'none', md: 'flex' },
@@ -67,6 +77,7 @@ const Navbar = () => {
                             letterSpacing: '.3rem',
                             color: 'inherit',
                             textDecoration: 'none',
+                            cursor: 'pointer'
                         }}
                     >
                         E-Shop
@@ -145,39 +156,54 @@ const Navbar = () => {
                         ))}
                     </Box>
                     {
-                        !!userData &&
-                        <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title="Open settings">
-                                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                                </IconButton>
-                            </Tooltip>
-                            <Menu
-                                sx={{ mt: '45px' }}
-                                id="menu-appbar"
-                                anchorEl={anchorElUser}
-                                anchorOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                keepMounted
-                                transformOrigin={{
-                                    vertical: 'top',
-                                    horizontal: 'right',
-                                }}
-                                open={Boolean(anchorElUser)}
-                                onClose={handleCloseUserMenu}
-                            >
-                                {settings.map((setting) => (
-                                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center" >
-                                            <Link href={setting === LOGOUT ? "/" : `/${setting.toLowerCase()}`} onClick={() => handleLogout(setting)} >{setting}</Link>
+                        userState.isLoggedIn ?
+                            <>
+                                <Box sx={{ flexGrow: 0 }}>
+                                    <Tooltip title="Open settings">
+                                        <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                                            <Avatar src="" />
+                                        </IconButton>
+                                    </Tooltip>
+                                    <Menu
+                                        sx={{ mt: '45px' }}
+                                        id="menu-appbar"
+                                        anchorEl={anchorElUser}
+                                        anchorOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        keepMounted
+                                        transformOrigin={{
+                                            vertical: 'top',
+                                            horizontal: 'right',
+                                        }}
+                                        open={Boolean(anchorElUser)}
+                                        onClose={handleCloseUserMenu}
+                                    >
+                                        {settings.map((setting) => (
+                                            <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                                                <Typography textAlign="center" component="span" onClick={() => handleUserMenuAction(setting == LOGOUT ? "/" : `/${setting.toLowerCase()}`)} >
+                                                    {/* <Link href={setting != LOGOUT ? `/${setting.toLowerCase()}` : "/"} onClick={() => handleLogout(setting)} >{setting}</Link> */}
+                                                    {setting}
 
-                                        </Typography>
-                                    </MenuItem>
-                                ))}
-                            </Menu>
-                        </Box>
+                                                </Typography>
+                                            </MenuItem>
+                                        ))}
+                                    </Menu>
+                                </Box>
+                            </>
+                            : <Box sx={{ flexGrow: 1, justifyContent: 'end', display: { xs: 'none', md: 'flex' } }}>
+                                
+                                    <Link 
+                                        className='btn btn-outline-light border-0'
+                                        onClick={handleCloseNavMenu}
+                                        sx={{ my: 2, color: 'white', display: 'block' }}
+                                        href="/auth"
+                                    >
+                                        LOGIN
+                                    </Link>
+                                
+                            </Box>
                     }
 
                 </Toolbar>
