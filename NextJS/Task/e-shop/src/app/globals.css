@@ -1,6 +1,7 @@
 main {
     display: flex;
     flex-direction: column;
+    margin: 10px 25px;
 
 }
 
@@ -9,7 +10,16 @@ main {
     color: rgb(138, 96, 153);
 }
 
-
 Input{
     border: 1px solod black;
+}
+.product-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    background-color: rgb(243, 235, 248);; 
+}
+.product-card:hover{
+    background-color: rgb(238, 218, 250);  
 }

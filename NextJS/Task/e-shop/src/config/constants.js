@@ -22,3 +22,6 @@ export const RESET_PASSWORD = "Password";
 
 export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+
+export const ITEMS_PER_PAGE = 8;
+

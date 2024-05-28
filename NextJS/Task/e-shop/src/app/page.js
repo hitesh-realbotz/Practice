@@ -1,10 +1,10 @@
-import ProductList from "./component/products";
+import ProductList from "./component/products/products";
 
 export default function Home() {
+
   return (
     <>
-      <main  >
-        <h1>Welcome to E-Shop</h1>
+      <main >
         <ProductList />
         
       </main>
