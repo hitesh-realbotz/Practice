@@ -19,27 +19,28 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
     }
 });
 
-// //Reset products
-// export const resetProducts = createAsyncThunk("resetProducts", async () => {
-//     try {
-//         let products = [];
-//         let productResponse = await axios.get(`https://dummyjson.com/products?limit=90`);        
-//         console.log("products ", productResponse.data);
-//         products = productResponse.data.products.map((item) => ({
-//             title: item.title,
-//             price: item.price,
-//             description: item.description,
-//             category: item.category,
-//             stock: item.stock,
-//             brand: item.brand,
-//             image: item.images[0]
-//         }));
-//         const addProductsResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`, products);
-//         return addProductsResponse.data;
-//     } catch (error) {
-//         toast.error(error.response.data.error.message);
-//     }
-// });
+//Reset products
+export const resetProducts = createAsyncThunk("resetProducts", async () => {
+    try {
+        let products = [];
+        let productResponse = await axios.get(`https://dummyjson.com/products?limit=90`);        
+        console.log("products ", productResponse.data);
+        products = productResponse.data.products.map((item) => ({
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            description: item.description,
+            category: item.category,
+            stock: item.stock,
+            brand: item.brand || "Generic",
+            image: item.images[0]
+        }));
+        const addProductsResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`, products);
+        return addProductsResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
 
 
 const Slice = createSlice({
@@ -49,15 +50,18 @@ const Slice = createSlice({
         setProduct: (state, action) => {
             state.products = action.payload;    
         },  
+        getProduct: (state, action) => {
+            return state.products;    
+        },  
     },
     extraReducers: (builder) => {
-        // builder.addCase(resetProducts.fulfilled, (state, action) => {
-        //     console.log("reducer", action);
-        //     if (!!action.payload) {
-        //         state.products = action.payload;
-        //         toast.success("Products Reset Success!");
-        //     }
-        // }),
+        builder.addCase(resetProducts.fulfilled, (state, action) => {
+            console.log("reducer", action);
+            if (!!action.payload) {
+                state.products = action.payload;
+                toast.success("Products Reset Success!");
+            }
+        }),
         builder.addCase(getProducts.fulfilled, (state, action) => {
             console.log("reducer", action);
             if (!!action.payload) {
@@ -69,5 +73,5 @@ const Slice = createSlice({
     })
 
 
-export const { setProduct } = Slice.actions;
+export const { setProduct, getProduct } = Slice.actions;
 export default Slice.reducer;
