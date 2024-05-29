@@ -10,6 +10,8 @@ import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
 import { toast } from "react-toastify";
 import Sort from "../sort";
 import { getSortedData } from "@/utils/sort.utils";
+import { addToCart } from "@/utils/cart.utils";
+import { updateUser } from "@/app/store/userSlice";
 
 
 const ProductList = () => {
@@ -17,7 +19,8 @@ const ProductList = () => {
     const dispatch = useDispatch();
 
     let products = useSelector((state) => state.productsData.products);
-    const isUser = useSelector((data) => data.usersData.isLoggedIn);
+    const userState = useSelector((data) => data.usersData);
+    let { userData } = userState;
 
     // const [pageProps, setPageProps] = useState({ pageProducts: [], page: 1, count: 10 });
     const defaultSortFields = {
@@ -71,9 +74,18 @@ const ProductList = () => {
     }, [products]);
 
 
-    const handleAddToCart = () => {
-        if (isUser) {
-            toast.info("Item added");
+    const handleAddToCart = (item) => {
+        if (userState.isLoggedIn) {
+            let updatedCart = addToCart(userData.cart, item);
+            console.log("updatedCart  ", updatedCart);
+            if (!!updatedCart) {
+                let updatedUserData = { ...userData, cart: updatedCart };
+                // Dispatch an action to update the user data in the store
+                const response = dispatch(updateUser(updatedUserData));
+                console.log("handleAddToCart ", response);
+                return ;
+            }
+            toast.info("Try again!");
             return;
         }
         toast.info("Please login to add item in cart.");
@@ -122,8 +134,7 @@ const ProductList = () => {
                 </div>
 
                 <Box sx={{ flexGrow: 1 }} className="product-container">
-                    <Grid container
-                        direction="row"
+                    <Grid container direction="row"
                         justifyContent="space-evenly"
                         alignItems="center" spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
                         {
@@ -153,7 +164,7 @@ const ProductList = () => {
                                                 </Typography>
                                                 <CardActions>
                                                     {/* <Button size="small">Add To Cart <AddShoppingCartOutlinedIcon fontSize="inherit" /> </Button> */}
-                                                    <button className="btn btn-outline-info" onClick={handleAddToCart}><AddShoppingCartOutlinedIcon fontSize="inherit" /> </button>
+                                                    <button className="btn btn-outline-info" onClick={() => handleAddToCart(item)}><AddShoppingCartOutlinedIcon fontSize="inherit" /> </button>
                                                 </CardActions>
                                             </div>
                                         </Card>

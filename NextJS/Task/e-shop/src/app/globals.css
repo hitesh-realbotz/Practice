@@ -32,3 +32,10 @@ Input{
     align-items: center;
     justify-content: center;
 }
+
+.cart-section{
+    max-width: 1000px;
+}
+.icon{
+    width: 50px;
+}

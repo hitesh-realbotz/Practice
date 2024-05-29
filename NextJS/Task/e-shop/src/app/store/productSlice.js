@@ -12,7 +12,6 @@ const initialState = {
 export const getProducts = createAsyncThunk("getProducts", async () => {
     try {      
         const productsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`);        
-        console.log("productsResponse ", productsResponse);
         return productsResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
@@ -26,12 +25,13 @@ export const resetProducts = createAsyncThunk("resetProducts", async () => {
         let productResponse = await axios.get(`https://dummyjson.com/products?limit=90`);        
         console.log("products ", productResponse.data);
         products = productResponse.data.products.map((item) => ({
-            id: item.id,
+            itemId: item.id,
             title: item.title,
-            price: item.price,
+            price: Math.ceil(item.price),
             description: item.description,
             category: item.category,
-            stock: item.stock,
+            qty: !!item.stock ? item.stock : 15,
+            availableQty: !!item.stock ? item.stock : 15,
             brand: item.brand || "Generic",
             image: item.images[0]
         }));

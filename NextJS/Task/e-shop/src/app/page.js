@@ -14,7 +14,7 @@ export default function Home() {
         isUser
           ?
           <>
-            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
+            <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 2 }}>
               <Grid item xs={12} sm={12} md={7} lg={8} >
                 <ProductList />
               </Grid>
