@@ -18,7 +18,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getUserByEmailId, logoutUser, setUser } from '../store/userSlice';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-// import { resetProducts } from '../store/productSlice';
+import { resetProducts } from '../store/productSlice';
 
 
 
@@ -71,9 +71,9 @@ const Navbar = () => {
     const navigate = (route) => {
         router.push(route);
     }
-    // const handleGetProducts = () => {
-    //     dispatch(resetProducts());
-    // };
+    const handleGetProducts = () => {
+        dispatch(resetProducts());
+    };
 
     return (
         <AppBar position="fixed" >

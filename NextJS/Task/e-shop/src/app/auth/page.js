@@ -16,7 +16,7 @@ const defaultErrorMessages = {
 export default function Page() {
     const dispatch = useDispatch();
     const router = useRouter();
-
+    
     let defaultFormFields = {
         email: '',
         password: '',

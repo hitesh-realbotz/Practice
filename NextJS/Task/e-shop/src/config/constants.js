@@ -25,3 +25,18 @@ export const REGEX_EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export const ITEMS_PER_PAGE = 8;
 
+export const SORT_ORDER_ASC = "Ascending";
+  export const SORT_ORDER_DESC = "Descending";
+
+export const SORT_BY_TITLE = "title";
+export const SORT_BY_TITLE_LABEL = "Title";
+export const SORT_BY_PRICE = "price";
+export const SORT_BY_PRICE_LABEL = "Price";
+export const SORT_BY_CATEGORY = "category";
+export const SORT_BY_CATEGORY_LABEL = "Category";
+export const SORT_BY_BRAND = "brand";
+export const SORT_BY_BRAND_LABEL = "Brand";
+export const FOR_PRODUCT = "Product";
+
+
+

@@ -20,6 +20,15 @@ Input{
     align-items: center; 
     background-color: rgb(243, 235, 248);; 
 }
+.product-container{
+    width: 95%; 
+}
 .product-card:hover{
     background-color: rgb(238, 218, 250);  
+}
+.act{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
 }
