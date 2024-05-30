@@ -53,19 +53,6 @@ export const loginUser = createAsyncThunk("loginUser", async ({ email, password 
         toast.error(error.response.data.error.message);
     }
 });
-// export const loginUserApi = createAsyncThunk("loginUserApi", async ({ email, password }) => {
-//     try {
-//         const loginUserResponse = await axios.post(`http://localhost:3000/api/login`, {
-//             email: email,
-//             password: password,
-//         });
-//         const encodedEmail = encode(loginUserResponse.data.email);
-//         const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
-//         return userResponse.data;
-//     } catch (error) {
-//         toast.error(error.response.data.error.message);
-//     }
-// });
 
 //Update user details
 export const updateUser = createAsyncThunk("updateUser", async (userData) => {

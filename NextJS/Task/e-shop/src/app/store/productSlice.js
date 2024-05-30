@@ -18,6 +18,16 @@ export const getProducts = createAsyncThunk("getProducts", async () => {
     }
 });
 
+//Update product details
+export const updateProducts = createAsyncThunk("updateProducts", async ({products}) => {
+    try { 
+        const productResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`,products);        
+        return productResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
+
 //Reset products
 export const resetProducts = createAsyncThunk("resetProducts", async () => {
     try {
@@ -63,6 +73,13 @@ const Slice = createSlice({
             }
         }),
         builder.addCase(getProducts.fulfilled, (state, action) => {
+            console.log("reducer", action);
+            if (!!action.payload) {
+                state.products = action.payload;
+                // toast.success("Products Fetch Success!");
+            }
+        }),      
+        builder.addCase(updateProducts.fulfilled, (state, action) => {
             console.log("reducer", action);
             if (!!action.payload) {
                 state.products = action.payload;

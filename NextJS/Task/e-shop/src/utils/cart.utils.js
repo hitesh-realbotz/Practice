@@ -43,6 +43,7 @@ export const addToCart = (userCart, item) => {
             return cart;
         }
         if (cart.cartItems[cartItemIndex].qty >= item.availableQty) {
+            toast.error("Cart Item reached avaialble quantity!");
             return null;
         }
         let updatedCart = {
@@ -62,9 +63,13 @@ export const addToCart = (userCart, item) => {
         return updatedCart;
 
     } else {
-        console.log("from else");
-        cart = addNewItemToCart(item);
-        return cart;
+        // console.log("from else");
+        // if(item.availableQty){
+            cart = addNewItemToCart(item);
+            return cart;
+        // }
+        // toast.error("Item out-of-stock!");
+
     }
 }
 
@@ -76,7 +81,7 @@ export const decreaseQtyFromCart = (userCart, item) => {
     if (cartItemIndex == -1) {
         return null;
     }
-    if (cart.cartItems.length > 1) {
+    // if (cart.cartItems.length > 1) {
         if (cart.cartItems[cartItemIndex].qty == 1) {
             let updatedCart = {
                 ...cart,
@@ -106,32 +111,33 @@ export const decreaseQtyFromCart = (userCart, item) => {
         console.log("CartUtil ", updatedCart);
         return updatedCart;
 
-    } else {
-        console.log("from else");
-        if (cart.cartItems[cartItemIndex].qty == 1) {    
-            return {};
-        }
-        let updatedCart = {
-            ...cart,
-            cartItems: cart.cartItems.map((cartItem, index) =>
-                index === cartItemIndex ? {
-                    ...cartItem,
-                    qty: cartItem.qty - 1,
-                    totalPrice: ((cartItem.qty - 1) * item.price)
-                } : cartItem
-            ),
-        };
-        console.log("CartUtil ", updatedCart);
-        updatedCart = updateCartTotalPrice(updatedCart);
+    // } 
+    // else {
+    //     console.log("from else");
+    //     if (cart.cartItems[cartItemIndex].qty == 1) {    
+    //         return {};
+    //     }
+    //     let updatedCart = {
+    //         ...cart,
+    //         cartItems: cart.cartItems.map((cartItem, index) =>
+    //             index === cartItemIndex ? {
+    //                 ...cartItem,
+    //                 qty: cartItem.qty - 1,
+    //                 totalPrice: ((cartItem.qty - 1) * item.price)
+    //             } : cartItem
+    //         ),
+    //     };
+    //     console.log("CartUtil ", updatedCart);
+    //     updatedCart = updateCartTotalPrice(updatedCart);
 
-        console.log("CartUtil ", updatedCart);
-        return updatedCart;
-    }
+    //     console.log("CartUtil ", updatedCart);
+    //     return updatedCart;
+    // }
 }
 
 
 
-const updateCartTotalPrice = (cart) => {
+export const updateCartTotalPrice = (cart) => {
     return {
         ...cart,
         totalPrice: (cart.cartItems.reduce((acc, cartItem) => {

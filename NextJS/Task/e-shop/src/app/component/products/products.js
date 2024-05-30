@@ -76,17 +76,22 @@ const ProductList = () => {
 
     const handleAddToCart = (item) => {
         if (userState.isLoggedIn) {
-            let updatedCart = addToCart(userData.cart, item);
-            console.log("updatedCart  ", updatedCart);
-            if (!!updatedCart) {
-                let updatedUserData = { ...userData, cart: updatedCart };
-                // Dispatch an action to update the user data in the store
-                const response = dispatch(updateUser(updatedUserData));
-                console.log("handleAddToCart ", response);
-                return ;
+            if (item.availableQty) {
+                let updatedCart = addToCart(userData.cart, item);
+                console.log("updatedCart  ", updatedCart);
+                if (!!updatedCart) {
+                    let updatedUserData = { ...userData, cart: updatedCart };
+                    // Dispatch an action to update the user data in the store
+                    const response = dispatch(updateUser(updatedUserData));
+                    console.log("handleAddToCart ", response);
+                    return;
+                }
+                toast.error("Try Again!");
+                return;
             }
-            toast.info("Try again!");
+            toast.error("Item out-of-stock!");
             return;
+
         }
         toast.info("Please login to add item in cart.");
     }
