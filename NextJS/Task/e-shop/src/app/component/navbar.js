@@ -217,14 +217,14 @@ const Navbar = () => {
                                 >
                                     LOGIN
                                 </Link>
-                                {/* <Link
+                                <Link
                                     className='btn btn-outline-light border-0'
                                     onClick={()=>handleGetProducts()}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/"
                                 >
                                     GetProducts
-                                </Link> */}
+                                </Link>
 
                             </Box>
                     }

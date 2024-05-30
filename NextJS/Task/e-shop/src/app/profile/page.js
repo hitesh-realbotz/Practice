@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import DropdownInput from "../component/form-input/dropdown-input";
 import { ANSWER_ERROR_TAG, EMAIL_ERROR_TAG, S_QUESTION_1, S_QUESTION_2, S_QUESTION_3, S_QUESTION_ERROR_TAG } from "@/config/constants";
 import FormInput from "../component/form-input/text-input";
+import { toast } from "react-toastify";
 
 const defaultErrorMessages = {
     emailError: '',
@@ -49,6 +50,7 @@ export default function Page() {
         const response = await dispatch(updateUser(userData));
         console.log("From Page ", response);
         if (!!response.payload) {
+            toast.success("Profile updated successfully!");
             router.push("/");
         }
     };

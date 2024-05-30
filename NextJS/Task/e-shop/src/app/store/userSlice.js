@@ -24,7 +24,9 @@ export const registerUser = createAsyncThunk("registerUser", async ({ email, pas
             password: encode(password),
             localId: regUserResponse.data.localId,
             securityQuestion: '',
-            answer: ''
+            answer: '',
+            cart: '',
+            orders: ''
         });
         return addUserResponse.data;
     } catch (error) {
@@ -159,7 +161,6 @@ const Slice = createSlice({
                 if (!!action.payload) {
                     state.userData = action.payload;
                     state.isLoggedIn = true;
-                    toast.success("Profile updated successfully!");
                 }      
             })            
         }    
