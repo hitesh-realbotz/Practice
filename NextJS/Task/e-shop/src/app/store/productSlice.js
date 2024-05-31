@@ -8,11 +8,21 @@ const initialState = {
 }
 
 
-//Fetch user details
-export const getProducts = createAsyncThunk("getProducts", async () => {
+//Fetch products
+export const fetchProducts = createAsyncThunk("fetchProducts", async () => {
     try {      
         const productsResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`);        
         return productsResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
+//Fetch product
+export const fetchProduct = createAsyncThunk("fetchProduct", async ({ itemId }) => {
+    try {    
+        console.log("Product slice ", itemId);
+        const productResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${itemId-1}.json`);        
+        return productResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
     }
@@ -72,7 +82,7 @@ const Slice = createSlice({
                 toast.success("Products Reset Success!");
             }
         }),
-        builder.addCase(getProducts.fulfilled, (state, action) => {
+        builder.addCase(fetchProducts.fulfilled, (state, action) => {
             console.log("reducer", action);
             if (!!action.payload) {
                 state.products = action.payload;

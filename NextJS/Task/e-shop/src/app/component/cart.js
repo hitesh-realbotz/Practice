@@ -7,7 +7,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../store/productSlice';
+import { fetchProducts } from '../store/productSlice';
 import { Divider, Typography } from '@mui/material';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
@@ -62,7 +62,7 @@ export default function Cart() {
 
     useEffect(() => {
         async function fetchAndSetPageProducts() {
-            await dispatch(getProducts());
+            await dispatch(fetchProducts());
         }
         if (products.length) {
             setCartItems();

@@ -207,6 +207,22 @@ const Navbar = () => {
                                         ))}
                                     </Menu>
                                 </Box>
+                                <Link
+                                    className='btn btn-outline-light border-0'
+                                  
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    href="/orders/bjj3kcA8MfPQkhazJC1GvZvfJcA2-1"
+                                >
+                                    OrderDetail
+                                </Link>
+                                <Link
+                                    className='btn btn-outline-light border-0'
+                                  
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    href="/product/13"
+                                >
+                                    ProductDetail
+                                </Link>
                             </>
                             : <Box sx={{ flexGrow: 1, justifyContent: 'end', display: { xs: 'none', md: 'flex' } }}>
 
@@ -225,6 +241,23 @@ const Navbar = () => {
                                 >
                                     GetProducts
                                 </Link>
+                                <Link
+                                    className='btn btn-outline-light border-0'
+                                  
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    href="/orders/bjj3kcA8MfPQkhazJC1GvZvfJcA2-1"
+                                >
+                                    OrderDetail
+                                </Link>
+                                <Link
+                                    className='btn btn-outline-light border-0'
+                                  
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    href="/product/13"
+                                >
+                                    ProductDetail
+                                </Link>
+                                
 
                             </Box>
                     }

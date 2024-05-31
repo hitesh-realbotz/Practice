@@ -24,7 +24,7 @@ export function middleware(request){
 }
 
 export const config={
-    matcher:["/about","/profile/:path*", "/dashboard", "/auth:path*"] //To main & child routes
+    matcher:["/about","/profile/:path*", "/dashboard", "/orders/:path*", "/auth/:path*"] //To main & child routes
     // matcher:["/about/:path*", "/study/:path+"] //To skip main & consider child routes
     // matcher:["/about/:path*", "/study"] //To consider main route only
 }
