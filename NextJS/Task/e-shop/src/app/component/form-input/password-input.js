@@ -4,10 +4,8 @@ import { useState, useEffect, memo } from 'react';
 
 const PasswordInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
 
-
-
   const [errorMessage, setErrorMessage] = useState('');
-  const [isPasswordType, setIsPasswordType] = useState(true);
+  const [isPasswordType, setIsPasswordType] = useState(otherProps.type == "password" ? true : false);
 
   //Updating Error messages from FormComponent on Form submission
   useEffect(() => {
@@ -32,7 +30,7 @@ const PasswordInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
         <input
           className="form-control border-dark"
           {...otherProps}
-          type={isPasswordType ? 'password' : 'text'}
+          type={isPasswordType ? 'password' : otherProps.type}
           onBlur={handleBlur}
         />
         <div style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)' }}>
