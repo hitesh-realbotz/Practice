@@ -1,7 +1,10 @@
-export default function Page() {
+import OrderDetail from "@/app/component/orders/order-detail";
+
+
+export default function Page ({ params }) {    
     return (
         <>
-            <h1>Order Detail Page</h1>
+            <OrderDetail orderId={params.orderId}/>
         </>
     );
 }

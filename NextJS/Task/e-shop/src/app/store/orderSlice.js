@@ -7,10 +7,22 @@ const initialState = {
     orders: [],
 }
 
+//Fetch order
+export const fetchOrder = createAsyncThunk("fetchOrder", async ({ orderId }) => {
+    try {
+        const userOrdersId = (orderId.split("-"))[0];
+        const orderIndex = (orderId.split("-"))[1];
+        console.log("OrderSlice called ", userOrdersId, orderIndex);
+        const orderResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/orders/${userOrdersId}/${orderIndex}.json`);
+        return orderResponse.data;
+    } catch (error) {
+        toast.error(error.response.data.error.message);
+    }
+});
 //Fetch orders
-export const getOrders = createAsyncThunk("getOrders", async () => {
-    try {      
-        const ordersResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products.json`);        
+export const fetchOrders = createAsyncThunk("fetchOrders", async () => {
+    try {
+        const ordersResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/orders.json`);
         return ordersResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
@@ -33,29 +45,29 @@ const Slice = createSlice({
     initialState,
     reducers: {
         setOrder: (state, action) => {
-            state.orders = action.payload;    
-        },  
+            state.orders = action.payload;
+        },
         getOrder: (state, action) => {
-            return state.orders;    
-        },  
+            return state.orders;
+        },
     },
     extraReducers: (builder) => {
-        
-        builder.addCase(getOrders.fulfilled, (state, action) => {
+
+        builder.addCase(fetchOrders.fulfilled, (state, action) => {
             console.log("reducer", action);
             if (!!action.payload) {
                 state.orders = action.payload;
             }
-        }),      
-        builder.addCase(addOrder.fulfilled, (state, action) => {
-            console.log("reducer", action);
-            if (!!action.payload) {
-                state.orders = action.payload;
-                toast.success("Order placed successfully!");
-            }
-        })     
-        }    
-    })
+        }),
+            builder.addCase(addOrder.fulfilled, (state, action) => {
+                console.log("reducer", action);
+                if (!!action.payload) {
+                    state.orders = action.payload;
+                    toast.success("Order placed successfully!");
+                }
+            })
+    }
+})
 
 
 export const { setOrder, getOrder } = Slice.actions;

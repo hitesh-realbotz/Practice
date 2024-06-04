@@ -2,11 +2,13 @@ import HomeComponent from "./component/home";
 
 export default function Home() {
   return (
-    <HomeComponent />
+    
+      <HomeComponent />
+   
   );
 
   // const userData = useSelector((data) => data.usersData.userData);
-  
+
   // const [isCart, setIsCart] = useState(!!userData?.cart?.cartItems?.length);
   // useEffect(() => {
   //   if (isCart && !!userData?.cart?.cartItems?.length) {

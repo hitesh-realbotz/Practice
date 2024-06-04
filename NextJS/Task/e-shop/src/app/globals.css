@@ -2,7 +2,6 @@ main {
     display: flex;
     flex-direction: column;
     margin: 10px 25px;
-
 }
 
 .span-as-link {
@@ -13,6 +12,15 @@ main {
 Input{
     border: 1px solod black;
 }
+
+.product-container{
+    width: 95%; 
+}
+
+.product-img{
+    background-color: aquamarine;
+}
+
 .product-card{
     display: flex;
     flex-direction: column;
@@ -20,22 +28,30 @@ Input{
     align-items: center; 
     background-color: rgb(243, 235, 248);; 
 }
-.product-container{
-    width: 95%; 
-}
+
 .product-card:hover{
-    background-color: rgb(238, 218, 250);  
+    background-color: rgb(238, 218, 250); 
+    cursor: pointer; 
 }
-.act{
+
+.main{
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    margin: auto;
     justify-content: center;
+    align-items: center;
 }
 
 .cart-section{
     max-width: 1000px;
 }
-.icon{
-    width: 50px;
+
+.hover:hover{
+    background-color: rgb(238, 218, 250); 
 }
+
+/* .act{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+} */

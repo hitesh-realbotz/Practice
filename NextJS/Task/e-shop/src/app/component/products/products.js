@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PaginationButtons from "../pagination-buttons";
 import { Box, Button, Card, CardActions, CardContent, CardMedia, Grid, Pagination, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
-import { getProducts } from "@/app/store/productSlice";
+import { fetchProducts } from "@/app/store/productSlice";
 import { FOR_PRODUCT, ITEMS_PER_PAGE, SORT_BY_BRAND, SORT_BY_BRAND_LABEL, SORT_BY_CATEGORY, SORT_BY_CATEGORY_LABEL, SORT_BY_PRICE, SORT_BY_PRICE_LABEL, SORT_BY_TITLE, SORT_BY_TITLE_LABEL, SORT_ORDER_ASC, SORT_ORDER_DESC } from "@/config/constants";
 import AddShoppingCartOutlinedIcon from '@mui/icons-material/AddShoppingCartOutlined';
 import CurrencyRupeeIcon from '@mui/icons-material/CurrencyRupee';
@@ -12,11 +12,13 @@ import Sort from "../sort";
 import { getSortedData } from "@/utils/sort.utils";
 import { addToCart } from "@/utils/cart.utils";
 import { updateUser } from "@/app/store/userSlice";
+import { useRouter } from "next/navigation";
 
 
 const ProductList = () => {
 
     const dispatch = useDispatch();
+    const router = useRouter();
 
     let products = useSelector((state) => state.productsData.products);
     const userState = useSelector((data) => data.usersData);
@@ -63,7 +65,7 @@ const ProductList = () => {
 
     useEffect(() => {
         async function fetchAndSetPageProducts() {
-            await dispatch(getProducts());
+            await dispatch(fetchProducts());
         }
         if (products.length) {
             getPaginatedData(1,);
@@ -116,6 +118,10 @@ const ProductList = () => {
         return;
     };
 
+    const handleToProduct = (itemId) => {
+        router.push(`/product/${itemId}`);
+    }
+
 
     return (
         <>
@@ -148,7 +154,7 @@ const ProductList = () => {
                                 pageProps.pageProducts.map((item) => (
                                     <Grid justifyContent="center"
                                         alignItems="center" item xs={2} sm={6} md={6} lg={6} xl={4} key={item.id}>
-                                        {/* <ProductCard key={product.id} item={product} /> */}
+                                        <div onClick={()=> handleToProduct(item.itemId)}>                                        
                                         <Card className="product-card" >
                                             <CardMedia
                                                 sx={{ height: 200, width: 200 }}
@@ -168,11 +174,11 @@ const ProductList = () => {
                                                     <CurrencyRupeeIcon fontSize="inherit" /> {item.price}
                                                 </Typography>
                                                 <CardActions>
-                                                    {/* <Button size="small">Add To Cart <AddShoppingCartOutlinedIcon fontSize="inherit" /> </Button> */}
                                                     <button className="btn btn-outline-info" onClick={() => handleAddToCart(item)}><AddShoppingCartOutlinedIcon fontSize="inherit" /> </button>
                                                 </CardActions>
                                             </div>
                                         </Card>
+                                        </div>
                                     </Grid>
                                 ))
                                 :

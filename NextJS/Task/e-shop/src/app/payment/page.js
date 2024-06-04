@@ -94,7 +94,7 @@ export default function Page() {
             updatedCart = {...updatedCart, cartItems: itemsToBeKept};
             updatedCart = updateCartTotalPrice({...updatedCart});
             dispatch(updateUser({...userData, cart: {...updatedCart}}));
-            router.push("/");
+            router.push(`/orders/${orderTobeAdded.orderId}`);
 
         }
     };
