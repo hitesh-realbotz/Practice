@@ -12,6 +12,7 @@ import { addOrder } from "../store/orderSlice";
 import { updateCartTotalPrice } from "@/utils/cart.utils";
 import { updateUser } from "../store/userSlice";
 import { updateProducts } from "../store/productSlice";
+import { getFormattedDateTime } from "@/utils/date-time.utils";
 
 const defaultErrorMessages = {
     buyerNameError: "",
@@ -30,24 +31,25 @@ export default function Page() {
     let userData = useSelector((data) => data.usersData.userData);
     let products = useSelector((state) => state.productsData.products);
     let orders = useSelector((state) => state.ordersData.orders);
-    let itemsToBeOrdered = userData.cart.cartItems.filter(item => item.isChecked);
-    let itemsToBeKept = userData.cart.cartItems.filter(item => !item.isChecked);
-    itemsToBeOrdered = [...itemsToBeOrdered.map((oItem) => {
-        const {availableQty, qty, ...restItem} =  {...products.find(item =>item.itemId === oItem.itemId)} 
-        return {...restItem, qty: oItem.qty, totalPrice: oItem.totalPrice};
-    })]
-    console.log("OrderedItems ",  itemsToBeOrdered);
+    let itemsToBeOrdered = userData?.cart?.cartItems?.filter(item => item.isChecked);
+
+    let itemsToBeKept = userData?.cart?.cartItems?.filter(item => !item.isChecked);
+
+    itemsToBeOrdered = itemsToBeOrdered?.length ? [...itemsToBeOrdered?.map((oItem) => {
+        const { availableQty, qty, ...restItem } = { ...products?.find(item => item.itemId === oItem.itemId) }
+        return { ...restItem, qty: oItem.qty, totalPrice: oItem.totalPrice };
+    })] : [];
 
     let defaultFormFields = {
         buyerName: "",
         contactNo: "",
         address: "",
-        amount: userData.cart.totalCheckedPrice,
+        amount: userData?.cart?.totalCheckedPrice,
         cardNo: "",
         cvv: "",
         pin: "",
         shippingMethod: "",
-        
+
     };
 
     const [formFields, setFormFields] = useState(defaultFormFields);
@@ -65,35 +67,47 @@ export default function Page() {
     const handleSubmit = async (event) => {
 
         event.preventDefault();
-        
+
         const validationResult = validateForm(Object.keys(formFields), Object.values(formFields), Object.keys(defaultErrorMessages));
         if (!validationResult.isValid) {
             setErrorMessages(validationResult.errors);
             return;
         }
-        const orderTobeAdded = {orderId: orders.length ? `${userData.localId}-${orders.length+1}` : `${userData.localId}-1` ,buyerName,contactNo, amount, shippingMethod, address, buyerId: userData.localId, orderedItems: [...itemsToBeOrdered]};
+        
+        const orderTobeAdded = {
+            orderId: `${userData.localId}-${orders.length}`,
+            buyerId: userData.localId,
+            orderedItems: [...itemsToBeOrdered],
+            orderDate: getFormattedDateTime(),
+            buyerName, contactNo, amount, shippingMethod, address,
+        };
         orders = [...orders, orderTobeAdded];
-        
-        const response = await dispatch(addOrder({orders : orders, buyerId: userData.localId} ));
-        
-        
+       
+
+        const response = await dispatch(addOrder({ orders: orders, buyerId: userData.localId }));
+
+
         if (!!response.payload) {
-            
+
             //Updating Products
-            products = {...products.map((item, index) => {
-                const orderedItem = itemsToBeOrdered.find(iToBeOrdered => iToBeOrdered.itemId == item.itemId);
-                return !!orderedItem 
-                ? {...item, availableQty: (item.availableQty - orderedItem.qty) } 
-                : item;
-            })};
-            console.log("updatedproducts changed",  products);
-            dispatch(updateProducts({products}));
+            console.log("updatedproducts before", products);
+            products = [
+                ...products.map((item, index) => {
+                    console.log("Map ", item.availableQty);
+                    const orderedItem = {...itemsToBeOrdered.find(iToBeOrdered => iToBeOrdered.itemId == item.itemId)};
+                    return orderedItem !== undefined
+                        ? { ...item, availableQty: (item.availableQty - orderedItem.qty) }
+                        : {...item};
+                })
+            ];
+            console.log("updatedproducts changed", products);
+            dispatch(updateProducts({ products }));
 
             //Removing cart items
-            let updatedCart = {...userData.cart};
-            updatedCart = {...updatedCart, cartItems: itemsToBeKept};
-            updatedCart = updateCartTotalPrice({...updatedCart});
-            dispatch(updateUser({...userData, cart: {...updatedCart}}));
+            let updatedCart = { ...userData.cart };
+            updatedCart = { ...updatedCart, cartItems: itemsToBeKept };
+            updatedCart = updateCartTotalPrice({ ...updatedCart });
+            dispatch(updateUser({ ...userData, cart: { ...updatedCart } }));
             router.push(`/orders/${orderTobeAdded.orderId}`);
 
         }
@@ -224,7 +238,7 @@ export default function Page() {
                             <div className="col-6">
                                 <PasswordInput
                                     label='CVV'
-                                    type='password'
+                                    type='text'
                                     name='cvv'
                                     value={cvv}
                                     onChange={handleChange}
@@ -235,7 +249,7 @@ export default function Page() {
                             <div className="col-6">
                                 <PasswordInput
                                     label='Pin'
-                                    type='password'
+                                    type='text'
                                     name='pin'
                                     value={pin}
                                     onChange={handleChange}

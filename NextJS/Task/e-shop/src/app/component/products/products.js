@@ -76,16 +76,16 @@ const ProductList = () => {
     }, [products]);
 
 
-    const handleAddToCart = (item) => {
+    const handleAddToCart = (item, event) => {
+        event.stopPropagation();
+        console.log("handleAddToCart  ", item);
         if (userState.isLoggedIn) {
             if (item.availableQty) {
                 let updatedCart = addToCart(userData.cart, item);
-                console.log("updatedCart  ", updatedCart);
                 if (!!updatedCart) {
                     let updatedUserData = { ...userData, cart: updatedCart };
                     // Dispatch an action to update the user data in the store
                     const response = dispatch(updateUser(updatedUserData));
-                    console.log("handleAddToCart ", response);
                     return;
                 }
                 toast.error("Try Again!");
@@ -126,67 +126,69 @@ const ProductList = () => {
     return (
         <>
             <div className="d-flex flex-column justify-content-center align-items-center">
-                <div className="d-flex align-items-end">
-                    <div className="mb-3">
-                        <Pagination color="primary" count={pageProps.count} page={pageProps.page} onChange={handleChange} />
-                    </div>
-                    <div>
-                        <Sort
-                            sortOptions={sortOptions}
-                            sortOrderOptions={sortOrderOptions}
-                            sortBy={sortBy}
-                            sortOrder={sortOrder}
-                            onhandleChange={(event, name) => handleChangeSelect(event, name)}
-                            onhandleBlur={(event, name) => onHandleBlurSelect(event, name)}
-                            handleReset={() => getPaginatedData(1, defaultSortFields.sortBy, defaultSortFields.sortOrder)}
-                            sortFor={FOR_PRODUCT}>
-                        </Sort>
-                    </div>
-                </div>
+                {
+                    pageProps.pageProducts.length
+                        ?
+                        <>
+                            <div className="d-flex align-items-end" >
+                                <div className="mb-3">
+                                    <Pagination color="primary" count={pageProps.count} page={pageProps.page} onChange={handleChange} />
+                                </div>
+                                <div>
+                                    <Sort
+                                        sortOptions={sortOptions}
+                                        sortOrderOptions={sortOrderOptions}
+                                        sortBy={sortBy}
+                                        sortOrder={sortOrder}
+                                        onhandleChange={(event, name) => handleChangeSelect(event, name)}
+                                        onhandleBlur={(event, name) => onHandleBlurSelect(event, name)}
+                                        handleReset={() => getPaginatedData(1, defaultSortFields.sortBy, defaultSortFields.sortOrder)}
+                                        sortFor={FOR_PRODUCT}>
+                                    </Sort>
+                                </div>
+                            </div>
 
-                <Box sx={{ flexGrow: 1 }} className="product-container">
-                    <Grid container direction="row"
-                        justifyContent="space-evenly"
-                        alignItems="center" spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
-                        {
-                            pageProps.pageProducts.length
-                                ?
-                                pageProps.pageProducts.map((item) => (
-                                    <Grid justifyContent="center"
-                                        alignItems="center" item xs={2} sm={6} md={6} lg={6} xl={4} key={item.id}>
-                                        <div onClick={()=> handleToProduct(item.itemId)}>                                        
-                                        <Card className="product-card" >
-                                            <CardMedia
-                                                sx={{ height: 200, width: 200 }}
-                                                image={item.image}
-                                                title={item.title}
-                                            />
-                                            <CardContent className="d-flex flex-column justify-content-center align-items-center">
-                                                <Typography gutterBottom variant="h5" component="div">
-                                                    {item.title}
-                                                </Typography>
-                                                <Typography variant="p" component="div" color="text.secondary">
-                                                    Brand : {item.brand}
-                                                </Typography>
-                                            </CardContent>
-                                            <div className="d-flex justify-content-center align-items-center">
-                                                <Typography gutterBottom variant="p" component="div" className="mb-0">
-                                                    <CurrencyRupeeIcon fontSize="inherit" /> {item.price}
-                                                </Typography>
-                                                <CardActions>
-                                                    <button className="btn btn-outline-info" onClick={() => handleAddToCart(item)}><AddShoppingCartOutlinedIcon fontSize="inherit" /> </button>
-                                                </CardActions>
+                            <Box sx={{ flexGrow: 1 }} className="product-container">
+                                <Grid container direction="row"
+                                    justifyContent="space-evenly"
+                                    alignItems="center" spacing={{ xs: 2, md: 3 }} columns={{ xs: 12, sm: 12, md: 12, lg: 12, xl: 12 }}>
+                                    {pageProps.pageProducts.map((item) => (
+                                        <Grid justifyContent="center"
+                                            alignItems="center" item xs={12} sm={6} md={6} lg={6} xl={4} key={item.id}>
+                                            <div onClick={() => handleToProduct(item.itemId)}>
+                                                <Card className="product-card" >
+                                                    <CardMedia
+                                                        sx={{ height: 200, width: 200 }}
+                                                        image={item.image}
+                                                        title={item.title}
+                                                    />
+                                                    <CardContent className="d-flex flex-column justify-content-center align-items-center">
+                                                        <Typography gutterBottom variant="h5" component="div">
+                                                            {item.title}
+                                                        </Typography>
+                                                        <Typography variant="p" component="div" color="text.secondary">
+                                                            Brand : {item.brand}
+                                                        </Typography>
+                                                    </CardContent>
+                                                    <div className="d-flex justify-content-center align-items-center">
+                                                        <Typography gutterBottom variant="p" component="div" className="mb-0">
+                                                            <CurrencyRupeeIcon fontSize="inherit" /> {item.price}
+                                                        </Typography>
+                                                        <CardActions>
+                                                            <button className="btn btn-outline-info" onClick={(event) => handleAddToCart(item, event)}><AddShoppingCartOutlinedIcon fontSize="inherit" /> </button>
+                                                        </CardActions>
+                                                    </div>
+                                                </Card>
                                             </div>
-                                        </Card>
-                                        </div>
-                                    </Grid>
-                                ))
-                                :
-                                <Typography>No Product.</Typography>
-
-                        }
-                    </Grid>
-                </Box>
+                                        </Grid>
+                                    ))
+                                    }
+                                </Grid>
+                            </Box>
+                        </>
+                        :
+                        <Typography className="d-flex justify-content-center align-items-center">No Product!</Typography>
+                }
             </div>
 
         </>

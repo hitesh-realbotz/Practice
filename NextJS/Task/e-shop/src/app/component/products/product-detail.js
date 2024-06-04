@@ -23,7 +23,7 @@ const ProductDetail = (props) => {
         setIsCart(!!userData?.cart?.cartItems?.length)
     }, [userData?.cart?.cartItems?.length]);
 
-    console.log(item);
+    console.log(Date.UTC());
     useEffect(() => {
         async function fetchAndSetProduct() {
             console.log("ProductDetailed useeffect ", props, props.itemId);
