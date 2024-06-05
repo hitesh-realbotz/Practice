@@ -6,6 +6,11 @@ export const ORDERS = "Orders";
 export const LOGOUT = "Logout";
 export const LOGIN = "Login";
 
+export const DASHBOARD_TITLE_CART_ITEMS = "Cart Items";
+export const DASHBOARD_TITLE_CART_TOTAL_PRICE = "Cart - Total Price";
+export const DASHBOARD_TITLE_CART_CHECKED_PRICE = "Cart - Checked Price";
+
+
 export const S_QUESTION_1 = "First Mobile Brand?";
 export const S_QUESTION_2 = "Birth Place?";
 export const S_QUESTION_3 = "Favorite Dish?";
@@ -41,15 +46,22 @@ export const ITEMS_PER_PAGE = 8;
 export const SORT_ORDER_ASC = "Ascending";
   export const SORT_ORDER_DESC = "Descending";
 
+export const SORT_BY_ADDRESS = "address";
+export const SORT_BY_ADDRESS_LABEL = "Address";
+export const SORT_BY_ORDER_DATE = "orderDate";
+export const SORT_BY_ORDER_DATE_LABEL = "Order Date";
 export const SORT_BY_TITLE = "title";
 export const SORT_BY_TITLE_LABEL = "Title";
+export const SORT_BY_AMOUNT = "amount";
 export const SORT_BY_PRICE = "price";
 export const SORT_BY_PRICE_LABEL = "Price";
 export const SORT_BY_CATEGORY = "category";
 export const SORT_BY_CATEGORY_LABEL = "Category";
 export const SORT_BY_BRAND = "brand";
 export const SORT_BY_BRAND_LABEL = "Brand";
+
 export const FOR_PRODUCT = "Product";
+export const FOR_ORDER = "Order";
 
 export const REMOVE_CART_ITEM_TITLE = "Are you sure to remove item?";
 export const DECREASE_CART_QTY_TITLE = "Are you sure to reduce quantity?";

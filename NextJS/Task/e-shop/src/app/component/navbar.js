@@ -39,8 +39,9 @@ const Navbar = () => {
         fetchUser();
     }, []);
 
-    const pages = userState.isLoggedIn ? [PRODUCTS, CART, DASHBOARD] : [PRODUCTS];
-    const settings = [PROFILE, DASHBOARD, CART, ORDERS, LOGOUT, "ResetProducts"];
+    // const pages = userState.isLoggedIn ? [PRODUCTS, CART, DASHBOARD] : [PRODUCTS];
+    const pages = userState.isLoggedIn ? [] : [PRODUCTS];
+    const settings = [PROFILE, DASHBOARD, CART, ORDERS, LOGOUT];
 
     const [anchorElNav, setAnchorElNav] = useState(null);
     const [anchorElUser, setAnchorElUser] = useState(null);
@@ -207,9 +208,8 @@ const Navbar = () => {
                                         ))}
                                     </Menu>
                                 </Box>
-                                <Link
+                                {/* <Link
                                     className='btn btn-outline-light border-0'
-                                  
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/orders/bjj3kcA8MfPQkhazJC1GvZvfJcA2-1"
                                 >
@@ -217,12 +217,11 @@ const Navbar = () => {
                                 </Link>
                                 <Link
                                     className='btn btn-outline-light border-0'
-                                  
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/product/13"
                                 >
                                     ProductDetail
-                                </Link>
+                                </Link> */}
                             </>
                             : <Box sx={{ flexGrow: 1, justifyContent: 'end', display: { xs: 'none', md: 'flex' } }}>
 
@@ -241,24 +240,20 @@ const Navbar = () => {
                                 >
                                     GetProducts
                                 </Link>
-                                <Link
-                                    className='btn btn-outline-light border-0'
-                                  
+                                {/* <Link
+                                    className='btn btn-outline-light border-0'                                  
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/orders/bjj3kcA8MfPQkhazJC1GvZvfJcA2-1"
                                 >
                                     OrderDetail
                                 </Link>
                                 <Link
-                                    className='btn btn-outline-light border-0'
-                                  
+                                    className='btn btn-outline-light border-0'                                  
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/product/13"
                                 >
                                     ProductDetail
-                                </Link>
-                                
-
+                                </Link> */}
                             </Box>
                     }
 

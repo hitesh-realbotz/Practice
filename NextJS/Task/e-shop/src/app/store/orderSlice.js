@@ -10,9 +10,9 @@ const initialState = {
 //Fetch order
 export const fetchOrder = createAsyncThunk("fetchOrder", async ({ orderId }) => {
     try {
+
         const userOrdersId = (orderId.split("-"))[0];
         const orderIndex = (orderId.split("-"))[1];
-        console.log("OrderSlice called ", userOrdersId, orderIndex);
         const orderResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/orders/${userOrdersId}/${orderIndex}.json`);
         return orderResponse.data;
     } catch (error) {
@@ -20,14 +20,15 @@ export const fetchOrder = createAsyncThunk("fetchOrder", async ({ orderId }) => 
     }
 });
 //Fetch orders
-export const fetchOrders = createAsyncThunk("fetchOrders", async () => {
+export const fetchOrders = createAsyncThunk("fetchOrders", async ({ buyerId }) => {
     try {
-        const ordersResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/orders.json`);
+        const ordersResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/orders/${buyerId}.json`);
         return ordersResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
     }
 });
+
 
 export const addOrder = createAsyncThunk("addOrder", async ({ orders, buyerId }) => {
     try {

@@ -13,7 +13,7 @@ const OrderDetail = (props) => {
     const router = useRouter();
     console.log("OrderDetailed called ", props.orderId);
     const [order, setOrder] = useState(false);
-
+    
     console.log(order);
     useEffect(() => {
         async function fetchAndSetOrder() {
@@ -33,15 +33,15 @@ const OrderDetail = (props) => {
             {
                 order ?
                     <>
-                        <div className="d-flex justify-content-center align-items-center m-auto">
-                            <Box sx={{ flexGrow: 1 }} >
-
+                        <div className="d-flex justify-content-center align-items-center m-auto product-container">
+                            <Box sx={{ flexGrow: 1,  }}  >
                                 <Grid container direction="row"
                                     spacing={{ xs: 2, md: 3 }} xs={12} sm={12} md={12} lg={12} xl={12}>
 
                                     <Grid item container direction="column"
                                         xs={12} sm={12} md={6} lg={6} xl={6}>
                                         <OrderField title={"Order Id"} value={order.orderId} />
+                                        <OrderField title={"Order Date"} value={order.orderDate} />
                                         <OrderField title={"Buyer Name"} value={order.buyerName} />
                                         <OrderField title={"Contact No."} value={order.contactNo} />
                                         <OrderField title={"Address"} value={order.address} />
@@ -51,13 +51,12 @@ const OrderDetail = (props) => {
 
                                     <Grid item direction="row"
                                         justifyContent="space-evenly"
-                                        alignItems="center" spacing={{ xs: 2, md: 3 }} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                        alignItems="center" spacing={{ xs: 2, md: 3 }} xs={12} sm={12} md={6} lg={6} xl={6} >
                                         <List sx={{ width: '100%' }} key={1}>
                                             {order.orderedItems.map((item) => {
                                                 const labelId = `checkbox-list-label-${item.itemId}`;
                                                 return (
                                                     <>
-
                                                         <ListItem className="hover"
                                                             key={item.itemId}
                                                             disablePadding
