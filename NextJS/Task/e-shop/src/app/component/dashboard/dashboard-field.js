@@ -2,7 +2,6 @@ import { Card, CardContent, Grid, Typography } from "@mui/material";
 
 const DashboardField = (props) => {
     const {title, value, handleToRoute} = props;
-    console.log("Dash ", title, value);
     return (
         <>
             <Grid justifyContent="center"

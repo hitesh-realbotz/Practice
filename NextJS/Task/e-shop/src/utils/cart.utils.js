@@ -16,21 +16,16 @@ export const toggleItemIsChecked = (userCart, item) => {
                 } : cartItem
             ),
         };
-        console.log("CartUtil ", updatedCart);
         updatedCart = updateCartTotalPrice(updatedCart);
-
-        console.log("CartUtil ", updatedCart);
         return updatedCart;
 
     } else {
-        console.log("from else");
         cart = addNewItemToCart(item);
         return cart;
     }
 }
 export const addToCart = (userCart, item) => {
     let cart = { ...userCart };
-    console.log("CartUtil ", cart, item);
     if (!!cart.cartItems) {
         const cartItemIndex = cart.cartItems.findIndex(i => i.itemId == item.itemId);
         if (cartItemIndex == -1) {
@@ -56,83 +51,44 @@ export const addToCart = (userCart, item) => {
                 } : cartItem
             ),
         };
-        console.log("CartUtil ", updatedCart);
         updatedCart = updateCartTotalPrice(updatedCart);
-
-        console.log("CartUtil ", updatedCart);
         return updatedCart;
 
     } else {
-        // console.log("from else");
-        // if(item.availableQty){
-            cart = addNewItemToCart(item);
-            return cart;
-        // }
-        // toast.error("Item out-of-stock!");
-
+        cart = addNewItemToCart(item);
+        return cart;
     }
 }
 
 
 export const decreaseQtyFromCart = (userCart, item) => {
     let cart = { ...userCart };
-    console.log("CartUtil ", cart, item);
     const cartItemIndex = cart.cartItems.findIndex(i => i.itemId == item.itemId);
     if (cartItemIndex == -1) {
         return null;
     }
-    // if (cart.cartItems.length > 1) {
-        if (cart.cartItems[cartItemIndex].qty == 1) {
-            let updatedCart = {
-                ...cart,
-                cartItems: cart.cartItems.filter((cartItem, index) =>
-                    index !== cartItemIndex
-                ),
-            };
-            console.log("CartUtil beforePrice ", updatedCart);
-            updatedCart = updateCartTotalPrice(updatedCart);
-
-            console.log("CartUtil ", updatedCart);
-            return updatedCart;
-        }
+    if (cart.cartItems[cartItemIndex].qty == 1) {
         let updatedCart = {
             ...cart,
-            cartItems: cart.cartItems.map((cartItem, index) =>
-                index === cartItemIndex ? {
-                    ...cartItem,
-                    qty: cartItem.qty - 1,
-                    totalPrice: ((cartItem.qty - 1) * item.price)
-                } : cartItem
+            cartItems: cart.cartItems.filter((cartItem, index) =>
+                index !== cartItemIndex
             ),
         };
-        console.log("CartUtil ", updatedCart);
         updatedCart = updateCartTotalPrice(updatedCart);
-
-        console.log("CartUtil ", updatedCart);
         return updatedCart;
-
-    // } 
-    // else {
-    //     console.log("from else");
-    //     if (cart.cartItems[cartItemIndex].qty == 1) {    
-    //         return {};
-    //     }
-    //     let updatedCart = {
-    //         ...cart,
-    //         cartItems: cart.cartItems.map((cartItem, index) =>
-    //             index === cartItemIndex ? {
-    //                 ...cartItem,
-    //                 qty: cartItem.qty - 1,
-    //                 totalPrice: ((cartItem.qty - 1) * item.price)
-    //             } : cartItem
-    //         ),
-    //     };
-    //     console.log("CartUtil ", updatedCart);
-    //     updatedCart = updateCartTotalPrice(updatedCart);
-
-    //     console.log("CartUtil ", updatedCart);
-    //     return updatedCart;
-    // }
+    }
+    let updatedCart = {
+        ...cart,
+        cartItems: cart.cartItems.map((cartItem, index) =>
+            index === cartItemIndex ? {
+                ...cartItem,
+                qty: cartItem.qty - 1,
+                totalPrice: ((cartItem.qty - 1) * item.price)
+            } : cartItem
+        ),
+    };
+    updatedCart = updateCartTotalPrice(updatedCart);
+    return updatedCart;
 }
 
 

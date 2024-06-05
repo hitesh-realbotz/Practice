@@ -48,7 +48,6 @@ export default function Page() {
         }
         userData = { ...userData, email, securityQuestion, answer };
         const response = await dispatch(updateUser(userData));
-        console.log("From Page ", response);
         if (!!response.payload) {
             toast.success("Profile updated successfully!");
             router.push("/");
@@ -95,7 +94,7 @@ export default function Page() {
 
     return (
         <>
-            <main className="align-items-center pt-5" >
+            <main className="align-items-center " >
                 {/* <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle col-lg-4 col-xl-4 col-xxl-3 col-4 col-md-6 col-sm-12"  > */}
                 <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle"
                     sx={{ flexGrow: 1, width: { xs: '100%', md: '40%' } }}  >

@@ -14,7 +14,11 @@ export function middleware(request){
         }
         
     }else{
-        if(request.nextUrl.pathname == "/auth" || request.nextUrl.pathname == "/"){
+        if(request.nextUrl.pathname == "/auth" 
+            || request.nextUrl.pathname == "/auth/forgot-pass" 
+            || request.nextUrl.pathname == "/"
+            || request.nextUrl.pathname.includes("/product/")
+            ){
             return NextResponse.next();
         }else{
             return NextResponse.redirect(new URL("/",request.url));
@@ -24,7 +28,5 @@ export function middleware(request){
 }
 
 export const config={
-    matcher:["/about","/profile/:path*", "/dashboard", "/orders/:path*","/product/:path*", "/auth/:path*"] //To main & child routes
-    // matcher:["/about/:path*", "/study/:path+"] //To skip main & consider child routes
-    // matcher:["/about/:path*", "/study"] //To consider main route only
+    matcher:["/about","/profile/:path*", "/dashboard", "/orders/:path*","/product/:path*", "/auth/:path*"] //To main & child routes 
 }

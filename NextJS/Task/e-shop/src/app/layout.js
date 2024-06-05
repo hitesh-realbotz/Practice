@@ -31,7 +31,7 @@ export default function RootLayout({ children }) {
             <Navbar />
           </div>
           <Toolbar />
-          <div className="d-flex justify-content-center align-items-center m-auto">
+          <div className="d-flex justify-content-center align-items-center mt-3">
             {children}
           </div>
           <ToastEle />

@@ -41,14 +41,22 @@ export default function Page() {
     })] : [];
 
     let defaultFormFields = {
-        buyerName: "",
-        contactNo: "",
-        address: "",
+        // buyerName: "",
+        // contactNo: "",
+        // address: "",
+        // amount: userData?.cart?.totalCheckedPrice,
+        // cardNo: "",
+        // cvv: "",
+        // pin: "",
+        // shippingMethod: "",
+        buyerName: "Test",
+        contactNo: "7897897897",
+        address: "Surat, Gujarat, India",
         amount: userData?.cart?.totalCheckedPrice,
-        cardNo: "",
-        cvv: "",
-        pin: "",
-        shippingMethod: "",
+        cardNo: "1111222211112222",
+        cvv: "123",
+        pin: "123123",
+        shippingMethod: "standard",
 
     };
 
@@ -81,26 +89,21 @@ export default function Page() {
             orderDate: getFormattedDateTime(),
             buyerName, contactNo, amount, shippingMethod, address,
         };
-        orders = [...orders, orderTobeAdded];
-       
+        orders = [...orders, orderTobeAdded];  
 
         const response = await dispatch(addOrder({ orders: orders, buyerId: userData.localId }));
-
 
         if (!!response.payload) {
 
             //Updating Products
-            console.log("updatedproducts before", products);
             products = [
                 ...products.map((item, index) => {
-                    console.log("Map ", item.availableQty);
                     const orderedItem = {...itemsToBeOrdered.find(iToBeOrdered => iToBeOrdered.itemId == item.itemId)};
-                    return orderedItem !== undefined
+                    return !!orderedItem.itemId
                         ? { ...item, availableQty: (item.availableQty - orderedItem.qty) }
-                        : {...item};
+                        : { ...item };
                 })
             ];
-            console.log("updatedproducts changed", products);
             dispatch(updateProducts({ products }));
 
             //Removing cart items
@@ -238,7 +241,7 @@ export default function Page() {
                             <div className="col-6">
                                 <PasswordInput
                                     label='CVV'
-                                    type='text'
+                                    type='password'
                                     name='cvv'
                                     value={cvv}
                                     onChange={handleChange}
@@ -249,7 +252,7 @@ export default function Page() {
                             <div className="col-6">
                                 <PasswordInput
                                     label='Pin'
-                                    type='text'
+                                    type='password'
                                     name='pin'
                                     value={pin}
                                     onChange={handleChange}

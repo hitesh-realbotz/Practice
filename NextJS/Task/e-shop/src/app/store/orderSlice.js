@@ -19,6 +19,7 @@ export const fetchOrder = createAsyncThunk("fetchOrder", async ({ orderId }) => 
         toast.error(error.response.data.error.message);
     }
 });
+
 //Fetch orders
 export const fetchOrders = createAsyncThunk("fetchOrders", async ({ buyerId }) => {
     try {
@@ -29,7 +30,7 @@ export const fetchOrders = createAsyncThunk("fetchOrders", async ({ buyerId }) =
     }
 });
 
-
+//Add new order
 export const addOrder = createAsyncThunk("addOrder", async ({ orders, buyerId }) => {
     try {
         const addOrderResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/orders/${buyerId}.json`, orders);

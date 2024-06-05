@@ -18,6 +18,7 @@ import { toast } from 'react-toastify';
 import ConfirmModal from './modal/confirm-modal';
 import { CLEAR_CART_TITLE, DECREASE_CART_QTY_TITLE, REMOVE_CART_ITEM_TITLE } from '@/config/constants';
 import { useRouter } from 'next/navigation';
+import LoadingComp from './loadingState';
 
 const defaultModalProps = {
     isOpen: false,
@@ -32,7 +33,7 @@ export default function Cart() {
     let userData = useSelector((data) => data.usersData.userData);
     let { cart } = userData;
     let products = useSelector((state) => state.productsData.products);
-    const [detailedCart, setDetailedCart] = useState(cart);
+    const [detailedCart, setDetailedCart] = useState({ ...cart, isLoading: true });
     const [modalProps, setModalProps] = useState(defaultModalProps);
 
     const setCartItems = () => {
@@ -54,7 +55,7 @@ export default function Cart() {
                 ...cart,
                 cartItems: updatedCartItems
             };
-            setDetailedCart(cart);
+            setDetailedCart({ ...cart, isLoading: false });
             return;
         }
         setDetailedCart("");
@@ -68,15 +69,16 @@ export default function Cart() {
             setCartItems();
         } else {
             fetchAndSetPageProducts();
+            if (!products.length) {
+                setDetailedCart({ ...detailedCart, isLoading: false });
+            }
         }
 
     }, [products, cart]);
 
     const handleToggle = (item) => {
-        console.log("handleToggle ", item.itemId);
 
         let updatedCart = toggleItemIsChecked(userData.cart, products.find(p => p.itemId == item.itemId));
-        console.log("updatedCart  ", updatedCart);
         if (!!updatedCart) {
             let updatedUserData = { ...userData, cart: updatedCart };
             // Dispatch an action to update the user data in the store
@@ -89,14 +91,13 @@ export default function Cart() {
 
     const handleIncreaseQty = (item) => {
         let updatedCart = addToCart(userData.cart, products.find(p => p.itemId == item.itemId));
-        console.log("updatedCart  ", updatedCart);
         if (!!updatedCart) {
             let updatedUserData = { ...userData, cart: updatedCart };
             // Dispatch an action to update the user data in the store
             const response = dispatch(updateUser(updatedUserData));
             return;
         }
-        
+
         return;
     }
     const handleConfirmDelete = () => {
@@ -105,7 +106,6 @@ export default function Cart() {
         let updatedCart = (modalProps.title === CLEAR_CART_TITLE || (userData.cart.cartItems.length === 1 && item.qty === 1))
             ? {}
             : decreaseQtyFromCart(userData.cart, products.find(p => p.itemId == item.itemId));
-        console.log("updatedCart  ", updatedCart);
         setModalProps(defaultModalProps);
         if (!!updatedCart) {
             let updatedUserData = { ...userData, cart: updatedCart };
@@ -141,104 +141,117 @@ export default function Cart() {
 
 
     return (
-        <div className="d-flex flex-column mt-3 justify-content-center align-items-center">
+        <>
             {
-                !!detailedCart?.cartItems?.length ?
+                detailedCart.isLoading
+                    ? <LoadingComp />
+                    :
                     <>
-                        <div className=" cart-section d-flex flex-column justify-content-center align-items-center">
-
+                        <div className="d-flex flex-column justify-content-center align-items-center w-auto">
                             {
-                                modalProps.isOpen ? <ConfirmModal isOpen={modalProps.isOpen}
-                                    title={modalProps.title}
-                                    data={modalProps.data}
-                                    onConfirm={handleConfirmDelete}
-                                    onClose={handleHideModal}
-                                />
-                                    : <></>
-                            }
-                            <Typography
-                                sx={{ display: 'inline' }}
-                                component="div"
-                                variant="p"
-                                color="text.primary"
-                            >
-                                <strong>Total Price : </strong>  <CurrencyRupeeIcon fontSize="inherit" /> {detailedCart.totalPrice}
-
-                            </Typography>
-                            <Typography
-                                sx={{ display: 'inline' }}
-                                component="div"
-                                variant="p"
-                                color="text.primary"
-                            >
-                                <strong>Total Checked Price : </strong>  <CurrencyRupeeIcon fontSize="inherit" /> {detailedCart.totalCheckedPrice}
-                            </Typography>
-                            <div className="d-flex justify-content-center">
-
-                                <button className="btn btn-primary m-3" onClick={handleCheckout} >
-                                    Checkout
-                                </button>
-                                <button className="btn btn-secondary m-3" onClick={handleClearCart} >
-                                    Clear Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <List sx={{ width: '100%' }} key={1}>
-                            {detailedCart.cartItems.map((item) => {
-                                const labelId = `checkbox-list-label-${item.itemId}`;
-
-                                return (
+                                !!detailedCart?.cartItems?.length ?
                                     <>
-                                        <ListItem
-                                            key={item.itemId}
-                                            disablePadding
-                                        >
-                                            <ListItemButton role={undefined} dense>
-                                                <ListItemIcon>
-                                                    <Checkbox onClick={() => handleToggle(item)}
-                                                        edge="start"
-                                                        checked={item.isChecked}
-                                                        tabIndex={-1}
-                                                        disableRipple
-                                                        inputProps={{ 'aria-labelledby': labelId }}
-                                                    />
-                                                </ListItemIcon>
-                                                {/* <ListItemText id={labelId} primary={`${item.itemId} ${item.title} `} /> */}
-                                                <ListItemText
-                                                    primary={`${item.title} `}
-                                                    primaryTypographyProps={{ fontSize: 18, color: "primary", fontWeight: "medium" }}
-                                                    secondary={
-                                                        <>
-                                                            <Typography
-                                                                sx={{ display: 'inline' }}
-                                                                component="span"
-                                                                variant="p"
-                                                                color="text.secondary"
-                                                                fontWeight="medium"
-                                                                fontSize={18}
-                                                            >
-                                                                <AddCircleOutlineIcon fontSize="small" onClick={() => handleIncreaseQty(item)} />
-                                                                <strong className="mx-3">{item.qty}</strong>
-                                                                <RemoveCircleOutlineIcon className="me-3" fontSize="small" onClick={() => handleDecreaseQty(item)} />
-                                                                |
-                                                                <CurrencyRupeeIcon className="ms-3" fontSize="inherit" /><strong> {item.totalPrice} </strong>
-                                                            </Typography>
-                                                        </>
-                                                    }
+                                        <div className=" cart-section d-flex flex-column justify-content-center align-items-center">
+                                            {
+                                                modalProps.isOpen ? <ConfirmModal isOpen={modalProps.isOpen}
+                                                    title={modalProps.title}
+                                                    data={modalProps.data}
+                                                    onConfirm={handleConfirmDelete}
+                                                    onClose={handleHideModal}
                                                 />
-                                            </ListItemButton>
-                                        </ListItem>
-                                        <Divider variant="inset" component="li" />
-                                    </>
-                                );
-                            })}
-                        </List>
-                    </>
+                                                    : <></>
+                                            }
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="div"
+                                                variant="p"
+                                                color="text.primary"
+                                            >
+                                                <strong>Total Price : </strong>  <CurrencyRupeeIcon fontSize="inherit" /> {detailedCart.totalPrice}
 
-                    : <></>
+                                            </Typography>
+                                            <Typography
+                                                sx={{ display: 'inline' }}
+                                                component="div"
+                                                variant="p"
+                                                color="text.primary"
+                                            >
+                                                <strong>Total Checked Price : </strong>  <CurrencyRupeeIcon fontSize="inherit" /> {detailedCart.totalCheckedPrice}
+                                            </Typography>
+                                            <div className="d-flex justify-content-center">
+
+                                                <button className="btn btn-primary m-3" onClick={handleCheckout} >
+                                                    Checkout
+                                                </button>
+                                                <button className="btn btn-secondary m-3" onClick={handleClearCart} >
+                                                    Clear Cart
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <List sx={{ width: '100%' }} key={1}>
+                                            {detailedCart.cartItems.map((item) => {
+                                                const labelId = `checkbox-list-label-${item.itemId}`;
+
+                                                return (
+                                                    <>
+                                                        <ListItem
+                                                            key={item.itemId}
+                                                            disablePadding
+                                                        >
+                                                            <ListItemButton role={undefined} dense>
+                                                                <ListItemIcon>
+                                                                    <Checkbox onClick={() => handleToggle(item)}
+                                                                        edge="start"
+                                                                        checked={item.isChecked}
+                                                                        tabIndex={-1}
+                                                                        disableRipple
+                                                                        inputProps={{ 'aria-labelledby': labelId }}
+                                                                    />
+                                                                </ListItemIcon>
+                                                                {/* <ListItemText id={labelId} primary={`${item.itemId} ${item.title} `} /> */}
+                                                                <ListItemText
+                                                                    primary={`${item.title} `}
+                                                                    primaryTypographyProps={{ fontSize: 18, color: "primary", fontWeight: "medium" }}
+                                                                    secondary={
+                                                                        <>
+                                                                            <Typography
+                                                                                sx={{ display: 'inline' }}
+                                                                                component="span"
+                                                                                variant="p"
+                                                                                color="text.secondary"
+                                                                                fontWeight="medium"
+                                                                                fontSize={18}
+                                                                            >
+                                                                                <AddCircleOutlineIcon fontSize="small" onClick={() => handleIncreaseQty(item)} />
+                                                                                <strong className="mx-3">{item.qty}</strong>
+                                                                                <RemoveCircleOutlineIcon className="me-3" fontSize="small" onClick={() => handleDecreaseQty(item)} />
+                                                                                |
+                                                                                <CurrencyRupeeIcon className="ms-3" fontSize="inherit" /><strong> {item.totalPrice} </strong>
+                                                                            </Typography>
+                                                                        </>
+                                                                    }
+                                                                />
+                                                            </ListItemButton>
+                                                        </ListItem>
+                                                        <Divider variant="inset" component="li" />
+                                                    </>
+                                                );
+                                            })}
+                                        </List>
+                                    </>
+                                    :
+                                    <>
+                                        <div className="d-flex flex-column justify-content-center align-items-center mt-5">
+                                            <h3>No items added yet!</h3>
+                                            <button className="btn btn-info" onClick={() => router.push("/")}>Go to Homepage</button>
+                                        </div>
+                                    </>
+                            }
+                        </div>
+                    </>
             }
-        </div>
+        </>
     );
 
 }

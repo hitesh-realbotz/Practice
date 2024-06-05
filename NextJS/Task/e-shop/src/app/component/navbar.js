@@ -31,8 +31,7 @@ const Navbar = () => {
             const email = Cookies.get("userEmail");
             if (email) {
                 const user = await dispatch(getUserByEmailId({ email }));
-                console.log("UserByID ", user.payload);
-                console.log("Cookies ", Cookies.get());
+                
                 dispatch(setUser(user.payload));
             }
         }
@@ -61,7 +60,6 @@ const Navbar = () => {
         setAnchorElUser(null);
     };
     const handleUserMenuAction = (route) => {
-        console.log("click ", route);
         if (route === "/") {
             dispatch(logoutUser());
         }
@@ -210,6 +208,14 @@ const Navbar = () => {
                                 </Box>
                                 {/* <Link
                                     className='btn btn-outline-light border-0'
+                                    onClick={()=>handleGetProducts()}
+                                    sx={{ my: 2, color: 'white', display: 'block' }}
+                                    href="/"
+                                >
+                                    GetProducts
+                                </Link> */}
+                                {/* <Link
+                                    className='btn btn-outline-light border-0'
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/orders/bjj3kcA8MfPQkhazJC1GvZvfJcA2-1"
                                 >
@@ -232,14 +238,14 @@ const Navbar = () => {
                                 >
                                     LOGIN
                                 </Link>
-                                <Link
+                                {/* <Link
                                     className='btn btn-outline-light border-0'
                                     onClick={()=>handleGetProducts()}
                                     sx={{ my: 2, color: 'white', display: 'block' }}
                                     href="/"
                                 >
                                     GetProducts
-                                </Link>
+                                </Link> */}
                                 {/* <Link
                                     className='btn btn-outline-light border-0'                                  
                                     sx={{ my: 2, color: 'white', display: 'block' }}

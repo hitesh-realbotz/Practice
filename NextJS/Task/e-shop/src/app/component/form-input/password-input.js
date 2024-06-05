@@ -30,7 +30,7 @@ const PasswordInput = memo(({ handleBlur, errorM, label, ...otherProps }) => {
         <input
           className="form-control border-dark"
           {...otherProps}
-          type={isPasswordType ? 'password' : otherProps.type}
+          type={isPasswordType ? 'password' : 'text'}
           onBlur={handleBlur}
         />
         <div style={{ position: 'absolute', top: '50%', right: '10px', transform: 'translateY(-50%)' }}>

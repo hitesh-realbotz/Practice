@@ -1,13 +1,14 @@
 "use client"
 import { useState } from "react";
 import { getUpdatedErrorMsg, validateForm } from "@/utils/validation/validation.utils";
-import { getUserByEmailId, updateUserPassword } from "../../store/userSlice";
+import { getUserByEmailId, loginUser, updateUserPassword } from "../../store/userSlice";
 import { useDispatch } from "react-redux";
 import { ANSWER_ERROR_TAG, ANSWER_VERIFICATION, EMAIL_ERROR_TAG, EMAIL_VERIFICATION, RESET_PASSWORD, S_QUESTION_1, S_QUESTION_2, S_QUESTION_3, S_QUESTION_ERROR_TAG } from "@/config/constants";
 import FormInput from "../../component/form-input/text-input";
 import { toast } from "react-toastify";
 import PasswordInput from "@/app/component/form-input/password-input";
 import { useRouter } from "next/navigation";
+import { decode } from "js-base64";
 
 const defaultErrorMessages = {
     emailError: '',
@@ -55,8 +56,8 @@ export default function Page() {
             if (!!response.payload) {
                 if (response.payload.answer.length) {
                     setFormMode(ANSWER_VERIFICATION);
+                    setFormFields({...formFields, securityQuestion: response.payload.securityQuestion })
                     userDetails = response.payload;
-                    console.log("From Page ", defaultFormFields);
                 }
             }
         }
@@ -80,6 +81,11 @@ export default function Page() {
             const response = await dispatch(updateUserPassword({ ...userDetails, newPassword: password }))
             if (!!response.payload) {
                 toast.success("Password updated successfully!");
+                const loginResponse = await dispatch(loginUser({ email: response.payload.email, password: decode(response.payload.password) }))
+                if (!!loginResponse.payload) {
+                    router.push(!!loginResponse.payload.answer.length ? "/" : "/profile");
+                }
+                return ;
             }
             router.push("/");
         }
@@ -100,11 +106,11 @@ export default function Page() {
 
     return (
         <>
-            <main className="align-items-center pt-5" >
+            <main className="align-items-center" >
                 {/* <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle col-lg-4 col-xl-4 col-xxl-3 col-4 col-md-6 col-sm-12"  > */}
                 <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle"
                     sx={{ flexGrow: 1, width: { xs: '100%', md: '40%' } }}  >
-                    <h1>Forgot Pass</h1>
+                    <h1>Forgot Password</h1>
 
                     <form onSubmit={handleSubmit} >
                         {

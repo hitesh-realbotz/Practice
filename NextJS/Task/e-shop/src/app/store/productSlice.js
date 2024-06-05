@@ -17,10 +17,10 @@ export const fetchProducts = createAsyncThunk("fetchProducts", async () => {
         toast.error(error.response.data.error.message);
     }
 });
+
 //Fetch product
 export const fetchProduct = createAsyncThunk("fetchProduct", async ({ itemId }) => {
     try {    
-        console.log("Product slice ", itemId);
         const productResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/products/${itemId-1}.json`);        
         return productResponse.data;
     } catch (error) {
@@ -43,7 +43,6 @@ export const resetProducts = createAsyncThunk("resetProducts", async () => {
     try {
         let products = [];
         let productResponse = await axios.get(`https://dummyjson.com/products?limit=90`);        
-        console.log("products ", productResponse.data);
         products = productResponse.data.products.map((item) => ({
             itemId: item.id,
             title: item.title,
