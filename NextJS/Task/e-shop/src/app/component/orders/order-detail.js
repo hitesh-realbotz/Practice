@@ -11,10 +11,8 @@ import { useRouter } from "next/navigation";
 const OrderDetail = (props) => {
     const dispatch = useDispatch();
     const router = useRouter();
-    console.log("OrderDetailed called ", props.orderId);
     const [order, setOrder] = useState(false);
     
-    console.log(order);
     useEffect(() => {
         async function fetchAndSetOrder() {
             const fetchedOrderResponse = await dispatch(fetchOrder({ orderId: props.orderId }));

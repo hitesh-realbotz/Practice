@@ -14,8 +14,7 @@ const Sort = memo((props) => {
 
     return (
         <>
-            <div className="d-flex align-items-end justify-content-evenly g-5">
-
+            <div className="d-flex align-items-end justify-content-center g-5">
                 <div className="ms-3">
 
                     <DropdownInput

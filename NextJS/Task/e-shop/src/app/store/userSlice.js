@@ -18,6 +18,7 @@ export const registerUser = createAsyncThunk("registerUser", async ({ email, pas
             returnSecureToken: true
         });
 
+
         const encodedEmail = encode(regUserResponse.data.email);
         const addUserResponse = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`, {
             email: regUserResponse.data.email,
@@ -26,8 +27,9 @@ export const registerUser = createAsyncThunk("registerUser", async ({ email, pas
             securityQuestion: '',
             answer: '',
             cart: '',
-            orders: ''
         });
+        Cookies.set("authToken",regUserResponse.data.idToken);
+        Cookies.set("userEmail",regUserResponse.data.email);
         return addUserResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
@@ -47,7 +49,7 @@ export const loginUser = createAsyncThunk("loginUser", async ({ email, password 
         const encodedEmail = encode(loginUserResponse.data.email);
         const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);
         Cookies.set("authToken",loginUserResponse.data.idToken);
-        Cookies.set("userEmail",loginUserResponse.data.email)        
+        Cookies.set("userEmail",loginUserResponse.data.email); 
         return userResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);
@@ -98,7 +100,6 @@ export const getUserByEmailId = createAsyncThunk("getUserByEmailId", async ({ema
     try {
         const encodedEmail = encode(email);
         const userResponse = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/users/${encodedEmail}.json`);        
-        console.log("UserRes ", email, userResponse);
         return userResponse.data;
     } catch (error) {
         toast.error(error.response.data.error.message);

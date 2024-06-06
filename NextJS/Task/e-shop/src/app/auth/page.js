@@ -46,7 +46,7 @@ export default function Page() {
             ? await dispatch(loginUser({ email, password }))
             : await dispatch(registerUser({ email, password }));
         if (!!response.payload) {
-            router.push(!!response.payload.answer ? "/" : "/profile");
+            router.push(!!response.payload.answer.length ? "/" : "/profile");
         }
 
     };
@@ -66,7 +66,7 @@ export default function Page() {
 
     return (
         <>
-            <main className="align-items-center pt-5" >
+            <main className="align-items-center" >
                 {/* <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle col-lg-4 col-xl-4 col-xxl-3 col-4 col-md-6 col-sm-12"  > */}
                 <div className="d-flex flex-column align-items-center border border-dark p-3 bg-primary-subtle"
                     sx={{ flexGrow: 1, width: { xs: '100%', md: '40%' } }}  >

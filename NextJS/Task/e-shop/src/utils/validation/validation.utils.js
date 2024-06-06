@@ -9,7 +9,7 @@ export const validate = (name, value) => {
         case 'password':
             return !value.trim() ? 'Password is Required.' : (value.length < 6 ? 'Password must be min. 6 character!' : '');
         case 'answer':
-            return !value.trim() ? 'Name is Required.' : '';
+            return !value.trim() ? 'Answer is Required.' : '';
 
         case 'securityQuestion':
             return !value ? 'Security Question must be selected.' : '';
@@ -17,7 +17,7 @@ export const validate = (name, value) => {
         case 'shippingMethod':
             return !value ? 'Shipping Method must be selected.' : '';
         case 'buyerName':
-            return !value.trim() ? 'Name is Required.' : '';
+            return !value.trim() ? 'Buyer Name is Required.' : '';
         case 'address':
             return !value.trim() 
                     ? 'Adddress is Required.' 
@@ -53,16 +53,7 @@ export const validate = (name, value) => {
                     ? 'Amount is Required.' 
                     : (!validateIsNumeric(value) 
                             ? 'Amount must contain only digits!' 
-                            : (value <= 0 ? 'Amount must be min. 1!' : ''));;
-        // case 'dob':
-        //     if (!value) return 'Date of Birth is Required';
-        //     return validateDateFormat(value);
-        // case 'startDate':
-        //     if (!value) return 'Start Date is Required';
-        //     return validateDateFormat(value);
-        // case 'endDate':
-        //     if (!value) return 'End Date is Required';
-        //     return validateDateFormat(value);
+                            : (value <= 0 ? 'Amount must be min. 1!' : ''));
 
         default:
             return '';
@@ -79,20 +70,6 @@ const validateIsNumeric = (value) => {
     const numericPattern = REGEX_DIGIT_ONLY;
     return numericPattern.test(value);
 };
-
-// //Date type validation
-// const validateDateFormat = (date) => {
-//     const datePattern = CONSTANTS.REGEX_DATE;
-//     if (datePattern.test(date)) {
-//         return validateIsFutureDate(date);
-//     }
-//     return 'Invalid Date format. Please use MM-DD-YYYY';
-// };
-// //FutureDate validation
-// const validateIsFutureDate = (date) => {
-//     if (new Date(date) > new Date()) return 'Future date not allowed!';
-//     return '';
-// };
 
 
 //Form Validation

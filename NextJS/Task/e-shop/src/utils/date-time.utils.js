@@ -27,8 +27,5 @@ export const getFormattedDateTime = (inputDate = new Date()) => {
 
     // Combine date and time strings
     let formattedDateTime = `${year}-${month}-${date} ${hours}:${minutes}:${seconds} ${amOrPm}`;
-
-    console.log("Formatted Date and Time:", formattedDateTime);
     return formattedDateTime;
-
 }

@@ -23,11 +23,8 @@ const ProductDetail = (props) => {
         setIsCart(!!userData?.cart?.cartItems?.length)
     }, [userData?.cart?.cartItems?.length]);
 
-    console.log(Date.UTC());
     useEffect(() => {
         async function fetchAndSetProduct() {
-            console.log("ProductDetailed useeffect ", props, props.itemId);
-
             const fetchedProductResponse = await dispatch(fetchProduct({ ...{ itemId: props.itemId } }));
             setItem(fetchedProductResponse.payload);
         }
@@ -35,16 +32,17 @@ const ProductDetail = (props) => {
 
     }, []);
 
-    const handleAddToCart = (item) => {
+    const handleAddToCart = async(item) => {
         if (userState.isLoggedIn) {
             if (item.availableQty) {
                 let updatedCart = addToCart(userData.cart, item);
-                console.log("updatedCart  ", updatedCart);
                 if (!!updatedCart) {
                     let updatedUserData = { ...userData, cart: updatedCart };
                     // Dispatch an action to update the user data in the store
-                    const response = dispatch(updateUser(updatedUserData));
-                    console.log("handleAddToCart ", response);
+                    const response = await dispatch(updateUser(updatedUserData));
+                    if (!!response.payload) {
+                        toast.success("Item added to cart!");
+                    }
                     return;
                 }
                 toast.error("Try Again!");
