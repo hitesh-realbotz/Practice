@@ -248,71 +248,161 @@ const http = require('http');
 
 
 
-//MongoDb CRUD
-const dbConnect = require('./mongodb');
-// const {MongoClient} = require('mongodb');
-// const url= 'mongodb://localhost:27017';
-// const databaseName='e-comm'
-// const client= new MongoClient(url, { family: 4 });
-// async function dbConnect()
-// {
-//     let result = await client.connect();
-//     db= result.db(databaseName);
-//     return db.collection('products');
-//     // let data = await collection.find({}).toArray();
-//     // console.log(data);
+// //MongoDb CRUD
+// const dbConnect = require('./mongodb');
+// // const {MongoClient} = require('mongodb');
+// // const url= 'mongodb://localhost:27017';
+// // const databaseName='e-comm'
+// // const client= new MongoClient(url, { family: 4 });
+// // async function dbConnect()
+// // {
+// //     let result = await client.connect();
+// //     db= result.db(databaseName);
+// //     return db.collection('products');
+// //     // let data = await collection.find({}).toArray();
+// //     // console.log(data);
+// // }
+
+// const getAll = async () => {
+//     let data = await dbConnect();
+//     data = await data.find({}).toArray();
+//     console.log(data);
 // }
 
-const getAll = async () => {
-    let data = await dbConnect();
-    data = await data.find({}).toArray();
-    console.log(data);
-}
+// const insert = async () => {
+//     let db = await dbConnect();
+//     response = await db.insertOne({
+//         name: "max 100",
+//         price: 200,
+//         brand: 'maxx',
+//         category: 'Mobile'
+//     });
+//     console.log(response);
+//     if (response.acknowledged) {
+//         console.log("Data inserted successfully!");
+//     }
+// }
 
-const insert = async () => {
-    let db = await dbConnect();
-    response = await db.insertOne({
-        name: "max 100",
-        price: 200,
-        brand: 'maxx',
-        category: 'Mobile'
-    });
-    console.log(response);
-    if (response.acknowledged) {
-        console.log("Data inserted successfully!");
-    }
-}
+// const update = async () => {
+//     let db = await dbConnect();
+//     response = await db.updateOne(
+//         { name: "max 100" },
+//         {
+//             $set: {
+//                 name: "max 100 pro",
+//                 price: 200,
+//                 brand: 'maxx',
+//                 category: 'Mobile'
+//             }
+//         }
+//     );
+//     if (response.modifiedCount) {
+//         console.log("Data updated successfully");
+//     }
+// }
 
-const update = async () => {
-    let db = await dbConnect();
-    response = await db.updateOne(
-        { name: "max 100" },
-        {
-            $set: {
-                name: "max 100 pro",
-                price: 200,
-                brand: 'maxx',
-                category: 'Mobile'
-            }
-        }
-    );
-    if (response.modifiedCount) {
-        console.log("Data updated successfully");
-    }
-}
+// const deleteRecord = async () => {
+//     let db = await dbConnect();
+//     response = await db.deleteOne(
+//         { name: "max 100" }
+//     );
+//     if (response.deletedCount) {
+//         console.log("Record deleted successfully!");
+//     }
+// }
 
-const deleteRecord = async () => {
-    let db = await dbConnect();
-    response = await db.deleteOne(
-        { name: "max 100" }
-    );
-    if (response.deletedCount) {
-        console.log("Record deleted successfully!");
-    }
-}
+// getAll();
+// // insert();
+// // update();
+// // deleteRecord();
 
-getAll();
-// insert();
-// update();
-// deleteRecord();
+
+// // //Mongoose CRUD
+// const mongoose = require('mongoose');
+// mongoose.connect('mongodb://localhost:27017/e-comm', {family: 4});
+// const productSchema = new mongoose.Schema({
+//     name: String,
+//     price: Number,
+//     brand: String,
+//     category: String
+// });
+
+// const saveInDB = async () => {
+//     const Product = mongoose.model('products2', productSchema);
+//     let data = new Product({
+//         name: "max 100",
+//         price: 200,
+//         brand: 'maxx',
+//         category: 'Mobile'
+//     });
+//     const result = await data.save();
+//     console.log(result);
+// }
+
+// const updateInDB =async  () => {
+//     const Product = mongoose.model('products2', productSchema);
+//     let data =await  Product.updateOne(
+//         { name: "max 100" },
+//         {
+//             $set: { price: 550,name:'max pro 6' }
+//         }
+//     )
+//     console.log(data)
+// }
+
+// const deleteInDB = async ()=>{
+//     const Product = mongoose.model('products2', productSchema);
+//     let data = await Product.deleteMany({name:'max 100+'})
+//     console.log(data);
+// }
+// const findInDB = async ()=>{
+//     const Product = mongoose.model('products2', productSchema);
+//     let data = await Product.find({name: "max 100+"})
+//     console.log(data);
+// }
+// const getAll = async ()=>{
+//     const Product = mongoose.model('products2', productSchema);
+//     let data = await Product.find()
+//     console.log(data);
+// }
+
+// getAll();
+// // saveInDB();
+// // findInDB();
+// // updateInDB();
+// // deleteInDB();
+
+
+// // OS info
+// const os = require('os');
+// console.log(os.arch());
+// console.log(os.freemem()/(1024*1024*1024));
+// console.log(os.totalmem()/(1024*1024*1024));
+// console.log(os.hostname(), os.platform());
+// console.log(os.userInfo());
+
+
+
+const express = require('express');
+const EventEmitter = require('events');
+const app = express();
+const event = new EventEmitter();
+let count = 0;
+
+event.on("countAPI", ()=>{
+    count++;
+    console.log(`Count : ${count}`);
+})
+
+app.get("/", async (req, resp) => {
+    resp.send("Api called : /");
+    event.emit("countAPI");
+});
+app.get("/list", async (req, resp) => {
+    resp.send("Api called : /");
+    event.emit("countAPI");
+});
+
+app.listen(5000);
+
 
