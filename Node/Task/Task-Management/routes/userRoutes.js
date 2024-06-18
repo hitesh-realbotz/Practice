@@ -1,31 +1,43 @@
 const express = require('express');
-const router = express.Router();
+const userRouter = express.Router();
 const userController = require('../controllers/userController');
+const User = require("../models/user");
+const { validateFields } = require('../utils/validation');
 
-router.post("/register", async (req, resp) => {
+//RequestBody Validation MiddleWare
+const inputValidationMiddleware = (req, resp, next) => {
+    const data = req.body;
+    const user = new User(data.email, data.password);
+    const validationResp = validateFields(user);
+    if (validationResp.length) {
+        resp.send({ errors: validationResp });
+    } else {
+        next();
+    }
+}
+
+//Registraion Route
+userRouter.post("/register", inputValidationMiddleware, async (req, resp) => {
     try {
         const { email, password } = req.body;
         const newUser = await userController.registerUser(email, password);
-        console.log("newUser =>", newUser);
         resp.status(201).json(newUser);
     } catch (error) {
-        console.error("Error registering user:", error);
-        if(!!error.errors) return resp.status(400).json({ error: `${error.errors}` });
+        if (!!error.errors) return resp.status(400).json({ error: `${error.errors}` });
         else resp.status(500).json({ error: `Something went wrong` });
     }
 });
-router.post("/login", async (req, resp) => {
+
+//Login Route
+userRouter.post("/login", inputValidationMiddleware, async (req, resp) => {
     try {
         const { email, password } = req.body;
         const newUser = await userController.loginUser(email, password);
-        console.log("newUser =>", newUser);
         resp.status(200).json(newUser);
     } catch (error) {
-        console.error("Error while login :", error);
-        if(!!error.errors) return resp.status(400).json({ error: `${error.errors}` });
+        if (!!error.errors) return resp.status(400).json({ error: `${error.errors}` });
         else resp.status(500).json({ error: `Something went wrong` });
     }
 });
 
-
-module.exports = router;
+module.exports = userRouter;
